@@ -1,4 +1,4 @@
-package com.context.springsecurity.ward.beds.domain;
+package com.context.springsecurity.ward.domain;
 
 import com.context.springsecurity.constants.DatabaseConstants;
 
