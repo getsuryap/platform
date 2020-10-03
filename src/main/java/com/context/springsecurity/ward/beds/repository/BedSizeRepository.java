@@ -1,7 +1,7 @@
 package com.context.springsecurity.ward.beds.repository;
 
 import com.context.springsecurity.ward.beds.domain.BedSize;
-import com.context.springsecurity.enums.BedSizeEnums;
+import com.context.springsecurity.util.enums.BedSizeEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

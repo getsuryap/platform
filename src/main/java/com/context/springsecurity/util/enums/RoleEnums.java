@@ -1,4 +1,4 @@
-package com.context.springsecurity.enums;
+package com.context.springsecurity.util.enums;
 
 public enum RoleEnums {
 	ROLE_USER,

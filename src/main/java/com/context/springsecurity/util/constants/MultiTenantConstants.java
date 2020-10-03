@@ -1,4 +1,4 @@
-package com.context.springsecurity.constants;
+package com.context.springsecurity.util.constants;
 
 public interface MultiTenantConstants {
     String DEFAULT_TENANT_ID = "public";

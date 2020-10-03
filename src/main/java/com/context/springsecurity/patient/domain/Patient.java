@@ -1,6 +1,6 @@
 package com.context.springsecurity.patient.domain;
 
-import com.context.springsecurity.constants.DatabaseConstants;
+import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

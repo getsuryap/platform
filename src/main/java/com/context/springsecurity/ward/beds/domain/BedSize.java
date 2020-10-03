@@ -1,8 +1,7 @@
 package com.context.springsecurity.ward.beds.domain;
 
-import com.context.springsecurity.constants.DatabaseConstants;
-import com.context.springsecurity.enums.BedSizeEnums;
-import com.context.springsecurity.enums.RoleEnums;
+import com.context.springsecurity.util.constants.DatabaseConstants;
+import com.context.springsecurity.util.enums.BedSizeEnums;
 
 import javax.persistence.*;
 

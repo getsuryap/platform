@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.context.springsecurity.enums.RoleEnums;
+import com.context.springsecurity.util.enums.RoleEnums;
 import com.context.springsecurity.domain.Role;
 import com.context.springsecurity.domain.User;
 import com.context.springsecurity.payload.request.LoginRequest;
