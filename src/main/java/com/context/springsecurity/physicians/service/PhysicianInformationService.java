@@ -34,7 +34,7 @@ public interface PhysicianInformationService {
 
     public ResponseEntity createNewPhysician(Physician PhysicianInformation);
 
-    public List<Physician> createByPhysicianListIterate(List<Physician> PhysicianInformationList);
+    public ResponseEntity createByPhysicianListIterate(List<Physician> PhysicianInformationList);
 
     public Optional<Physician> retrievePhysicianById(Long id);
 
