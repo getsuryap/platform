@@ -1,4 +1,4 @@
-package com.context.springsecurity.enums;
+package com.context.springsecurity.util.enums;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

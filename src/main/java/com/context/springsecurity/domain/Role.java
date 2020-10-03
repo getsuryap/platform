@@ -1,7 +1,7 @@
 package com.context.springsecurity.domain;
 
-import com.context.springsecurity.constants.DatabaseConstants;
-import com.context.springsecurity.enums.RoleEnums;
+import com.context.springsecurity.util.constants.DatabaseConstants;
+import com.context.springsecurity.util.enums.RoleEnums;
 
 import javax.persistence.*;
 

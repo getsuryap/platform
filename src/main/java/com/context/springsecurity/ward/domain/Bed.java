@@ -1,6 +1,6 @@
 package com.context.springsecurity.ward.domain;
 
-import com.context.springsecurity.constants.DatabaseConstants;
+import com.context.springsecurity.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

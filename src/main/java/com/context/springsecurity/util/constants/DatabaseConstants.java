@@ -1,4 +1,4 @@
-package com.context.springsecurity.constants;
+package com.context.springsecurity.util.constants;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
