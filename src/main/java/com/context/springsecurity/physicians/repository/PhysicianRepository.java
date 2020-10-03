@@ -1,4 +1,9 @@
-package com.context.springsecurity.util.constants;
+package com.context.springsecurity.physicians.repository;
+
+import com.context.springsecurity.physicians.domains.Physician;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,13 +23,8 @@ package com.context.springsecurity.util.constants;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class DatabaseConstants {
-    public static final String PATIENT_INFO_TABLE = "m_patient";
-    public static final String MISC_INFO_TABLE = "m_misc";
-    public static final String CONTACTS_INFO_TABLE = "m_contacts";
-    public static final String ROLES_TABLE = "m_roles";
-    public static final String DOCTOR_INFORMATION = "m_doctor";
-    public static final String BEDS_TABLE = "m_bed";
-    public static final String BED_SIZES = "m_bed_size";
-    public static final String PHYSICIAN_TABLE = "m_physician";
+public interface PhysicianRepository extends JpaRepository<Physician, Long> {
+    Boolean existsByUsername(String username);
+
+    Optional<Physician> getById(Long id);
 }
