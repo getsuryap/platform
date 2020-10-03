@@ -30,8 +30,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/patients")
 public class PatientApiResources {
-    @Autowired()
+
     PatientInformationServices patientInformationServices;
+
+    @Autowired
+    PatientApiResources(PatientInformationServices patientInformationServices){
+        this.patientInformationServices = patientInformationServices;
+    }
 
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
