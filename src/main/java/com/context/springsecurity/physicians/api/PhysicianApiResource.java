@@ -48,10 +48,15 @@ public class PhysicianApiResource {
         return physicianInformationService.retrieveAllPhysicians();
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity create(@Valid @RequestBody Physician physician) {
         return physicianInformationService.createNewPhysician(physician);
+    }
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
+    ResponseEntity createWithIteration(@Valid @RequestBody List<Physician> physician) {
+        return physicianInformationService.createByPhysicianListIterate(physician);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -64,6 +69,7 @@ public class PhysicianApiResource {
     ResponseEntity update(@PathVariable Long id, @RequestBody Physician physician){
         return  physicianInformationService.updatePhysician(id,physician);
     }
+
 
 
 }

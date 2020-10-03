@@ -54,8 +54,15 @@ public class PhysicianInformationServiceImpl  implements PhysicianInformationSer
     }
 
     @Override
-    public List<Physician> createByPhysicianListIterate(List<Physician> physiciansList) {
-        return physicianRepository.saveAll(physiciansList);
+    public ResponseEntity createByPhysicianListIterate(List<Physician> physiciansList) {
+        for (Physician physician: physiciansList){
+            if (physicianRepository.existsByUsername(physician.getUsername())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new MessageResponse("Error: Username "+ physician.getUsername() + " is already taken!"));
+            }
+        }
+        return ResponseEntity.ok(physicianRepository.saveAll(physiciansList));
     }
 
     @Override
