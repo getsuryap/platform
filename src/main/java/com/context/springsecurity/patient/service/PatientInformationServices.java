@@ -36,7 +36,9 @@ public interface PatientInformationServices {
 
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
 
-    public Optional<Patient> retrievePatientById(Long id);
+    public ResponseEntity retrievePatientById(Long id);
+
+    public ResponseEntity deletePatientById(Long id);
 
     public ResponseEntity updatePatient(Long id, Patient patient);
 
