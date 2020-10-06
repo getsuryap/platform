@@ -2,6 +2,7 @@ package com.context.springsecurity.patient.service;
 
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
 import com.context.springsecurity.patient.domain.Patient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public interface PatientInformationServices {
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
 
     public Optional<Patient> retrievePatientById(Long id);
+
+    public ResponseEntity updatePatient(Long id, Patient patient);
 
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
 }

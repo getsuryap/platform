@@ -26,5 +26,5 @@ import java.util.Optional;
 public interface PhysicianRepository extends JpaRepository<Physician, Long> {
     Boolean existsByUsername(String username);
 
-    Optional<Physician> getById(Long id);
+    Physician getById(Long id);
 }
