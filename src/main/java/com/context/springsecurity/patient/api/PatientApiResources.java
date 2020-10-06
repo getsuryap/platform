@@ -3,6 +3,7 @@ package com.context.springsecurity.patient.api;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.service.PatientInformationServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +44,18 @@ public class PatientApiResources {
     @ResponseBody
     List<Patient> all() {
         return patientInformationServices.retrieveAllPatients();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    Patient findById(@Valid @PathVariable Long id) {
+        return patientInformationServices.retrievePatientById(id).get();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    ResponseEntity updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+        return patientInformationServices.updatePatient(id,patient);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)

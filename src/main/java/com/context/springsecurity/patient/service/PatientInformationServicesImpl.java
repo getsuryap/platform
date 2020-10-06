@@ -6,8 +6,10 @@ import com.context.springsecurity.patient.contacts.services.ContactsInformationS
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,13 +63,34 @@ public class PatientInformationServicesImpl implements PatientInformationService
     }
 
     @Override
+    public ResponseEntity updatePatient(Long id, Patient update) {
+        return patientInformationRepository.findById(id)
+                .map(patient -> {
+                    patient.setCountry(update.getCountry() == null? patient.getCountry() : update.getCountry());
+                    patient.setDob(update.getDOB() ==null? patient.getDOB() : update.getDOB());
+                    patient.setEthnicity(update.getEthnicity() == null ? patient.getEthnicity() : update.getEthnicity());
+                    patient.setFirst_name(update.getFirst_name() == null ? patient.getFirst_name() : update.getFirst_name());
+                    patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
+                    patient.setLast_name(update.getLast_name() == null ? patient.getLast_name() : update.getLast_name());
+                    patient.setMdn(update.getMdn() == null ? patient.getMdn() : update.getMdn());
+                    patient.setGender(update.getGender() == null ? patient.getGender()  : update.getGender() );
+                    patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
+                    patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
+                    patient.setContactsInformation(patient.getContactsInformation());
+                    patient.setSsn(update.getSsn() ==null ? patient.getSsn() : update.getSsn());
+                    return ResponseEntity.ok(patientInformationRepository.save(patient));
+
+                }).orElseThrow(() -> new EntityNotFoundException());
+    }
+
+    @Override
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest) {
         return patientInformationRepository.findById(patientId).map(patientInformation -> {
             ContactsInformation contactsInformation = new ContactsInformation(
                     contactsInformationRequest.getIsReachable(), contactsInformationRequest.getEmail_address(),
                     contactsInformationRequest.getZipcode(), contactsInformationRequest.getCity(),
                     contactsInformationRequest.getState(), contactsInformationRequest.getPhysical_address(),
-                    contactsInformationRequest.gethome_phone(), contactsInformationRequest.getwork_phone(),patientInformation
+                    contactsInformationRequest.gethome_phone(), contactsInformationRequest.getwork_phone(), patientInformation
             );
             patientInformation.setContactsInformation(contactsInformation);
             contactsInformation.setPatient(patientInformation);
