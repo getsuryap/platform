@@ -29,7 +29,7 @@ import javax.validation.constraints.NotBlank;
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 

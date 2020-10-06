@@ -48,8 +48,8 @@ public class PatientApiResources {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    Patient findById(@Valid @PathVariable Long id) {
-        return patientInformationServices.retrievePatientById(id).get();
+   ResponseEntity findById(@Valid @PathVariable Long id) {
+        return patientInformationServices.retrievePatientById(id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -68,6 +68,12 @@ public class PatientApiResources {
     @ResponseBody
     List<Patient> createNewPatients(@Valid @RequestBody List<Patient> patientInformationListRequest){
         return patientInformationServices.createByPatientListIterate(patientInformationListRequest);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    ResponseEntity deletePatient(@PathVariable Long id) {
+        return patientInformationServices.deletePatientById(id);
     }
 
 }

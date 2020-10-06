@@ -5,9 +5,11 @@ import com.context.springsecurity.patient.contacts.repository.ContactsInformatio
 import com.context.springsecurity.patient.contacts.services.ContactsInformationService;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.repository.PatientInformationRepository;
+import com.context.springsecurity.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -58,26 +60,41 @@ public class PatientInformationServicesImpl implements PatientInformationService
     }
 
     @Override
-    public Optional<Patient> retrievePatientById(Long id) {
-        return patientInformationRepository.findById(id);
+    public ResponseEntity retrievePatientById(Long id) {
+        if (patientInformationRepository.existsById(id))
+            return ResponseEntity.ok(patientInformationRepository.findById(id));
+        else {
+            return ResponseEntity.ok(new MessageResponse("Patient with a given ID is not found"));
+        }
+    }
+
+    @Override
+    public ResponseEntity deletePatientById(Long id) {
+        if (patientInformationRepository.existsById(id)) {
+            patientInformationRepository.deleteById(id);
+            return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
+        }
+        else {
+            return ResponseEntity.ok(new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
+        }
     }
 
     @Override
     public ResponseEntity updatePatient(Long id, Patient update) {
         return patientInformationRepository.findById(id)
                 .map(patient -> {
-                    patient.setCountry(update.getCountry() == null? patient.getCountry() : update.getCountry());
-                    patient.setDob(update.getDOB() ==null? patient.getDOB() : update.getDOB());
+                    patient.setCountry(update.getCountry() == null ? patient.getCountry() : update.getCountry());
+                    patient.setDob(update.getDOB() == null ? patient.getDOB() : update.getDOB());
                     patient.setEthnicity(update.getEthnicity() == null ? patient.getEthnicity() : update.getEthnicity());
                     patient.setFirst_name(update.getFirst_name() == null ? patient.getFirst_name() : update.getFirst_name());
                     patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
                     patient.setLast_name(update.getLast_name() == null ? patient.getLast_name() : update.getLast_name());
                     patient.setMdn(update.getMdn() == null ? patient.getMdn() : update.getMdn());
-                    patient.setGender(update.getGender() == null ? patient.getGender()  : update.getGender() );
+                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
                     patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
                     patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
                     patient.setContactsInformation(patient.getContactsInformation());
-                    patient.setSsn(update.getSsn() ==null ? patient.getSsn() : update.getSsn());
+                    patient.setSsn(update.getSsn() == null ? patient.getSsn() : update.getSsn());
                     return ResponseEntity.ok(patientInformationRepository.save(patient));
 
                 }).orElseThrow(() -> new EntityNotFoundException());
