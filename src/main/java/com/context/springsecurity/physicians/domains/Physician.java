@@ -1,11 +1,15 @@
 package com.context.springsecurity.physicians.domains;
 
+import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.util.constants.DatabaseConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -57,12 +61,14 @@ public class Physician {
     @Column(name = "doc_type")
     private String level;
 
+    @OneToMany(targetEntity = Patient.class,cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Patient> patients;
+
     public Physician(){}
     public Physician(
-            Long id,
             String firstname, String lastname,String username, String contacts,
             String specialities, String level) {
-        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -127,4 +133,11 @@ public class Physician {
         this.level = level;
     }
 
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
 }

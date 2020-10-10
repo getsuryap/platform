@@ -67,7 +67,7 @@ public class PhysicianInformationServiceImpl  implements PhysicianInformationSer
 
     @Override
     public Optional<Physician> retrievePhysicianById(Long id) {
-        return Optional.empty();
+       return physicianRepository.findById(id);
     }
 
     @Override

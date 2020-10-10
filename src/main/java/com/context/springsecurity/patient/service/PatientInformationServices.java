@@ -2,10 +2,13 @@ package com.context.springsecurity.patient.service;
 
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
 import com.context.springsecurity.patient.domain.Patient;
+import com.context.springsecurity.physicians.domains.Physician;
+import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,17 +33,27 @@ import java.util.Optional;
 @Component
 @Service
 public interface PatientInformationServices {
+    @Transactional
     public List<Patient> retrieveAllPatients();
 
+    @Transactional
     public Patient createNewPatient(Patient patientInformation);
 
+    @Transactional
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
 
-    public ResponseEntity retrievePatientById(Long id);
+    @Transactional
+    public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException;
 
+    @Transactional
     public ResponseEntity deletePatientById(Long id);
 
+    @Transactional
     public ResponseEntity updatePatient(Long id, Patient patient);
 
+    @Transactional
+    public ResponseEntity assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException;
+
+    @Transactional
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
 }
