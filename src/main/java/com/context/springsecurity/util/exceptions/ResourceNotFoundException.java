@@ -1,11 +1,12 @@
-package com.context.springsecurity.physicians.repository;
+package com.context.springsecurity.util.exceptions;
 
-import com.context.springsecurity.physicians.domains.Physician;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
+ * This file was created by eli on 10/10/2020 for com.context.springsecurity.util.exceptions
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -23,7 +24,11 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface PhysicianRepository extends JpaRepository<Physician, Long> {
-    Boolean existsByUsername(String username);
-    Physician getById(Long id);
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFoundException extends Exception {
+    public static final long serialVersionUID = 1L;
+
+    public ResourceNotFoundException(String message){
+        super(message);
+    }
 }

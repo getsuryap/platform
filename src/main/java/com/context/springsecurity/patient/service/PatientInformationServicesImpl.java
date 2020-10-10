@@ -6,14 +6,21 @@ import com.context.springsecurity.patient.contacts.services.ContactsInformationS
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.repository.PatientInformationRepository;
 import com.context.springsecurity.payload.response.MessageResponse;
+import com.context.springsecurity.physicians.domains.Physician;
+import com.context.springsecurity.physicians.service.PhysicianInformationService;
+import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,6 +51,12 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Autowired
     ContactsInformationService contactsInformationService;
 
+    PhysicianInformationService physicianInformationService;
+    @Autowired
+    public PatientInformationServicesImpl(PhysicianInformationService physicianInformationService){
+        this.physicianInformationService = physicianInformationService;
+    }
+
     @Override
     public List<Patient> retrieveAllPatients() {
         return patientInformationRepository.findAll();
@@ -60,12 +73,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     }
 
     @Override
-    public ResponseEntity retrievePatientById(Long id) {
-        if (patientInformationRepository.existsById(id))
-            return ResponseEntity.ok(patientInformationRepository.findById(id));
-        else {
-            return ResponseEntity.ok(new MessageResponse("Patient with a given ID is not found"));
-        }
+    public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
+        Patient patient = patientInformationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Patient not found ::" + id));
+      return ResponseEntity.ok().body(patient);
     }
 
     @Override
@@ -117,5 +128,24 @@ public class PatientInformationServicesImpl implements PatientInformationService
         }).orElseGet(() -> {
             return null;
         });
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity assignPatientToPhysician(Long patientId,  Long physicianId) throws ResourceNotFoundException{
+        return patientInformationRepository.findById(patientId).map(patient -> {
+            physicianInformationService.retrievePhysicianById(physicianId).ifPresent(physician -> {
+                patient.setPhysician(physician);
+                List<Patient> patients = physician.getPatients();
+                patients.add(patient);
+                physician.setPatients(patients);
+                physicianInformationService.updatePhysician(physicianId, physician);
+                patientInformationRepository.save(patient);
+
+            });
+
+         return ResponseEntity.ok(physicianInformationService.getPhysicianById(physicianId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Physician not set"));
+
     }
 }

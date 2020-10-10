@@ -1,13 +1,17 @@
 package com.context.springsecurity.patient.domain;
 
+import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -30,7 +34,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
-public class Patient {
+public class Patient  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -84,10 +88,16 @@ public class Patient {
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
     private  ContactsInformation contactsInformation;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "physician_id")
+    @JsonIgnoreProperties(value = "students", allowSetters = true)
+    private Physician physician;
+
     public  Patient(){ }
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
-                    String principal_tribe,  String country, ContactsInformation contactsInformation) {
+                    String principal_tribe,  String country, ContactsInformation contactsInformation,
+                    Physician physician) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -100,6 +110,7 @@ public class Patient {
         this.principal_tribe = principal_tribe;
         this.country = country;
         this.contactsInformation = contactsInformation;
+        this.physician  = physician;
     }
 
 
@@ -198,6 +209,14 @@ public class Patient {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public void setPhysician(Physician physician) {
+        this.physician = physician;
+    }
+
+    public Physician getPhysician() {
+        return physician;
     }
 
     @JsonBackReference

@@ -2,6 +2,7 @@ package com.context.springsecurity.patient.api;
 
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.service.PatientInformationServices;
+import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
 import com.context.springsecurity.util.exceptions.TaskNotFoundException;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
@@ -81,7 +82,7 @@ public class PatientApiResources {
     @ResponseBody
     ResponseEntity findById(
             @ApiParam(name = "patientId", required = true)
-            @PathVariable Long patientId) throws NotFoundException {
+            @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
         return patientInformationServices.retrievePatientById(patientId);
     }
 
@@ -104,6 +105,22 @@ public class PatientApiResources {
             @ApiParam(name = "patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Patient Entity", required = true) @RequestBody Patient patient) {
         return patientInformationServices.updatePatient(patientId, patient);
+    }
+
+    @ApiOperation(
+            value = "ASSIGN patient to Physician",
+            notes = "ASSIGN Patient to Physician"
+    )
+    @RequestMapping(
+            value = "/{patientId}/{physicianId}",
+    method = RequestMethod.PUT,
+    consumes = MediaType.ALL_VALUE,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity assignPatientToPhysician(
+            @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
+            @ApiParam(name = "Physician ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
+        return patientInformationServices.assignPatientToPhysician(patientId, physicianId) ;
     }
 
 
