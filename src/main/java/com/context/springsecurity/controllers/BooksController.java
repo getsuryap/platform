@@ -6,6 +6,7 @@ import com.context.springsecurity.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -15,6 +16,7 @@ import java.util.Locale;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@ApiIgnore
 @RequestMapping("/api/books")
 public class BooksController {
     @Autowired

@@ -3,6 +3,8 @@ package com.context.springsecurity.patient.domain;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -27,6 +29,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Entity
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
+@ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +38,7 @@ public class Patient {
 
     @NotBlank
     @Column(length = 20)
+    @ApiModelProperty(notes = "Patient First name", required = true, name = "first_name")
     private String first_name;
 
     @NotBlank

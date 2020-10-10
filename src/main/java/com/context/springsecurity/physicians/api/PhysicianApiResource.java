@@ -4,6 +4,7 @@ import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.service.PatientInformationServices;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.physicians.service.PhysicianInformationService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/physicians")
+@Api(value = "/api/physicians", tags = "Physicians")
 public class PhysicianApiResource {
 
     PhysicianInformationService physicianInformationService;
