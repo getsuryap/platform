@@ -1,10 +1,10 @@
 package com.context.springsecurity;
 
-import com.context.springsecurity.ward.beds.domain.BedSize;
-import com.context.springsecurity.util.enums.BedSizeEnums;
-import com.context.springsecurity.util.enums.RoleEnums;
 import com.context.springsecurity.domain.Role;
 import com.context.springsecurity.repository.RoleRepository;
+import com.context.springsecurity.util.enums.BedSizeEnums;
+import com.context.springsecurity.util.enums.RoleEnums;
+import com.context.springsecurity.ward.beds.domain.BedSize;
 import com.context.springsecurity.ward.beds.repository.BedSizeRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
