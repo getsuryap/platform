@@ -31,7 +31,7 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
+@Entity(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 public class Patient  implements Serializable {
@@ -88,16 +88,17 @@ public class Patient  implements Serializable {
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
     private  ContactsInformation contactsInformation;
 
+    /*
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "physician_id")
     @JsonIgnoreProperties(value = "students", allowSetters = true)
     private Physician physician;
+    */
 
     public  Patient(){ }
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
-                    String principal_tribe,  String country, ContactsInformation contactsInformation,
-                    Physician physician) {
+                    String principal_tribe,  String country, ContactsInformation contactsInformation) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -110,7 +111,6 @@ public class Patient  implements Serializable {
         this.principal_tribe = principal_tribe;
         this.country = country;
         this.contactsInformation = contactsInformation;
-        this.physician  = physician;
     }
 
 
@@ -211,6 +211,7 @@ public class Patient  implements Serializable {
         this.country = country;
     }
 
+    /**
     public void setPhysician(Physician physician) {
         this.physician = physician;
     }
@@ -218,6 +219,8 @@ public class Patient  implements Serializable {
     public Physician getPhysician() {
         return physician;
     }
+
+    **/
 
     @JsonBackReference
     public ContactsInformation getContactsInformation() {

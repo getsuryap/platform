@@ -9,6 +9,8 @@ import com.context.springsecurity.payload.response.MessageResponse;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.physicians.service.PhysicianInformationService;
 import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +49,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     private PatientInformationRepository patientInformationRepository;
     @Autowired
     ContactsInformationRepository contactsInformationRepository;
-
     @Autowired
     ContactsInformationService contactsInformationService;
+    @Autowired
+    SessionFactory sessionFactory;
 
     PhysicianInformationService physicianInformationService;
     @Autowired
@@ -59,7 +62,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
 
     @Override
     public List<Patient> retrieveAllPatients() {
-        return patientInformationRepository.findAll();
+        Session session = this.sessionFactory.openSession();
+        List<Patient> patientList = session.createQuery("from m_patient").list();
+        session.close();
+        return patientList;
     }
 
     @Override
@@ -135,7 +141,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
     public ResponseEntity assignPatientToPhysician(Long patientId,  Long physicianId) throws ResourceNotFoundException{
         return patientInformationRepository.findById(patientId).map(patient -> {
             physicianInformationService.retrievePhysicianById(physicianId).ifPresent(physician -> {
-                patient.setPhysician(physician);
+               // patient.setPhysician(physician);
                 List<Patient> patients = physician.getPatients();
                 patients.add(patient);
                 physician.setPatients(patients);
