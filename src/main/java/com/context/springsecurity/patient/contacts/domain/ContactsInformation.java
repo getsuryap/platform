@@ -32,7 +32,7 @@ public class ContactsInformation {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @Column(length = 2)
+    @Column(name = "is_active")
     private Boolean isReachable;
 
     @NotBlank

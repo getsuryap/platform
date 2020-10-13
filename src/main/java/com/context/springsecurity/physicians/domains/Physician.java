@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -61,20 +62,26 @@ public class Physician {
     @Column(name = "doc_type")
     private String level;
 
-    @OneToMany(targetEntity = Patient.class,cascade = CascadeType.ALL)
+    @OneToMany(
+            targetEntity = Patient.class,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "physician_id")
     @JsonIgnore
-    private List<Patient> patients;
+    private List<Patient> patients = new ArrayList<>();
 
     public Physician(){}
     public Physician(
             String firstname, String lastname,String username, String contacts,
-            String specialities, String level) {
+            String specialities, String level,List<Patient> patients) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.contacts = contacts;
         this.specialities = specialities;
         this.level = level;
+        this.patients = patients;
     }
 
     public Long getId() {
