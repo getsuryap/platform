@@ -141,13 +141,8 @@ public class PatientInformationServicesImpl implements PatientInformationService
     public ResponseEntity assignPatientToPhysician(Long patientId,  Long physicianId) throws ResourceNotFoundException{
         return patientInformationRepository.findById(patientId).map(patient -> {
             physicianInformationService.retrievePhysicianById(physicianId).ifPresent(physician -> {
-               // patient.setPhysician(physician);
-                List<Patient> patients = physician.getPatients();
-                patients.add(patient);
-                physician.setPatients(patients);
-                physicianInformationService.updatePhysician(physicianId, physician);
-                patientInformationRepository.save(patient);
-
+             patient.setPhysician(physician);
+             patientInformationRepository.save(patient);
             });
 
          return ResponseEntity.ok(physicianInformationService.getPhysicianById(physicianId));
