@@ -88,17 +88,16 @@ public class Patient  implements Serializable {
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
     private  ContactsInformation contactsInformation;
 
-    /*
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
-    @JoinColumn(name = "physician_id")
-    @JsonIgnoreProperties(value = "students", allowSetters = true)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+    @JsonIgnore
     private Physician physician;
-    */
+
 
     public  Patient(){ }
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
-                    String principal_tribe,  String country, ContactsInformation contactsInformation) {
+                    String principal_tribe,  String country,Physician physician) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -110,7 +109,7 @@ public class Patient  implements Serializable {
         this.mdn = mdn;
         this.principal_tribe = principal_tribe;
         this.country = country;
-        this.contactsInformation = contactsInformation;
+        this.physician = physician;
     }
 
 
@@ -211,7 +210,7 @@ public class Patient  implements Serializable {
         this.country = country;
     }
 
-    /**
+
     public void setPhysician(Physician physician) {
         this.physician = physician;
     }
@@ -220,7 +219,6 @@ public class Patient  implements Serializable {
         return physician;
     }
 
-    **/
 
     @JsonBackReference
     public ContactsInformation getContactsInformation() {
@@ -229,5 +227,17 @@ public class Patient  implements Serializable {
 
     public void setContactsInformation(ContactsInformation contactsInformation) {
         this.contactsInformation = contactsInformation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Patient )) return false;
+        return id != null && id.equals(((Patient) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

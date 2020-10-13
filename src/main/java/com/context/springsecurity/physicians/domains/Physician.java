@@ -30,7 +30,7 @@ import java.util.Set;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
+@Entity(name = DatabaseConstants.PHYSICIAN_TABLE)
 @Table(name = DatabaseConstants.PHYSICIAN_TABLE)
 public class Physician {
     @Id
@@ -63,7 +63,6 @@ public class Physician {
     private String level;
 
     @OneToMany(
-            targetEntity = Patient.class,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -74,14 +73,13 @@ public class Physician {
     public Physician(){}
     public Physician(
             String firstname, String lastname,String username, String contacts,
-            String specialities, String level,List<Patient> patients) {
+            String specialities, String level) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.contacts = contacts;
         this.specialities = specialities;
         this.level = level;
-        this.patients = patients;
     }
 
     public Long getId() {
@@ -147,4 +145,15 @@ public class Physician {
     public void setPatients(List<Patient> patients) {
         this.patients = patients;
     }
+
+    public void addPatient(Patient patient){
+        patients.add(patient);
+        patient.setPhysician(this);
+    }
+
+    public void deletePatient(Patient patient){
+        patients.remove(patient);
+        patient.setPhysician(null);
+    }
+
 }
