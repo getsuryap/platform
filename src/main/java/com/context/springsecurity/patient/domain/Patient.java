@@ -89,8 +89,9 @@ public class Patient  implements Serializable {
     private  ContactsInformation contactsInformation;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
-    @JsonIgnore
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "physician_id")
     private Physician physician;
 
 

@@ -1,6 +1,7 @@
 package com.context.springsecurity.patient.service;
 
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
+import com.context.springsecurity.patient.data.PatientData;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
@@ -56,4 +57,6 @@ public interface PatientInformationServices {
 
     @Transactional
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
+
+    public ResponseEntity retrievePatientCreationDataTemplate();
 }

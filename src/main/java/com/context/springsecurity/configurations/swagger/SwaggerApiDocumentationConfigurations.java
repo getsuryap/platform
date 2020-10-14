@@ -1,4 +1,4 @@
-package com.context.springsecurity.util.swagger;
+package com.context.springsecurity.configurations.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,13 +9,12 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * This file was created by eli on 10/10/2020 for com.context.springsecurity.util.swagger
+ * This file was created by eli on 10/10/2020 for com.context.springsecurity.configurations.swagger
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
