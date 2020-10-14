@@ -25,7 +25,7 @@ import javax.validation.constraints.NotBlank;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
+@Entity(name = DatabaseConstants.CONTACTS_INFO_TABLE)
 @Table(name = DatabaseConstants.CONTACTS_INFO_TABLE)
 public class ContactsInformation {
     @Id
