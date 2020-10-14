@@ -6,6 +6,10 @@ import com.context.springsecurity.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +33,9 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
 @Entity(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
@@ -37,7 +44,7 @@ public class Patient  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private Long id;
+    private @Setter(AccessLevel.PROTECTED)  Long id;
 
     @NotBlank
     @Column(length = 20)
@@ -91,10 +98,8 @@ public class Patient  implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "physician_id")
-    private Physician physician;
+    @Getter @Setter private Physician physician;
 
-
-    public  Patient(){ }
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
                     String principal_tribe,  String country,
@@ -117,126 +122,13 @@ public class Patient  implements Serializable {
 
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getMiddle_name() {
-        return middle_name;
-    }
-
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getSuffix() {
-        return suffix;
-    }
-
-    public void setSuffix(String suffix) {
-        this.suffix = suffix;
-    }
-
-    public String getEthnicity() {
-        return ethnicity;
-    }
-
-    public void setEthnicity(String ethnicity) {
-        this.ethnicity = ethnicity;
-    }
-
-    public String getDOB() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getSsn() {
-        return ssn;
-    }
-
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
-
-    public String getMdn() {
-        return mdn;
-    }
-
-    public void setMdn(String mdn) {
-        this.mdn = mdn;
-    }
-
-    public String getPrincipal_tribe() {
-        return principal_tribe;
-    }
-
-    public void setPrincipal_tribe(String principal_tribe) {
-        this.principal_tribe = principal_tribe;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-
-    public void setPhysician(Physician physician) {
-        this.physician = physician;
-    }
-
-    public Physician getPhysician() {
-        return physician;
-    }
-
-
-    @JsonBackReference
-    public ContactsInformation getContactsInformation() {
-        return contactsInformation;
-    }
-
-    public void setContactsInformation(ContactsInformation contactsInformation) {
-        this.contactsInformation = contactsInformation;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Patient )) return false;
-        return id != null && id.equals(((Patient) o).getId());
+        return id != null && id.equals(((Patient) o).id);
     }
 
     @Override
