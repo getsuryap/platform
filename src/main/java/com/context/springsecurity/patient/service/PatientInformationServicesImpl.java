@@ -130,7 +130,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
                     contactsInformationRequest.getIsReachable(), contactsInformationRequest.getEmail_address(),
                     contactsInformationRequest.getZipcode(), contactsInformationRequest.getCity(),
                     contactsInformationRequest.getState(), contactsInformationRequest.getPhysical_address(),
-                    contactsInformationRequest.gethome_phone(), contactsInformationRequest.getwork_phone(), patientInformation
+                    contactsInformationRequest.getWork_phone(), contactsInformationRequest.getWork_phone(), patientInformation
             );
             patientInformation.setContactsInformation(contactsInformation);
             contactsInformation.setPatient(patientInformation);

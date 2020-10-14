@@ -3,6 +3,10 @@ package com.context.springsecurity.contacts.domain;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.domain.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +29,9 @@ import javax.validation.constraints.NotBlank;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
 @Entity(name = DatabaseConstants.CONTACTS_INFO_TABLE)
 @Table(name = DatabaseConstants.CONTACTS_INFO_TABLE)
 public class ContactsInformation {
@@ -57,12 +64,10 @@ public class ContactsInformation {
     @Column(length = 20)
     private String work_phone;
 
-
     @OneToOne
     @MapsId
     private Patient patient;
 
-    public ContactsInformation(){}
     public ContactsInformation(
             Boolean isReachable,String email_address,
             String zipcode, String city, String state,
@@ -79,88 +84,5 @@ public class ContactsInformation {
         this.patient = patient;
     }
 
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getEmail_address() {
-        return email_address;
-    }
-
-    public void setEmail_address(String email_address) {
-        this.email_address = email_address;
-    }
-
-    public Boolean getIsReachable() {
-        return isReachable;
-    }
-
-    public void setIsReachable(Boolean isReachable) {
-        this.isReachable = isReachable;
-    }
-
-    public String gethome_phone() {
-        return home_phone;
-    }
-
-    public void setHome_phone(String home_phone) {
-        this.home_phone = home_phone;
-    }
-
-    public String getPhysical_address() {
-        return physical_address;
-    }
-
-    public void setPhysical_address(String physical_address) {
-        this.physical_address = physical_address;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
-    public String getwork_phone() {
-        return work_phone;
-    }
-
-    public void setWork_phone(String work_phone) {
-        this.work_phone = work_phone;
-    }
-
-
-    @JsonManagedReference
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 
 }
