@@ -49,7 +49,7 @@ public class HibernateConfigurations {
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic_default");
         basicDataSource.setUsername("root");
         basicDataSource.setPassword("mysql");
@@ -67,6 +67,7 @@ public class HibernateConfigurations {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        hibernateProperties.setProperty("show-sql", "true");
         return hibernateProperties;
     }
 }

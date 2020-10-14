@@ -115,7 +115,7 @@ public class PatientApiResources {
             value = "UPDATE specific Patient information",
             notes = "UPDATE specific Patient information")
     @RequestMapping(
-            value = "/{id}",
+            value = "/{patientId}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
