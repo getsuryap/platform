@@ -60,10 +60,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Autowired
     SessionFactory sessionFactory;
 
-
     PhysicianInformationService physicianInformationService;
     @Autowired
-    public PatientInformationServicesImpl(PhysicianInformationService physicianInformationService){
+    public PatientInformationServicesImpl(
+            PhysicianInformationService physicianInformationService){
         this.physicianInformationService = physicianInformationService;
     }
 
@@ -96,8 +96,9 @@ public class PatientInformationServicesImpl implements PatientInformationService
 
     @Override
     public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
-
-      return ResponseEntity.ok().body(patientInformationRepository.findById(id));
+        Patient patient = patientInformationRepository.findById(id).get();
+        patient.getPhysician().getPatients().clear();
+      return ResponseEntity.ok().body(patient);
     }
 
     @Override
