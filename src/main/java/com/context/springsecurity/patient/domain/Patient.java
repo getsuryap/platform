@@ -3,9 +3,7 @@ package com.context.springsecurity.patient.domain;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,6 +32,7 @@ import java.io.Serializable;
 @Entity(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Patient  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,10 +85,10 @@ public class Patient  implements Serializable {
     private String country;
 
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id")
     private  ContactsInformation contactsInformation;
 
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "physician_id")
     private Physician physician;
@@ -98,7 +97,9 @@ public class Patient  implements Serializable {
     public  Patient(){ }
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
-                    String principal_tribe,  String country,Physician physician) {
+                    String principal_tribe,  String country,
+                    ContactsInformation contactsInformation,
+                    Physician physician) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -111,6 +112,7 @@ public class Patient  implements Serializable {
         this.principal_tribe = principal_tribe;
         this.country = country;
         this.physician = physician;
+        this.contactsInformation = contactsInformation;
     }
 
 
