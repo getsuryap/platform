@@ -78,6 +78,9 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
+        for (int i = 0; i<physiciansOptions.size();i++){
+            physiciansOptions.get(i).getPatients().clear();
+        }
         return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
     }
 
