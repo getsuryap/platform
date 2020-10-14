@@ -1,7 +1,7 @@
-package com.context.springsecurity.patient.contacts.api;
+package com.context.springsecurity.contacts.api;
 
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
-import com.context.springsecurity.patient.contacts.services.ContactsInformationService;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.services.ContactsInformationService;
 import com.context.springsecurity.patient.service.PatientInformationServices;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
