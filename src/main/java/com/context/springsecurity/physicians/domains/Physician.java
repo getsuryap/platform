@@ -2,8 +2,10 @@ package com.context.springsecurity.physicians.domains;
 
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.util.constants.DatabaseConstants;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
@@ -33,6 +35,7 @@ import java.util.Set;
  */
 @Entity(name = DatabaseConstants.PHYSICIAN_TABLE)
 @Table(name = DatabaseConstants.PHYSICIAN_TABLE)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Physician {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +66,6 @@ public class Physician {
     @Column(name = "doc_type")
     private String level;
 
-    @JsonManagedReference
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
