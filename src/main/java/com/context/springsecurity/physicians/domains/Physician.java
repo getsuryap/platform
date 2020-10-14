@@ -3,17 +3,17 @@ package com.context.springsecurity.physicians.domains;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.validator.constraints.UniqueElements;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -33,6 +33,9 @@ import java.util.Set;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
 @Entity(name = DatabaseConstants.PHYSICIAN_TABLE)
 @Table(name = DatabaseConstants.PHYSICIAN_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
@@ -74,7 +77,6 @@ public class Physician {
     @JoinColumn(name = "physician_id")
     private List<Patient> patients = new ArrayList<>();
 
-    public Physician(){}
     public Physician(
             String firstname, String lastname,String username, String contacts,
             String specialities, String level) {
@@ -84,70 +86,6 @@ public class Physician {
         this.contacts = contacts;
         this.specialities = specialities;
         this.level = level;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(String contacts) {
-        this.contacts = contacts;
-    }
-
-    public String getSpecialities() {
-        return specialities;
-    }
-
-    public void setSpecialities(String specialities) {
-        this.specialities = specialities;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public List<Patient> getPatients() {
-        return patients;
-    }
-
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
     }
 
     public void addPatient(Patient patient){

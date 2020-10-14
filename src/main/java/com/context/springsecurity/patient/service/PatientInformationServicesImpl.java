@@ -107,7 +107,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
         return patientInformationRepository.findById(id)
                 .map(patient -> {
                     patient.setCountry(update.getCountry() == null ? patient.getCountry() : update.getCountry());
-                    patient.setDob(update.getDOB() == null ? patient.getDOB() : update.getDOB());
+                    patient.setDob(update.getDob() == null ? patient.getDob() : update.getDob());
                     patient.setEthnicity(update.getEthnicity() == null ? patient.getEthnicity() : update.getEthnicity());
                     patient.setFirst_name(update.getFirst_name() == null ? patient.getFirst_name() : update.getFirst_name());
                     patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
