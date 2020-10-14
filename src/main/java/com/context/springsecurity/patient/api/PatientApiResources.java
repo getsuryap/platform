@@ -1,5 +1,6 @@
 package com.context.springsecurity.patient.api;
 
+import com.context.springsecurity.patient.data.PatientData;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.service.PatientInformationServices;
 import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
@@ -42,7 +43,7 @@ import java.util.Locale;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
 @RequestMapping("/api/patients")
-@Api(value = "/api/patients", tags = "Patients",description = "Patient  API resources")
+@Api(value = "/api/patients", tags = "Patients", description = "Patient  API resources")
 public class PatientApiResources {
 
     PatientInformationServices patientInformationServices;
@@ -54,7 +55,7 @@ public class PatientApiResources {
 
 
     @ApiOperation(value = "GET List all patients", notes = "Get list of all patients")
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "/remove",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -65,6 +66,29 @@ public class PatientApiResources {
     })
     List<Patient> all() {
         return patientInformationServices.retrieveAllPatients();
+    }
+
+    @ApiOperation(
+            value = "RETRIEVE Patient creation Template for creating new Patient",
+            notes = "RETRIEVE Patient creation Template for creating new Patient"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = PatientData.class),
+            @ApiResponse(code = 500, message = "Internal Server error"),
+            @ApiResponse(code = 404, message = "Error")
+    })
+    @ResponseBody
+    ResponseEntity retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
+        if (!(command == null || command.isEmpty())) {
+            if (command.equals("template")){
+                return patientInformationServices.retrievePatientCreationDataTemplate();
+            }
+        }
+        return ResponseEntity.ok().body(patientInformationServices.retrieveAllPatients());
     }
 
 
@@ -113,14 +137,14 @@ public class PatientApiResources {
     )
     @RequestMapping(
             value = "/{patientId}/{physicianId}",
-    method = RequestMethod.PUT,
-    consumes = MediaType.ALL_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+            method = RequestMethod.PUT,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Physician ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
-        return patientInformationServices.assignPatientToPhysician(patientId, physicianId) ;
+        return patientInformationServices.assignPatientToPhysician(patientId, physicianId);
     }
 
 

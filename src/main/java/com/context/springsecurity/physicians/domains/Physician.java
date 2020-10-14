@@ -3,6 +3,7 @@ package com.context.springsecurity.physicians.domains;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
@@ -62,12 +63,13 @@ public class Physician {
     @Column(name = "doc_type")
     private String level;
 
+    @JsonManagedReference
     @OneToMany(
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @JoinColumn(name = "physician_id")
-    @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
 
     public Physician(){}
