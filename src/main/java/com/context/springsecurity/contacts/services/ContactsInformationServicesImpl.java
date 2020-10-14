@@ -1,7 +1,7 @@
-package com.context.springsecurity.patient.contacts.services;
+package com.context.springsecurity.contacts.services;
 
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
-import com.context.springsecurity.patient.contacts.repository.ContactsInformationRepository;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.repository.ContactsInformationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

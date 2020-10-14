@@ -1,4 +1,4 @@
-package com.context.springsecurity.patient.contacts.domain;
+package com.context.springsecurity.contacts.domain;
 
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.domain.Patient;

@@ -2,7 +2,7 @@ package com.context.springsecurity.patient.domain;
 
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.util.constants.DatabaseConstants;
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

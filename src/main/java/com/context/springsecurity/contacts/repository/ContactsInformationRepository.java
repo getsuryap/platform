@@ -1,6 +1,6 @@
-package com.context.springsecurity.patient.contacts.repository;
+package com.context.springsecurity.contacts.repository;
 
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

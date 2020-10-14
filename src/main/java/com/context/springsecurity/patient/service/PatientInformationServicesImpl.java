@@ -1,9 +1,8 @@
 package com.context.springsecurity.patient.service;
 
-import ch.qos.logback.classic.db.SQLBuilder;
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
-import com.context.springsecurity.patient.contacts.repository.ContactsInformationRepository;
-import com.context.springsecurity.patient.contacts.services.ContactsInformationService;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.repository.ContactsInformationRepository;
+import com.context.springsecurity.contacts.services.ContactsInformationService;
 import com.context.springsecurity.patient.data.PatientData;
 import com.context.springsecurity.patient.domain.Patient;
 import com.context.springsecurity.patient.repository.PatientInformationRepository;
@@ -11,24 +10,15 @@ import com.context.springsecurity.payload.response.MessageResponse;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.physicians.service.PhysicianInformationService;
 import com.context.springsecurity.util.exceptions.ResourceNotFoundException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

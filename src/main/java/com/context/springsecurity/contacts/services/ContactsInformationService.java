@@ -1,6 +1,6 @@
-package com.context.springsecurity.patient.contacts.services;
+package com.context.springsecurity.contacts.services;
 
-import com.context.springsecurity.patient.contacts.domain.ContactsInformation;
+import com.context.springsecurity.contacts.domain.ContactsInformation;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
