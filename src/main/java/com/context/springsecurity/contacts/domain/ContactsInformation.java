@@ -2,7 +2,9 @@ package com.context.springsecurity.contacts.domain;
 
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.patient.domain.Patient;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.CONTACTS_INFO_TABLE)
 @Table(name = DatabaseConstants.CONTACTS_INFO_TABLE)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class ContactsInformation {
     @Id
     @Column(name = "id", unique = true)

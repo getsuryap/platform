@@ -1,15 +1,13 @@
 package com.context.springsecurity.patient.domain;
 
+import com.context.springsecurity.domain.Auditable;
 import com.context.springsecurity.physicians.domains.Physician;
 import com.context.springsecurity.util.constants.DatabaseConstants;
 import com.context.springsecurity.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +31,7 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Data
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
@@ -40,7 +39,8 @@ import java.io.Serializable;
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Patient  implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class Patient extends Auditable<String> implements Serializable  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
