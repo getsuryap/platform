@@ -87,7 +87,9 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
         Patient patient = patientInformationRepository.findById(id).get();
-        patient.getPhysician().getPatients().clear();
+        if (patient.getPhysician() != null){
+            patient.getPhysician().getPatients().clear();
+        }
       return ResponseEntity.ok().body(patient);
     }
 

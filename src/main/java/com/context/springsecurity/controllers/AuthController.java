@@ -36,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @ApiIgnore
-@RequestMapping("/auth") /**Defining class-level request handling**/
+@RequestMapping("/api/auth") /**Defining class-level request handling**/
 public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
