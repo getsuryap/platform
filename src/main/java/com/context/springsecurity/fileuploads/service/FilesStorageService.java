@@ -5,6 +5,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -43,9 +45,11 @@ public interface FilesStorageService {
 
     public Resource loadImage(Long patientId,String filename);
 
-    public Resource loadDocument(long patientId, String filename);
+    public Resource loadDocument(Long patientId, String filename);
 
     public void deleteAll();
+
+    public void deletePatientFileOrDocument(String documentLocation, Long patientId, String filename);
 
     public Stream<Path> loadAll();
 

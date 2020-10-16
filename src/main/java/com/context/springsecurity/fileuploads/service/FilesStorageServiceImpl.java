@@ -1,5 +1,6 @@
 package com.context.springsecurity.fileuploads.service;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.stream.Stream;
 
 /**
@@ -86,7 +84,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public Resource loadImage(Long patientId, String filename) {
         try {
-            Path path = this.retrieveEntityImagePath("images",patientId);
+            Path path = this.retrieveEntityImagePath("images", patientId);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -101,9 +99,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource loadDocument(long patientId, String filename) {
+    public Resource loadDocument(Long patientId, String filename) {
         try {
-            Path path = this.retrieveEntityImagePath("documents",patientId);
+            Path path = this.retrieveEntityImagePath("documents", patientId);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -114,6 +112,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deletePatientFileOrDocument(String documentLocation,  Long patientId, String filename) {
+
+        try{
+            FileSystemUtils.deleteRecursively(retrieveDocumentOrImagePath(documentLocation,patientId,filename));
+        }catch (IOException e){
+            throw new RuntimeException(new MessagingException("Couldn't delete this document. Error: "+e.getMessage()));
         }
     }
 
@@ -177,6 +185,17 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);
+        return Paths.get(sb.toString());
+    }
+
+    private Path retrieveDocumentOrImagePath(String documentLocation, @NonNull Long patientId, @NonNull String fileName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("uploads/");
+        sb.append(patientId);
+        sb.append("/");
+        sb.append(documentLocation);
+        sb.append("/");
+        sb.append(fileName);
         return Paths.get(sb.toString());
     }
 }
