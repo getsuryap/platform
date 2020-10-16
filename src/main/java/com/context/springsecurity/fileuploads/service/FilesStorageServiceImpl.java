@@ -84,9 +84,26 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource load(Long patientId, String filename) {
+    public Resource loadImage(Long patientId, String filename) {
         try {
-            Path path = this.retrieveEntityImagePath(patientId);
+            Path path = this.retrieveEntityImagePath("images",patientId);
+            Path file = path.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Resource loadDocument(long patientId, String filename) {
+        try {
+            Path path = this.retrieveEntityImagePath("documents",patientId);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -115,7 +132,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public String uploadPatientImage(@NonNull Long patientId, MultipartFile file) {
+    public String uploadPatientImage(@NonNull Long patientId, @NonNull String documentLocation, MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -127,37 +144,39 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             // Copy file to the target location (Replacing existing file with the same name)
 
 
-            Path targetLocation = this.createDirectoryIfNotExists(patientId).resolve(fileName);
+            Path targetLocation = this.createDirectoryIfNotExists(patientId, documentLocation).resolve(fileName);
 
             logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
             logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequestUri());
 
-            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("images/").concat(fileName));
+            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(documentLocation + "/").concat(fileName));
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("images/").concat(fileName);
+            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(fileName);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
-    private Path createDirectoryIfNotExists(Long patientId) {
+    private Path createDirectoryIfNotExists(Long patientId, String documentLocation) {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("uploads/");
             sb.append(patientId);
-            sb.append("/images");
+            sb.append("/" + documentLocation);
             Path image = Paths.get(sb.toString());
             return Files.createDirectories(image);
         } catch (IOException e) {
             throw new RuntimeException("Could not create a directory for this client. Error:  " + e.getMessage());
         }
     }
-    private Path retrieveEntityImagePath(@NonNull Long patientId){
+
+    private Path retrieveEntityImagePath(String documentLocation, @NonNull Long patientId) {
         StringBuilder sb = new StringBuilder();
         sb.append("uploads/");
         sb.append(patientId);
-        sb.append("/images");
+        sb.append("/");
+        sb.append(documentLocation);
         return Paths.get(sb.toString());
     }
 }
