@@ -36,7 +36,7 @@ public class BaseApplication implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception{
-        filesStorageService.deleteAll();
+        //filesStorageService.deleteAll();
         filesStorageService.init();
     }
 
