@@ -87,7 +87,7 @@ public class FilesUploadController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @GetMapping("/files/{patientId}/{filename:.+}")
+    @GetMapping("/{patientId}/images/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
         Resource file = storageService.load(patientId, filename);

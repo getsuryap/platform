@@ -132,10 +132,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
             logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequestUri());
 
-            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(targetLocation.toString()));
+            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("images/").concat(fileName));
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(targetLocation.toString());
+            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("images/").concat(fileName);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
