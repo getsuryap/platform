@@ -152,7 +152,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             Path targetLocation = this.createDirectoryIfNotExists(patientId, documentLocation).resolve(fileName);
 
             logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
-            logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequestUri());
+            logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
 
             logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(documentLocation + "/").concat(fileName));
 
