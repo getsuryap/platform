@@ -3,6 +3,7 @@ package com.context.springsecurity.fileuploads.controller;
 import com.context.springsecurity.fileuploads.message.ResponseMessage;
 import com.context.springsecurity.fileuploads.model.FileInfo;
 import com.context.springsecurity.fileuploads.service.FilesStorageService;
+import com.context.springsecurity.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -115,5 +116,19 @@ public class FilesUploadController {
         Resource file = storageService.loadDocument(patientId, filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @DeleteMapping("/{patientId}/images/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
+         storageService.deletePatientFileOrDocument("images",patientId, filename);
+        return ResponseEntity.ok().body("Done");
+    }
+
+    @DeleteMapping("/{patientId}/documents/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<String> deletePatientDocument(@PathVariable String filename, @PathVariable Long patientId) {
+         storageService.deletePatientFileOrDocument("documents",patientId, filename);
+        return ResponseEntity.ok().body("Done");
     }
 }
