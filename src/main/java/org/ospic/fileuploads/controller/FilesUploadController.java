@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -38,16 +39,17 @@ import java.util.stream.Collectors;
  */
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController
+@Controller
 @RequestMapping("/api/upload")
 public class FilesUploadController {
-
     FilesStorageService storageService;
 
     @Autowired
     public FilesUploadController(FilesStorageService storageService) {
         this.storageService = storageService;
     }
+
+
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -61,6 +63,7 @@ public class FilesUploadController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
+
 
     @RequestMapping(value = "/{patientId}/images", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
@@ -109,6 +112,7 @@ public class FilesUploadController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+
     @GetMapping("/{patientId}/documents/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
@@ -117,14 +121,15 @@ public class FilesUploadController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @DeleteMapping("/{patientId}/images/{filename:.+}")
+
+    @RequestMapping(value="/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
          storageService.deletePatientFileOrDocument("images",patientId, filename);
         return ResponseEntity.ok().body("Done");
     }
 
-    @DeleteMapping("/{patientId}/documents/{filename:.+}")
+    @RequestMapping(value ="/{patientId}/documents/{filename:.+}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> deletePatientDocument(@PathVariable String filename, @PathVariable Long patientId) {
          storageService.deletePatientFileOrDocument("documents",patientId, filename);

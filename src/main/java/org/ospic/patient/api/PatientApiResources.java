@@ -1,6 +1,7 @@
 package org.ospic.patient.api;
 
 import org.ospic.fileuploads.message.ResponseMessage;
+import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.data.PatientData;
 import org.ospic.patient.domain.Patient;
 import org.ospic.patient.service.PatientInformationServices;
@@ -8,6 +9,8 @@ import org.ospic.util.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +45,12 @@ import java.util.List;
 public class PatientApiResources {
 
     PatientInformationServices patientInformationServices;
+    FilesStorageService filesStorageService;
 
     @Autowired
-    PatientApiResources(PatientInformationServices patientInformationServices) {
+    PatientApiResources(PatientInformationServices patientInformationServices, FilesStorageService filesStorageService) {
         this.patientInformationServices = patientInformationServices;
+        this.filesStorageService = filesStorageService;
     }
 
 
@@ -220,6 +225,21 @@ public class PatientApiResources {
     @ResponseBody
     ResponseEntity deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
         return patientInformationServices.deletePatientById(id);
+    }
+
+    @GetMapping("/{patientId}/images/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
+        Resource file = filesStorageService.loadImage(patientId, filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @RequestMapping(value = "/{patientId}/documents/{filename:.+}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
+        Resource file = filesStorageService.loadDocument(patientId, filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
 }
