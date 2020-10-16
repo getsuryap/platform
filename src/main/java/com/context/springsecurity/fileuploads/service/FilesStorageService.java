@@ -3,6 +3,7 @@ package com.context.springsecurity.fileuploads.service;
 import lombok.NonNull;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -29,6 +30,7 @@ import java.util.stream.Stream;
  * under the License.
  */
 @Component
+@Service
 public interface FilesStorageService {
     /**
      * Initiate Storage service **/
@@ -39,12 +41,14 @@ public interface FilesStorageService {
      * **/
     public void save(MultipartFile multipartFile);
 
-    public Resource load(Long patientId,String filename);
+    public Resource loadImage(Long patientId,String filename);
+
+    public Resource loadDocument(long patientId, String filename);
 
     public void deleteAll();
 
     public Stream<Path> loadAll();
 
-    public String uploadPatientImage(@NonNull Long patientId, MultipartFile multipartFile);
+    public String uploadPatientImage(@NonNull Long patientId,@NonNull String documentLocation, MultipartFile multipartFile);
 
 }

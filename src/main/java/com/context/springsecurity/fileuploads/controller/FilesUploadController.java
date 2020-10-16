@@ -61,11 +61,25 @@ public class FilesUploadController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
-    @RequestMapping(value = "/{patientId}", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/{patientId}/images", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
-            String response = storageService.uploadPatientImage(patientId,file);
+            String response = storageService.uploadPatientImage(patientId, "images", file);
+            message = "Uploaded the file successfully: " + response;
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
+
+    @RequestMapping(value = "/{patientId}/documents", method = RequestMethod.POST)
+    public ResponseEntity<ResponseMessage> uploadPatientFileDocument(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
+        String message = "";
+        try {
+            String response = storageService.uploadPatientImage(patientId, "documents", file);
             message = "Uploaded the file successfully: " + response;
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -90,7 +104,15 @@ public class FilesUploadController {
     @GetMapping("/{patientId}/images/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = storageService.load(patientId, filename);
+        Resource file = storageService.loadImage(patientId, filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/{patientId}/documents/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
+        Resource file = storageService.loadDocument(patientId, filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
