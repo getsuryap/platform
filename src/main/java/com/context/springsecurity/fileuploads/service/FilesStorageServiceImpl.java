@@ -1,6 +1,5 @@
 package com.context.springsecurity.fileuploads.service;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +120,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try{
             FileSystemUtils.deleteRecursively(retrieveDocumentOrImagePath(documentLocation,patientId,filename));
         }catch (IOException e){
-            throw new RuntimeException(new MessagingException("Couldn't delete this document. Error: "+e.getMessage()));
+            throw new RuntimeException("Couldn't delete this document. Error: "+e.getMessage());
         }
     }
 
