@@ -3,6 +3,7 @@ package org.ospic.patient.service;
 import org.ospic.contacts.domain.ContactsInformation;
 import org.ospic.contacts.repository.ContactsInformationRepository;
 import org.ospic.contacts.services.ContactsInformationService;
+import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.data.PatientData;
 import org.ospic.patient.domain.Patient;
 import org.ospic.patient.repository.PatientInformationRepository;
@@ -15,6 +16,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -49,12 +51,17 @@ public class PatientInformationServicesImpl implements PatientInformationService
     ContactsInformationService contactsInformationService;
     @Autowired
     SessionFactory sessionFactory;
+    FilesStorageService filesStorageService;
 
     PhysicianInformationService physicianInformationService;
+
     @Autowired
     public PatientInformationServicesImpl(
-            PhysicianInformationService physicianInformationService){
+            PhysicianInformationService physicianInformationService,
+            FilesStorageService filesStorageService
+    ) {
         this.physicianInformationService = physicianInformationService;
+        this.filesStorageService = filesStorageService;
     }
 
     @Override
@@ -68,7 +75,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
-        for (int i = 0; i<physiciansOptions.size();i++){
+        for (int i = 0; i < physiciansOptions.size(); i++) {
             physiciansOptions.get(i).getPatients().clear();
         }
         return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
@@ -87,10 +94,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
         Patient patient = patientInformationRepository.findById(id).get();
-        if (patient.getPhysician() != null){
+        if (patient.getPhysician() != null) {
             patient.getPhysician().getPatients().clear();
         }
-      return ResponseEntity.ok().body(patient);
+        return ResponseEntity.ok().body(patient);
     }
 
     @Override
@@ -98,8 +105,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
         if (patientInformationRepository.existsById(id)) {
             patientInformationRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
-        }
-        else {
+        } else {
             return ResponseEntity.ok(new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
         }
     }
@@ -146,17 +152,32 @@ public class PatientInformationServicesImpl implements PatientInformationService
 
     @Transactional
     @Override
-    public ResponseEntity assignPatientToPhysician(Long patientId,  Long physicianId) throws ResourceNotFoundException{
+    public ResponseEntity assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
         return patientInformationRepository.findById(patientId).map(patient -> {
             physicianInformationService.retrievePhysicianById(physicianId).ifPresent(physician -> {
 
-                 patient.setPhysician(physician);
-                 patientInformationRepository.save(patient);
+                patient.setPhysician(physician);
+                patientInformationRepository.save(patient);
 
             });
 
-         return ResponseEntity.ok(physicianInformationService.getPhysicianById(physicianId));
+            return ResponseEntity.ok(physicianInformationService.getPhysicianById(physicianId));
         }).orElseThrow(() -> new ResourceNotFoundException("Physician not set"));
 
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity uploadPatientImage(Long patientId, MultipartFile file) {
+        try {
+            return patientInformationRepository.findById(patientId).map(patient -> {
+                String imagePath = filesStorageService.uploadPatientImage(patientId,"images",file);
+                patient.setImageThumbnail(imagePath);
+                return ResponseEntity.ok().body(patientInformationRepository.save(patient));
+            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: "+patientId + "not found"));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

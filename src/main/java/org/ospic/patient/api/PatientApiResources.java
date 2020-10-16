@@ -1,5 +1,6 @@
 package org.ospic.patient.api;
 
+import org.ospic.fileuploads.message.ResponseMessage;
 import org.ospic.patient.data.PatientData;
 import org.ospic.patient.domain.Patient;
 import org.ospic.patient.service.PatientInformationServices;
@@ -7,9 +8,11 @@ import org.ospic.util.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -76,7 +79,7 @@ public class PatientApiResources {
     @ResponseBody
     ResponseEntity retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
-            if (command.equals("template")){
+            if (command.equals("template")) {
                 return patientInformationServices.retrievePatientCreationDataTemplate();
             }
         }
@@ -177,6 +180,32 @@ public class PatientApiResources {
             @ApiParam(name = "List of Patient Entity", required = true)
             @Valid @RequestBody List<Patient> patientInformationListRequest) {
         return patientInformationServices.createByPatientListIterate(patientInformationListRequest);
+    }
+
+    @ApiOperation(
+            value = "UPDATE Patient upload Thumbnail image",
+            notes = "UPDATE Patient upload Thumbnail image"
+    )
+    @RequestMapping(
+            value = "/{patientId}/images",
+            method = RequestMethod.PATCH,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Client image updated successfully"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient not found")})
+    @ResponseBody
+    public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
+        String message = "";
+        try {
+            ResponseEntity responseEntity = patientInformationServices.uploadPatientImage(patientId, file);
+            return responseEntity;
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
     }
 
 
