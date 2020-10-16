@@ -180,4 +180,20 @@ public class PatientInformationServicesImpl implements PatientInformationService
         }
         return null;
     }
+
+    @Transactional
+    @Override
+    public ResponseEntity deletePatientImage(Long patientId,String fileName) {
+        try {
+            patientInformationRepository.findById(patientId).map(patient -> {
+                filesStorageService.deletePatientFileOrDocument("images",patientId,fileName);
+                patient.setImageThumbnail(null);
+                patientInformationRepository.save(patient);
+                return ResponseEntity.ok().body(patientInformationRepository.findById(patientId));
+            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: "+patientId + "not found"));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
