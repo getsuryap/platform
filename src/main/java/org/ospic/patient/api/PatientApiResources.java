@@ -244,8 +244,8 @@ public class PatientApiResources {
     @RequestMapping(value="/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
-        filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
-        return ResponseEntity.ok().body("Done");
+        //filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
+        return patientInformationServices.deletePatientImage(patientId, filename);
     }
 
 }

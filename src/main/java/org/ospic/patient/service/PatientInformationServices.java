@@ -59,4 +59,6 @@ public interface PatientInformationServices {
     public ResponseEntity retrievePatientCreationDataTemplate();
 
     public ResponseEntity uploadPatientImage(Long patientId,  MultipartFile file);
+
+    public ResponseEntity deletePatientImage(Long patientId ,String fileName);
 }
