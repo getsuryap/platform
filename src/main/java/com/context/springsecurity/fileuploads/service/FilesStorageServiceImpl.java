@@ -49,10 +49,13 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public void init() {
-        try {
-            Files.createDirectory(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload");
+        if (!Files.exists(root)) {
+            try {
+                Files.createDirectory(root);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Could not initialize folder for upload");
+            }
         }
     }
 
@@ -81,9 +84,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource load(String filename) {
+    public Resource load(Long patientId, String filename) {
         try {
-            Path file = root.resolve(filename);
+            Path path = this.retrieveEntityImagePath(patientId);
+            Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -136,19 +140,25 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
-    private Path createDirectoryIfNotExists(Long patientId){
 
-        try{
+    private Path createDirectoryIfNotExists(Long patientId) {
+        try {
             StringBuilder sb = new StringBuilder();
             sb.append("uploads/");
             sb.append(patientId);
             sb.append("/images");
             Path image = Paths.get(sb.toString());
-           return Files.createDirectories(image);
-        }catch (IOException e){
-            throw new RuntimeException("Could not create a directory for this client. Error:  "+e.getMessage());
+            return Files.createDirectories(image);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create a directory for this client. Error:  " + e.getMessage());
         }
-
+    }
+    private Path retrieveEntityImagePath(@NonNull Long patientId){
+        StringBuilder sb = new StringBuilder();
+        sb.append("uploads/");
+        sb.append(patientId);
+        sb.append("/images");
+        return Paths.get(sb.toString());
     }
 }
 

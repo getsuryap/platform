@@ -39,7 +39,7 @@ public interface FilesStorageService {
      * **/
     public void save(MultipartFile multipartFile);
 
-    public Resource load(String filename);
+    public Resource load(Long patientId,String filename);
 
     public void deleteAll();
 
