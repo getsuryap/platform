@@ -6,6 +6,7 @@ import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -56,4 +57,6 @@ public interface PatientInformationServices {
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
 
     public ResponseEntity retrievePatientCreationDataTemplate();
+
+    public ResponseEntity uploadPatientImage(Long patientId,  MultipartFile file);
 }

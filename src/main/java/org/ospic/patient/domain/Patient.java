@@ -91,6 +91,10 @@ public class Patient extends Auditable<String> implements Serializable  {
     @Column(length = 20)
     private String country;
 
+
+    @Column(length = 255, name = "thumbnail")
+    private String imageThumbnail;
+
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private  ContactsInformation contactsInformation;
@@ -102,7 +106,7 @@ public class Patient extends Auditable<String> implements Serializable  {
 
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
-                    String principal_tribe,  String country,
+                    String principal_tribe,  String country,String imageThumbnail,
                     ContactsInformation contactsInformation,
                     Physician physician) {
         this.first_name = first_name;
@@ -116,6 +120,7 @@ public class Patient extends Auditable<String> implements Serializable  {
         this.mdn = mdn;
         this.principal_tribe = principal_tribe;
         this.country = country;
+        this.imageThumbnail = imageThumbnail;
         this.physician = physician;
         this.contactsInformation = contactsInformation;
     }
