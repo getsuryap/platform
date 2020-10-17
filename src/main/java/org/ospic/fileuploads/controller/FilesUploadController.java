@@ -1,5 +1,9 @@
 package org.ospic.fileuploads.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.ospic.fileuploads.message.ResponseMessage;
 import org.ospic.fileuploads.model.FileInfo;
 import org.ospic.fileuploads.service.FilesStorageService;
@@ -7,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +47,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/api/upload")
+@Api(value = "/api/upload", tags = "Uploads")
 public class FilesUploadController {
     FilesStorageService storageService;
 
@@ -49,9 +56,21 @@ public class FilesUploadController {
         this.storageService = storageService;
     }
 
-
-
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ApiOperation(
+            value = "UPLOAD files and documents in the system",
+            notes = "UPLOAD files and documents in the system"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.POST,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "File uploaded successfully"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Path not found")})
+    @ResponseBody
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
@@ -65,7 +84,22 @@ public class FilesUploadController {
     }
 
 
-    @RequestMapping(value = "/{patientId}/images", method = RequestMethod.POST)
+    @ApiOperation(
+            value = "UPLOAD patient profile picture",
+            notes = "UPLOAD patient profile picture"
+    )
+    @RequestMapping(
+            value = "/{patientId}/images",
+            method = RequestMethod.POST,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Patient profile picture updated successfully"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient not found")})
+
+    @ResponseBody
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
@@ -78,7 +112,21 @@ public class FilesUploadController {
         }
     }
 
-    @RequestMapping(value = "/{patientId}/documents", method = RequestMethod.POST)
+    @ApiOperation(
+            value = "UPLOAD patient document",
+            notes = "UPLOAD patient document"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Patient Document/File uploaded successfully"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient not found")})
+    @RequestMapping(
+            value = "/{patientId}/documents",
+            method = RequestMethod.POST,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
+    @ResponseBody
     public ResponseEntity<ResponseMessage> uploadPatientFileDocument(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
@@ -91,7 +139,19 @@ public class FilesUploadController {
         }
     }
 
-    @GetMapping("/files")
+
+    @ApiOperation(
+            value = "LIST all files/documents in a given directory",
+            notes = "LIST all files/documents in a given directory"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Directory not found")})
+    @RequestMapping(
+            value="/files",
+            method = RequestMethod.GET)
+    @ResponseBody
     public ResponseEntity<List<FileInfo>> getListFiles() {
         List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
@@ -104,7 +164,17 @@ public class FilesUploadController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
-    @GetMapping("/{patientId}/images/{filename:.+}")
+    @ApiOperation(
+            value = "GET patient file from his/her file",
+            notes = "GET patient file from his/her file"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient file not found")})
+    @RequestMapping(
+            value = "/{patientId}/images/{filename:.+}",
+            method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
         Resource file = storageService.loadImage(patientId, filename);
@@ -113,7 +183,20 @@ public class FilesUploadController {
     }
 
 
-    @GetMapping("/{patientId}/documents/{filename:.+}")
+    @ApiOperation(
+            value = "GET patient document by document/file name",
+            notes = "GET patient document by document/file name"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient file not found")})
+    @RequestMapping(
+            value = "/{patientId}/documents/{filename:.+}",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
     @ResponseBody
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
         Resource file = storageService.loadDocument(patientId, filename);
@@ -122,14 +205,42 @@ public class FilesUploadController {
     }
 
 
-    @RequestMapping(value="/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
+    @ApiOperation(
+            value = "DELETE patient image by file name",
+            notes = "DELETE patient image by file name"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient file not found")})
+
+    @RequestMapping(
+            value="/{patientId}/images/{filename:.+}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
     @ResponseBody
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
          storageService.deletePatientFileOrDocument("images",patientId, filename);
         return ResponseEntity.ok().body("Done");
     }
 
-    @RequestMapping(value ="/{patientId}/documents/{filename:.+}", method = RequestMethod.DELETE)
+    @ApiOperation(
+            value = "DELETE patient document",
+            notes = "DELETE patient document"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Internal server Error"),
+            @ApiResponse(code = 404, message = "Patient document not found")})
+
+    @RequestMapping(
+            value ="/{patientId}/documents/{filename:.+}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
     @ResponseBody
     public ResponseEntity<String> deletePatientDocument(@PathVariable String filename, @PathVariable Long patientId) {
          storageService.deletePatientFileOrDocument("documents",patientId, filename);
