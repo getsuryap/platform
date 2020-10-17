@@ -14,6 +14,7 @@ import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,6 +71,22 @@ public class PatientInformationServicesImpl implements PatientInformationService
         List<Patient> patientList = session.createQuery("from m_patient").list();
         session.close();
         return patientList;
+    }
+
+    @Override
+    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients() {
+        Session session = this.sessionFactory.openSession();
+        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NOT NULL").list();
+        session.close();
+        return ResponseEntity.status(HttpStatus.OK).body(patients);
+    }
+
+    @Override
+    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients() {
+        Session session = this.sessionFactory.openSession();
+        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NULL").list();
+        session.close();
+        return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
 
     @Override

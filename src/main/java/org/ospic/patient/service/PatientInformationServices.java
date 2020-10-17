@@ -35,6 +35,10 @@ public interface PatientInformationServices {
     @Transactional
     public List<Patient> retrieveAllPatients();
 
+    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients();
+
+    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
+
     @Transactional
     public Patient createNewPatient(Patient patientInformation);
 
@@ -61,4 +65,5 @@ public interface PatientInformationServices {
     public ResponseEntity uploadPatientImage(Long patientId,  MultipartFile file);
 
     public ResponseEntity deletePatientImage(Long patientId ,String fileName);
+
 }
