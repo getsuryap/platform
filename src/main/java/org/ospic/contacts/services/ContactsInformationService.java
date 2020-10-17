@@ -1,7 +1,9 @@
 package org.ospic.contacts.services;
 
 import org.ospic.contacts.domain.ContactsInformation;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -24,7 +26,8 @@ import java.util.List;
  * under the License.
  */
 
-@Controller
+@Component
+@Service
 public interface ContactsInformationService {
     public ContactsInformation createNewContact(Long id, ContactsInformation contactsInformation);
     public List<ContactsInformation> retrieveAllContactsInformation();

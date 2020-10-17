@@ -171,10 +171,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     public ResponseEntity uploadPatientImage(Long patientId, MultipartFile file) {
         try {
             return patientInformationRepository.findById(patientId).map(patient -> {
-                String imagePath = filesStorageService.uploadPatientImage(patientId,"images",file);
+                String imagePath = filesStorageService.uploadPatientImage(patientId, "images", file);
                 patient.setImageThumbnail(imagePath);
                 return ResponseEntity.ok().body(patientInformationRepository.save(patient));
-            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: "+patientId + "not found"));
+            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
@@ -183,14 +183,14 @@ public class PatientInformationServicesImpl implements PatientInformationService
 
     @Transactional
     @Override
-    public ResponseEntity deletePatientImage(Long patientId,String fileName) {
+    public ResponseEntity deletePatientImage(Long patientId, String fileName) {
         try {
             patientInformationRepository.findById(patientId).map(patient -> {
-                filesStorageService.deletePatientFileOrDocument("images",patientId,fileName);
+                filesStorageService.deletePatientFileOrDocument("images", patientId, fileName);
                 patient.setImageThumbnail(null);
                 patientInformationRepository.save(patient);
                 return ResponseEntity.ok().body(patientInformationRepository.findById(patientId));
-            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: "+patientId + "not found"));
+            }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
