@@ -54,8 +54,8 @@ public class PatientApiResources {
     }
 
 
-    @ApiOperation(value = "GET List all patients", notes = "Get list of all patients")
-    @RequestMapping(value = "/remove",
+    @ApiOperation(value = "GET List all un-assigned patients", notes = "Get list of all un-assigned patients")
+    @RequestMapping(value = "/unassigned",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -64,8 +64,21 @@ public class PatientApiResources {
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Entity not found")
     })
-    List<Patient> all() {
-        return patientInformationServices.retrieveAllPatients();
+    ResponseEntity<List<Patient>> getAllUnassignedPatients() {
+        return patientInformationServices.retrieveAllUnAssignedPatients();
+    }
+    @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
+    @RequestMapping(value = "/assigned",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = Patient[].class),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Entity not found")
+    })
+    ResponseEntity<List<Patient>> getAllAssignedPatients() {
+        return patientInformationServices.retrieveAllAssignedPatients();
     }
 
     @ApiOperation(

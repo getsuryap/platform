@@ -1,5 +1,9 @@
 package org.ospic.patient.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -22,13 +26,15 @@ import javax.persistence.*;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@Entity(name = DatabaseConstants.MISC_INFO_TABLE)
 @Table(name = DatabaseConstants.MISC_INFO_TABLE)
 public class PatientMiscInfo {
     @Id
     @Column(name = "id")
     private Long id;
-
 
     @Column(length = 200)
     private String  citizenShip;
@@ -45,7 +51,6 @@ public class PatientMiscInfo {
     @Column(length = 60)
     private String  rehabilitation;
 
-    public PatientMiscInfo(){}
     public PatientMiscInfo(String citizenShip, String medical_enrollment, String employment, String school, String rehabilitation) {
         this.citizenShip = citizenShip;
         this.medical_enrollment = medical_enrollment;
@@ -54,12 +59,5 @@ public class PatientMiscInfo {
         this.rehabilitation = rehabilitation;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCitizenShip() {
-        return citizenShip;
-    }
 
 }
