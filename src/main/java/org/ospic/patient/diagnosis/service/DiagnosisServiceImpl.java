@@ -1,5 +1,14 @@
 package org.ospic.patient.diagnosis.service;
 
+import org.ospic.patient.diagnosis.domains.Diagnosis;
+import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
+import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.service.PatientInformationServicesImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.service
  * --
@@ -21,5 +30,37 @@ package org.ospic.patient.diagnosis.service;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class DiagnosisServiceImpl {
+@Repository
+public class DiagnosisServiceImpl implements DiagnosisService {
+
+    DiagnosisRepository diagnosisRepository;
+    PatientInformationRepository patientInformationRepository;
+    @Autowired
+    public DiagnosisServiceImpl(
+            DiagnosisRepository diagnosisRepository,
+            PatientInformationRepository patientInformationRepository){
+        this.diagnosisRepository = diagnosisRepository;
+        this.patientInformationRepository = patientInformationRepository;
+    }
+    @Override
+    public ResponseEntity saveDiagnosisReport(Long patientId, Diagnosis diagnosis) {
+        return patientInformationRepository.findById(patientId).map(patient -> {
+            diagnosis.setPatient(patient);
+            diagnosisRepository.save(diagnosis);
+            Patient patie = patientInformationRepository.findById(patientId).get();
+            return ResponseEntity.ok().body(patie);
+        }).orElseGet(() -> {
+            return null;
+        });
+    }
+
+    @Override
+    public ResponseEntity retrieveAllDiagnosisReports() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity retrieveAllDiagnosisReportsByPatientId() {
+        return null;
+    }
 }

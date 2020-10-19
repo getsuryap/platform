@@ -1,5 +1,11 @@
 package org.ospic.patient.diagnosis.service;
 
+import lombok.NonNull;
+import org.ospic.patient.diagnosis.domains.Diagnosis;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.service
  * --
@@ -21,5 +27,12 @@ package org.ospic.patient.diagnosis.service;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Component
+@Service
 public interface DiagnosisService {
+    public ResponseEntity saveDiagnosisReport(@NonNull Long patientId, @NonNull Diagnosis diagnosis);
+
+    public ResponseEntity retrieveAllDiagnosisReports();
+
+    public ResponseEntity retrieveAllDiagnosisReportsByPatientId();
 }
