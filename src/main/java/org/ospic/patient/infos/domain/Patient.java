@@ -112,14 +112,14 @@ public class Patient extends Auditable<String> implements Serializable  {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "diagnosis_id")
+    @JoinColumn(name = "patient_id")
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
                     String principal_tribe,  String country,String imageThumbnail,
                     ContactsInformation contactsInformation,
-                    Physician physician) {
+                    Physician physician,List<Diagnosis> diagnoses) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -134,6 +134,7 @@ public class Patient extends Auditable<String> implements Serializable  {
         this.imageThumbnail = imageThumbnail;
         this.physician = physician;
         this.contactsInformation = contactsInformation;
+        this.diagnoses = diagnoses;
     }
 
 

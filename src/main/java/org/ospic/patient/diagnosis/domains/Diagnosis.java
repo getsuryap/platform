@@ -38,16 +38,14 @@ import java.io.Serializable;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = DatabaseConstants.DIAGNOSES_TABLE)
 @Table(name = DatabaseConstants.DIAGNOSES_TABLE)
-@ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
+@ApiModel(value = "Diagnosis", description = "A Diagnosis row containing specific patient information's")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode(callSuper = true)
 public class Diagnosis  extends Auditable<String> implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Setter(AccessLevel.PROTECTED)  Long id;
 
     @Column(name = "problem")
@@ -60,15 +58,18 @@ public class Diagnosis  extends Auditable<String> implements Serializable {
     @Column(name = "treatments")
     private String treatmentType;
 
+    @NotBlank
     @Column(name = "medicines")
     private String medicineNames;
 
+    @NonNull
+    @NotBlank
     @Column(name = "lab_tests")
     private String laboratoryTests;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
-    @Getter @Setter private Patient patient;
+    private Patient patient;
 
     public Diagnosis(String problemIdentification, String diagnosisReport, String treatmentType, String medicineNames,String laboratoryTests){
         this.diagnosisReport = diagnosisReport;
@@ -76,5 +77,17 @@ public class Diagnosis  extends Auditable<String> implements Serializable {
         this.treatmentType = treatmentType;
         this.medicineNames = medicineNames;
         this.problemIdentification = problemIdentification;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Patient )) return false;
+        return id != null && id.equals(((Diagnosis) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }
