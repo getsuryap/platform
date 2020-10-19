@@ -1,7 +1,7 @@
-package org.ospic.patient.service;
+package org.ospic.patient.infos.service;
 
-import org.ospic.contacts.domain.ContactsInformation;
-import org.ospic.patient.domain.Patient;
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

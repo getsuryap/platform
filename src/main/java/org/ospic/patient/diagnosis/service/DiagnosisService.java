@@ -1,9 +1,9 @@
-package org.ospic.contacts.repository;
-
-import org.ospic.contacts.domain.ContactsInformation;
-import org.springframework.data.jpa.repository.JpaRepository;
+package org.ospic.patient.diagnosis.service;
 
 /**
+ * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.service
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -21,6 +21,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface ContactsInformationRepository extends JpaRepository<ContactsInformation, Long> {
-
+public interface DiagnosisService {
 }

@@ -1,6 +1,6 @@
-package org.ospic.patient.repository;
+package org.ospic.patient.infos.repository;
 
-import org.ospic.patient.domain.Patient;
+import org.ospic.patient.infos.domain.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

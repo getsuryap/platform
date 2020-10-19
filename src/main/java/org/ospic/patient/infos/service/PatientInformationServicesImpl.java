@@ -1,12 +1,12 @@
-package org.ospic.patient.service;
+package org.ospic.patient.infos.service;
 
-import org.ospic.contacts.domain.ContactsInformation;
-import org.ospic.contacts.repository.ContactsInformationRepository;
-import org.ospic.contacts.services.ContactsInformationService;
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.contacts.repository.ContactsInformationRepository;
+import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.patient.data.PatientData;
-import org.ospic.patient.domain.Patient;
-import org.ospic.patient.repository.PatientInformationRepository;
+import org.ospic.patient.infos.data.PatientData;
+import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.service.PhysicianInformationService;

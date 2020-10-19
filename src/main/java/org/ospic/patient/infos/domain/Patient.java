@@ -1,9 +1,10 @@
-package org.ospic.patient.domain;
+package org.ospic.patient.infos.domain;
 
 import org.ospic.domain.Auditable;
+import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.contacts.domain.ContactsInformation;
+import org.ospic.patient.contacts.domain.ContactsInformation;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +13,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -103,6 +106,14 @@ public class Patient extends Auditable<String> implements Serializable  {
     @ManyToOne
     @JoinColumn(name = "physician_id")
     @Getter @Setter private Physician physician;
+
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "diagnosis_id")
+    private List<Diagnosis> diagnoses = new ArrayList<>();
 
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
                     String ethnicity,  String dob,  String gender,  String ssn,  String mdn,

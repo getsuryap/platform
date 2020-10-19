@@ -1,4 +1,7 @@
-package org.ospic.util.constants;
+package org.ospic.patient.contacts.repository;
+
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,15 +21,6 @@ package org.ospic.util.constants;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class DatabaseConstants {
-    public static final String PATIENT_INFO_TABLE = "m_patient";
-    public static final String MISC_INFO_TABLE = "m_misc";
-    public static final String CONTACTS_INFO_TABLE = "m_contacts";
-    public static final String ROLES_TABLE = "m_roles";
-    public static final String DOCTOR_INFORMATION = "m_doctor";
-    public static final String BEDS_TABLE = "m_bed";
-    public static final String BED_SIZES = "m_bed_size";
-    public static final String PHYSICIAN_TABLE = "m_physician";
+public interface ContactsInformationRepository extends JpaRepository<ContactsInformation, Long> {
 
-    public static final String DIAGNOSES_TABLE = "m_diagnosis";
 }
