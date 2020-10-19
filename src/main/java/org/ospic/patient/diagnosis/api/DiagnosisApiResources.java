@@ -1,9 +1,9 @@
-package org.ospic.patient.repository;
-
-import org.ospic.patient.domain.PatientMiscInfo;
-import org.springframework.data.jpa.repository.JpaRepository;
+package org.ospic.patient.diagnosis.api;
 
 /**
+ * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.api
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -21,6 +21,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface PatientMiscInformationRepository extends JpaRepository<PatientMiscInfo,Long> {
-    PatientMiscInfo getById(String id);
+
+public class DiagnosisApiResources {
 }

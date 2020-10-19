@@ -1,7 +1,7 @@
-package org.ospic.contacts.services;
+package org.ospic.patient.contacts.services;
 
-import org.ospic.contacts.domain.ContactsInformation;
-import org.ospic.contacts.repository.ContactsInformationRepository;
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

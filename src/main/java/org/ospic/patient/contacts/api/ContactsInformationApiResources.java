@@ -1,8 +1,8 @@
-package org.ospic.contacts.api;
+package org.ospic.patient.contacts.api;
 
-import org.ospic.contacts.domain.ContactsInformation;
-import org.ospic.contacts.services.ContactsInformationService;
-import org.ospic.patient.service.PatientInformationServices;
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.contacts.services.ContactsInformationService;
+import org.ospic.patient.infos.service.PatientInformationServices;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

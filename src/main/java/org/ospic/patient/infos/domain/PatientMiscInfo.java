@@ -1,4 +1,4 @@
-package org.ospic.patient.domain;
+package org.ospic.patient.infos.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;

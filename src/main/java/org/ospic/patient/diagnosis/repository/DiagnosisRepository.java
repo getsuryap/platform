@@ -1,13 +1,12 @@
-package org.ospic.contacts.services;
+package org.ospic.patient.diagnosis.repository;
 
-import org.ospic.contacts.domain.ContactsInformation;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.ospic.patient.diagnosis.domains.Diagnosis;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
+ * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.repository
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -25,11 +24,5 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-@Component
-@Service
-public interface ContactsInformationService {
-    public ContactsInformation createNewContact(Long id, ContactsInformation contactsInformation);
-    public List<ContactsInformation> retrieveAllContactsInformation();
-    public List<ContactsInformation> createNewContactsByIteration(List<ContactsInformation> contactsInformationList);
+public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
 }

@@ -1,10 +1,10 @@
-package org.ospic.patient.api;
+package org.ospic.patient.infos.api;
 
 import org.ospic.fileuploads.message.ResponseMessage;
 import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.patient.data.PatientData;
-import org.ospic.patient.domain.Patient;
-import org.ospic.patient.service.PatientInformationServices;
+import org.ospic.patient.infos.data.PatientData;
+import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.infos.service.PatientInformationServices;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;

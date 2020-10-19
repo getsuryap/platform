@@ -1,7 +1,7 @@
-package org.ospic.contacts.domain;
+package org.ospic.patient.contacts.domain;
 
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.patient.domain.Patient;
+import org.ospic.patient.infos.domain.Patient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
