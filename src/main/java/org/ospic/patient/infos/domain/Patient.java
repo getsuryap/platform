@@ -1,5 +1,6 @@
 package org.ospic.patient.infos.domain;
 
+import org.hibernate.envers.Audited;
 import org.ospic.domain.Auditable;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.physicians.domains.Physician;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

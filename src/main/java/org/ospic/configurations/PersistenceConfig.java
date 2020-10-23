@@ -1,13 +1,20 @@
-package org.ospic.patient.contacts.services;
+package org.ospic.configurations;
 
-import org.ospic.patient.contacts.domain.ContactsInformation;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
+ * This file was created by eli on 14/10/2020 for org.ospic.configurations
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -25,12 +32,12 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+public class PersistenceConfig {
 
-@Component
-@Service
-public interface ContactsInformationService {
-    public ContactsInformation createNewContact(Long id, ContactsInformation contactsInformation);
-    public List<ContactsInformation> retrieveAllContactsInformation();
-    public List<ContactsInformation> createNewContactsByIteration(List<ContactsInformation> contactsInformationList);
-    public ResponseEntity retrievePatientContactByPatientId(Long patientId);
+    @Bean
+    public AuditorAware<String> auditorAware(){
+        return new AuditorAwareImpl();
+    }
 }

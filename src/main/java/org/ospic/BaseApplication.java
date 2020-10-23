@@ -1,8 +1,8 @@
 package org.ospic;
 
-import org.ospic.domain.Role;
+import org.ospic.authentication.roles.Role;
 import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.repository.RoleRepository;
+import org.ospic.authentication.roles.repository.RoleRepository;
 import org.ospic.util.enums.BedSizeEnums;
 import org.ospic.util.enums.RoleEnums;
 import org.ospic.ward.beds.domain.BedSize;
@@ -43,13 +43,8 @@ public class BaseApplication implements CommandLineRunner {
     InitializingBean sendDatabase() {
         return () -> {
             for (RoleEnums roleEnums : RoleEnums.values()) {
-                if (!roleRepository.existsByName(roleEnums)) {
-                    roleRepository.save(new Role(roleEnums));
-                }
-            }
-            for (BedSizeEnums bedSizeEnums: BedSizeEnums.values()){
-                if(!bedsRepository.existsByName(bedSizeEnums)){
-                    bedsRepository.save(new BedSize(bedSizeEnums));
+                if (!roleRepository.existsByName(roleEnums.name())) {
+                    roleRepository.save(new Role(String.valueOf(roleEnums)));
                 }
             }
 

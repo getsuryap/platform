@@ -1,13 +1,13 @@
-package org.ospic.patient.contacts.services;
+package org.ospic.configurations;
 
-import org.ospic.patient.contacts.domain.ContactsInformation;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.AuditorAware;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
+ * This file was created by eli on 22/10/2020 for org.ospic.configurations
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -25,12 +25,9 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-@Component
-@Service
-public interface ContactsInformationService {
-    public ContactsInformation createNewContact(Long id, ContactsInformation contactsInformation);
-    public List<ContactsInformation> retrieveAllContactsInformation();
-    public List<ContactsInformation> createNewContactsByIteration(List<ContactsInformation> contactsInformationList);
-    public ResponseEntity retrievePatientContactByPatientId(Long patientId);
+public class AuditorAwareImpl implements AuditorAware<String> {
+    @Override
+    public Optional<String> getCurrentAuditor(){
+        return Optional.of("Admins");
+    }
 }

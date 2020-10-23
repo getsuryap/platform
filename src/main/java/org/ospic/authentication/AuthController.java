@@ -1,21 +1,24 @@
-package org.ospic.controllers;
+package org.ospic.authentication;
 
-import java.util.HashSet;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.ospic.authentication.privileges.domains.Privilege;
+import org.ospic.authentication.users.User;
+import org.ospic.authentication.users.repository.UserRepository;
 import org.ospic.util.enums.RoleEnums;
-import org.ospic.domain.Role;
-import org.ospic.domain.User;
+import org.ospic.authentication.roles.Role;
 import org.ospic.payload.request.LoginRequest;
 import org.ospic.payload.request.SignupRequest;
 import org.ospic.payload.response.JwtResponse;
 import org.ospic.payload.response.MessageResponse;
-import org.ospic.repository.RoleRepository;
-import org.ospic.repository.UserRepository;
+import org.ospic.authentication.roles.repository.RoleRepository;
 import org.ospic.security.jwt.JwtUtils;
 import org.ospic.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +69,7 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-
+		
 		return ResponseEntity.ok(new JwtResponse(jwt,
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
@@ -94,29 +97,29 @@ public class AuthController {
 							 encoder.encode(signUpRequest.getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();
-		Set<Role> roles = new HashSet<>();
+		List<Role> roles = new ArrayList<>();
 
 		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
+			Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER.toString())
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
-					Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN)
+					Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN.toString())
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(adminRole);
 
 					break;
 				case "mod":
-					Role modRole = roleRepository.findByName(RoleEnums.ROLE_MODERATOR)
+					Role modRole = roleRepository.findByName(RoleEnums.ROLE_MODERATOR.toString())
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(modRole);
 
 					break;
 				default:
-					Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
+					Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER.toString())
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(userRole);
 				}

@@ -1,10 +1,10 @@
-package org.ospic.repository;
+package org.ospic.authentication.users.repository;
 
-import java.util.Optional;
-
-import org.ospic.domain.User;
+import org.ospic.authentication.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 
 @Repository
