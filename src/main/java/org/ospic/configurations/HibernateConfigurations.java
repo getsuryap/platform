@@ -50,7 +50,7 @@ public class HibernateConfigurations {
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl("jdbc:mysql://remotemysql.com:3306/1GT19qmaZr");
+        basicDataSource.setUrl("jdbc:mysql://remotemysql.com:3306/1GT19qmaZr?useSSL=true");
         basicDataSource.setUsername("1GT19qmaZr");
         basicDataSource.setPassword("OOTnKY9r3I");
         return basicDataSource;

@@ -1,11 +1,14 @@
 package org.ospic.security.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.ospic.domain.User;
+import org.ospic.authentication.privileges.domains.Privilege;
+import org.ospic.authentication.roles.Role;
+import org.ospic.authentication.users.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +40,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	public static UserDetailsImpl build(User user){
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
@@ -50,6 +53,26 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	public List<String> getPrivileges(Collection<Role> roles) {
+		List<String> privileges = new ArrayList<>();
+		List<Privilege> collection = new ArrayList<>();
+		for (Role role : roles) {
+			collection.addAll(role.getPrivileges());
+		}
+		for (Privilege item : collection) {
+			privileges.add(item.getName());
+		}
+		return privileges;
+	}
+
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (String privilege : privileges) {
+			authorities.add(new SimpleGrantedAuthority(privilege));
+		}
 		return authorities;
 	}
 

@@ -1,15 +1,13 @@
-package org.ospic.configurations;
+package org.ospic.authentication.privileges.repository;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.ospic.authentication.privileges.domains.Privilege;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 /**
- * This file was created by eli on 14/10/2020 for org.ospic.configurations
+ * This file was created by eli on 22/10/2020 for org.ospic.authentication.privileges.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,12 +27,8 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class JpaAuditingConfiguration {
+@Repository
+public interface PrivilegesRepository extends JpaRepository<Privilege,Long> {
 
-    @Bean
-    public AuditorAware<String> auditorProvider(){
-        return ()-> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication().getName());
-    }
+    Privilege  findByName(String name);
 }

@@ -1,12 +1,16 @@
 package org.ospic.patient.contacts.api;
 
+import io.swagger.annotations.*;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.services.ContactsInformationService;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.service.PatientInformationServices;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -46,10 +50,33 @@ public class ContactsInformationApiResources {
         return contactsInformationService.retrieveAllContactsInformation();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(
+            value = "/{id}",
+            method = RequestMethod.PATCH,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ContactsInformation createNew(@Valid @RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
-        return patientInformationServices.updatePatientContacts(id,contactsInformationRequest);
+    ContactsInformation createNew(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
+        return patientInformationServices.updatePatientContacts(id, contactsInformationRequest);
+    }
+
+    @ApiOperation(
+            value = "RETRIEVE patient contacts",
+            notes = "RETRIEVE patient contacts"
+    )
+    @RequestMapping(
+            value = "/{patientId}",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Entity not found")
+    })
+    @ResponseBody
+    ResponseEntity retrievePatientContacts(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) {
+        return contactsInformationService.retrievePatientContactByPatientId(patientId);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)

@@ -29,4 +29,5 @@ public class DatabaseConstants {
     public static final String PHYSICIAN_TABLE = "m_physician";
 
     public static final String DIAGNOSES_TABLE = "m_diagnosis";
+    public static final String PRIVILEGE_TABLE = "m_privilege";
 }

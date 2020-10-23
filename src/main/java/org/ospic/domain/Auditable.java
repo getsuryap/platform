@@ -37,27 +37,32 @@ import java.util.Date;
  * under the License.
  */
 @Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PUBLIC)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Auditable<U> {
+public abstract class Auditable<U> {
 
+
+
+    
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createdDate;
+    protected Date createdDate;
 
     @CreatedBy
-    @Column(name = "created_by",nullable = true, updatable = false)
-    private U createdBy;
+    @Column(name = "created_by",nullable = false, updatable = false)
+    protected U createdBy;
 
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date lastModifiedDate;
+    protected Date lastModifiedDate;
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", nullable = true, updatable = true)
-    private U lastModifiedBy;
+    @Column(name = "last_modified_by", nullable = false, updatable = true)
+    protected U lastModifiedBy;
+
+
 
 }
