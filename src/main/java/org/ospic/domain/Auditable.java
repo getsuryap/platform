@@ -51,7 +51,7 @@ public abstract class Auditable<U> {
     protected Date createdDate;
 
     @CreatedBy
-    @Column(name = "created_by",nullable = false, updatable = false)
+    @Column(name = "created_by",nullable = true, updatable = false)
     protected U createdBy;
 
     @UpdateTimestamp
@@ -60,7 +60,7 @@ public abstract class Auditable<U> {
     protected Date lastModifiedDate;
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", nullable = false, updatable = true)
+    @Column(name = "last_modified_by", nullable = true, updatable = true)
     protected U lastModifiedBy;
 
 

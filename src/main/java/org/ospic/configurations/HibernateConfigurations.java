@@ -45,7 +45,17 @@ public class HibernateConfigurations {
 
         return sessionFactoryBean;
     }
-
+    /**
+    @Bean
+    public DataSource dataSource() {
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic_default?useSSL=true");
+        basicDataSource.setUsername("root");
+        basicDataSource.setPassword("mysql");
+        return basicDataSource;
+    }
+    **/
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
@@ -55,6 +65,8 @@ public class HibernateConfigurations {
         basicDataSource.setPassword("OOTnKY9r3I");
         return basicDataSource;
     }
+
+
 
     @Bean(name = "transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {

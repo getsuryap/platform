@@ -96,6 +96,9 @@ public class Patient extends Auditable<String> implements Serializable  {
     @Column(length = 20)
     private String country;
 
+    @Column(length =2, nullable = false, columnDefinition = "boolean default false")
+    private Boolean isAdmitted = false;
+
 
     @Column(length = 255, name = "thumbnail")
     private String imageThumbnail;
