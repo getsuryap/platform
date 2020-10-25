@@ -77,7 +77,7 @@ public class Patient extends Auditable<String> implements Serializable  {
     private String dob;
 
     @NotBlank
-    @Column(length = 5)
+    @Column(length = 25)
     private String gender;
 
     @NotBlank

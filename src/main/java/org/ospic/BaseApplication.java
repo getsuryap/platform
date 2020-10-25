@@ -43,8 +43,8 @@ public class BaseApplication implements CommandLineRunner {
     InitializingBean sendDatabase() {
         return () -> {
             for (RoleEnums roleEnums : RoleEnums.values()) {
-                if (!roleRepository.existsByName(roleEnums.name())) {
-                    roleRepository.save(new Role(String.valueOf(roleEnums)));
+                if (!roleRepository.existsByName(roleEnums)) {
+                    roleRepository.save(new Role(roleEnums));
                 }
             }
 

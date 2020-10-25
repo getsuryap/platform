@@ -40,9 +40,8 @@ public class UserDetailsImpl implements UserDetails {
 
 	public static UserDetailsImpl build(User user){
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName()))
+				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
-
 		return new UserDetailsImpl(
 				user.getId(), 
 				user.getUsername(), 
@@ -56,25 +55,6 @@ public class UserDetailsImpl implements UserDetails {
 		return authorities;
 	}
 
-	public List<String> getPrivileges(Collection<Role> roles) {
-		List<String> privileges = new ArrayList<>();
-		List<Privilege> collection = new ArrayList<>();
-		for (Role role : roles) {
-			collection.addAll(role.getPrivileges());
-		}
-		for (Privilege item : collection) {
-			privileges.add(item.getName());
-		}
-		return privileges;
-	}
-
-	private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		for (String privilege : privileges) {
-			authorities.add(new SimpleGrantedAuthority(privilege));
-		}
-		return authorities;
-	}
 
 	public Long getId() {
 		return id;
