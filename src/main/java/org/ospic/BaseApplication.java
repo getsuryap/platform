@@ -35,7 +35,6 @@ public class BaseApplication implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception{
-        //filesStorageService.deleteAll();
         filesStorageService.init();
     }
 
@@ -44,7 +43,7 @@ public class BaseApplication implements CommandLineRunner {
         return () -> {
             for (RoleEnums roleEnums : RoleEnums.values()) {
                 if (!roleRepository.existsByName(roleEnums)) {
-                    roleRepository.save(new Role(roleEnums));
+                    roleRepository.save(new Role(roleEnums, roleEnums.name()));
                 }
             }
 

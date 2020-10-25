@@ -97,7 +97,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         Role role = roleRepository.findByName(RoleEnums.ROLE_ADMIN).get();
         if (role == null) {
-            role = new Role(name);
+            role = new Role(name, name.name());
             roleRepository.save(role);
         }
         return role;

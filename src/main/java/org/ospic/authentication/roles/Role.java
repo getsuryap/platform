@@ -28,8 +28,12 @@ public class Role {
     @Column(length = 200)
     private RoleEnums name;
 
+    @Column(length = 200)
+    private String role_id;
 
-    public Role(RoleEnums name) {
+
+    public Role(RoleEnums name, String role_id) {
+        this.role_id = role_id;
         this.name = name;
     }
 
