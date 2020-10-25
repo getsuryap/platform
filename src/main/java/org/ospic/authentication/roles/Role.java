@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = DatabaseConstants.ROLES_TABLE)
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @NoArgsConstructor
@@ -26,17 +26,11 @@ public class Role {
     Long id;
 
     @Column(length = 200)
-    private String name;
+    private RoleEnums name;
 
 
-    public Role(String name) {
+    public Role(RoleEnums name) {
         this.name = name;
     }
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_privileges",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    private Collection<Privilege> privileges;
 
 }

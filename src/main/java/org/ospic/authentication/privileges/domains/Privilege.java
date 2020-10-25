@@ -44,9 +44,6 @@ public class Privilege {
 
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
-
     public Privilege(String name){
         this.name = name;
     }

@@ -9,9 +9,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.ospic.authentication.privileges.domains.Privilege;
 import org.ospic.authentication.users.User;
 import org.ospic.authentication.users.repository.UserRepository;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.enums.RoleEnums;
 import org.ospic.authentication.roles.Role;
 import org.ospic.payload.request.LoginRequest;
@@ -22,17 +27,14 @@ import org.ospic.authentication.roles.repository.RoleRepository;
 import org.ospic.security.jwt.JwtUtils;
 import org.ospic.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 
@@ -40,6 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @ApiIgnore
 @RequestMapping("/api/auth") /**Defining class-level request handling**/
+@Api(value = "/api/auth",  tags = "Authentication")
 public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -100,26 +103,26 @@ public class AuthController {
 		List<Role> roles = new ArrayList<>();
 
 		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER.toString())
+			Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
 					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
 				switch (role) {
 				case "admin":
-					Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN.toString())
+					Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(adminRole);
 
 					break;
 				case "mod":
-					Role modRole = roleRepository.findByName(RoleEnums.ROLE_MODERATOR.toString())
+					Role modRole = roleRepository.findByName(RoleEnums.ROLE_MODERATOR)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(modRole);
 
 					break;
 				default:
-					Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER.toString())
+					Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(userRole);
 				}
@@ -130,5 +133,27 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+	@ApiOperation(
+			value = "RETRIEVE List of all Application Users",
+			notes = "RETRIEVE List of all Application Users"
+	)
+	@RequestMapping(
+			value = "/users",
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success", response = User[].class),
+			@ApiResponse(code = 500, message = "Internal server error"),
+			@ApiResponse(code = 404, message = "Entity not found")
+	})
+	@ResponseBody
+	ResponseEntity<List<User>> retrieveAllApplicationUsersResponse(){
+		List<User> users = userRepository.findAll();
+		users.forEach(user->{
+			user.setPassword(null);
+		});
+		return ResponseEntity.ok(users);
 	}
 }

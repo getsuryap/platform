@@ -142,6 +142,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
                     patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
                     patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
                     patient.setContactsInformation(patient.getContactsInformation());
+                    patient.setIsAdmitted(update.getIsAdmitted());
                     patient.setSsn(update.getSsn() == null ? patient.getSsn() : update.getSsn());
                     return ResponseEntity.ok(patientInformationRepository.save(patient));
 
