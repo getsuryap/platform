@@ -1,5 +1,6 @@
 package org.ospic.patient.infos.data;
 
+import org.ospic.patient.infos.domain.Gender;
 import org.ospic.physicians.domains.Physician;
 
 import java.io.Serializable;
@@ -30,15 +31,19 @@ public class PatientData implements Serializable {
     private final Long id;
     private final String name;
     private final List<Physician> physicianOptions;
+    private final List<Gender> genderList;
 
-    public static PatientData patientCreationTemplate(final List<Physician> physicianOptions){
-        return new PatientData(null,null, physicianOptions);
+    public static PatientData patientCreationTemplate(final List<Gender> genderList, final List<Physician> physicianOptions) {
+        return new PatientData(null, null,genderList, physicianOptions);
     }
 
-    public PatientData(final Long id, final String name, final List<Physician> physicianOptions) {
+    public PatientData(final Long id, final String name,
+                       final List<Gender> genderList,
+                       final List<Physician> physicianOptions) {
         this.id = id;
         this.name = name;
         this.physicianOptions = physicianOptions;
+        this.genderList = genderList;
     }
 
     public Long getId() {
@@ -51,5 +56,9 @@ public class PatientData implements Serializable {
 
     public List<Physician> getPhysicianOptions() {
         return physicianOptions;
+    }
+
+    public List<Gender> getGenderList() {
+        return genderList;
     }
 }

@@ -76,9 +76,6 @@ public class Patient extends Auditable<String> implements Serializable  {
     @Column(length = 50)
     private String dob;
 
-    @NotBlank
-    @Column(length = 25)
-    private String gender;
 
     @NotBlank
     @Column(length = 20)
@@ -120,8 +117,12 @@ public class Patient extends Auditable<String> implements Serializable  {
     @JoinColumn(name = "patient_id")
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "gender_id")
+    private Gender gender;
+
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
-                    String ethnicity,  String dob,  String gender,  String ssn,  String mdn,
+                    String ethnicity,  String dob,  Gender gender,  String ssn,  String mdn,
                     String principal_tribe,  String country,String imageThumbnail,
                     ContactsInformation contactsInformation,
                     Physician physician,List<Diagnosis> diagnoses) {
