@@ -5,7 +5,9 @@ import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.infos.data.PatientData;
+import org.ospic.patient.infos.domain.Gender;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.infos.repository.GenderInfoRepository;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
@@ -43,7 +45,7 @@ import java.util.List;
  */
 @Repository
 public class PatientInformationServicesImpl implements PatientInformationServices {
-
+    private GenderInfoRepository genderInfoRepository;
     @Autowired
     private PatientInformationRepository patientInformationRepository;
     @Autowired
@@ -59,10 +61,12 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Autowired
     public PatientInformationServicesImpl(
             PhysicianInformationService physicianInformationService,
-            FilesStorageService filesStorageService
+            FilesStorageService filesStorageService,
+            GenderInfoRepository genderInfoRepository
     ) {
         this.physicianInformationService = physicianInformationService;
         this.filesStorageService = filesStorageService;
+        this.genderInfoRepository = genderInfoRepository;
     }
 
     @Override
@@ -92,10 +96,11 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
+        List<Gender> genders = genderInfoRepository.findAll();
         for (int i = 0; i < physiciansOptions.size(); i++) {
             physiciansOptions.get(i).getPatients().clear();
         }
-        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
+        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(genders, physiciansOptions));
     }
 
     @Override

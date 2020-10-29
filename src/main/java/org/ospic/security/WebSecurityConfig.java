@@ -74,16 +74,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 /**.antMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
-                **/
+                 .antMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "USER")
+                 .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
+                 .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
+                 **/
                 .antMatchers("/api/patients/**/images/**").permitAll()
                 .antMatchers("/api/patients/**/documents/**").permitAll()
-                .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/api/auth/signin").permitAll()
+                .antMatchers("/api/auth/signup").hasAnyRole("ADMIN")
+                /**.antMatchers("/api/test/**").permitAll()
+                 .antMatchers("/login").permitAll()
+                 .antMatchers("/").permitAll()
+                 **/
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated();
 
