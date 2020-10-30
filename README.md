@@ -8,3 +8,8 @@ Steps to install
 - Run `mvn clean install` 
 - Then run `mvn spring-boot:run`
 - Read the Api documentations from http://localhost:8080/swagger-ui.html#/
+
+## Contribution Guidelines
+ - Fork this repository https://github.com/ospic/spring_platform
+ - Do some changes
+ - Commit to your forked repo and create Pull request 
