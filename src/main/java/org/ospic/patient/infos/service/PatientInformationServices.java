@@ -1,6 +1,7 @@
 package org.ospic.patient.infos.service;
 
 import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ public interface PatientInformationServices {
     public ResponseEntity<List<Patient>> retrieveAllAssignedPatients();
 
     public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
+
+    public ResponseEntity retrieveAllPatientTrendData();
 
     @Transactional
     public Patient createNewPatient(Patient patientInformation);

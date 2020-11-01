@@ -3,6 +3,7 @@ package org.ospic.patient.infos.api;
 import org.ospic.fileuploads.message.ResponseMessage;
 import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.infos.data.PatientData;
+import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.service.PatientInformationServices;
 import org.ospic.util.exceptions.ResourceNotFoundException;
@@ -67,6 +68,7 @@ public class PatientApiResources {
     ResponseEntity<List<Patient>> getAllUnassignedPatients() {
         return patientInformationServices.retrieveAllUnAssignedPatients();
     }
+
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
     @RequestMapping(value = "/assigned",
             method = RequestMethod.GET,
@@ -100,6 +102,9 @@ public class PatientApiResources {
             if (command.equals("template")) {
                 return patientInformationServices.retrievePatientCreationDataTemplate();
             }
+            if (command.equals("trends")){
+                return patientInformationServices.retrieveAllPatientTrendData();
+            }
         }
         return ResponseEntity.ok().body(patientInformationServices.retrieveAllPatients());
     }
@@ -121,6 +126,23 @@ public class PatientApiResources {
             @ApiParam(name = "patientId", required = true)
             @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
         return patientInformationServices.retrievePatientById(patientId);
+    }
+
+    @ApiOperation(
+            value = "GET patients trend data by sex and date",
+            notes = "GET patients trend data by sex and date")
+    @RequestMapping(
+            value = "/trends",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = PatientTrendDatas[].class),
+            @ApiResponse(code = 500, message = "Internal server error"),
+            @ApiResponse(code = 404, message = "Entity not found")})
+    @ResponseBody
+    ResponseEntity<List<PatientTrendDatas>> getPatientTrendBySexAndDate() {
+        return patientInformationServices.retrieveAllPatientTrendData();
     }
 
 
@@ -254,7 +276,8 @@ public class PatientApiResources {
         Resource file = filesStorageService.loadDocument(patientId, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-    @RequestMapping(value="/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
+
+    @RequestMapping(value = "/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
         //filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
