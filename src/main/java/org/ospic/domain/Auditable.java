@@ -47,7 +47,7 @@ public abstract class Auditable<U> {
     
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected Date createdDate;
 
     @CreatedBy
@@ -56,7 +56,7 @@ public abstract class Auditable<U> {
 
     @UpdateTimestamp
     @Column(name = "last_modified_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected Date lastModifiedDate;
 
     @LastModifiedBy

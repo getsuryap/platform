@@ -92,10 +92,25 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
-       for (int i = 0; i < physiciansOptions.size(); i++) {
+        for (int i = 0; i < physiciansOptions.size(); i++) {
             physiciansOptions.get(i).getPatients().clear();
         }
         return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
+    }
+
+    @Override
+    public ResponseEntity retrieveAllPatientTrendData() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT date(created_date) as date, count(*) as total,");
+        sb.append("count(case when gender = '1' then 1 else null end) as male, ");
+        sb.append("count(case when gender = '2' then 1 else null end) as female, ");
+        sb.append("count(case when gender = '0' then 1 else null end) as other FROM m_patient group by date(created_date)");
+        String queryString = sb.toString();
+        Session session = this.sessionFactory.openSession();
+        List patientstrends = session.createQuery(queryString).list();
+        session.close();
+
+        return ResponseEntity.ok().body(patientstrends);
     }
 
     @Override
@@ -127,7 +142,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
             return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
 
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
+                new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
 
     }
 
