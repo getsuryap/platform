@@ -31,19 +31,16 @@ public class PatientData implements Serializable {
     private final Long id;
     private final String name;
     private final List<Physician> physicianOptions;
-    private final List<Gender> genderList;
 
-    public static PatientData patientCreationTemplate(final List<Gender> genderList, final List<Physician> physicianOptions) {
-        return new PatientData(null, null,genderList, physicianOptions);
+    public static PatientData patientCreationTemplate( final List<Physician> physicianOptions) {
+        return new PatientData(null, null,physicianOptions);
     }
 
     public PatientData(final Long id, final String name,
-                       final List<Gender> genderList,
                        final List<Physician> physicianOptions) {
         this.id = id;
         this.name = name;
         this.physicianOptions = physicianOptions;
-        this.genderList = genderList;
     }
 
     public Long getId() {
@@ -58,7 +55,4 @@ public class PatientData implements Serializable {
         return physicianOptions;
     }
 
-    public List<Gender> getGenderList() {
-        return genderList;
-    }
 }

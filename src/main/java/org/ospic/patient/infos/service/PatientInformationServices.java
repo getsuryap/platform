@@ -33,7 +33,7 @@ import java.util.List;
 @Service
 public interface PatientInformationServices {
     @Transactional
-    public List<Patient> retrieveAllPatients();
+    public ResponseEntity<List<Patient>> retrieveAllPatients();
 
     public ResponseEntity<List<Patient>> retrieveAllAssignedPatients();
 

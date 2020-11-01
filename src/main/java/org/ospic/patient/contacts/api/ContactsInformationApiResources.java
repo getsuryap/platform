@@ -43,6 +43,12 @@ public class ContactsInformationApiResources {
     @Autowired
     PatientInformationServices patientInformationServices;
 
+    public ContactsInformationApiResources(
+            ContactsInformationService contactsInformationService,
+            PatientInformationServices patientInformationServices) {
+        this.patientInformationServices = patientInformationServices;
+        this.contactsInformationService = contactsInformationService;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody

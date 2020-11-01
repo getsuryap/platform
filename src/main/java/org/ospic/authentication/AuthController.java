@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiResponses;
 import org.ospic.authentication.privileges.domains.Privilege;
 import org.ospic.authentication.users.User;
 import org.ospic.authentication.users.repository.UserRepository;
+import org.ospic.patient.contacts.services.ContactsInformationServicesImpl;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.enums.RoleEnums;
 import org.ospic.authentication.roles.Role;
@@ -26,6 +27,8 @@ import org.ospic.payload.response.MessageResponse;
 import org.ospic.authentication.roles.repository.RoleRepository;
 import org.ospic.security.jwt.JwtUtils;
 import org.ospic.security.services.UserDetailsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +47,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/auth") /**Defining class-level request handling**/
 @Api(value = "/api/auth",  tags = "Authentication")
 public class AuthController {
+	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -65,6 +70,7 @@ public class AuthController {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		
@@ -72,7 +78,7 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		
+		logger.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
 		return ResponseEntity.ok(new JwtResponse(jwt,
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 

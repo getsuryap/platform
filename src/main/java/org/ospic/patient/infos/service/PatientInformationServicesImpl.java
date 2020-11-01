@@ -5,9 +5,7 @@ import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.infos.data.PatientData;
-import org.ospic.patient.infos.domain.Gender;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.GenderInfoRepository;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
@@ -45,7 +43,7 @@ import java.util.List;
  */
 @Repository
 public class PatientInformationServicesImpl implements PatientInformationServices {
-    private GenderInfoRepository genderInfoRepository;
+
     @Autowired
     private PatientInformationRepository patientInformationRepository;
     @Autowired
@@ -61,20 +59,18 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Autowired
     public PatientInformationServicesImpl(
             PhysicianInformationService physicianInformationService,
-            FilesStorageService filesStorageService,
-            GenderInfoRepository genderInfoRepository
+            FilesStorageService filesStorageService
     ) {
         this.physicianInformationService = physicianInformationService;
         this.filesStorageService = filesStorageService;
-        this.genderInfoRepository = genderInfoRepository;
     }
 
     @Override
-    public List<Patient> retrieveAllPatients() {
+    public ResponseEntity<List<Patient>> retrieveAllPatients() {
         Session session = this.sessionFactory.openSession();
         List<Patient> patientList = session.createQuery("from m_patient").list();
         session.close();
-        return patientList;
+        return ResponseEntity.ok().body(patientList);
     }
 
     @Override
@@ -96,11 +92,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
-        List<Gender> genders = genderInfoRepository.findAll();
-        for (int i = 0; i < physiciansOptions.size(); i++) {
+       for (int i = 0; i < physiciansOptions.size(); i++) {
             physiciansOptions.get(i).getPatients().clear();
         }
-        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(genders, physiciansOptions));
+        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
     }
 
     @Override
@@ -115,11 +110,14 @@ public class PatientInformationServicesImpl implements PatientInformationService
 
     @Override
     public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
-        Patient patient = patientInformationRepository.findById(id).get();
-        if (patient.getPhysician() != null) {
-            patient.getPhysician().getPatients().clear();
-        }
-        return ResponseEntity.ok().body(patient);
+        if (patientInformationRepository.existsById(id)) {
+            Patient patient = patientInformationRepository.findById(id).get();
+            if (patient.getPhysician() != null) {
+                patient.getPhysician().getPatients().clear();
+            }
+            return ResponseEntity.ok().body(patient);
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new MessageResponse(String.format("Patient with given Id:  %s is not found", id)));
     }
 
     @Override
@@ -127,9 +125,10 @@ public class PatientInformationServicesImpl implements PatientInformationService
         if (patientInformationRepository.existsById(id)) {
             patientInformationRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
-        } else {
-            return ResponseEntity.ok(new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
-        }
+
+        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new MessageResponse("Patient with a given ID is either not available or has being deleted by someone else"));
+
     }
 
     @Override
@@ -143,7 +142,7 @@ public class PatientInformationServicesImpl implements PatientInformationService
                     patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
                     patient.setLast_name(update.getLast_name() == null ? patient.getLast_name() : update.getLast_name());
                     patient.setMdn(update.getMdn() == null ? patient.getMdn() : update.getMdn());
-                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
+                    // patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
                     patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
                     patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
                     patient.setContactsInformation(patient.getContactsInformation());
@@ -217,6 +216,8 @@ public class PatientInformationServicesImpl implements PatientInformationService
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new MessageResponse(String.format("Patient with given Id is not available "))
+        );
     }
 }
