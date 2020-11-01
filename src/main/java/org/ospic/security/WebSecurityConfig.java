@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/ui",
             "/configuration/security",
             "/swagger-ui.html",
+            "/swagger-resources/configuration/ui",
             "/webjars/**"
             // other public endpoints of your API may be appended to this array
     };
@@ -81,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/patients/**/images/**").permitAll()
                 .antMatchers("/api/patients/**/documents/**").permitAll()
                 .antMatchers("/api/auth/signin").permitAll()
-                .antMatchers("/api/auth/signup").hasAnyRole("ADMIN")
+                .antMatchers("/api/auth/signup").permitAll()
                 /**.antMatchers("/api/test/**").permitAll()
                  .antMatchers("/login").permitAll()
                  .antMatchers("/").permitAll()

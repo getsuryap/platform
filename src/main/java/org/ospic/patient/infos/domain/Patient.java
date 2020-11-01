@@ -1,5 +1,6 @@
 package org.ospic.patient.infos.domain;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.envers.Audited;
 import org.ospic.domain.Auditable;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
@@ -16,7 +17,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -117,15 +120,15 @@ public class Patient extends Auditable<String> implements Serializable  {
     @JoinColumn(name = "patient_id")
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "gender_id")
+    @NonNull
+    @Column(name = "gender")
     private Gender gender;
 
     public Patient( String first_name, String middle_name, String last_name,  String suffix,
-                    String ethnicity,  String dob,  Gender gender,  String ssn,  String mdn,
+                    String ethnicity,  String dob,    String ssn,  String mdn,
                     String principal_tribe,  String country,String imageThumbnail,
                     ContactsInformation contactsInformation,
-                    Physician physician,List<Diagnosis> diagnoses) {
+                    Physician physician,List<Diagnosis> diagnoses,Gender gender) {
         this.first_name = first_name;
         this.middle_name = middle_name;
         this.last_name = last_name;
@@ -142,9 +145,6 @@ public class Patient extends Auditable<String> implements Serializable  {
         this.contactsInformation = contactsInformation;
         this.diagnoses = diagnoses;
     }
-
-
-
 
 
     @Override

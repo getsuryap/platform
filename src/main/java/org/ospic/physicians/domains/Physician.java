@@ -1,5 +1,6 @@
 package org.ospic.physicians.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;

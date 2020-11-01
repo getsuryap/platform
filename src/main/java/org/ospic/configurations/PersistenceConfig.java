@@ -4,12 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.springframework.security.core.userdetails.User;
 
 /**
  * This file was created by eli on 14/10/2020 for org.ospic.configurations
@@ -33,11 +28,12 @@ import java.util.UUID;
  * under the License.
  */
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableJpaAuditing(
+        auditorAwareRef = "auditorAware")
 public class PersistenceConfig {
 
     @Bean
     public AuditorAware<String> auditorAware(){
-        return new AuditorAwareImpl();
+        return new SpringSecurityAuditorAware();
     }
 }

@@ -1,6 +1,9 @@
 package org.ospic.configurations;
 
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Optional;
 
@@ -25,9 +28,12 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class AuditorAwareImpl implements AuditorAware<String> {
+public class SpringSecurityAuditorAware implements AuditorAware<String> {
+
     @Override
     public Optional<String> getCurrentAuditor(){
-        return Optional.of("Admins");
+        return Optional.of(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        //return Optional.of("Naresh");//Optional.of(SecurityContextHolder.getContext().getAuthentication().getName());
     }
+
 }
