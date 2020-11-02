@@ -1,7 +1,6 @@
 package org.ospic.patient.infos.service;
 
 import org.ospic.patient.contacts.domain.ContactsInformation;
-import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
+ * This file was created by eli on 02/11/2020 for org.ospic.patient.infos.service
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -32,25 +34,7 @@ import java.util.List;
  */
 @Component
 @Service
-public interface PatientInformationServices {
-    @Transactional
-    public ResponseEntity<List<Patient>> retrieveAllPatients();
-
-    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients();
-
-    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
-
-    public ResponseEntity retrieveAllPatientTrendData();
-
-    @Transactional
-    public Patient createNewPatient(Patient patientInformation);
-
-    @Transactional
-    public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
-
-    @Transactional
-    public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException;
-
+public interface PatientInformationWriteService {
     @Transactional
     public ResponseEntity deletePatientById(Long id);
 
@@ -63,7 +47,13 @@ public interface PatientInformationServices {
     @Transactional
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
 
-    public ResponseEntity retrievePatientCreationDataTemplate();
+
+    @Transactional
+    public Patient createNewPatient(Patient patientInformation);
+
+    @Transactional
+    public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
+
 
     public ResponseEntity uploadPatientImage(Long patientId,  MultipartFile file);
 
