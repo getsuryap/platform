@@ -1,14 +1,12 @@
 package org.ospic.patient.infos.data;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.Serializable;
+import org.springframework.jdbc.core.RowMapper;
+import javax.swing.tree.TreePath;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * This file was created by eli on 01/11/2020 for org.ospic.patient.infos.data
+ * This file was created by eli on 02/11/2020 for org.ospic.patient.infos.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,21 +26,16 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-public class PatientTrendDatas implements Serializable {
-    private String date;
-    private  Long total;
-    private  Long male;
-    private  Long female;
-    private  Long other;
-
-    public PatientTrendDatas(String date, Long total, Long male, Long female, Long other) {
-        this.date = date;
-        this.male = male;
-        this.female = female;
-        this.other = other;
-        this.total = total;
+public class PatientTrendsDataRowMapper implements RowMapper<PatientTrendDatas> {
+    @Override
+    public PatientTrendDatas mapRow(ResultSet resultSet, int i) throws SQLException {
+        PatientTrendDatas pt = new PatientTrendDatas();
+        pt.setDate(resultSet.getString("date"));
+        pt.setFemale(resultSet.getLong("female"));
+        pt.setMale(resultSet.getLong("male"));
+        pt.setOther(resultSet.getLong("other"));
+        pt.setTotal(resultSet.getLong("total"));
+        return pt;
     }
+
 }

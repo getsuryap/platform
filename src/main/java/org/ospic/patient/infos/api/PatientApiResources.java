@@ -5,7 +5,8 @@ import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.infos.data.PatientData;
 import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.service.PatientInformationServices;
+import org.ospic.patient.infos.service.PatientInformationReadServices;
+import org.ospic.patient.infos.service.PatientInformationWriteService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
@@ -45,12 +46,16 @@ import java.util.List;
 @Api(value = "/api/patients", tags = "Patients", description = "Patient  API resources")
 public class PatientApiResources {
 
-    PatientInformationServices patientInformationServices;
+    PatientInformationReadServices patientInformationReadServices;
+    PatientInformationWriteService patientInformationWriteService;
     FilesStorageService filesStorageService;
 
     @Autowired
-    PatientApiResources(PatientInformationServices patientInformationServices, FilesStorageService filesStorageService) {
-        this.patientInformationServices = patientInformationServices;
+    PatientApiResources(PatientInformationReadServices patientInformationReadServices,
+                        PatientInformationWriteService patientInformationWriteService,
+                        FilesStorageService filesStorageService) {
+        this.patientInformationReadServices = patientInformationReadServices;
+        this.patientInformationWriteService = patientInformationWriteService;
         this.filesStorageService = filesStorageService;
     }
 
@@ -66,7 +71,7 @@ public class PatientApiResources {
             @ApiResponse(code = 404, message = "Entity not found")
     })
     ResponseEntity<List<Patient>> getAllUnassignedPatients() {
-        return patientInformationServices.retrieveAllUnAssignedPatients();
+        return patientInformationReadServices.retrieveAllUnAssignedPatients();
     }
 
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
@@ -80,7 +85,7 @@ public class PatientApiResources {
             @ApiResponse(code = 404, message = "Entity not found")
     })
     ResponseEntity<List<Patient>> getAllAssignedPatients() {
-        return patientInformationServices.retrieveAllAssignedPatients();
+        return patientInformationReadServices.retrieveAllAssignedPatients();
     }
 
     @ApiOperation(
@@ -100,13 +105,13 @@ public class PatientApiResources {
     ResponseEntity retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("template")) {
-                return patientInformationServices.retrievePatientCreationDataTemplate();
+                return patientInformationReadServices.retrievePatientCreationDataTemplate();
             }
             if (command.equals("trends")){
-                return patientInformationServices.retrieveAllPatientTrendData();
+                return patientInformationReadServices.retrieveAllPatientTrendData();
             }
         }
-        return ResponseEntity.ok().body(patientInformationServices.retrieveAllPatients());
+        return ResponseEntity.ok().body(patientInformationReadServices.retrieveAllPatients());
     }
 
 
@@ -122,10 +127,10 @@ public class PatientApiResources {
             @ApiResponse(code = 500, message = "Internal server error"),
             @ApiResponse(code = 404, message = "Entity not found")})
     @ResponseBody
-    ResponseEntity findById(
+    ResponseEntity<Patient> findById(
             @ApiParam(name = "patientId", required = true)
             @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
-        return patientInformationServices.retrievePatientById(patientId);
+        return patientInformationReadServices.retrievePatientById(patientId);
     }
 
     @ApiOperation(
@@ -142,7 +147,7 @@ public class PatientApiResources {
             @ApiResponse(code = 404, message = "Entity not found")})
     @ResponseBody
     ResponseEntity<List<PatientTrendDatas>> getPatientTrendBySexAndDate() {
-        return patientInformationServices.retrieveAllPatientTrendData();
+        return patientInformationReadServices.retrieveAllPatientTrendData();
     }
 
 
@@ -163,7 +168,7 @@ public class PatientApiResources {
     ResponseEntity updatePatient(
             @ApiParam(name = "patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Patient Entity", required = true) @RequestBody Patient patient) {
-        return patientInformationServices.updatePatient(patientId, patient);
+        return patientInformationWriteService.updatePatient(patientId, patient);
     }
 
     @ApiOperation(
@@ -179,7 +184,7 @@ public class PatientApiResources {
     ResponseEntity assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Physician ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
-        return patientInformationServices.assignPatientToPhysician(patientId, physicianId);
+        return patientInformationWriteService.assignPatientToPhysician(patientId, physicianId);
     }
 
 
@@ -199,7 +204,7 @@ public class PatientApiResources {
             @ApiResponse(code = 404, message = "Entity not found")})
     @ResponseBody
     Patient createNewPatient(@ApiParam(name = "Patient Entity", required = true) @Valid @RequestBody Patient patientInformationRequest) {
-        return patientInformationServices.createNewPatient(patientInformationRequest);
+        return patientInformationWriteService.createNewPatient(patientInformationRequest);
     }
 
 
@@ -219,7 +224,7 @@ public class PatientApiResources {
     List<Patient> createNewPatients(
             @ApiParam(name = "List of Patient Entity", required = true)
             @Valid @RequestBody List<Patient> patientInformationListRequest) {
-        return patientInformationServices.createByPatientListIterate(patientInformationListRequest);
+        return patientInformationWriteService.createByPatientListIterate(patientInformationListRequest);
     }
 
     @ApiOperation(
@@ -240,7 +245,7 @@ public class PatientApiResources {
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
-            ResponseEntity responseEntity = patientInformationServices.uploadPatientImage(patientId, file);
+            ResponseEntity responseEntity = patientInformationWriteService.uploadPatientImage(patientId, file);
             return responseEntity;
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
@@ -259,7 +264,7 @@ public class PatientApiResources {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
-        return patientInformationServices.deletePatientById(id);
+        return patientInformationWriteService.deletePatientById(id);
     }
 
     @GetMapping("/{patientId}/images/{filename:.+}")
@@ -281,7 +286,7 @@ public class PatientApiResources {
     @ResponseBody
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
         //filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
-        return patientInformationServices.deletePatientImage(patientId, filename);
+        return patientInformationWriteService.deletePatientImage(patientId, filename);
     }
 
 }

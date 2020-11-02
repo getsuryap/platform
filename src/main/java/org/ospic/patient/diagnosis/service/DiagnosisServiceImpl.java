@@ -4,7 +4,6 @@ import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
-import org.ospic.patient.infos.service.PatientInformationServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;

@@ -1,29 +1,31 @@
 package org.ospic.patient.infos.service;
 
+import org.hibernate.SessionFactory;
+import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
-import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.patient.infos.data.PatientData;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.payload.response.MessageResponse;
-import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.service.PhysicianInformationService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.util.List;
 
 /**
+ * This file was created by eli on 02/11/2020 for org.ospic.patient.infos.service
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -42,8 +44,7 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class PatientInformationServicesImpl implements PatientInformationServices {
-
+public class PatientInformationWriteServiceImpl implements PatientInformationWriteService {
     @Autowired
     private PatientInformationRepository patientInformationRepository;
     @Autowired
@@ -55,62 +56,18 @@ public class PatientInformationServicesImpl implements PatientInformationService
     FilesStorageService filesStorageService;
 
     PhysicianInformationService physicianInformationService;
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public PatientInformationServicesImpl(
+    public PatientInformationWriteServiceImpl(
+            DataSource dataSource,
             PhysicianInformationService physicianInformationService,
-            FilesStorageService filesStorageService
-    ) {
+            FilesStorageService filesStorageService) {
         this.physicianInformationService = physicianInformationService;
         this.filesStorageService = filesStorageService;
-    }
 
-    @Override
-    public ResponseEntity<List<Patient>> retrieveAllPatients() {
-        Session session = this.sessionFactory.openSession();
-        List<Patient> patientList = session.createQuery("from m_patient").list();
-        session.close();
-        return ResponseEntity.ok().body(patientList);
-    }
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-    @Override
-    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients() {
-        Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NOT NULL").list();
-        session.close();
-        return ResponseEntity.status(HttpStatus.OK).body(patients);
-    }
-
-    @Override
-    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients() {
-        Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NULL").list();
-        session.close();
-        return ResponseEntity.status(HttpStatus.OK).body(patients);
-    }
-
-    @Override
-    public ResponseEntity retrievePatientCreationDataTemplate() {
-        List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
-        for (int i = 0; i < physiciansOptions.size(); i++) {
-            physiciansOptions.get(i).getPatients().clear();
-        }
-        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
-    }
-
-    @Override
-    public ResponseEntity retrieveAllPatientTrendData() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT date(created_date) as date, count(*) as total,");
-        sb.append("count(case when gender = '1' then 1 else null end) as male, ");
-        sb.append("count(case when gender = '2' then 1 else null end) as female, ");
-        sb.append("count(case when gender = '0' then 1 else null end) as other FROM m_patient group by date(created_date)");
-        String queryString = sb.toString();
-        Session session = this.sessionFactory.openSession();
-        List patientstrends = session.createQuery(queryString).list();
-        session.close();
-
-        return ResponseEntity.ok().body(patientstrends);
     }
 
     @Override
@@ -122,19 +79,6 @@ public class PatientInformationServicesImpl implements PatientInformationService
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList) {
         return patientInformationRepository.saveAll(patientInformationList);
     }
-
-    @Override
-    public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
-        if (patientInformationRepository.existsById(id)) {
-            Patient patient = patientInformationRepository.findById(id).get();
-            if (patient.getPhysician() != null) {
-                patient.getPhysician().getPatients().clear();
-            }
-            return ResponseEntity.ok().body(patient);
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new MessageResponse(String.format("Patient with given Id:  %s is not found", id)));
-    }
-
     @Override
     public ResponseEntity deletePatientById(Long id) {
         if (patientInformationRepository.existsById(id)) {

@@ -3,14 +3,13 @@ package org.ospic.patient.contacts.api;
 import io.swagger.annotations.*;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.services.ContactsInformationService;
-import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.service.PatientInformationServices;
+import org.ospic.patient.infos.service.PatientInformationReadServices;
+import org.ospic.patient.infos.service.PatientInformationWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,12 +40,14 @@ public class ContactsInformationApiResources {
     @Autowired
     ContactsInformationService contactsInformationService;
     @Autowired
-    PatientInformationServices patientInformationServices;
+    PatientInformationReadServices patientInformationReadServices;
+    @Autowired
+    PatientInformationWriteService patientInformationWriteService;
 
     public ContactsInformationApiResources(
             ContactsInformationService contactsInformationService,
-            PatientInformationServices patientInformationServices) {
-        this.patientInformationServices = patientInformationServices;
+            PatientInformationWriteService patientInformationWriteService) {
+        this.patientInformationWriteService = patientInformationWriteService;
         this.contactsInformationService = contactsInformationService;
     }
 
@@ -63,7 +64,7 @@ public class ContactsInformationApiResources {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ContactsInformation createNew(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
-        return patientInformationServices.updatePatientContacts(id, contactsInformationRequest);
+        return patientInformationWriteService.updatePatientContacts(id, contactsInformationRequest);
     }
 
     @ApiOperation(
