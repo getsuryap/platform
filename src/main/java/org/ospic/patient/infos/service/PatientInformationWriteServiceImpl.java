@@ -101,7 +101,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
                     patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
                     patient.setLast_name(update.getLast_name() == null ? patient.getLast_name() : update.getLast_name());
                     patient.setMdn(update.getMdn() == null ? patient.getMdn() : update.getMdn());
-                    // patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
+                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
                     patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
                     patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
                     patient.setContactsInformation(patient.getContactsInformation());
