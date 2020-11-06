@@ -76,11 +76,7 @@ public class ContactsInformationApiResources {
             method = RequestMethod.GET,
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = ResponseEntity.class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     @ResponseBody
     ResponseEntity retrievePatientContacts(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) {
         return contactsInformationService.retrievePatientContactByPatientId(patientId);

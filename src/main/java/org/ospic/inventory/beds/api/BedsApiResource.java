@@ -58,11 +58,7 @@ public class BedsApiResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Bed[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     ResponseEntity<List<Bed>> retrieveBeds() {
         return bedReadService.retrieveBedList();
     }
@@ -77,11 +73,7 @@ public class BedsApiResource {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.ALL_VALUE
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Bed[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     @ResponseBody
     ResponseEntity<String> createBed(@Valid  @ApiParam(name = "Bed Entity", required = true)  @RequestBody  Bed bedData){
         return bedWriteService.createNewBed(bedData);

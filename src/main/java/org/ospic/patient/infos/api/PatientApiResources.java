@@ -65,11 +65,7 @@ public class PatientApiResources {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Patient[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     ResponseEntity<List<Patient>> getAllUnassignedPatients() {
         return patientInformationReadServices.retrieveAllUnAssignedPatients();
     }
@@ -79,11 +75,7 @@ public class PatientApiResources {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Patient[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     ResponseEntity<List<Patient>> getAllAssignedPatients() {
         return patientInformationReadServices.retrieveAllAssignedPatients();
     }
@@ -96,11 +88,7 @@ public class PatientApiResources {
             value = "/",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = PatientData.class),
-            @ApiResponse(code = 500, message = "Internal Server error"),
-            @ApiResponse(code = 404, message = "Error")
-    })
+
     @ResponseBody
     ResponseEntity retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
@@ -122,10 +110,7 @@ public class PatientApiResources {
             value = "/{patientId}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Patient.class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")})
+
     @ResponseBody
     ResponseEntity<Patient> findById(
             @ApiParam(name = "patientId", required = true)
@@ -141,10 +126,7 @@ public class PatientApiResources {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = PatientTrendDatas[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")})
+
     @ResponseBody
     ResponseEntity<List<PatientTrendDatas>> getPatientTrendBySexAndDate() {
         return patientInformationReadServices.retrieveAllPatientTrendData();
@@ -159,11 +141,7 @@ public class PatientApiResources {
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 400, message = "Ba request", response = Patient.class),
-            @ApiResponse(code = 404, message = "Entity not found")})
+
     @ResponseBody
     ResponseEntity updatePatient(
             @ApiParam(name = "patient ID", required = true) @PathVariable Long patientId,
@@ -197,11 +175,7 @@ public class PatientApiResources {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successfully"),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 400, message = "Ba request", response = Patient.class),
-            @ApiResponse(code = 404, message = "Entity not found")})
+
     @ResponseBody
     Patient createNewPatient(@ApiParam(name = "Patient Entity", required = true) @Valid @RequestBody Patient patientInformationRequest) {
         return patientInformationWriteService.createNewPatient(patientInformationRequest);
@@ -216,10 +190,7 @@ public class PatientApiResources {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successfully"),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")})
+
     @ResponseBody
     List<Patient> createNewPatients(
             @ApiParam(name = "List of Patient Entity", required = true)
@@ -237,10 +208,7 @@ public class PatientApiResources {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Client image updated successfully"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient not found")})
+
     @ResponseBody
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";

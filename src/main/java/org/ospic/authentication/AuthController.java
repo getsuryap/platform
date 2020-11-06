@@ -153,11 +153,7 @@ public class AuthController {
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success", response = User[].class),
-			@ApiResponse(code = 500, message = "Internal server error"),
-			@ApiResponse(code = 404, message = "Entity not found")
-	})
+
 	@ResponseBody
 	ResponseEntity<List<User>> retrieveAllApplicationUsersResponse(){
 		List<User> users = userRepository.findAll();
@@ -177,11 +173,7 @@ public class AuthController {
 			produces = MediaType.ALL_VALUE
 
 	)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 500, message = "Internal server error"),
-			@ApiResponse(code = 404, message = "Entity not found")
-	})
+
 	@ResponseBody
 	public String logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
