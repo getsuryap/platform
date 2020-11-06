@@ -66,10 +66,7 @@ public class FilesUploadController {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.ALL_VALUE
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "File uploaded successfully"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Path not found")})
+
     @ResponseBody
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
@@ -94,10 +91,6 @@ public class FilesUploadController {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.ALL_VALUE
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Patient profile picture updated successfully"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient not found")})
 
     @ResponseBody
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
@@ -116,10 +109,6 @@ public class FilesUploadController {
             value = "UPLOAD patient document",
             notes = "UPLOAD patient document"
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Patient Document/File uploaded successfully"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient not found")})
     @RequestMapping(
             value = "/{patientId}/documents",
             method = RequestMethod.POST,
@@ -144,10 +133,6 @@ public class FilesUploadController {
             value = "LIST all files/documents in a given directory",
             notes = "LIST all files/documents in a given directory"
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Directory not found")})
     @RequestMapping(
             value="/files",
             method = RequestMethod.GET)
@@ -168,10 +153,6 @@ public class FilesUploadController {
             value = "GET patient file from his/her file",
             notes = "GET patient file from his/her file"
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient file not found")})
     @RequestMapping(
             value = "/{patientId}/images/{filename:.+}",
             method = RequestMethod.GET)
@@ -187,10 +168,6 @@ public class FilesUploadController {
             value = "GET patient document by document/file name",
             notes = "GET patient document by document/file name"
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient file not found")})
     @RequestMapping(
             value = "/{patientId}/documents/{filename:.+}",
             method = RequestMethod.GET,
@@ -209,10 +186,6 @@ public class FilesUploadController {
             value = "DELETE patient image by file name",
             notes = "DELETE patient image by file name"
     )
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 500, message = "Internal server Error"),
-            @ApiResponse(code = 404, message = "Patient file not found")})
 
     @RequestMapping(
             value="/{patientId}/images/{filename:.+}",

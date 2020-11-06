@@ -48,11 +48,7 @@ public class DiagnosisApiResources {
     @ApiOperation(
             value = "CREATE new diagnosis Report",
             notes = "CREATE new diagnosis Report")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Diagnosis[].class),
-            @ApiResponse(code = 500, message = "Internal server error"),
-            @ApiResponse(code = 404, message = "Entity not found")
-    })
+
     @RequestMapping(
             value = "/{patientId}",
             method = RequestMethod.POST,
