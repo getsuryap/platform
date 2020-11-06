@@ -1,9 +1,14 @@
-package org.ospic.ward.beds.domain;
+package org.ospic.inventory.wards.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModel;
+import lombok.*;
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.util.enums.BedSizeEnums;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,37 +28,20 @@ import javax.persistence.*;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
-@Table(name = DatabaseConstants.BED_SIZES, uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
-public class BedSize {
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@Entity(name = DatabaseConstants.WARDS_TABLE)
+@Table(name = DatabaseConstants.WARDS_TABLE)
+@ApiModel(value = "Wards", description = "A Wards ")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Ward {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", unique = true)
+    private @Setter(AccessLevel.PROTECTED) Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 200)
-    private BedSizeEnums name;
-
-    public BedSize() {
-    }
-
-    public BedSize(BedSizeEnums name) {
-        this.name = name;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setName(BedSizeEnums name) {
-        this.name = name;
-    }
-
-    public BedSizeEnums getName() {
-        return name;
-    }
+    @NotNull
+    @Column(name = "name", length = 20, nullable = false)
+    private String name;
 }

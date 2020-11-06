@@ -25,7 +25,7 @@ public class DatabaseConstants {
     public static final String ROLES_TABLE = "m_roles";
     public static final String DOCTOR_INFORMATION = "m_doctor";
     public static final String BEDS_TABLE = "m_beds";
-    public static final String BED_SIZES = "m_bed_size";
+    public static final String WARDS_TABLE = "m_wards";
     public static final String PHYSICIAN_TABLE = "m_physician";
 
     public static final String DIAGNOSES_TABLE = "m_diagnosis";

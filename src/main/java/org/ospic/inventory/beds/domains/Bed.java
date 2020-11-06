@@ -1,11 +1,18 @@
-package org.ospic.ward.domain;
+package org.ospic.inventory.beds.domains;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModel;
+import lombok.*;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 /**
+ * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.domains
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -23,54 +30,36 @@ import javax.validation.constraints.NotBlank;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@Entity(name = DatabaseConstants.BEDS_TABLE)
 @Table(name = DatabaseConstants.BEDS_TABLE)
+@ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Bed {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private Long id;
+    private @Setter(AccessLevel.PROTECTED) Long id;
 
     @NotBlank
+    @Column(name = "identifier", nullable = false, length = 20)
+    private String identifier;
+
     @Column(name = "patient_id",unique = true)
-    private Long patientId;
+    private  Long patientId;
 
-    @NotBlank
+
     @Column(
             name = "is_occupied",
             nullable = false,
-            columnDefinition = "bit default 0"
+            columnDefinition = "boolean default false"
     )
     private Boolean isOccupied;
 
-    public Bed(){}
     public Bed(Long patientId, Boolean isOccupied){
         this.isOccupied = isOccupied;
         this.patientId = patientId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOccupied(Boolean occupied) {
-        isOccupied = occupied;
-    }
-
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
-    }
-
-    /**Getters **/
-    public Long getId() {
-        return id;
-    }
-
-    public Boolean getOccupied() {
-        return isOccupied;
-    }
-
-    public Long getPatientId() {
-        return patientId;
     }
 }

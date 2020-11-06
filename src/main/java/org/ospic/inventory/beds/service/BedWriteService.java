@@ -1,6 +1,12 @@
-package org.ospic.ward.beds.service;
+package org.ospic.inventory.beds.service;
+
+import org.ospic.inventory.beds.domains.Bed;
+import org.springframework.http.ResponseEntity;
 
 /**
+ * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.service
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -18,5 +24,6 @@ package org.ospic.ward.beds.service;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface BedsService {
+public interface BedWriteService {
+    public ResponseEntity<String> createNewBed(Bed bed);
 }

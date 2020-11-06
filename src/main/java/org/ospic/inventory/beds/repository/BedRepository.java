@@ -1,6 +1,6 @@
-package org.ospic.ward.repository;
+package org.ospic.inventory.beds.repository;
 
-import org.ospic.ward.domain.Bed;
+import org.ospic.inventory.beds.domains.Bed;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
