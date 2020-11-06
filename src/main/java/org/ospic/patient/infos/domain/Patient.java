@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,71 +47,87 @@ import java.util.Map;
 @Entity(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = true)
-public class Patient extends Auditable<String> implements Serializable  {
+public class Patient extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private @Setter(AccessLevel.PROTECTED)  Long id;
+    private @Setter(AccessLevel.PROTECTED)
+    Long id;
 
     @NotBlank
-    @Column(length = 20)
+    @Column(length = 100)
     @ApiModelProperty(notes = "Patient First name", required = true, name = "first_name")
-    private String first_name;
+    private String name;
+
+    @Column(name = "guardian_name", length = 100)
+    private String guardianName;
 
     @NotBlank
-    @Column(length = 20)
-    private String middle_name;
+    @Column(name = "phone", length = 15)
+    private String phone;
+
+    @Column(name = "address", length = 200)
+    private String address;
+
+    @Column(name = "email_address", length = 20)
+    private String emailAddress;
 
     @NotBlank
-    @Column(length = 20)
-    private String last_name;
+    @Column(name = "height", length = 10)
+    private String height;
 
     @NotBlank
-    @Column(length = 20)
-    private String suffix;
+    @Column(name = "weight", length = 10)
+    private String weight;
 
     @NotBlank
-    @Column(length = 20)
-    private String ethnicity;
+    @Column(name = "blood_pressure", length = 10)
+    private String bloodPressure;
 
-    @NotBlank
-    @Column(length = 50)
-    private String dob;
+    @NotNull
+    @Column(name = "age", length = 3)
+    private int age;
 
-
-    @NotBlank
-    @Column(length = 20)
-    private String ssn;
-
-    @NotBlank
-    @Column(length = 20)
-    private String mdn;
-
-    @NotBlank
-    @Column(length = 200)
-    private String principal_tribe;
-
-    @NotBlank
-    @Column(length = 20)
-    private String country;
-
-    @Column(length =2, nullable = false, columnDefinition = "boolean default false")
+    @Column(length = 2, nullable = false, columnDefinition = "boolean default false")
     private Boolean isAdmitted = false;
 
-
     @Column(length = 255, name = "thumbnail")
-    private String imageThumbnail;
+    private String patientPhoto;
 
-    @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL)
+    @Column(name = "blood_group", length = 2)
+    private String bloodGroup;
+
+    @NotBlank
+    @Column(name = "note", length = 200)
+    private String note;
+
+    @NotBlank
+    @Column(name = "symptoms", length = 250)
+    private String symptoms;
+
+    @NotBlank
+    @Column(name ="marital_status", length = 25)
+    private String marriageStatus;
+
+    @NonNull
+    @Column(name = "gender")
+    private Gender gender;
+
+
+
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
-    private  ContactsInformation contactsInformation;
+    private ContactsInformation contactsInformation;
 
 
     @ManyToOne
     @JoinColumn(name = "physician_id")
-    @Getter @Setter private Physician physician;
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @Getter
+    @Setter
+    private Physician physician;
 
     @OneToMany(
             fetch = FetchType.EAGER,
@@ -118,39 +135,44 @@ public class Patient extends Auditable<String> implements Serializable  {
             orphanRemoval = true
     )
     @JoinColumn(name = "patient_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
-    @NonNull
-    @Column(name = "gender")
-    private Gender gender;
-
-    public Patient( String first_name, String middle_name, String last_name,  String suffix,
-                    String ethnicity,  String dob,    String ssn,  String mdn,
-                    String principal_tribe,  String country,String imageThumbnail,
-                    ContactsInformation contactsInformation,
-                    Physician physician,List<Diagnosis> diagnoses,Gender gender) {
-        this.first_name = first_name;
-        this.middle_name = middle_name;
-        this.last_name = last_name;
-        this.suffix = suffix;
-        this.ethnicity = ethnicity;
-        this.dob = dob;
+    public Patient(
+            String name, String guardianName, String phone, String address, String emailAddress,
+            String height,  String weight, String bloodPressure,  int age, Boolean isAdmitted, String patientPhoto,
+            String bloodGroup,String note,String symptoms, String marriageStatus, Gender gender,
+            ContactsInformation contactsInformation, Physician physician, List<Diagnosis> diagnoses) {
+        this.name = name;
+        this.guardianName = guardianName;
+        this.phone = phone;
+        this.address = address;
+        this.emailAddress = emailAddress;
+        this.height = height;
+        this.weight = weight;
+        this.bloodPressure = bloodPressure;
+        this.age = age;
+        this.isAdmitted = isAdmitted;
+        this.patientPhoto = patientPhoto;
+        this.bloodGroup = bloodGroup;
+        this.note = note;
+        this.symptoms = symptoms;
+        this.marriageStatus = marriageStatus;
         this.gender = gender;
-        this.ssn = ssn;
-        this.mdn = mdn;
-        this.principal_tribe = principal_tribe;
-        this.country = country;
-        this.imageThumbnail = imageThumbnail;
-        this.physician = physician;
         this.contactsInformation = contactsInformation;
+        this.physician = physician;
         this.diagnoses = diagnoses;
     }
+
+
+
+
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Patient )) return false;
+        if (!(o instanceof Patient)) return false;
         return id != null && id.equals(((Patient) o).id);
     }
 

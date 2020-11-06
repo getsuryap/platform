@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import io.swagger.annotations.Api;
@@ -35,8 +37,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -162,4 +166,32 @@ public class AuthController {
 		});
 		return ResponseEntity.ok(users);
 	}
+
+	@ApiOperation(
+			value = "LOGOUT Session",
+			notes = "LOGOUT Session"
+	)
+	@RequestMapping(
+			value = "/signout",
+			method = RequestMethod.GET,
+			produces = MediaType.ALL_VALUE
+
+	)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 500, message = "Internal server error"),
+			@ApiResponse(code = 404, message = "Entity not found")
+	})
+	@ResponseBody
+	public String logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null){
+			SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+			logoutHandler.setInvalidateHttpSession(true);
+			logoutHandler.logout(httpServletRequest, httpServletResponse, authentication);
+			SecurityContextHolder.getContext().setAuthentication(null);
+		}
+		return "redirect:/";
+	}
+
 }
