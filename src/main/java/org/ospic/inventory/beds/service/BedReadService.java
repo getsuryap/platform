@@ -1,9 +1,9 @@
-package org.ospic.ward.beds.repository;
+package org.ospic.inventory.beds.service;
 
-import org.ospic.ward.beds.domain.BedSize;
-import org.ospic.util.enums.BedSizeEnums;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.ospic.inventory.beds.domains.Bed;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,8 +23,8 @@ import org.springframework.stereotype.Repository;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Repository
-public interface BedSizeRepository extends JpaRepository<BedSize, Long> {
-    Boolean existsByName(BedSizeEnums bedSizeEnums);
-}
+public interface BedReadService {
+    public ResponseEntity<List<Bed>> retrieveBedList();
 
+    public ResponseEntity<Bed> retrieveBedById(Long id);
+}
