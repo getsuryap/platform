@@ -76,7 +76,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patientList = session.createQuery("from m_patient").list();
+        List<Patient> patientList = session.createQuery("from m_patients").list();
         session.close();
         return ResponseEntity.ok().body(patientList);
     }
@@ -84,7 +84,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllAssignedPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NOT NULL").list();
+        List<Patient> patients = session.createQuery("from m_patients WHERE physician_id IS NOT NULL").list();
         session.close();
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
@@ -92,7 +92,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patient WHERE physician_id IS NULL").list();
+        List<Patient> patients = session.createQuery("from m_patients WHERE physician_id IS NULL").list();
         session.close();
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
@@ -112,7 +112,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         sb.append("SELECT date(created_date) as date, count(*) as total,");
         sb.append("count(case when gender = '1' then 1 else null end) as male, ");
         sb.append("count(case when gender = '2' then 1 else null end) as female, ");
-        sb.append("count(case when gender = '0' then 1 else null end) as other FROM m_patient group by date(created_date)");
+        sb.append("count(case when gender = '0' then 1 else null end) as other FROM m_patients group by date(created_date)");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
         List<PatientTrendDatas> patientstrends = jdbcTemplate.query(queryString, new PatientTrendsDataRowMapper());

@@ -94,19 +94,8 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     public ResponseEntity updatePatient(Long id, Patient update) {
         return patientInformationRepository.findById(id)
                 .map(patient -> {
-                    patient.setCountry(update.getCountry() == null ? patient.getCountry() : update.getCountry());
-                    patient.setDob(update.getDob() == null ? patient.getDob() : update.getDob());
-                    patient.setEthnicity(update.getEthnicity() == null ? patient.getEthnicity() : update.getEthnicity());
-                    patient.setFirst_name(update.getFirst_name() == null ? patient.getFirst_name() : update.getFirst_name());
-                    patient.setMiddle_name(update.getMiddle_name() == null ? patient.getMiddle_name() : update.getMiddle_name());
-                    patient.setLast_name(update.getLast_name() == null ? patient.getLast_name() : update.getLast_name());
-                    patient.setMdn(update.getMdn() == null ? patient.getMdn() : update.getMdn());
-                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
-                    patient.setSuffix(update.getSuffix() == null ? patient.getSuffix() : update.getSuffix());
-                    patient.setPrincipal_tribe(update.getPrincipal_tribe() == null ? patient.getPrincipal_tribe() : update.getPrincipal_tribe());
-                    patient.setContactsInformation(patient.getContactsInformation());
+              patient.setContactsInformation(patient.getContactsInformation());
                     patient.setIsAdmitted(update.getIsAdmitted());
-                    patient.setSsn(update.getSsn() == null ? patient.getSsn() : update.getSsn());
                     return ResponseEntity.ok(patientInformationRepository.save(patient));
 
                 }).orElseThrow(() -> new EntityNotFoundException());
@@ -153,7 +142,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         try {
             return patientInformationRepository.findById(patientId).map(patient -> {
                 String imagePath = filesStorageService.uploadPatientImage(patientId, "images", file);
-                patient.setImageThumbnail(imagePath);
+                patient.setPatientPhoto(imagePath);
                 return ResponseEntity.ok().body(patientInformationRepository.save(patient));
             }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));
         } catch (ResourceNotFoundException e) {
@@ -168,7 +157,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         try {
             patientInformationRepository.findById(patientId).map(patient -> {
                 filesStorageService.deletePatientFileOrDocument("images", patientId, fileName);
-                patient.setImageThumbnail(null);
+                patient.setPatientPhoto(null);
                 patientInformationRepository.save(patient);
                 return ResponseEntity.ok().body(patientInformationRepository.findById(patientId));
             }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));

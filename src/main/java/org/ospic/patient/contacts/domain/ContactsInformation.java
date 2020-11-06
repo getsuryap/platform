@@ -1,5 +1,6 @@
 package org.ospic.patient.contacts.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.patient.infos.domain.Patient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -68,6 +69,7 @@ public class ContactsInformation {
 
     @OneToOne
     @MapsId
+    @ApiModelProperty(position = 1, required = true, hidden=true, notes = "used to display user name")
     private Patient patient;
 
     public ContactsInformation(
