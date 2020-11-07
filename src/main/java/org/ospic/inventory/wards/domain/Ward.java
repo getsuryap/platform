@@ -37,11 +37,15 @@ import javax.validation.constraints.NotNull;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ward {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private @Setter(AccessLevel.PROTECTED) Long id;
 
     @NotNull
-    @Column(name = "name", length = 20, nullable = false)
+    @Column(name = "name",unique = true, length = 15, nullable = false)
     private  String name;
+
+    public Ward(String name){
+        this.name = name;
+    }
 }
