@@ -1,9 +1,20 @@
 package org.ospic.inventory.wards.api;
 
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.wards.domain.Ward;
+import org.ospic.inventory.wards.repository.WardRepository;
+import org.ospic.inventory.wards.service.WardReadService;
+import org.ospic.inventory.wards.service.WardWriteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.wards.api
@@ -28,7 +39,49 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
+@Component
 @RequestMapping("/api/wards")
 @Api(value = "/api/wards", tags = "Wards", description = "Wards API resources")
 public class WardApiResources {
+    final WardReadService wardReadService;
+    final WardWriteService wardWriteService;
+    final WardRepository wardRepository;
+    @Autowired
+    public WardApiResources(
+            WardReadService wardReadService,
+            WardWriteService wardWriteService,
+            WardRepository wardRepository){
+        this.wardReadService = wardReadService;
+        this.wardWriteService = wardWriteService;
+        this.wardRepository =wardRepository;
+    }
+    @ApiOperation(
+            value = "RETRIEVE Wards",
+            notes = "RETRIEVE Wards"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    ResponseEntity<List<Ward>> retrieveAllWards(){
+        return wardReadService.retrieveListOfWards();
+    }
+
+    @ApiOperation(
+            value = "CREATE new Ward",
+            notes = "CREAT new Ward"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.ALL_VALUE
+    )
+    @ResponseBody
+    ResponseEntity<String> createNewWard(@Valid @RequestBody  Ward ward){
+       return wardWriteService.createNewWard(ward);
+    }
 }
