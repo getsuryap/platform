@@ -101,7 +101,7 @@ public class SwaggerApiDocumentationConfigurations {
                 .globalResponseMessage(RequestMethod.PUT, globalResponses)
 
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("org.ospic"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(metadata());

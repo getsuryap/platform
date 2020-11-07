@@ -4,6 +4,9 @@ import org.ospic.inventory.beds.domains.Bed;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -24,5 +27,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BedRepository extends JpaRepository<Bed, Long> {
+    @Override
+    Optional<Bed> findById(Long aLong);
+
+    Optional<List<Bed>> findByIdentifierEquals(String identifier);
+
+    Optional<List<Bed>> findByIsOccupiedFalse();
+    Optional<List<Bed>> findByIsOccupiedTrue();
 
 }
