@@ -2,6 +2,7 @@ package org.ospic.inventory.beds.api;
 
 import io.swagger.annotations.*;
 import org.ospic.inventory.beds.domains.Bed;
+import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.beds.service.BedReadService;
 import org.ospic.inventory.beds.service.BedWriteService;
 import org.ospic.patient.infos.domain.Patient;
@@ -42,11 +43,16 @@ public class BedsApiResource {
 
     private final BedReadService bedReadService;
     private final BedWriteService bedWriteService;
+    private final BedRepository bedRepository;
 
     @Autowired
-    public BedsApiResource(BedReadService bedReadService, BedWriteService bedWriteService) {
+    public BedsApiResource(
+            BedReadService bedReadService,
+            BedWriteService bedWriteService,
+            BedRepository bedRepository) {
         this.bedReadService = bedReadService;
         this.bedWriteService = bedWriteService;
+        this.bedRepository = bedRepository;
     }
 
 
@@ -91,6 +97,20 @@ public class BedsApiResource {
     )
     @ResponseBody
     ResponseEntity<Bed> retrieveBedById(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId){
-        return bedReadService.retrieveBedById(bedId);
+        return ResponseEntity.ok().body(bedRepository.findById(bedId).get());
+    }
+    @ApiOperation(
+            value = "GET Bed by IDentifier",
+            notes = "GET Bed by IDentifier"
+    )
+    @RequestMapping(
+            value = "/identifier/{Identifier}",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    ResponseEntity<List<Bed>> retrieveBedByIdentifier(@ApiParam(name = "Bed Identifier", required = true) @PathVariable String Identifier){
+        return ResponseEntity.ok().body(bedRepository.findByIdentifierEquals(Identifier).get());
     }
 }
