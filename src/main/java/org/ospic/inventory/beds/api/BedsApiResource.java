@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class BedsApiResource {
         this.bedRepository = bedRepository;
     }
 
-
+ /*
     @ApiOperation(
             value = "LIST all Beds",
             notes = "LIST all Beds"
@@ -68,6 +69,7 @@ public class BedsApiResource {
     ResponseEntity<List<Bed>> retrieveBeds() {
         return bedReadService.retrieveBedList();
     }
+    */
 
     @ApiOperation(
             value = "CREATE Bed",
@@ -112,5 +114,28 @@ public class BedsApiResource {
     @ResponseBody
     ResponseEntity<List<Bed>> retrieveBedByIdentifier(@ApiParam(name = "Bed Identifier", required = true) @PathVariable String Identifier){
         return ResponseEntity.ok().body(bedRepository.findByIdentifierEquals(Identifier).get());
+    }
+
+    @ApiOperation(
+            value = "RETRIEVE list of occupied beds",
+            notes = "RETRIEVE list of occupied beds"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    ResponseEntity<List<Bed>> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
+        if (!(command == null || command.isEmpty())) {
+            if (command.equals("occupied")){
+                return ResponseEntity.ok().body(bedRepository.findByIsOccupiedTrue().get());
+            }
+            if (command.equals("unoccupied")){
+                return ResponseEntity.ok().body(bedRepository.findByIsOccupiedFalse().get());
+            }
+        }
+        return bedReadService.retrieveBedList();
     }
 }
