@@ -32,4 +32,5 @@ public interface WardRepository extends JpaRepository<Ward, Long> {
     Optional<Ward> findById(Long id);
     Optional<Ward> findByName(String name);
     Boolean existsByName(String name);
+    boolean existsById(Long id);
 }
