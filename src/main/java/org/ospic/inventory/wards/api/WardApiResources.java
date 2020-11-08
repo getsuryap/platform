@@ -2,11 +2,13 @@ package org.ospic.inventory.wards.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.inventory.wards.service.WardReadService;
 import org.ospic.inventory.wards.service.WardWriteService;
+import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.wards.api
@@ -51,11 +54,8 @@ public class WardApiResources {
     final BedRepository bedRepository;
 
     @Autowired
-    public WardApiResources(
-            WardReadService wardReadService,
-            WardWriteService wardWriteService,
-            WardRepository wardRepository,
-            BedRepository bedRepository) {
+    public WardApiResources(WardReadService wardReadService, WardWriteService wardWriteService,
+            WardRepository wardRepository, BedRepository bedRepository) {
         this.wardReadService = wardReadService;
         this.wardWriteService = wardWriteService;
         this.wardRepository = wardRepository;
@@ -68,6 +68,16 @@ public class WardApiResources {
     ResponseEntity<List<Ward>> retrieveAllWards() {
         return wardReadService.retrieveListOfWards();
     }
+
+
+    @ApiOperation(value = "RETRIEVE ward by ID", notes = "RETRIEVE ward by ID")
+    @RequestMapping(value = "/{wardId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<Ward> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId){
+        Optional<Ward> ward = wardRepository.findById(wardId);
+        return ward.map(value -> ResponseEntity.ok().body(value)).orElse(null);
+    }
+
 
     @ApiOperation(value = "CREATE new Ward", notes = "CREATE new Ward")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
@@ -87,4 +97,12 @@ public class WardApiResources {
         });
         return ResponseEntity.ok().body("All wards created successfully if it was not present");
     }
+
+    @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
+    @RequestMapping(value = "/{wardId}/beds", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<String> addNewBedInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid Bed bed) throws ResourceNotFoundException {
+        return wardWriteService.addBedInWard(wardId, bed);
+    }
+
 }
