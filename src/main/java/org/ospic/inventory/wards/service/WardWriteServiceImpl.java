@@ -70,10 +70,10 @@ public class WardWriteServiceImpl implements WardWriteService {
 
     @Override
     public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException {
-       return wardRepository.findById(wardId).map(ward -> {
-           if (bedRepository.existsByIdentifier(bed.getIdentifier())){
-               return ResponseEntity.badRequest().body(String.format("Bed with the same Identifier %s is already exist", bed.getIdentifier()));
-           }
+        return wardRepository.findById(wardId).map(ward -> {
+            if (bedRepository.existsByIdentifier(bed.getIdentifier())) {
+                return ResponseEntity.badRequest().body(String.format("Bed with the same Identifier %s is already exist", bed.getIdentifier()));
+            }
             //bed.setIdentifier(String.format("WD%03dB%03d", wardId,bed.getId()));
             ward.addBed(bed);
             wardRepository.save(ward);
@@ -82,7 +82,15 @@ public class WardWriteServiceImpl implements WardWriteService {
     }
 
     @Override
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) {
-        return null;
+    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException {
+        return wardRepository.findById(wardId).map(ward -> {
+            beds.forEach(bed -> {
+                if (!bedRepository.existsByIdentifier(bed.getIdentifier())) {
+                    ward.addBed(bed);
+                }
+            });
+            wardRepository.save(ward);
+            return ResponseEntity.ok().body("Bed added successfully...");
+        }).orElseThrow(() -> new ResourceNotFoundException("Ward with such an ID os not found"));
     }
 }

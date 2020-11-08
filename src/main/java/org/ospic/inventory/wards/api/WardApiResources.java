@@ -99,10 +99,17 @@ public class WardApiResources {
     }
 
     @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
-    @RequestMapping(value = "/{wardId}/beds", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/{wardId}/bed", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewBedInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid Bed bed) throws ResourceNotFoundException {
         return wardWriteService.addBedInWard(wardId, bed);
+    }
+
+    @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
+    @RequestMapping(value = "/{wardId}/beds", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<String> addNewListOfBedsInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid List<Bed> beds) throws ResourceNotFoundException {
+        return wardWriteService.addListOfBedsInWard(wardId, beds);
     }
 
 }
