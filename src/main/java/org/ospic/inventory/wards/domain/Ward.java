@@ -63,6 +63,16 @@ public class Ward {
         this.name = name;
     }
 
+    public void addBed(Bed bed){
+       beds.add(bed);
+       bed.setWard(this);
+    }
+
+    public void deletePatient(Bed bed){
+        beds.remove(bed);
+        bed.setWard(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

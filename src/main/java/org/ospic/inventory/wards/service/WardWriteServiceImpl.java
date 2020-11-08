@@ -1,15 +1,18 @@
 package org.ospic.inventory.wards.service;
 
 import org.hibernate.SessionFactory;
+import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.payload.response.MessageResponse;
+import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * This file was created by eli on 07/11/2020 for org.ospic.inventory.wards.service
@@ -37,17 +40,21 @@ public class WardWriteServiceImpl implements WardWriteService {
 
     @Autowired
     SessionFactory sessionFactory;
-    @Autowired WardRepository wardRepository;
+    @Autowired
+    WardRepository wardRepository;
+    @Autowired
+    BedRepository bedRepository;
 
-    public WardWriteServiceImpl(WardRepository wardRepository) {
-        this.wardRepository= wardRepository;
+    public WardWriteServiceImpl(WardRepository wardRepository, BedRepository bedRepository) {
+        this.wardRepository = wardRepository;
+        this.bedRepository = bedRepository;
     }
 
     @Override
     public ResponseEntity<String> createNewWard(Ward ward) {
-      if(wardRepository.existsByName(ward.getName())){
-          return ResponseEntity.badRequest().body(String.format("A ward with name `%s`is Already Exist",ward.getName()));
-      }
+        if (wardRepository.existsByName(ward.getName())) {
+            return ResponseEntity.badRequest().body(String.format("A ward with name `%s`is Already Exist", ward.getName()));
+        }
         EntityManager entityManager = sessionFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager.persist(ward);
@@ -58,6 +65,24 @@ public class WardWriteServiceImpl implements WardWriteService {
 
     @Override
     public ResponseEntity<Ward> editWard(Ward ward) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException {
+       return wardRepository.findById(wardId).map(ward -> {
+           if (bedRepository.existsByIdentifier(bed.getIdentifier())){
+               return ResponseEntity.badRequest().body(String.format("Bed with the same Identifier %s is already exist", bed.getIdentifier()));
+           }
+            //bed.setIdentifier(String.format("WD%03dB%03d", wardId,bed.getId()));
+            ward.addBed(bed);
+            wardRepository.save(ward);
+            return ResponseEntity.ok().body("Bed added successfully...");
+        }).orElseThrow(() -> new ResourceNotFoundException("Ward with such an ID os not found"));
+    }
+
+    @Override
+    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) {
         return null;
     }
 }
