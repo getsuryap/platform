@@ -39,16 +39,21 @@ public class BedWriteServiceImpl implements BedWriteService {
     BedRepository bedRepository;
     @Autowired
     SessionFactory sessionFactory;
-    public BedWriteServiceImpl(BedRepository bedRepository){
+
+    public BedWriteServiceImpl(BedRepository bedRepository) {
         this.bedRepository = bedRepository;
     }
+
     @Override
     public ResponseEntity<String> createNewBed(Bed bed) {
+        if (bedRepository.existsByIdentifier(bed.getIdentifier())) {
+            return ResponseEntity.badRequest().body(String.format("Bed with the same identifier %s already exist", bed.getIdentifier()));
+        }
         EntityManager entityManager = sessionFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager.persist(bed);
-       entityManager.getTransaction().commit();
+        entityManager.getTransaction().commit();
         entityManager.close();
-        return ResponseEntity.ok().body("Created Successfully");
+        return ResponseEntity.ok().body("Bed Created Successfully");
     }
 }
