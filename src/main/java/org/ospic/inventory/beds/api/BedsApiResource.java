@@ -47,85 +47,50 @@ public class BedsApiResource {
     private final BedRepository bedRepository;
 
     @Autowired
-    public BedsApiResource(
-            BedReadService bedReadService,
-            BedWriteService bedWriteService,
-            BedRepository bedRepository) {
+    public BedsApiResource(BedReadService bedReadService, BedWriteService bedWriteService, BedRepository bedRepository) {
         this.bedReadService = bedReadService;
         this.bedWriteService = bedWriteService;
         this.bedRepository = bedRepository;
     }
 
- /*
-    @ApiOperation(
-            value = "LIST all Beds",
-            notes = "LIST all Beds"
-    )
-    @RequestMapping(value = "/",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
 
-    ResponseEntity<List<Bed>> retrieveBeds() {
-        return bedReadService.retrieveBedList();
-    }
-    */
-
-    @ApiOperation(
-            value = "CREATE Bed",
-            notes = "CREATE bed"
-    )
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.ALL_VALUE
-    )
-
+    @ApiOperation(value = "CREATE Bed", notes = "CREATE bed")
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<String> createBed(@Valid  @ApiParam(name = "Bed Entity", required = true)  @RequestBody  Bed bedData){
         return bedWriteService.createNewBed(bedData);
     }
 
-    @ApiOperation(
-            value = "GET Bed by ID",
-            notes = "GET Bed by ID"
-    )
-    @RequestMapping(
-            value = "/{bedId}",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+
+    @ApiOperation(value = "CREATE beds by array", notes = "CREATE beds by an array")
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<String> createBedsByListOfBeds(@Valid @RequestBody List<Bed> beds){
+        beds.forEach(bedWriteService::createNewBed);
+        return ResponseEntity.ok().body("All beds created successfully if it was not present before");
+    }
+
+
+    @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
+    @RequestMapping(value = "/{bedId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<Bed> retrieveBedById(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId){
         return ResponseEntity.ok().body(bedRepository.findById(bedId).get());
     }
-    @ApiOperation(
-            value = "GET Bed by IDentifier",
-            notes = "GET Bed by IDentifier"
-    )
-    @RequestMapping(
-            value = "/identifier/{Identifier}",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+
+
+
+    @ApiOperation(value = "GET Bed by IDentifier", notes = "GET Bed by IDentifier")
+    @RequestMapping(value = "/identifier/{Identifier}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<Bed>> retrieveBedByIdentifier(@ApiParam(name = "Bed Identifier", required = true) @PathVariable String Identifier){
         return ResponseEntity.ok().body(bedRepository.findByIdentifierEquals(Identifier).get());
     }
 
-    @ApiOperation(
-            value = "RETRIEVE list of occupied beds",
-            notes = "RETRIEVE list of occupied beds"
-    )
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+
+
+    @ApiOperation(value = "RETRIEVE list of occupied beds", notes = "RETRIEVE list of occupied beds")
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<Bed>> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
         if (!(command == null || command.isEmpty())) {

@@ -45,7 +45,7 @@ public class Bed {
     private @Setter(AccessLevel.PROTECTED) Long id;
 
     @NotBlank
-    @Column(name = "identifier", nullable = false, length = 20)
+    @Column(name = "identifier", nullable = false, unique = true, length = 20)
     private String identifier;
 
     @Column(name = "patient_id",unique = true)

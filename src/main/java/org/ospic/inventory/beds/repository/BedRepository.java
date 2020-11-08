@@ -29,9 +29,8 @@ import java.util.Optional;
 public interface BedRepository extends JpaRepository<Bed, Long> {
     @Override
     Optional<Bed> findById(Long aLong);
-
+    Boolean existsByIdentifier(String identifier);
     Optional<List<Bed>> findByIdentifierEquals(String identifier);
-
     Optional<List<Bed>> findByIsOccupiedFalse();
     Optional<List<Bed>> findByIsOccupiedTrue();
 
