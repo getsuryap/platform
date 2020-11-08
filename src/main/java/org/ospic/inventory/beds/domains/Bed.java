@@ -3,7 +3,9 @@ package org.ospic.inventory.beds.domains;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -57,6 +59,11 @@ public class Bed {
             columnDefinition = "boolean default false"
     )
     private Boolean isOccupied;
+
+    @ManyToOne
+    @JoinColumn(name = "ward_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
+    private Ward ward;
 
     public Bed(Long patientId, Boolean isOccupied){
         this.isOccupied = isOccupied;
