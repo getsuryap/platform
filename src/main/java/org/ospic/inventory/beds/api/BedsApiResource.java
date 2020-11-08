@@ -61,6 +61,12 @@ public class BedsApiResource {
         return bedWriteService.createNewBed(bedData);
     }
 
+    @ApiOperation(value = "ASSIGN bed to ward", notes = "ASSIGN bed to ward")
+    @RequestMapping(value = "/{bedId}/{wardId}/{action}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<String> updateBedInWard(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId, @ApiParam(name = "Ward ID", required = true) @PathVariable Long wardId, @ApiParam(name = "Action", required = true) @PathVariable String action){
+        return bedWriteService.updateBedInWardByAction(bedId, wardId, action);
+    }
 
     @ApiOperation(value = "CREATE beds by array", notes = "CREATE beds by an array")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

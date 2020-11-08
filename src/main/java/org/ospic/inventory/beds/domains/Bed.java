@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.ospic.inventory.wards.domain.Ward;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -68,5 +69,17 @@ public class Bed {
     public Bed(Long patientId, Boolean isOccupied){
         this.isOccupied = isOccupied;
         this.patientId = patientId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bed)) return false;
+        return id != null && id.equals(((Bed) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
     }
 }

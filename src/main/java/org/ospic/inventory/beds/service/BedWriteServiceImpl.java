@@ -3,7 +3,9 @@ package org.ospic.inventory.beds.service;
 import org.hibernate.SessionFactory;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.util.constants.DatabaseConstants;
+import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -38,10 +40,13 @@ public class BedWriteServiceImpl implements BedWriteService {
     @Autowired
     BedRepository bedRepository;
     @Autowired
+    WardRepository wardRepository;
+    @Autowired
     SessionFactory sessionFactory;
 
-    public BedWriteServiceImpl(BedRepository bedRepository) {
+    public BedWriteServiceImpl(BedRepository bedRepository, WardRepository wardRepository) {
         this.bedRepository = bedRepository;
+        this.wardRepository = wardRepository;
     }
 
     @Override
@@ -55,5 +60,36 @@ public class BedWriteServiceImpl implements BedWriteService {
         entityManager.getTransaction().commit();
         entityManager.close();
         return ResponseEntity.ok().body("Bed Created Successfully");
+    }
+
+    @Override
+    public ResponseEntity<String> updateBedInWardByAction(Long bedId, Long wardId, String action) {
+       if (!bedRepository.existsById(bedId)) {
+            return ResponseEntity.ok().body(String.format("Bed with id %2d does not exist...", bedId));
+        }
+        if (!wardRepository.existsById(wardId)) {
+            return ResponseEntity.ok().body(String.format("Ward with id %2d does not exist...", wardId));
+        }
+
+        if ("assign".equals(action)) {
+             bedRepository.findById(bedId).map(bed -> {
+                wardRepository.findById(wardId).ifPresent(ward -> {
+                    bed.setWard(ward);
+                    bedRepository.save(bed);
+                });
+                return null;
+            });
+            return ResponseEntity.ok().body(String.format("Bed with ID %2d has assigned to ward with ID %s", bedId, wardId));
+        }
+        if ("remove".equals(action)){
+            bedRepository.findById(bedId).map(bed->{
+                bed.setWard(null);
+                bedRepository.save(bed);
+                return null;
+            });
+            return ResponseEntity.ok().body(String.format("Bed with ID %2d has being removed from ward with ID %2d", bedId, wardId ));
+        }
+        return null;
+
     }
 }

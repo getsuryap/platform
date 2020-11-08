@@ -62,4 +62,16 @@ public class Ward {
     public Ward(String name){
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ward)) return false;
+        return id != null && id.equals(((Ward) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }
