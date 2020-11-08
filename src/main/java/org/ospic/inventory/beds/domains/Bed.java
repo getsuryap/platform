@@ -1,7 +1,6 @@
 package org.ospic.inventory.beds.domains;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -63,6 +62,7 @@ public class Bed {
     @ManyToOne
     @JoinColumn(name = "ward_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
+    @JsonIgnore
     private Ward ward;
 
     public Bed(Long patientId, Boolean isOccupied){
