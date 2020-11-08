@@ -3,12 +3,18 @@ package org.ospic.inventory.wards.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.inventory.beds.domains.Bed;
+import org.ospic.patient.infos.domain.Patient;
+import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,6 +50,14 @@ public class Ward {
     @NotNull
     @Column(name = "name",unique = true, length = 15, nullable = false)
     private  String name;
+
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "ward_id")
+    private List<Bed> beds = new ArrayList<>();
 
     public Ward(String name){
         this.name = name;
