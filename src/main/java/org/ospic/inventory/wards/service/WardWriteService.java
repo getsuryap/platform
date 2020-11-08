@@ -32,6 +32,6 @@ public interface WardWriteService {
     public ResponseEntity<String> createNewWard(Ward ward);
     public ResponseEntity<Ward> editWard(Ward ward);
     public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds);
+    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
 
 }
