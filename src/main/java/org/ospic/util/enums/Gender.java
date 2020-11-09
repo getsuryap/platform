@@ -1,4 +1,4 @@
-package org.ospic.patient.infos.domain;
+package org.ospic.util.enums;
 
 import java.util.HashMap;
 import java.util.Map;

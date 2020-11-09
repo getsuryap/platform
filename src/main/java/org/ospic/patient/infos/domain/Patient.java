@@ -1,7 +1,5 @@
 package org.ospic.patient.infos.domain;
 
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.envers.Audited;
 import org.ospic.domain.Auditable;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.physicians.domains.Physician;
@@ -11,16 +9,14 @@ import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.ospic.util.enums.Gender;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

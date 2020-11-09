@@ -1,6 +1,5 @@
 package org.ospic.patient.infos.data;
 
-import org.ospic.patient.infos.domain.Gender;
 import org.ospic.physicians.domains.Physician;
 
 import java.io.Serializable;
