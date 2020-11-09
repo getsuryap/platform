@@ -2,6 +2,7 @@ package org.ospic.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
 import org.ospic.inventory.admission.service.AdmissionsWriteService;
@@ -47,9 +48,7 @@ public class AdmissionsApiResources {
     @Autowired
     AdmissionsReadService admissionsReadService;
 
-    public AdmissionsApiResources(
-            AdmissionsWriteService admissionsWriteService,
-            AdmissionsReadService admissionsReadService) {
+    public AdmissionsApiResources(AdmissionsWriteService admissionsWriteService, AdmissionsReadService admissionsReadService) {
         this.admissionsWriteService = admissionsWriteService;
         this.admissionsReadService = admissionsReadService;
     }
@@ -64,8 +63,8 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    ResponseEntity<String> createNewWard(@Valid @RequestBody Admission admission) {
-        return admissionsWriteService.admitPatient(admission);
+    ResponseEntity<String> createNewWard(@Valid @RequestBody AdmissionRequest admissionRequest) {
+        return admissionsWriteService.admitPatient(admissionRequest);
     }
 
 }

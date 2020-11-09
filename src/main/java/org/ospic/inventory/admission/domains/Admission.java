@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -45,11 +46,8 @@ public class Admission {
     private @Setter(AccessLevel.PROTECTED)
     Long id;
 
-    @Column(
-            name = "is_active",
-            nullable = false,
-            columnDefinition = "boolean default true"
-    )
+    @Column(name = "is_active", nullable = false,
+            columnDefinition = "boolean default true")
     private Boolean isActive;
 
     @Column(name = "bed")
@@ -86,5 +84,15 @@ public class Admission {
         this.endDateTime = endDateTime;
     }
 
+    public Admission addFromRequest(AdmissionRequest admissionRequest) {
+        Admission admission = new Admission();
+        admission.setBedNumber(admissionRequest.getBedId());
+        admission.setWard(admissionRequest.getWardId());
+        admission.setStartDateTime(admissionRequest.getStartDateTime());
+        admission.setEndDateTime(admissionRequest.getEndDateTime());
+        admission.setIsActive(admissionRequest.getIsActive());
+        admission.setPatientId(admissionRequest.getPatientId());
+        return admission;
+    }
 
 }
