@@ -1,5 +1,6 @@
 package org.ospic.inventory.admission.service;
 
+import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.springframework.http.ResponseEntity;
 
@@ -25,7 +26,7 @@ import org.springframework.http.ResponseEntity;
  * under the License.
  */
 public interface AdmissionsWriteService {
-    public ResponseEntity<String> admitPatient(Admission admission);
+    public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest);
     public ResponseEntity<String> endPatientAdmission();
     public ResponseEntity<String > updatePatientAdmissionInfo();
 }

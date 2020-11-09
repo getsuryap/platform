@@ -1,5 +1,6 @@
 package org.ospic.inventory.admission.service;
 
+import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     }
 
     @Override
-    public ResponseEntity<String> admitPatient(Admission admission) {
+    public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest) {
+        Admission admission = new Admission().addFromRequest(admissionRequest);
         admissionRepository.save(admission);
         return ResponseEntity.ok().body("Patient Admitted successfully");
     }
