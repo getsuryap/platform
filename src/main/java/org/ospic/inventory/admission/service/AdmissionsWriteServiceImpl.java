@@ -3,6 +3,8 @@ package org.ospic.inventory.admission.service;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
+import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -33,14 +35,29 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
     @Autowired
     AdmissionRepository admissionRepository;
+    @Autowired
+    BedRepository bedRepository;
+    @Autowired
+    PatientInformationRepository patientInformationRepository;
 
-    public AdmissionsWriteServiceImpl(AdmissionRepository admissionRepository) {
+    public AdmissionsWriteServiceImpl(
+            AdmissionRepository admissionRepository,
+            BedRepository bedRepository,
+            PatientInformationRepository patientInformationRepository) {
         this.admissionRepository = admissionRepository;
+        this.bedRepository = bedRepository;
+        this.patientInformationRepository = patientInformationRepository;
     }
 
     @Override
     public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest) {
         Admission admission = new Admission().addFromRequest(admissionRequest);
+        bedRepository.findById(admissionRequest.getBedId()).ifPresent(bed->{
+            admission.getBeds().add(bed);
+        });
+       // patientInformationRepository.findById(admissionRequest.getPatientId()).ifPresent(admission::setPatient);
+
+
         admissionRepository.save(admission);
         return ResponseEntity.ok().body("Patient Admitted successfully");
     }

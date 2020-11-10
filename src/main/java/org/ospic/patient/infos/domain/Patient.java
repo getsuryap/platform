@@ -1,6 +1,12 @@
 package org.ospic.patient.infos.domain;
 
+import lombok.experimental.PackagePrivate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.domain.Auditable;
+import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
@@ -121,8 +127,6 @@ public class Patient extends Auditable<String> implements Serializable {
     @ManyToOne
     @JoinColumn(name = "physician_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-    @Getter
-    @Setter
     private Physician physician;
 
     @OneToMany(
@@ -133,6 +137,17 @@ public class Patient extends Auditable<String> implements Serializable {
     @JoinColumn(name = "patient_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     private List<Diagnosis> diagnoses = new ArrayList<>();
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "patient")
+
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    private List<Admission> admissions = new ArrayList<>();
+
 
     public Patient(
             String name, String guardianName, String phone, String address, String emailAddress,

@@ -3,6 +3,8 @@ package org.ospic.inventory.admission.repository;
 import org.ospic.inventory.admission.domains.Admission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.repository
  * --
@@ -26,5 +28,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AdmissionRepository extends JpaRepository<Admission,Long> {
     boolean isActive(Long admissionId);
+    Optional<Admission> findById(Long admissionId);
 
 }
