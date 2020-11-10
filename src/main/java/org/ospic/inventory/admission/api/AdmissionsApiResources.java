@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
+import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
 import org.ospic.inventory.admission.service.AdmissionsWriteService;
 import org.ospic.inventory.wards.domain.Ward;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.api
@@ -47,18 +49,33 @@ public class AdmissionsApiResources {
     AdmissionsWriteService admissionsWriteService;
     @Autowired
     AdmissionsReadService admissionsReadService;
+    @Autowired
+    AdmissionRepository admissionRepository;
 
-    public AdmissionsApiResources(AdmissionsWriteService admissionsWriteService, AdmissionsReadService admissionsReadService) {
+    public AdmissionsApiResources(AdmissionsWriteService admissionsWriteService,
+                                  AdmissionsReadService admissionsReadService,
+                                  AdmissionRepository admissionRepository) {
         this.admissionsWriteService = admissionsWriteService;
         this.admissionsReadService = admissionsReadService;
+        this.admissionRepository = admissionRepository;
     }
 
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Admission>> retrieveAllWards() {
+    ResponseEntity<List<Admission>> retrieveAllAdmissions() {
         return admissionsReadService.retrieveAllAdmissions();
     }
+
+    @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID")
+    @RequestMapping(value = "/{admissionId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<Admission> retrieveAdmissionByID(@PathVariable("admissionId") Long admissionId) {
+        Optional<Admission> admission = admissionRepository.findById(admissionId);
+        return admission.map(value -> ResponseEntity.ok().body(value)).orElse(null);
+    }
+
+
 
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)

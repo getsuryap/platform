@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.domains
@@ -39,7 +43,7 @@ import javax.validation.constraints.NotBlank;
 @Table(name = DatabaseConstants.BEDS_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Bed {
+public class Bed implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -49,9 +53,10 @@ public class Bed {
     @Column(name = "identifier", nullable = false, unique = true, length = 20)
     private String identifier;
 
-    @Column(name = "patient_id",unique = true)
-    private  Long patientId;
 
+    @ManyToMany(mappedBy = "beds", fetch = FetchType.EAGER)
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    private List<Admission> admissions = new ArrayList<>();
 
     @Column(
             name = "is_occupied",
@@ -68,7 +73,6 @@ public class Bed {
 
     public Bed(Long patientId, Boolean isOccupied){
         this.isOccupied = isOccupied;
-        this.patientId = patientId;
     }
 
     @Override
