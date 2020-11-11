@@ -1,5 +1,7 @@
 package org.ospic.patient.diagnosis.service;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
 import org.ospic.patient.infos.domain.Patient;
@@ -7,6 +9,8 @@ import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.service
@@ -35,6 +39,8 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     DiagnosisRepository diagnosisRepository;
     PatientInformationRepository patientInformationRepository;
     @Autowired
+    SessionFactory sessionFactory;
+    @Autowired
     public DiagnosisServiceImpl(
             DiagnosisRepository diagnosisRepository,
             PatientInformationRepository patientInformationRepository){
@@ -42,24 +48,26 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         this.patientInformationRepository = patientInformationRepository;
     }
     @Override
-    public ResponseEntity saveDiagnosisReport(Long patientId, Diagnosis diagnosis) {
+    public ResponseEntity<String> saveDiagnosisReport(Long patientId, Diagnosis diagnosis) {
         return patientInformationRepository.findById(patientId).map(patient -> {
             diagnosis.setPatient(patient);
             diagnosisRepository.save(diagnosis);
-            Patient patie = patientInformationRepository.findById(patientId).get();
-            return ResponseEntity.ok().body(patie);
+            return ResponseEntity.ok().body("Diagnosis added successfully ");
         }).orElseGet(() -> {
             return null;
         });
     }
 
     @Override
-    public ResponseEntity retrieveAllDiagnosisReports() {
-        return null;
+    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReports() {
+        Session session = this.sessionFactory.openSession();
+        List<Diagnosis> diagnoses = session.createQuery("from m_diagnosis").list();
+        session.close();
+        return ResponseEntity.ok().body(diagnoses);
     }
 
     @Override
-    public ResponseEntity retrieveAllDiagnosisReportsByPatientId() {
+    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByPatientId(Long patientId) {
         return null;
     }
 }

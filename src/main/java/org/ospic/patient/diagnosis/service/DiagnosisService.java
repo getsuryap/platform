@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.service
  * --
@@ -30,9 +32,9 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface DiagnosisService {
-    public ResponseEntity saveDiagnosisReport(@NonNull Long patientId, @NonNull Diagnosis diagnosis);
+    public ResponseEntity<String> saveDiagnosisReport(@NonNull Long patientId, @NonNull Diagnosis diagnosis);
 
-    public ResponseEntity retrieveAllDiagnosisReports();
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports();
 
-    public ResponseEntity retrieveAllDiagnosisReportsByPatientId();
+    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByPatientId(Long patientId);
 }

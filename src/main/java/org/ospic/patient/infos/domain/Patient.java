@@ -121,7 +121,6 @@ public class Patient extends Auditable<String> implements Serializable {
 
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
-    @JsonIgnore
     private ContactsInformation contactsInformation;
 
 

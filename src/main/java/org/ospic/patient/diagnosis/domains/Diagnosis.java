@@ -1,6 +1,7 @@
 package org.ospic.patient.diagnosis.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
@@ -42,7 +43,7 @@ import java.io.Serializable;
 @Table(name = DatabaseConstants.DIAGNOSES_TABLE)
 @ApiModel(value = "Diagnosis", description = "A Diagnosis row containing specific patient information's")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Diagnosis  extends Auditable<String> implements Serializable {
+public class Diagnosis implements Serializable {
     @Id
     @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +70,7 @@ public class Diagnosis  extends Auditable<String> implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private Patient patient;
 
     public Diagnosis(String problemIdentification, String diagnosisReport, String treatmentType, String medicineNames,String laboratoryTests){
