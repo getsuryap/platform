@@ -2,6 +2,7 @@ package org.ospic.patient.diagnosis.api;
 
 import io.swagger.annotations.*;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
+import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
 import org.ospic.patient.diagnosis.service.DiagnosisService;
 import org.ospic.patient.infos.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient..api
@@ -33,17 +36,52 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@RequestMapping("/api/diagnosis")
-@Api(value = "/api/diagnosis", tags = "Diagnoses", description = "Diagnoses reports API resources")
-@Controller()
+@RequestMapping("/api/diagnoses")
+@Api(value = "/api/diagnoses", tags = "Diagnoses", description = "Diagnoses reports API resources")
 public class DiagnosisApiResources {
 
     @Autowired DiagnosisService diagnosisService;
+    @Autowired
+    DiagnosisRepository diagnosisRepository;
 
     @Autowired
-    public DiagnosisApiResources(DiagnosisService diagnosisService) {
+    public DiagnosisApiResources(
+            DiagnosisService diagnosisService,
+            DiagnosisRepository diagnosisRepository) {
         this.diagnosisService = diagnosisService;
+        this.diagnosisRepository = diagnosisRepository;
     }
+
+    @ApiOperation(
+            value = "LIST all available diagnosis",
+            notes = "LIST all available diagnosis"
+    )
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports() {
+        //List<Diagnosis> diagnoses = diagnosisRepository.findAll();
+        return diagnosisService.retrieveAllDiagnosisReports();
+    }
+
+
+    @ApiOperation(
+            value = "LIST Patient diagnosis",
+            notes = "LIST Patient diagnosis"
+    )
+    @RequestMapping(
+            value = "/{patientId}",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByPatientId(@PathVariable Long patientId) {
+        return ResponseEntity.ok().body(diagnosisRepository.findByPatientId(patientId));
+    }
+
 
     @ApiOperation(
             value = "CREATE new diagnosis Report",
@@ -59,5 +97,8 @@ public class DiagnosisApiResources {
 
         return diagnosisService.saveDiagnosisReport(patientId, diagnosticReport);
     }
+
+
+
 
 }

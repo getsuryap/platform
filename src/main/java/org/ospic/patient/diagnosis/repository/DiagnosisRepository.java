@@ -3,6 +3,9 @@ package org.ospic.patient.diagnosis.repository;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.repository
  * --
@@ -25,4 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
+    List<Diagnosis> findByPatientId(Long patientId);
+    Optional<Diagnosis> findById(Long diagnosticId);
+
 }
