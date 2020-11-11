@@ -121,6 +121,7 @@ public class Patient extends Auditable<String> implements Serializable {
 
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
+    @JsonIgnore
     private ContactsInformation contactsInformation;
 
 
@@ -136,6 +137,7 @@ public class Patient extends Auditable<String> implements Serializable {
     )
     @JoinColumn(name = "patient_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @JsonIgnore
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
     @OneToMany(
@@ -146,6 +148,7 @@ public class Patient extends Auditable<String> implements Serializable {
     @JoinColumn(name = "patient")
 
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @JsonIgnore
     private List<Admission> admissions = new ArrayList<>();
 
 

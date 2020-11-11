@@ -76,6 +76,7 @@ public class Physician {
             orphanRemoval = true
     )
     @JoinColumn(name = "physician_id")
+    @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
 
     public Physician(
