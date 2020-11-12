@@ -2,8 +2,10 @@ package org.ospic.inventory.pharmacy.Medicine.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.pharmacy.Medicine.data.MedicineRequest;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
 import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
+import org.ospic.inventory.pharmacy.Medicine.service.MedicineWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +42,13 @@ import java.util.List;
 public class MedicineApiResource {
     @Autowired
     MedicineRepository medicineRepository;
+    @Autowired
+    MedicineWriteService medicineWriteService;
 
     @Autowired
-    public MedicineApiResource(MedicineRepository medicineRepository) {
+    public MedicineApiResource(MedicineRepository medicineRepository, MedicineWriteService medicineWriteService) {
         this.medicineRepository = medicineRepository;
+        this.medicineWriteService = medicineWriteService;
     }
 
     @ApiOperation(
@@ -74,9 +79,8 @@ public class MedicineApiResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
-    ResponseEntity<Medicine> addNewMedicineProduct(@Valid @RequestBody Medicine medicine) {
-        Medicine medicineResponse = medicineRepository.save(medicine);
-        return ResponseEntity.ok().body(medicineResponse);
+    ResponseEntity<String> addNewMedicineProduct(@Valid @RequestBody MedicineRequest medicine) {
+        return medicineWriteService.createNewMedicineProduct(medicine);
     }
 
 

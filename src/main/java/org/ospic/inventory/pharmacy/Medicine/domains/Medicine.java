@@ -55,7 +55,7 @@ public class Medicine {
 
 
     @NotBlank
-    @Column(name = "name", length = 20, nullable = false)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
     @NotBlank
@@ -63,7 +63,7 @@ public class Medicine {
     private String company;
 
     @NotBlank
-    @Column(name = "compositions", length = 20, nullable = false)
+    @Column(name = "compositions", length = 200, nullable = false)
     private String compositions;
 
 
@@ -74,12 +74,12 @@ public class Medicine {
     @ManyToOne
     @JoinColumn(name = "grp_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medicine group")
-    private MedicineGroup medicineGroup;
+    private MedicineGroup group;
 
     @ManyToOne
     @JoinColumn(name = "cat_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display Medicine category")
-    private MedicineCategory medicineCategory;
+    private MedicineCategory category;
 
     public Medicine(
             String name, String company, String compositions, int units) {
