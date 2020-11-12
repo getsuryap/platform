@@ -2,10 +2,8 @@ package org.ospic.inventory.pharmacy.Medicine.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
-import org.ospic.inventory.pharmacy.Medicine.repository.PharmacyRepository;
-import org.ospic.patient.infos.domain.Patient;
+import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +36,14 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/pharmacy/medicine")
-@Api(value = "/api/pharmacy/medicine", tags = "Pharmacy")
+@Api(value = "/api/pharmacy/medicine", tags = "Medicine")
 public class MedicineApiResource {
     @Autowired
-    PharmacyRepository pharmacyRepository;
+    MedicineRepository medicineRepository;
 
     @Autowired
-    public MedicineApiResource(PharmacyRepository pharmacyRepository) {
-        this.pharmacyRepository = pharmacyRepository;
+    public MedicineApiResource(MedicineRepository medicineRepository) {
+        this.medicineRepository = medicineRepository;
     }
 
     @ApiOperation(
@@ -60,7 +58,7 @@ public class MedicineApiResource {
 
     @ResponseBody
     ResponseEntity<List<Medicine>> retrieveAllMedicineProducts() {
-        List<Medicine> medicines = pharmacyRepository.findAll();
+        List<Medicine> medicines = medicineRepository.findAll();
         return ResponseEntity.ok().body(medicines);
     }
 
@@ -77,7 +75,7 @@ public class MedicineApiResource {
 
     @ResponseBody
     ResponseEntity<Medicine> addNewMedicineProduct(@Valid @RequestBody Medicine medicine) {
-        Medicine medicineResponse = pharmacyRepository.save(medicine);
+        Medicine medicineResponse = medicineRepository.save(medicine);
         return ResponseEntity.ok().body(medicineResponse);
     }
 

@@ -1,10 +1,13 @@
-package org.ospic.inventory.pharmacy.Medicine.repository;
+package org.ospic.inventory.pharmacy.Groups.repository;
 
-import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.repository
+ * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,5 +27,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * specific language governing permissions and limitations
  * under the License.
  */
-public  interface PharmacyRepository extends JpaRepository<Medicine, Long> {
+public interface MedicineGroupRepository extends JpaRepository<MedicineGroup, Long> {
+    @Override
+    Optional<MedicineGroup> findById(Long aLong);
+
+    @Override
+    List<MedicineGroup> findAll();
+
+    boolean existsByName(String name);
 }
