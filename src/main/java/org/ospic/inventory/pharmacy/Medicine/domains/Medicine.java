@@ -3,7 +3,11 @@ package org.ospic.inventory.pharmacy.Medicine.domains;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
+import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
+import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -62,28 +66,27 @@ public class Medicine {
     @Column(name = "compositions", length = 20, nullable = false)
     private String compositions;
 
-    @NotBlank
-    @Column(name = "category", length = 20, nullable = false)
-    private String category;
-
-
-    @NotBlank
-    @Column(name = "m_group", length = 20, nullable = false)
-    private String group;
-
 
     @NotNull
     @Column(name = "units", length = 5)
     private int units;
 
+    @ManyToOne
+    @JoinColumn(name = "grp_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medicine group")
+    private MedicineGroup medicineGroup;
+
+    @ManyToOne
+    @JoinColumn(name = "cat_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display Medicine category")
+    private MedicineCategory medicineCategory;
+
     public Medicine(
-            String name, String company, String compositions, String category,
-            String group, int units) {
+            String name, String company, String compositions, int units) {
         this.name = name;
         this.company = company;
         this.compositions = compositions;
-        this.category = category;
-        this.group = group;
+
         this.units = units;
     }
 

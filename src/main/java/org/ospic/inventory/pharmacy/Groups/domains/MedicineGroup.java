@@ -1,14 +1,18 @@
 package org.ospic.inventory.pharmacy.Groups.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.domains
@@ -55,9 +59,17 @@ public class MedicineGroup {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-
     @Column(name = "descriptions", length = 250)
     private String description;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "cat_id")
+    @JsonIgnore
+    private List<Medicine> medicines = new ArrayList<>();
 
     public MedicineGroup(String name, String description) {
         this.name = name;
