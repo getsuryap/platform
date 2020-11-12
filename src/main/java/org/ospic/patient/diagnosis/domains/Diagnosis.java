@@ -1,5 +1,6 @@
 package org.ospic.patient.diagnosis.domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -13,6 +14,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.patient.diagnosis.domains
@@ -49,36 +51,24 @@ public class Diagnosis implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Setter(AccessLevel.PROTECTED)  Long id;
 
-    @Column(name = "problem")
-    private String problemIdentification;
-
-    @Column(name = "diagnosis_report")
-    private String diagnosisReport;
 
     @NotBlank
-    @Column(name = "treatments")
-    private String treatmentType;
+    @Column(name = "symptoms")
+    private String symptoms;
 
-    @NotBlank
-    @Column(name = "medicines")
-    private String medicineNames;
-
-    @NonNull
-    @NotBlank
-    @Column(name = "lab_tests")
-    private String laboratoryTests;
+    @Column(name = "date",  nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
     @JsonIgnore
     private Patient patient;
 
-    public Diagnosis(String problemIdentification, String diagnosisReport, String treatmentType, String medicineNames,String laboratoryTests){
-        this.diagnosisReport = diagnosisReport;
-        this.laboratoryTests = laboratoryTests;
-        this.treatmentType = treatmentType;
-        this.medicineNames = medicineNames;
-        this.problemIdentification = problemIdentification;
+    public Diagnosis( String symptoms, Date date, Patient patient) {
+        this.symptoms = symptoms;
+        this.date = date;
+        this.patient = patient;
     }
 
     @Override

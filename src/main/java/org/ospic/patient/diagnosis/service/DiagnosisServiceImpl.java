@@ -6,6 +6,7 @@ import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -61,7 +62,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReports() {
         Session session = this.sessionFactory.openSession();
-        List<Diagnosis> diagnoses = session.createQuery("from m_diagnosis").list();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s",  DatabaseConstants.DIAGNOSES_TABLE)).list();
         session.close();
         return ResponseEntity.ok().body(diagnoses);
     }

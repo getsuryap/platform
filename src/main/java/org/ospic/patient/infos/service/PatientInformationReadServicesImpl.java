@@ -12,6 +12,7 @@ import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.service.PhysicianInformationService;
+import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,7 +77,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patientList = session.createQuery("from m_patients").list();
+        List<Patient> patientList = session.createQuery(String.format("from %s", DatabaseConstants.PATIENT_INFO_TABLE)).list();
         session.close();
         return ResponseEntity.ok().body(patientList);
     }
