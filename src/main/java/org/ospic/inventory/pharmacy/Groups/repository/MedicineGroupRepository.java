@@ -33,6 +33,6 @@ public interface MedicineGroupRepository extends JpaRepository<MedicineGroup, Lo
 
     @Override
     List<MedicineGroup> findAll();
-
     boolean existsByName(String name);
+    boolean existsById(Long id);
 }

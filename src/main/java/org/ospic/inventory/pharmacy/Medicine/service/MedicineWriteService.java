@@ -1,14 +1,13 @@
-package org.ospic.inventory.pharmacy.Categories.repository;
+package org.ospic.inventory.pharmacy.Medicine.service;
 
-import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.Optional;
+import org.ospic.inventory.pharmacy.Medicine.data.MedicineRequest;
+import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.repository
+ * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,14 +27,8 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface MedicineCategoryRepository extends JpaRepository<MedicineCategory, Long> {
-    @Override
-    Optional<MedicineCategory> findById(Long aLong);
-
-    @Override
-    List<MedicineCategory> findAll();
-
-    boolean existsByName(String name);
-    boolean existsById(Long id);
-
+@Component
+@Service
+public interface MedicineWriteService {
+    ResponseEntity<String> createNewMedicineProduct(MedicineRequest medicineRequest);
 }

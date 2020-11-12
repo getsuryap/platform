@@ -1,14 +1,9 @@
-package org.ospic.inventory.pharmacy.Categories.repository;
+package org.ospic.inventory.pharmacy.Medicine.data;
 
-import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.Optional;
+import lombok.*;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.repository
+ * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,14 +23,24 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface MedicineCategoryRepository extends JpaRepository<MedicineCategory, Long> {
-    @Override
-    Optional<MedicineCategory> findById(Long aLong);
+@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+public class MedicineRequest {
+    private String name;
+    private String company;
+    private String compositions;
+    private int units;
+    private Long group;
+    private Long category;
 
-    @Override
-    List<MedicineCategory> findAll();
-
-    boolean existsByName(String name);
-    boolean existsById(Long id);
-
+    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category) {
+        this.name = name;
+        this.company = company;
+        this.compositions = compositions;
+        this.units = units;
+        this.group = group;
+        this.category = category;
+    }
 }
