@@ -1,20 +1,17 @@
 package org.ospic.patient.infos.domain;
 
-import lombok.experimental.PackagePrivate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.ospic.domain.Auditable;
-import org.ospic.inventory.admission.domains.Admission;
-import org.ospic.patient.diagnosis.domains.Diagnosis;
-import org.ospic.physicians.domains.Physician;
-import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.patient.contacts.domain.ContactsInformation;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.domain.Auditable;
+import org.ospic.inventory.admission.domains.Admission;
+import org.ospic.patient.contacts.domain.ContactsInformation;
+import org.ospic.patient.diagnosis.domains.Diagnosis;
+import org.ospic.physicians.domains.Physician;
+import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.Gender;
 
 import javax.persistence.*;
