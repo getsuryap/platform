@@ -33,6 +33,7 @@ public class DatabaseConstants {
     public static final String PRIVILEGE_TABLE = TI+"privilege";
     public static final String TABLE_PHARMACY_MEDICINES = TI+"medicines";
     public static final String TABLE_MEDICINE_GROUPS_ = TI+"mdc_groups";
+    public static final String TABLE_MEDICINE_CATEGORY_ = TI+"mdc_categories";
 
     public static final String GENDER_TABLE = TI+"gender";
 }
