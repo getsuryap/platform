@@ -24,6 +24,8 @@ package org.ospic.inventory.pharmacy.Groups.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
+import org.ospic.inventory.pharmacy.Categories.repository.MedicineCategoryRepository;
 import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
 import org.ospic.inventory.pharmacy.Groups.repository.MedicineGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +38,20 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/pharmacy/medicine/groups")
-@Api(value = "/api/pharmacy/medicine/groups", tags = "Medicine Groups")
+@RequestMapping("/api/pharmacy/medicine/categories")
+@Api(value = "/api/pharmacy/medicine/categories", tags = "Medicine Categories")
 public class MedicineGroupsApiResources {
     @Autowired
-    MedicineGroupRepository medicineGroupRepository;
+    MedicineCategoryRepository medicineCategoryRepository;
 
-    public MedicineGroupsApiResources(MedicineGroupRepository medicineGroupRepository) {
-        this.medicineGroupRepository = medicineGroupRepository;
+    public MedicineGroupsApiResources(MedicineCategoryRepository medicineCategoryRepository) {
+        this.medicineCategoryRepository = medicineCategoryRepository;
     }
 
     @ApiOperation(
-            value = "RETRIEVE list of available Medicine groups available",
-            notes = "RETRIEVE list of available Medicine groups available",
-            response = MedicineGroup.class)
+            value = "RETRIEVE list of available Medicine categories ",
+            notes = "RETRIEVE list of available Medicine categories",
+            response = MedicineCategory.class)
     @RequestMapping(
             value = "/",
             method = RequestMethod.GET,
@@ -57,16 +59,34 @@ public class MedicineGroupsApiResources {
             produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
-    ResponseEntity<List<MedicineGroup>> retrieveAllMedicineGroups() {
-        List<MedicineGroup> medicineGroupsResponse = medicineGroupRepository.findAll();
-        return ResponseEntity.ok().body(medicineGroupsResponse);
+    ResponseEntity<List<MedicineCategory>> retrieveAllMedicineCategories() {
+        List<MedicineCategory> medicineCategoriesResponse = medicineCategoryRepository.findAll();
+        return ResponseEntity.ok().body(medicineCategoriesResponse);
+    }
+
+    @ApiOperation(
+            value = "RETRIEVE Medicine category by ID",
+            notes = "RETRIEVE  Medicine category by ID",
+            response = MedicineCategory.class)
+    @RequestMapping(
+            value = "/{medicineCategoryId}",
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @ResponseBody
+    ResponseEntity retrieveMedicineCategoryById(@PathVariable Long medicationCategoryId) {
+        if (medicineCategoryRepository.findById(medicationCategoryId).isPresent()) {
+            return ResponseEntity.ok().body(medicineCategoryRepository.findById(medicationCategoryId).get());
+        }
+        return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicationCategoryId));
     }
 
 
     @ApiOperation(
-            value = "ADD new Medicine group",
-            notes = "ADD new Medicine group",
-            response = MedicineGroup.class)
+            value = "ADD new Medicine category",
+            notes = "ADD new Medicine category",
+            response = MedicineCategory.class)
     @RequestMapping(
             value = "/",
             method = RequestMethod.POST,
@@ -75,12 +95,38 @@ public class MedicineGroupsApiResources {
     )
 
     @ResponseBody
-    ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineGroup medicineGroup) {
-        if (medicineGroupRepository.existsByName(medicineGroup.getName())) {
-            return ResponseEntity.ok().body(String.format("Another Medicine Group with same name '%s' already exist", medicineGroup.getName()));
+    ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategory medicineCategory) {
+        if (medicineCategoryRepository.existsByName(medicineCategory.getName())) {
+            return ResponseEntity.ok().body(String.format("Another Medicine Category with same name '%s' already exist", medicineCategory.getName()));
         }
-        medicineGroupRepository.save(medicineGroup);
-        return ResponseEntity.ok().body("Medicine group added successfully");
+        medicineCategoryRepository.save(medicineCategory);
+        return ResponseEntity.ok().body("Medicine category added successfully");
+
+    }
+
+    @ApiOperation(
+            value = "ADD new Medicine categories",
+            notes = "ADD new Medicine categories",
+            response = MedicineCategory.class)
+    @RequestMapping(
+            value = "/list",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+
+    @ResponseBody
+    ResponseEntity<String> addNewMedicineCategories(@Valid @RequestBody List<MedicineCategory> medicineCategories) {
+        StringBuilder sb = new StringBuilder();
+        medicineCategories.forEach(category -> {
+            if (!medicineCategoryRepository.existsByName(category.getName())) {
+                medicineCategoryRepository.save(category);
+            } else {
+                sb.append(String.format("Medicine category Category with name: `%s` already exist \n", category.getName()));
+            }
+        });
+        String sbs = sb.toString();
+        return ResponseEntity.ok().body(sbs.isEmpty() ? "All Categories Added Successfully" : sbs);
 
     }
 }
