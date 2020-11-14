@@ -11,6 +11,7 @@ import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,6 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
@@ -46,13 +46,14 @@ import java.util.List;
         })
 @ApiModel(value = "Medicine", description = "Contain all medicine's available")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class MedicineGroup {
+public class MedicineGroup implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private @Setter(AccessLevel.PROTECTED)
-    Long id;
+    private Long id;
 
 
     @NotBlank
@@ -65,11 +66,12 @@ public class MedicineGroup {
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = false,
+            mappedBy = "group"
+
     )
-    @JoinColumn(name = "cat_id")
     @JsonIgnore
-    private List<Medicine> medicines = new ArrayList<>();
+    private List<Medicine> medicines;
 
     public MedicineGroup(String name, String description) {
         this.name = name;

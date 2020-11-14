@@ -13,6 +13,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.domains
@@ -35,7 +36,6 @@ import javax.validation.constraints.NotNull;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
@@ -46,12 +46,13 @@ import javax.validation.constraints.NotNull;
         })
 @ApiModel(value = "Medicine", description = "Contain all medicine's available")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Medicine {
+public class Medicine implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private @Setter(AccessLevel.PROTECTED)
-    Long id;
+    private Long id;
 
 
     @NotBlank
@@ -71,14 +72,12 @@ public class Medicine {
     @Column(name = "units", length = 5)
     private int units;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "grp_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medicine group")
     private MedicineGroup group;
 
     @ManyToOne
     @JoinColumn(name = "cat_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display Medicine category")
     private MedicineCategory category;
 
     public Medicine(

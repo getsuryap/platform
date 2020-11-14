@@ -1,11 +1,14 @@
-package org.ospic.inventory.pharmacy.Medicine.data;
+package org.ospic.inventory.pharmacy.Medicine.service;
 
-import lombok.*;
+import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.data
+ * This file was created by eli on 14/11/2020 for org.ospic.inventory.pharmacy.Medicine.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,25 +28,8 @@ import javax.validation.constraints.Min;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-public class MedicineRequest {
-    private String name;
-    private String company;
-    private String compositions;
-    @Min(1)
-    private int units;
-    private Long group;
-    private Long category;
-
-    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category) {
-        this.name = name;
-        this.company = company;
-        this.compositions = compositions;
-        this.units = units;
-        this.group = group;
-        this.category = category;
-    }
+@Component
+@Service
+public interface MedicineReadService {
+    public ResponseEntity<List<Medicine>>  fetchAllMedicine();
 }
