@@ -5,10 +5,12 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.inventory.pharmacy.Medicine.data.MedicineRequest;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
 import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
+import org.ospic.inventory.pharmacy.Medicine.service.MedicineReadService;
 import org.ospic.inventory.pharmacy.Medicine.service.MedicineWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,35 +38,32 @@ import java.util.List;
  * under the License.
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Validated
 @RestController
-@RequestMapping("/api/pharmacy/medicine")
-@Api(value = "/api/pharmacy/medicine", tags = "Medicine")
+@RequestMapping("/api/pharmacy/medicines")
+@Api(value = "/api/pharmacy/medicines", tags = "Medicines")
 public class MedicineApiResource {
     @Autowired
     MedicineRepository medicineRepository;
     @Autowired
     MedicineWriteService medicineWriteService;
+    @Autowired
+    MedicineReadService medicineReadService;
 
     @Autowired
-    public MedicineApiResource(MedicineRepository medicineRepository, MedicineWriteService medicineWriteService) {
+    public MedicineApiResource(MedicineRepository medicineRepository,
+                               MedicineReadService medicineReadService,
+                               MedicineWriteService medicineWriteService) {
         this.medicineRepository = medicineRepository;
         this.medicineWriteService = medicineWriteService;
+        this.medicineReadService = medicineReadService;
     }
 
-    @ApiOperation(
-            value = "RETRIEVE list of available Medicines",
-            notes = "RETRIEVE list of available Medicines",
-            response = Medicine.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @ApiOperation(value = "RETRIEVE list of available Medicines", notes = "RETRIEVE list of available Medicines", response = Medicine.class)
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<Medicine>> retrieveAllMedicineProducts() {
-        List<Medicine> medicines = medicineRepository.findAll();
-        return ResponseEntity.ok().body(medicines);
+        return  medicineReadService.fetchAllMedicine();
     }
 
 

@@ -36,8 +36,8 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/pharmacy/medicine/groups")
-@Api(value = "/api/pharmacy/medicine/groups", tags = "Medicine Groups")
+@RequestMapping("/api/pharmacy/medicines/groups")
+@Api(value = "/api/pharmacy/medicines/groups", tags = "Medicine Groups")
 public class MedicineCategoriesApiResources {
     @Autowired
     MedicineGroupRepository medicineGroupRepository;
