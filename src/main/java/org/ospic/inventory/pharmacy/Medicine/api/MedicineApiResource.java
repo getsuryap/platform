@@ -8,6 +8,7 @@ import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
 import org.ospic.inventory.pharmacy.Medicine.service.MedicineReadService;
 import org.ospic.inventory.pharmacy.Medicine.service.MedicineWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.api
@@ -63,8 +65,21 @@ public class MedicineApiResource {
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<Medicine>> retrieveAllMedicineProducts() {
-        return  medicineReadService.fetchAllMedicine();
+        List<Medicine> medicines = medicineReadService.fetchAllMedicine();
+        if (medicines.isEmpty()){
+            return new ResponseEntity<List<Medicine>>(HttpStatus.NO_CONTENT);
+        }
+        return  ResponseEntity.ok().body(medicines);
     }
+
+    @ApiOperation(value = "RETRIEVE  Medicines by ID", notes = "RETRIEVE  Medicines by ID", response = Medicine.class)
+    @RequestMapping(value = "/{medicineId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<Medicine> retrieveAllMedicineProducts(@PathVariable  Long medicineId) {
+        Optional<Medicine> medicine = medicineRepository.findById(medicineId);
+        return medicine.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
 
     @ApiOperation(

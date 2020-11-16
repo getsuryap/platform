@@ -65,6 +65,7 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
                 medicineRequest.getCompositions(), medicineRequest.getUnits());
         medicine.setCategory(category);
         medicine.setGroup(group);
+        group.getMedicines().add(medicine);
         medicineRepository.save(medicine);
         return ResponseEntity.ok().body("Medicine Saved Successfully");
     }

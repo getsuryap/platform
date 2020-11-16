@@ -11,8 +11,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.domains
@@ -70,7 +69,7 @@ public class MedicineCategory implements Serializable {
     )
     @JoinColumn(name = "grp_id")
     @JsonIgnore
-    private List<Medicine> medicines = new ArrayList<>();
+    private Set<Medicine> medicines = new HashSet<>();
 
     public MedicineCategory(String name, String description) {
         this.name = name;
@@ -78,14 +77,19 @@ public class MedicineCategory implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MedicineCategory)) return false;
-        return id != null && id.equals(((MedicineCategory) o).id);
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override
-    public int hashCode() {
-        return 31;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        MedicineCategory other = (MedicineCategory) obj;
+        return Objects.equals(id, other.getId());
     }
 }
