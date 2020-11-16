@@ -7,6 +7,7 @@ import org.ospic.inventory.pharmacy.Categories.repository.MedicineCategoryReposi
 import org.ospic.inventory.pharmacy.Groups.api.MedicineGroupsApiResources;
 import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
 import org.ospic.inventory.pharmacy.Groups.repository.MedicineGroupRepository;
+import org.ospic.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
 import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
 import org.ospic.patient.infos.domain.Patient;
@@ -77,5 +78,13 @@ public class MedicineReadServiceImpl implements MedicineReadService {
 
         session.close();
         return medicines;
+    }
+
+    @Override
+    public MedicineDataTemplate readMedicineDataTemplate() {
+        List<MedicineGroup> medicineGroups = medicineGroupRepository.findAll();
+        List<MedicineCategory> medicineCategories = medicineCategoryRepository.findAll();
+
+        return new MedicineDataTemplate(medicineCategories, medicineGroups);
     }
 }
