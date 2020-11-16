@@ -31,4 +31,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MedicineWriteService {
     ResponseEntity<String> createNewMedicineProduct(MedicineRequest medicineRequest);
+    Medicine updateMedicineProduct(Long medicineId, MedicineRequest medicine);
 }
