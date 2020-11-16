@@ -1,15 +1,14 @@
-package org.ospic.inventory.pharmacy.Medicine.service;
+package org.ospic.inventory.pharmacy.Medicine.data;
 
-import org.ospic.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
+import lombok.*;
+import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
+import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * This file was created by eli on 14/11/2020 for org.ospic.inventory.pharmacy.Medicine.service
+ * This file was created by eli on 16/11/2020 for org.ospic.inventory.pharmacy.Medicine.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,11 +28,16 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface MedicineReadService {
-    @Transactional
-    public List<Medicine>  fetchAllMedicine();
+@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+public class MedicineDataTemplate {
+    private List<MedicineCategory> medicineCategoriesOptions;
+    private List<MedicineGroup> medicineGroupOptions;
 
-    public MedicineDataTemplate readMedicineDataTemplate();
+    public MedicineDataTemplate(List<MedicineCategory> medicineCategoriesOptions, List<MedicineGroup> medicineGroupOptions) {
+        this.medicineCategoriesOptions = medicineCategoriesOptions;
+        this.medicineGroupOptions = medicineGroupOptions;
+    }
 }

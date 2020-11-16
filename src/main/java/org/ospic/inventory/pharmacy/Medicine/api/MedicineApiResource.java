@@ -2,6 +2,7 @@ package org.ospic.inventory.pharmacy.Medicine.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
 import org.ospic.inventory.pharmacy.Medicine.data.MedicineRequest;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
 import org.ospic.inventory.pharmacy.Medicine.repository.MedicineRepository;
@@ -64,7 +65,7 @@ public class MedicineApiResource {
     @ApiOperation(value = "RETRIEVE list of available Medicines", notes = "RETRIEVE list of available Medicines", response = Medicine.class)
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Medicine>> retrieveAllMedicineProducts() {
+    ResponseEntity<List<Medicine>> retrieveAllMedicineProductsOrTemplate() {
         List<Medicine> medicines = medicineReadService.fetchAllMedicine();
         if (medicines.isEmpty()){
             return new ResponseEntity<List<Medicine>>(HttpStatus.NO_CONTENT);
@@ -79,6 +80,14 @@ public class MedicineApiResource {
         Optional<Medicine> medicine = medicineRepository.findById(medicineId);
         return medicine.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @ApiOperation(value = "RETRIEVE medicine templates", notes = "RETRIEVE  M medicine templates", response = MedicineDataTemplate.class)
+    @RequestMapping(value = "/template", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<MedicineDataTemplate> retrieveMedicineTemplate(){
+        return ResponseEntity.ok().body(medicineReadService.readMedicineDataTemplate());
+    }
+
 
 
 
