@@ -76,7 +76,7 @@ public class MedicineApiResource {
     @ApiOperation(value = "RETRIEVE  Medicines by ID", notes = "RETRIEVE  Medicines by ID", response = Medicine.class)
     @RequestMapping(value = "/{medicineId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Medicine> retrieveAllMedicineProducts(@PathVariable  Long medicineId) {
+    ResponseEntity<Medicine> retrieveAllMedicineProductById(@PathVariable  Long medicineId) {
         Optional<Medicine> medicine = medicineRepository.findById(medicineId);
         return medicine.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -86,6 +86,14 @@ public class MedicineApiResource {
     @ResponseBody
     ResponseEntity<MedicineDataTemplate> retrieveMedicineTemplate(){
         return ResponseEntity.ok().body(medicineReadService.readMedicineDataTemplate());
+    }
+
+
+    @ApiOperation(value = "UPDATE medicine product", notes = "UPDATE  medicine product", response = Medicine.class)
+    @RequestMapping(value = "/{medicinalId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<Medicine> updateMedicineProductByItsId(@PathVariable Long medicinalId, @Valid @RequestBody MedicineRequest medicine){
+        return ResponseEntity.ok().body(medicineWriteService.updateMedicineProduct(medicinalId, medicine));
     }
 
 
