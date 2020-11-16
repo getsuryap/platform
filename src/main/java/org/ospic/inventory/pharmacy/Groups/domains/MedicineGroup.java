@@ -12,8 +12,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Groups.domains
@@ -44,12 +43,8 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"name"}),
         })
-@ApiModel(value = "Medicine", description = "Contain all medicine's available")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class MedicineGroup implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+public class MedicineGroup  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -66,12 +61,12 @@ public class MedicineGroup implements Serializable {
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
-            orphanRemoval = false,
-            mappedBy = "group"
+            orphanRemoval = true
 
     )
     @JsonIgnore
-    private List<Medicine> medicines;
+    @JoinColumn(name = "grp_id")
+    private Set<Medicine> medicines = new HashSet<>();
 
     public MedicineGroup(String name, String description) {
         this.name = name;
@@ -89,4 +84,6 @@ public class MedicineGroup implements Serializable {
     public int hashCode() {
         return 31;
     }
+
+
 }

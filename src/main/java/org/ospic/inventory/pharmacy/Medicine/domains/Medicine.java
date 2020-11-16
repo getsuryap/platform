@@ -1,12 +1,15 @@
 package org.ospic.inventory.pharmacy.Medicine.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.domain.Auditable;
 import org.ospic.inventory.pharmacy.Categories.domains.MedicineCategory;
 import org.ospic.inventory.pharmacy.Groups.domains.MedicineGroup;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
 
@@ -14,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.inventory.pharmacy.Medicine.domains
@@ -85,21 +89,9 @@ public class Medicine implements Serializable {
         this.name = name;
         this.company = company;
         this.compositions = compositions;
-
         this.units = units;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Medicine)) return false;
-        return id != null && id.equals(((Medicine) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 
 
 }
