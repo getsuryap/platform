@@ -62,7 +62,8 @@ public class Admission implements Serializable {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE})
+            CascadeType.MERGE},
+    fetch = FetchType.EAGER)
     @JoinTable(
 
             name = DatabaseConstants.TABLE_ADMISSION_INFO,

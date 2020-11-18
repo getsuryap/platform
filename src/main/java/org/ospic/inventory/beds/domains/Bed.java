@@ -56,6 +56,7 @@ public class Bed implements Serializable {
 
     @ManyToMany(mappedBy = "beds", fetch = FetchType.EAGER)
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @JsonIgnore
     private List<Admission> admissions = new ArrayList<>();
 
     @Column(
