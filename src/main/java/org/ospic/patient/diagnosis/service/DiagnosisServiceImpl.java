@@ -62,13 +62,16 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReports() {
         Session session = this.sessionFactory.openSession();
-        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s",  DatabaseConstants.DIAGNOSES_TABLE)).list();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s order by date ASC" ,  DatabaseConstants.DIAGNOSES_TABLE)).list();
         session.close();
         return ResponseEntity.ok().body(diagnoses);
     }
 
     @Override
     public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByPatientId(Long patientId) {
-        return null;
+        Session session = this.sessionFactory.openSession();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s WHERE patient_id = %2d order by date ASC" ,  DatabaseConstants.DIAGNOSES_TABLE, patientId)).list();
+        session.close();
+        return ResponseEntity.ok().body(diagnoses);
     }
 }
