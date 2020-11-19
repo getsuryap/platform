@@ -79,7 +79,7 @@ public class DiagnosisApiResources {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByPatientId(@PathVariable Long patientId) {
-        return ResponseEntity.ok().body(diagnosisRepository.findByPatientId(patientId));
+        return diagnosisService.retrieveAllDiagnosisReportsByPatientId(patientId);
     }
 
 
