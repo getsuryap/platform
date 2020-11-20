@@ -1,13 +1,12 @@
-package org.ospic.inventory.wards.service;
+package org.ospic.inventory.wards.data;
 
-import org.ospic.inventory.wards.data.WardResponseData;
-import org.ospic.inventory.wards.domain.Ward;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * This file was created by eli on 07/11/2020 for org.ospic.inventory.wards.service
+ * This file was created by eli on 20/11/2020 for org.ospic.inventory.wards.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,7 +26,21 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface WardReadService {
-    public ResponseEntity<List<Ward>> retrieveListOfWards();
-    public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts();
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+public class WardResponseData {
+    private String id;
+    private String name;
+    private String numberOfBeds;
+
+    public WardResponseData(String id, String name, String numberOfBeds) {
+        this.id = id;
+        this.name = name;
+        this.numberOfBeds = numberOfBeds;
+    }
+
+    public WardResponseData instance(String name, String count){
+        return new WardResponseData(null,name,count);
+    }
 }
