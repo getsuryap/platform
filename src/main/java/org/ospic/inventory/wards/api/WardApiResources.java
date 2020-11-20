@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.inventory.wards.data.WardResponseData;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.inventory.wards.service.WardReadService;
@@ -67,6 +68,13 @@ public class WardApiResources {
     @ResponseBody
     ResponseEntity<List<Ward>> retrieveAllWards() {
         return wardReadService.retrieveListOfWards();
+    }
+
+    @ApiOperation(value = "RETRIEVE Wards with beds count", notes = "RETRIEVE Wards with beds count")
+    @RequestMapping(value = "/beds", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
+        return wardReadService.retrieveAllWardsWithBedsCounts();
     }
 
 

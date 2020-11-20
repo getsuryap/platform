@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -38,6 +41,7 @@ import java.util.List;
 @RestController()
 @RequestMapping("/api/diagnoses")
 @Api(value = "/api/diagnoses", tags = "Diagnoses", description = "Diagnoses reports API resources")
+@Validated
 public class DiagnosisApiResources {
 
     @Autowired DiagnosisService diagnosisService;
@@ -78,7 +82,7 @@ public class DiagnosisApiResources {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByPatientId(@PathVariable Long patientId) {
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByPatientId(@PathVariable("patientId") @NotNull Long patientId) {
         return diagnosisService.retrieveAllDiagnosisReportsByPatientId(patientId);
     }
 

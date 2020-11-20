@@ -1,11 +1,17 @@
 package org.ospic.inventory.wards.service;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.ospic.inventory.wards.data.WardResponseData;
+import org.ospic.inventory.wards.data.WardResponseDataRowMapper;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -33,14 +39,30 @@ import java.util.List;
 public class WardReadServiceImpl implements WardReadService {
     @Autowired
     WardRepository wardRepository;
+    @Autowired
+    SessionFactory sessionFactory;
+    JdbcTemplate jdbcTemplate;
 
-    public WardReadServiceImpl(WardRepository wardRepository){
+    public WardReadServiceImpl(DataSource dataSource, WardRepository wardRepository) {
         this.wardRepository = wardRepository;
+
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ResponseEntity<List<Ward>> retrieveListOfWards() {
         List<Ward> wards = wardRepository.findAll();
         return ResponseEntity.ok().body(wards);
+    }
+
+    @Override
+    public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT w.*, (SELECT COUNT(*) FROM m_beds b WHERE b.ward_id = w.id) as counts FROM ospic_default.m_wards w;");
+        String queryString = sb.toString();
+        Session session = this.sessionFactory.openSession();
+        List<WardResponseData> wardResponseData = jdbcTemplate.query(queryString, new WardResponseDataRowMapper());
+        session.close();
+        return ResponseEntity.ok().body(wardResponseData);
     }
 }
