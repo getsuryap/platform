@@ -58,7 +58,7 @@ public class WardReadServiceImpl implements WardReadService {
     @Override
     public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT w.*, (SELECT COUNT(*) FROM m_beds b WHERE b.ward_id = w.id) as counts FROM ospic_default.m_wards w;");
+        sb.append("SELECT w.*, (SELECT COUNT(*) FROM m_beds b WHERE b.ward_id = w.id) as counts FROM m_wards w");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
         List<WardResponseData> wardResponseData = jdbcTemplate.query(queryString, new WardResponseDataRowMapper());
