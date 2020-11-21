@@ -2,15 +2,18 @@ package org.ospic.inventory.wards.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.wards.data.WardResponseData;
 import org.ospic.inventory.wards.data.WardResponseDataRowMapper;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
+import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.List;
 
@@ -51,7 +54,11 @@ public class WardReadServiceImpl implements WardReadService {
 
     @Override
     public ResponseEntity<List<Ward>> retrieveListOfWards() {
-        List<Ward> wards = wardRepository.findAll();
+        EntityManager entityManager = sessionFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        List<Ward> wards = entityManager.createQuery("from "+ DatabaseConstants.WARDS_TABLE, Ward.class).getResultList();
+        entityManager.getTransaction().commit();
+        entityManager.close();
         return ResponseEntity.ok().body(wards);
     }
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +71,7 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID")
     @RequestMapping(value = "/{admissionId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Admission> retrieveAdmissionByID(@PathVariable("admissionId") Long admissionId) {
+    ResponseEntity<Admission> retrieveAdmissionByID(@NotNull @PathVariable("admissionId") Long admissionId) {
         Optional<Admission> admission = admissionRepository.findById(admissionId);
         return admission.map(value -> ResponseEntity.ok().body(value)).orElse(null);
     }

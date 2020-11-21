@@ -1,6 +1,7 @@
 package org.ospic.inventory.wards.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -58,6 +59,7 @@ public class Ward {
             orphanRemoval = true
     )
     @JoinColumn(name = "ward_id")
+    @JsonIgnore
     private List<Bed> beds = new ArrayList<>();
 
     public Ward(String name){
