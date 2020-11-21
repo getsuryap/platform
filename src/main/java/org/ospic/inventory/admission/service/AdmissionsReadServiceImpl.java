@@ -46,8 +46,8 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
         List<Admission> admissions = admissionRepository.findAll();
         admissions.forEach(admission -> {
             try {
-              String beds =   new ObjectMapper().writeValueAsString(admission.getBeds());
-              admission.getBeds().getWard().setBeds(null);
+                String beds = new ObjectMapper().writeValueAsString(admission.getBeds());
+                admission.getBeds().getWard().setBeds(null);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -57,8 +57,19 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId) {
+    public ResponseEntity<List<Admission>> retrieveListOfAdmissionInBedId(Long bedId) {
+
+        return ResponseEntity.ok().body(admissionRepository.findByBedsId(bedId));
+    }
+
+    @Override
+    public ResponseEntity<List<Admission>> retrieveListOfAdmissionInWardId(Long wardId) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId) {
+        return ResponseEntity.ok().body(admissionRepository.findByPatientId(patientId));
     }
 
     @Override

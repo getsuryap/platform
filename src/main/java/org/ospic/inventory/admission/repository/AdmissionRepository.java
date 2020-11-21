@@ -3,6 +3,7 @@ package org.ospic.inventory.admission.repository;
 import org.ospic.inventory.admission.domains.Admission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,6 +29,10 @@ import java.util.Optional;
  */
 public interface AdmissionRepository extends JpaRepository<Admission,Long> {
     boolean isActive(Long admissionId);
+    boolean existsByBedsId(Long bedId);
+    boolean existsByPatientId(Long patientId);
     Optional<Admission> findById(Long admissionId);
+    List<Admission> findByPatientId(Long patientId);
+    List<Admission> findByBedsId(Long bedId);
 
 }
