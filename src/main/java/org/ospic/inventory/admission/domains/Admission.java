@@ -1,9 +1,6 @@
 package org.ospic.inventory.admission.domains;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
@@ -16,9 +13,7 @@ import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.domains
@@ -59,15 +54,23 @@ public class Admission implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "patient_id")
-    @JsonIgnoreProperties({"admissions", "contactsInformation", "physician"})
-    private Patient patient;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "bed_id")
-    @JsonIgnoreProperties({"ward.beds"})
-    private Bed beds;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    },  fetch = FetchType.EAGER)
+    @JoinTable(name = "x_patient_admissions")
+    @JsonIgnoreProperties({"admissions", "contactsInformation", "physician"})
+    private Set<Patient> patients =new HashSet<>();
+
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    },fetch = FetchType.EAGER)
+    @JoinTable(name = "x_bed_admissions")
+    private Set<Bed> beds= new HashSet<>();
 
 
 
@@ -97,6 +100,16 @@ public class Admission implements Serializable {
         admission.setToDateTime(admissionRequest.getEndDateTime());
         admission.setIsActive(admissionRequest.getIsActive());
         return admission;
+    }
+
+    public void addBed(Bed bed){
+        beds.add(bed);
+        bed.getAdmissions().add(this);
+    }
+
+    public void addPatient(Patient patient){
+        patients.add(patient);
+        patient.getAdmissions().add(this);
     }
 
 

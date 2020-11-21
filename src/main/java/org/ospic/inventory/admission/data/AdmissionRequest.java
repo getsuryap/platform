@@ -36,17 +36,15 @@ public class AdmissionRequest {
     private Boolean isActive;
     private Long bedId;
     private Long patientId;
-    private Long wardId;
     private Date startDateTime;
     private Date endDateTime;
 
     public AdmissionRequest(
-            Boolean isActive, Long bedId, Long patientId,
-            Long wardId, Date startDateTime, Date endDateTime) {
+            Boolean isActive, Long bedId, Long patientId
+            , Date startDateTime, Date endDateTime) {
         this.isActive = isActive;
         this.bedId = bedId;
         this.patientId = patientId;
-        this.wardId = wardId;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

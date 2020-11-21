@@ -166,15 +166,8 @@ public class PatientApiResources {
     }
 
 
-    @ApiOperation(
-            value = "CREATE new patient",
-            notes = "CREATE new Patient",
-            response = Patient.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "CREATE new patient", notes = "CREATE new Patient", response = Patient.class)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
     Patient createNewPatient(@ApiParam(name = "Patient Entity", required = true) @Valid @RequestBody Patient patientInformationRequest) {
@@ -182,14 +175,8 @@ public class PatientApiResources {
     }
 
 
-    @ApiOperation(
-            value = "CREATE patients by posting list of patients",
-            notes = "CREATE patients by posting list of patients")
-    @RequestMapping(
-            value = "/list",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "CREATE patients by posting list of patients", notes = "CREATE patients by posting list of patients")
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
     List<Patient> createNewPatients(
@@ -198,16 +185,8 @@ public class PatientApiResources {
         return patientInformationWriteService.createByPatientListIterate(patientInformationListRequest);
     }
 
-    @ApiOperation(
-            value = "UPDATE Patient upload Thumbnail image",
-            notes = "UPDATE Patient upload Thumbnail image"
-    )
-    @RequestMapping(
-            value = "/{patientId}/images",
-            method = RequestMethod.PATCH,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
+    @ApiOperation(value = "UPDATE Patient upload Thumbnail image", notes = "UPDATE Patient upload Thumbnail image")
+    @RequestMapping(value = "/{patientId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
@@ -222,14 +201,8 @@ public class PatientApiResources {
     }
 
 
-    @ApiOperation(
-            value = "DELETE Patient",
-            notes = "DELETE Patient")
-    @RequestMapping(
-            value = "/{id}",
-            method = RequestMethod.DELETE,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "DELETE Patient", notes = "DELETE Patient")
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
         return patientInformationWriteService.deletePatientById(id);

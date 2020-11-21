@@ -21,7 +21,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -51,6 +53,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = true)
 public class Patient extends Auditable<String> implements Serializable {
+    private static final long serialVersionUID = -1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -138,16 +141,9 @@ public class Patient extends Auditable<String> implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
-    @OneToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JoinColumn(name = "patient_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Admission> admissions = new ArrayList<>();
+    @ManyToMany(mappedBy = "patients")
+    @JsonIgnore
+    private Set<Admission> admissions = new HashSet<>();
 
 
     public Patient(
@@ -175,10 +171,6 @@ public class Patient extends Auditable<String> implements Serializable {
         this.physician = physician;
         this.diagnoses = diagnoses;
     }
-
-
-
-
 
 
     @Override
