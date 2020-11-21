@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.domain.Auditable;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.contacts.domain.ContactsInformation;
@@ -127,24 +129,24 @@ public class Patient extends Auditable<String> implements Serializable {
     private Physician physician;
 
     @OneToMany(
-            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @JoinColumn(name = "patient_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
     @OneToMany(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "patient")
-
+    @JoinColumn(name = "patient_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-    @JsonIgnore
+
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Admission> admissions = new ArrayList<>();
 
 

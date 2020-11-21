@@ -54,7 +54,12 @@ public class Bed implements Serializable {
     private String identifier;
 
 
-    @ManyToMany(mappedBy = "beds", fetch = FetchType.EAGER)
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "bed_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @JsonIgnore
     private List<Admission> admissions = new ArrayList<>();
@@ -69,7 +74,7 @@ public class Bed implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ward_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
-    @JsonIgnore
+
     private Ward ward;
 
     public Bed(Long patientId, Boolean isOccupied){

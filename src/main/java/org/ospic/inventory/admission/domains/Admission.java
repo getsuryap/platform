@@ -2,7 +2,9 @@ package org.ospic.inventory.admission.domains;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -46,6 +48,7 @@ import java.util.List;
 @Table(name = DatabaseConstants.TABLE_ADMISSION_INFO)
 @ApiModel(value = "Admission", description = "Admission ")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Admission implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,61 +59,46 @@ public class Admission implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id")
+    @JsonIgnoreProperties({"admissions", "contactsInformation", "physician"})
     private Patient patient;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE},
-    fetch = FetchType.EAGER)
-    @JoinTable(
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "bed_id")
+    @JsonIgnoreProperties({"ward.beds"})
+    private Bed beds;
 
-            name = DatabaseConstants.TABLE_ADMISSION_INFO,
-            joinColumns = @JoinColumn(name = "id"),
 
-            inverseJoinColumns = @JoinColumn(name="bed_id")
-    )
-    @JoinColumn(nullable = true)
-    private List<Bed> beds = new ArrayList<>();
 
     @Column(name = "start_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date startDateTime;
+    private Date fromDateTime;
 
 
     @Column(name = "end_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
-    private Date endDateTime;
+    private Date toDateTime;
 
     public Admission(
-            Boolean isActive,  Date startDateTime, Date endDateTime) {
+            Boolean isActive,  Date fromDateTime, Date toDateTime) {
         this.isActive = isActive;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
+        this.fromDateTime = fromDateTime;
+        this.toDateTime = toDateTime;
     }
 
     public Admission addFromRequest(AdmissionRequest admissionRequest) {
         Admission admission = new Admission();
-        admission.setStartDateTime(admissionRequest.getStartDateTime());
-        admission.setEndDateTime(admissionRequest.getEndDateTime());
+        admission.setFromDateTime(admissionRequest.getStartDateTime());
+        admission.setToDateTime(admissionRequest.getEndDateTime());
         admission.setIsActive(admissionRequest.getIsActive());
         return admission;
     }
 
-    public void addBed(Bed bed){
-        beds.add(bed);
-        bed.getAdmissions().add(this);
-    }
-
-    public void removeBed(Bed bed){
-        beds.remove(bed);
-        bed.getAdmissions().remove(this);
-    }
 
     @Override
     public boolean equals(Object o) {
