@@ -53,7 +53,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest) {
         Admission admission = new Admission().addFromRequest(admissionRequest);
         bedRepository.findById(admissionRequest.getBedId()).ifPresent(bed->{
-            admission.getBeds().add(bed);
+           // admission.getBeds().add(bed);
         });
        // patientInformationRepository.findById(admissionRequest.getPatientId()).ifPresent(admission::setPatient);
 

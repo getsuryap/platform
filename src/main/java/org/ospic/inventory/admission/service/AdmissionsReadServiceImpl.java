@@ -1,5 +1,7 @@
 package org.ospic.inventory.admission.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,17 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
     @Override
     public ResponseEntity<List<Admission>> retrieveAllAdmissions() {
-        return ResponseEntity.ok(admissionRepository.findAll());
+        List<Admission> admissions = admissionRepository.findAll();
+        admissions.forEach(admission -> {
+            try {
+              String beds =   new ObjectMapper().writeValueAsString(admission.getBeds());
+              admission.getBeds().getWard().setBeds(null);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return ResponseEntity.ok(admissions);
     }
 
     @Override
