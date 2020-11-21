@@ -72,4 +72,9 @@ public class WardReadServiceImpl implements WardReadService {
         session.close();
         return ResponseEntity.ok().body(wardResponseData);
     }
+
+    @Override
+    public ResponseEntity<Ward> findById(Long id) {
+        return null;
+    }
 }

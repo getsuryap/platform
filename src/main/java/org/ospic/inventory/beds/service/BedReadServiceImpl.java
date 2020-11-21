@@ -68,4 +68,16 @@ public class BedReadServiceImpl implements BedReadService {
         entityManager.close();
         return ResponseEntity.ok(bed);
     }
+
+    @Override
+    public ResponseEntity<List<Bed>> retrieveBedListByWard(Long wardId) {
+        Session session = this.sessionFactory.openSession();
+        String queryString = String.format("from %s WHERE ward_id = %2d", DatabaseConstants.BEDS_TABLE, wardId);
+        List<Bed> bedsList = session.createQuery(queryString).list();
+        bedsList.forEach(bed -> {
+            bed.setWard(null);
+        });
+        session.close();
+        return ResponseEntity.ok().body(bedsList);
+    }
 }
