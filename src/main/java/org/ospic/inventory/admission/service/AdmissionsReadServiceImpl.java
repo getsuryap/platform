@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
+import org.ospic.inventory.beds.domains.Bed;
+import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -36,22 +39,23 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
     @Autowired
     AdmissionRepository admissionRepository;
+    @Autowired
+    BedRepository bedRepository;
+    @Autowired
+    PatientInformationRepository patientRepository;
 
-    public AdmissionsReadServiceImpl(AdmissionRepository admissionRepository) {
+    public AdmissionsReadServiceImpl(
+            BedRepository bedRepository,
+            PatientInformationRepository patientRepository,
+            AdmissionRepository admissionRepository) {
         this.admissionRepository = admissionRepository;
+        this.bedRepository = bedRepository;
+        this.patientRepository = patientRepository;
     }
 
     @Override
     public ResponseEntity<List<Admission>> retrieveAllAdmissions() {
         List<Admission> admissions = admissionRepository.findAll();
-        admissions.forEach(admission -> {
-            try {
-                String beds = new ObjectMapper().writeValueAsString(admission.getBeds());
-                admission.getBeds().getWard().setBeds(null);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
 
         return ResponseEntity.ok(admissions);
     }
@@ -69,7 +73,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
     @Override
     public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId) {
-        return ResponseEntity.ok().body(admissionRepository.findByPatientId(patientId));
+        return ResponseEntity.ok().body(admissionRepository.findByPatientsId(patientId));
     }
 
     @Override

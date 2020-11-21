@@ -3,6 +3,8 @@ package org.ospic.patient.infos.repository;
 import org.ospic.patient.infos.domain.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -22,5 +24,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface PatientInformationRepository extends JpaRepository<Patient,Long> {
+    @Transactional
     Patient getById(String id);
 }

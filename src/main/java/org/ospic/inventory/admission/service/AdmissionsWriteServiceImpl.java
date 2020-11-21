@@ -3,11 +3,17 @@ package org.ospic.inventory.admission.service;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
+import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
@@ -49,14 +55,15 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         this.patientInformationRepository = patientInformationRepository;
     }
 
+    @Transactional
     @Override
     public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest) {
-        Admission admission = new Admission().addFromRequest(admissionRequest);
-        bedRepository.findById(admissionRequest.getBedId()).ifPresent(bed->{
-           // admission.getBeds().add(bed);
-        });
-       // patientInformationRepository.findById(admissionRequest.getPatientId()).ifPresent(admission::setPatient);
+        Optional<Bed> bedOptional = bedRepository.findById(admissionRequest.getBedId());
+        Optional<Patient> patientOptional = patientInformationRepository.findById(admissionRequest.getPatientId());
 
+        Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(),admissionRequest.getStartDateTime());
+        admission.addPatient(patientOptional.get());
+        admission.addBed(bedOptional.get());
 
         admissionRepository.save(admission);
         return ResponseEntity.ok().body("Patient Admitted successfully");

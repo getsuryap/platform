@@ -13,7 +13,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.domains
@@ -36,6 +38,7 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Data
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
@@ -43,7 +46,9 @@ import java.util.List;
 @Table(name = DatabaseConstants.BEDS_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Bed implements Serializable {
+    private static final long serialVersionUID = -1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -54,15 +59,9 @@ public class Bed implements Serializable {
     private String identifier;
 
 
-    @OneToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JoinColumn(name = "bed_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @ManyToMany(mappedBy = "beds", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Admission> admissions = new ArrayList<>();
+    private Set<Admission> admissions = new HashSet<>();
 
     @Column(
             name = "is_occupied",
@@ -81,6 +80,8 @@ public class Bed implements Serializable {
         this.isOccupied = isOccupied;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,6 +91,6 @@ public class Bed implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        return 32;
     }
 }
