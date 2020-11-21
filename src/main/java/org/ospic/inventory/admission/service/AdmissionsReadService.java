@@ -31,6 +31,12 @@ public interface AdmissionsReadService {
 
     public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId);
 
+
+    public ResponseEntity<List<Admission>> retrieveListOfAdmissionInBedId(Long bedId);
+
+
+    public ResponseEntity<List<Admission>> retrieveListOfAdmissionInWardId(Long wardId);
+
     public ResponseEntity<List<Admission>> retrieveListOfActiveAdmissions();
 
     public ResponseEntity<List<Admission>> retrieveListOfInactiveAdmissions();

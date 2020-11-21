@@ -69,10 +69,19 @@ public class AdmissionsApiResources {
     }
 
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID")
-    @RequestMapping(value = "/{admissionId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Admission> retrieveAdmissionByID(@NotNull @PathVariable("admissionId") Long admissionId) {
-        Optional<Admission> admission = admissionRepository.findById(admissionId);
+    ResponseEntity retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
+        if (null != command){
+            if (command.equals("bed")){
+                return admissionsReadService.retrieveListOfAdmissionInBedId(id);
+            }
+            if (command.equals("patient")){
+                return admissionsReadService.retrieveListOfPatientAdmission(id);
+            }
+
+        }
+        Optional<Admission> admission = admissionRepository.findById(id);
         return admission.map(value -> ResponseEntity.ok().body(value)).orElse(null);
     }
 
