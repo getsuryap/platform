@@ -76,6 +76,14 @@ public class BedsApiResource {
         return ResponseEntity.ok().body("All beds created successfully if it was not present before");
     }
 
+    @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
+    @RequestMapping(value = "/{wardId}/ward", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<List<Bed>> retrieveListOfBedsByInWard(@ApiParam(name = "wardId", required = true) @PathVariable Long wardId){
+        return bedReadService.retrieveBedListByWard(wardId);
+    }
+
+
 
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{bedId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

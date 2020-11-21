@@ -30,4 +30,5 @@ import java.util.List;
 public interface WardReadService {
     public ResponseEntity<List<Ward>> retrieveListOfWards();
     public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts();
+    public ResponseEntity<Ward> findById(Long id);
 }
