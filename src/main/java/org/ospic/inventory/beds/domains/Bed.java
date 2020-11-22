@@ -12,10 +12,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.domains
@@ -76,8 +73,9 @@ public class Bed implements Serializable {
 
     private Ward ward;
 
-    public Bed(Long patientId, Boolean isOccupied){
+    public Bed(String identifier, Boolean isOccupied){
         this.isOccupied = isOccupied;
+        this.identifier = identifier;
     }
 
 
@@ -85,12 +83,13 @@ public class Bed implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bed)) return false;
-        return id != null && id.equals(((Bed) o).id);
+        if (o == null || getClass() != o.getClass()) return false;
+        Bed tag = (Bed) o;
+        return Objects.equals(identifier, tag.identifier);
     }
 
     @Override
     public int hashCode() {
-        return 32;
+        return Objects.hash(identifier);
     }
 }
