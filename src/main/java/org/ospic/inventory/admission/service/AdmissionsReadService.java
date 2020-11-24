@@ -2,7 +2,6 @@ package org.ospic.inventory.admission.service;
 
 import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.domains.Admission;
-import org.ospic.inventory.beds.domains.Bed;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.List;
 public interface AdmissionsReadService {
     public ResponseEntity<List<Admission>> retrieveAllAdmissions();
 
-    public ResponseEntity<List<AdmissionResponseData>> retrieveListOfPatientAdmission(Long patientId);
+    public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId);
 
 
     public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId);

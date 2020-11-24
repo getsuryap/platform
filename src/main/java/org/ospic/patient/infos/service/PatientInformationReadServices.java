@@ -30,8 +30,6 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
 public interface PatientInformationReadServices {
     @Transactional
     public ResponseEntity<List<Patient>> retrieveAllPatients();
@@ -46,6 +44,9 @@ public interface PatientInformationReadServices {
     public ResponseEntity<Patient> retrievePatientById(Long id) throws ResourceNotFoundException;
 
     public ResponseEntity retrievePatientCreationDataTemplate();
+
+
+    public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId);
 
 
 }

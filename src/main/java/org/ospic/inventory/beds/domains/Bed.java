@@ -70,7 +70,7 @@ public class Bed implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ward_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
-
+    @JsonIgnore
     private Ward ward;
 
     public Bed(String identifier, Boolean isOccupied){

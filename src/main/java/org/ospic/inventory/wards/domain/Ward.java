@@ -59,7 +59,7 @@ public class Ward {
             orphanRemoval = true
     )
     @JoinColumn(name = "ward_id")
-    @JsonIgnore
+
     private List<Bed> beds = new ArrayList<>();
 
     public Ward(String name){

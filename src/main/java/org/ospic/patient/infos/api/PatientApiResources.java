@@ -51,7 +51,7 @@ public class PatientApiResources {
     FilesStorageService filesStorageService;
 
     @Autowired
-    PatientApiResources(PatientInformationReadServices patientInformationReadServices,
+    public PatientApiResources(PatientInformationReadServices patientInformationReadServices,
                         PatientInformationWriteService patientInformationWriteService,
                         FilesStorageService filesStorageService) {
         this.patientInformationReadServices = patientInformationReadServices;
@@ -103,20 +103,20 @@ public class PatientApiResources {
     }
 
 
-    @ApiOperation(
-            value = "GET specific Patient information by patient ID",
-            notes = "GET specific Patient information by patient ID")
-    @RequestMapping(
-            value = "/{patientId}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @ApiOperation(value = "GET specific Patient information by patient ID", notes = "GET specific Patient information by patient ID")
+    @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Patient> findById(
-            @ApiParam(name = "patientId", required = true)
-            @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
+    ResponseEntity<Patient> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
         return patientInformationReadServices.retrievePatientById(patientId);
     }
+
+    @ApiOperation(value = "GET patient admitted in this bedId", notes = "GET patient admitted in this bedId")
+    @RequestMapping(value = "/{bedId}/admitted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<List<Patient>> findPatientAdmittedInBedId( @PathVariable Long bedId) {
+        return patientInformationReadServices.retrievePatientAdmittedInThisBed(bedId);
+    }
+
 
     @ApiOperation(
             value = "GET patients trend data by sex and date",
@@ -207,6 +207,7 @@ public class PatientApiResources {
     ResponseEntity deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
         return patientInformationWriteService.deletePatientById(id);
     }
+
 
     @GetMapping("/{patientId}/images/{filename:.+}")
     @ResponseBody

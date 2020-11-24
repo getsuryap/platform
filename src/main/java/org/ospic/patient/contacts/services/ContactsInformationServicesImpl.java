@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +31,7 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Controller
-@Service
+@Repository
 public class ContactsInformationServicesImpl implements ContactsInformationService {
     private static final Logger logger = LoggerFactory.getLogger(ContactsInformationServicesImpl.class);
 

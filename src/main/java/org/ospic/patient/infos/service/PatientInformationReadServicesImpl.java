@@ -108,7 +108,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     }
 
     @Override
-    public ResponseEntity<List<PatientTrendDatas>>  retrieveAllPatientTrendData() {
+    public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT date(created_date) as date, count(*) as total,");
         sb.append("count(case when gender = '1' then 1 else null end) as male, ");
@@ -133,6 +133,20 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
             return ResponseEntity.ok().body(patient);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new MessageResponse(String.format("Patient with given Id:  %s is not found", id)));
+    }
+
+    @Override
+    public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId) {
+        String sb =
+                " select p.id from  m_patients p where id =  " +
+                " (select  pa.patients_id from " +
+                " m_admissions a " +
+                " inner join m_admissions_m_beds ba ON a.id = ba.admissions_id " +
+                " inner join m_admissions_m_patients pa ON a.id = pa.admissions_id " +
+                " where ba.beds_id = 1 AND a.is_active = true) ";
+        Session session = this.sessionFactory.openSession();
+        List<Patient> patient = session.createQuery(sb).list();
+        return ResponseEntity.ok().body(patient);
     }
 
 }
