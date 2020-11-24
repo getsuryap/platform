@@ -1,21 +1,18 @@
 package org.ospic.inventory.admission.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
-import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
-import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -72,13 +69,8 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId) {
         Session session = this.sessionFactory.openSession();
-        StringBuilder sb = new StringBuilder();
-        sb.append(" SELECT a.id, a.is_active, a.start_date, a.end_date, bed_id as bed, pa.patient_id as patient FROM "+ DatabaseConstants.TABLE_ADMISSION_INFO+ " a ");
-        sb.append(" INNER JOIN b_admissions ba ON a.id = ba.b_admission_id  ");
-        sb.append(" INNER JOIN p_admissions pa ON a.id = pa.p_admission_id  ");
-        sb.append(" WHERE ba.bed_id = 1");
-        String query = sb.toString();
-        List<AdmissionResponseData> admissions = session.createQuery(query).list();
+        String sb = "from m_admissions a where id IN (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id =1) order by a.id DESC";
+        List<AdmissionResponseData> admissions = session.createQuery(sb).list();
         session.close();
         return ResponseEntity.ok().body(admissions);
     }
@@ -89,16 +81,13 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public ResponseEntity<List<AdmissionResponseData>> retrieveListOfPatientAdmission(Long patientId) {
+    public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId) {
         Session session = this.sessionFactory.openSession();
-        StringBuilder sb = new StringBuilder();
-        sb.append(" SELECT a.*, bed_id as bed, pa.patient_id as patient FROM m_admissions a   ");
-        sb.append(" INNER JOIN b_admissions ba ON a.id = ba.b_admission_id  ");
-        sb.append(" INNER JOIN p_admissions pa ON a.id = pa.p_admission_id  ");
-        sb.append(" WHERE pa.patient_id =    ".concat(patientId.toString()));
-
-        String query = sb.toString();
-        List<AdmissionResponseData> admissions = session.createNativeQuery(String.valueOf(sb),AdmissionResponseData.class).getResultList();
+        EntityManager entityManager = sessionFactory.createEntityManager();
+        String sb = "select  a.start_date as fromDateTime, a.is_active as isActive, a.end_date as toDateTime from m_admissions a inner join m_admissions_m_patients pa on pa.admissions_id = a.id where pa.patients_id = 1";
+        String sba = "select a from m_admissions a join fetch m_admissions_m_patients pa on pa.admissions_id = a.id where pa.patients_id = 1";
+        List<Admission> admissions = entityManager.createQuery(sba, Admission.class).getResultList();
+        entityManager.close();
         session.close();
         return ResponseEntity.ok().body(admissions);
     }

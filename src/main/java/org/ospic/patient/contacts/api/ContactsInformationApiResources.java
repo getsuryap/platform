@@ -40,10 +40,9 @@ public class ContactsInformationApiResources {
     @Autowired
     ContactsInformationService contactsInformationService;
     @Autowired
-    PatientInformationReadServices patientInformationReadServices;
-    @Autowired
     PatientInformationWriteService patientInformationWriteService;
 
+    @Autowired
     public ContactsInformationApiResources(
             ContactsInformationService contactsInformationService,
             PatientInformationWriteService patientInformationWriteService) {
