@@ -2,13 +2,13 @@ package org.ospic.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
 import org.ospic.inventory.admission.service.AdmissionsWriteService;
-import org.ospic.inventory.wards.domain.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.api
@@ -90,10 +89,11 @@ public class AdmissionsApiResources {
 
 
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<String> createNewWard(@Valid @RequestBody AdmissionRequest admissionRequest) {
+    ResponseEntity<CustomReponseMessage> createAdmitPatient(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
+
     }
 
 }

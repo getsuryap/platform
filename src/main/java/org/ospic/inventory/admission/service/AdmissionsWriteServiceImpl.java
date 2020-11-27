@@ -1,19 +1,21 @@
 package org.ospic.inventory.admission.service;
 
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
-import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
@@ -57,16 +59,25 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> admitPatient(AdmissionRequest admissionRequest) {
-        Optional<Bed> bedOptional = bedRepository.findById(admissionRequest.getBedId());
-        Optional<Patient> patientOptional = patientInformationRepository.findById(admissionRequest.getPatientId());
+    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest) {
+        return patientInformationRepository.findById(admissionRequest.getPatientId()).map(patient -> {
+            CustomReponseMessage cm = new CustomReponseMessage();
+            HttpHeaders httpHeaders = new HttpHeaders();
 
-        Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(),admissionRequest.getStartDateTime());
-        admission.addPatient(patientOptional.get());
-        admission.addBed(bedOptional.get());
-
-        admissionRepository.save(admission);
-        return ResponseEntity.ok().body("Patient Admitted successfully");
+            if (patient.getIsAdmitted()){
+              cm.setMessage("Cannot re-admit an admitted patient");
+                return new ResponseEntity<CustomReponseMessage>( cm, httpHeaders, HttpStatus.CONFLICT);
+            }
+            Optional<Bed> bedOptional = bedRepository.findById(admissionRequest.getBedId());
+            Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(), admissionRequest.getStartDateTime());
+            admission.addPatient(patient);
+            admission.addBed(bedOptional.get());
+            patient.setIsAdmitted(true);
+            patientInformationRepository.save(patient);
+            admissionRepository.save(admission);
+            cm.setMessage("Patient Admitted successfully");
+            return new ResponseEntity<CustomReponseMessage>(cm,httpHeaders,HttpStatus.OK);
+        }).orElseThrow(() -> new EntityNotFoundException());
     }
 
     @Override
