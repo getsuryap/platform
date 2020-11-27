@@ -74,7 +74,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " inner join m_admissions_m_beds ab ON ab.admissions_id = a.id " +
                     " inner join m_beds b on ab.beds_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id " +
-                    " where a.id in (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id = ? )";
+                    " ";
         }
 
         @Override
@@ -102,6 +102,13 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
+    public Collection<AdmissionResponseData> retrieveAdmissionById(Long admissionId) {
+        final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
+        final String sql = "select " + rm.schema() + " where a.id = ?  order by a.id DESC ";
+        return this.jdbcTemplate.query(sql, rm, new Object[]{admissionId});
+    }
+
+    @Override
     public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId) {
 
         return null;
@@ -115,7 +122,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public Collection<AdmissionResponseData> retrieveListOfPatientAdmission(Long patientId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
-        final String sql = "select " + rm.schema() + "  order by a.id DESC ";
+        final String sql = "select " + rm.schema() + " where a.id in (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id = ? ) order by a.id DESC ";
         return this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
     }
 
