@@ -3,6 +3,7 @@ package org.ospic.inventory.admission.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.inventory.admission.data.AdmissionRequest;
+import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,8 +83,8 @@ public class AdmissionsApiResources {
             }
 
         }
-        Optional<Admission> admission = admissionRepository.findById(id);
-        return admission.map(value -> ResponseEntity.ok().body(value)).orElse(null);
+        Collection<AdmissionResponseData> admission = admissionsReadService.retrieveAdmissionById(id);
+        return  ResponseEntity.ok().body(admission);
     }
 
 

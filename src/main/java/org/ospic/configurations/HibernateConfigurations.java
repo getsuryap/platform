@@ -69,6 +69,7 @@ public class HibernateConfigurations {
         return basicDataSource;
     }
 
+
     @Bean(name = "transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {
         HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
