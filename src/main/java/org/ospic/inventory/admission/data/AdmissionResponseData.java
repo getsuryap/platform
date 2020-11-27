@@ -1,7 +1,9 @@
 package org.ospic.inventory.admission.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -25,24 +27,32 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-public class AdmissionResponseData {
-    public long id;
-    public Date start_date;
-    public Date end_date;
-    public Boolean is_active;
-    public long patient;
-    public long bed;
+public class AdmissionResponseData implements Serializable {
+    private final Long id;
+    @JsonFormat(pattern = "yy/MM/dd")
+    private final Date startDate;
+    @JsonFormat(pattern = "yy/MM/dd")
+    private final Date endDate;
+    private final Boolean isActive;
+    private final Long wardId;
+    private final Long bedId;
+    private final String bedIdentifier;
+    private final String wardName;
 
-    public AdmissionResponseData(Long id, Date start_date, Date end_date, Boolean is_active, long patient, long bed) {
+    public static AdmissionResponseData responseTemplate(Long id, Date startDate, Date endDate, Boolean isActive,Long wardId, Long bedId,String wardName, String bedIdentifier){
+        return new AdmissionResponseData(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier);
+    }
+
+    public AdmissionResponseData(Long id, Date startDate, Date endDate, Boolean isActive, Long wardId, Long bedId,String wardName, String bedIdentifier) {
         this.id = id;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.is_active = is_active;
-        this.patient = patient;
-        this.bed = bed;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isActive = isActive;
+        this.wardId = wardId;
+        this.bedId = bedId;
+        this.bedIdentifier = bedIdentifier;
+        this.wardName = wardName;
     }
 }

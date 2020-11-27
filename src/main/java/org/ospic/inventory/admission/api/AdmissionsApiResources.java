@@ -77,7 +77,7 @@ public class AdmissionsApiResources {
                 return admissionsReadService.retrieveListOfAdmissionInBedId(id);
             }
             if (command.equals("patient")){
-                return admissionsReadService.retrieveListOfPatientAdmission(id);
+                return ResponseEntity.ok().body(admissionsReadService.retrieveListOfPatientAdmission(id));
             }
 
         }
