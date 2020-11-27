@@ -10,9 +10,17 @@ import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,8 +47,8 @@ import java.util.List;
 @Repository
 public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
-    @Autowired
-    AdmissionRepository admissionRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private final AdmissionRepository admissionRepository;
     @Autowired
     BedRepository bedRepository;
     @Autowired
@@ -50,11 +58,38 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
     public AdmissionsReadServiceImpl(
             BedRepository bedRepository,
-            PatientInformationRepository patientRepository,
+            PatientInformationRepository patientRepository, final DataSource dataSource,
             AdmissionRepository admissionRepository) {
         this.admissionRepository = admissionRepository;
         this.bedRepository = bedRepository;
         this.patientRepository = patientRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+    private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
+
+        public String schema() {
+            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab.beds_id as bedId, " +
+                    " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a  " +
+                    " inner join m_admissions_m_beds ab ON ab.admissions_id = a.id " +
+                    " inner join m_beds b on ab.beds_id = b.id " +
+                    " inner join m_wards w on b.ward_id = w.id " +
+                    " where a.id in (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id = ? )";
+        }
+
+        @Override
+        public AdmissionResponseData mapRow(final ResultSet rs, @SuppressWarnings("unused") final int rowNum) throws SQLException {
+
+            final Long id = rs.getLong("id");
+            final Date startDate = rs.getDate("startDate");
+            final Date endDate = rs.getDate("endDate");
+            final boolean isActive = rs.getBoolean("isActive");
+            final Long bedId = rs.getLong("bedId");
+            final Long wardId = rs.getLong("wardId");
+            final String bedIdentifier = rs.getString("bedIdentifier");
+            final String wardName = rs.getString("wardName");
+            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier);
+        }
     }
 
     @Override
@@ -68,11 +103,8 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
     @Override
     public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId) {
-        Session session = this.sessionFactory.openSession();
-        String sb = "from m_admissions a where id IN (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id =1) order by a.id DESC";
-        List<AdmissionResponseData> admissions = session.createQuery(sb).list();
-        session.close();
-        return ResponseEntity.ok().body(admissions);
+
+        return null;
     }
 
     @Override
@@ -81,15 +113,10 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public ResponseEntity<List<Admission>> retrieveListOfPatientAdmission(Long patientId) {
-        Session session = this.sessionFactory.openSession();
-        EntityManager entityManager = sessionFactory.createEntityManager();
-        String sb = "select  a.start_date as fromDateTime, a.is_active as isActive, a.end_date as toDateTime from m_admissions a inner join m_admissions_m_patients pa on pa.admissions_id = a.id where pa.patients_id = 1";
-        String sba = "select a from m_admissions a join fetch m_admissions_m_patients pa on pa.admissions_id = a.id where pa.patients_id = 1";
-        List<Admission> admissions = entityManager.createQuery(sba, Admission.class).getResultList();
-        entityManager.close();
-        session.close();
-        return ResponseEntity.ok().body(admissions);
+    public Collection<AdmissionResponseData> retrieveListOfPatientAdmission(Long patientId) {
+        final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
+        final String sql = "select " + rm.schema() + "  order by a.id DESC ";
+        return this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
     }
 
     @Override
