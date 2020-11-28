@@ -1,6 +1,5 @@
 package org.ospic.inventory.admission.service;
 
-import org.ospic.authentication.AuthController;
 import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.data.EndAdmissionRequest;
@@ -8,10 +7,10 @@ import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.exception.AdmissionNotFoundException;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.domains.Bed;
+import org.ospic.inventory.beds.exception.BedNotFoundException;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.patient.infos.PatientNotFoundException;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
-import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
@@ -50,7 +48,6 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     private static final Logger logger = LoggerFactory.getLogger(AdmissionsWriteServiceImpl.class);
 
 
-
     @Autowired
     AdmissionRepository admissionRepository;
     @Autowired
@@ -74,19 +71,39 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
 
-            if (patient.getIsAdmitted()){
-              cm.setMessage("Cannot re-admit an admitted patient");
-                return new ResponseEntity<CustomReponseMessage>( cm, httpHeaders, HttpStatus.CONFLICT);
+            if (patient.getIsAdmitted()) {
+                cm.setMessage("Cannot re-admit an admitted patient");
+                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
             }
-            Optional<Bed> bedOptional = bedRepository.findById(admissionRequest.getBedId());
+            if (!bedRepository.existsById(admissionRequest.getBedId())){
+                cm.setMessage(String.format("Cannot find a Bed with an ID %2d ", admissionRequest.getBedId()));
+                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
+            }
+            Bed bed = bedRepository.findById(admissionRequest.getBedId()).get();
+            if (bed.getIsOccupied()){
+                cm.setMessage(String.format("Bed with an ID %2d is occupied", admissionRequest.getBedId()));
+                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
+            }
+            /**Create new admission **/
             Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(), admissionRequest.getStartDateTime());
             admission.addPatient(patient);
-            admission.addBed(bedOptional.get());
+            admission.addBed(bed);
+            admissionRepository.save(admission);
+
+
+            /** Update Bed set it as active. Not open for new admission **/
+            bed.setIsOccupied(true);
+            bedRepository.save(bed);
+
+            /**
+             * Update patient set as admitted to prevent re-admission**/
             patient.setIsAdmitted(true);
             patientInformationRepository.save(patient);
-            admissionRepository.save(admission);
+
+
+            /**Return Message **/
             cm.setMessage("Patient Admitted successfully");
-            return new ResponseEntity<CustomReponseMessage>(cm,httpHeaders,HttpStatus.OK);
+            return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
         }).orElseThrow(() -> new EntityNotFoundException());
     }
 
@@ -97,19 +114,28 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         HttpHeaders httpHeaders = new HttpHeaders();
         return patientInformationRepository.findById(request.getPatientId()).map(patient -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
-                if (!(admission.getIsActive() || patient.getIsAdmitted())){
-                    cm.setMessage("Can't end inactive admission or un-admitted patient");
-                    return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK) ;
-                }
-                patient.setIsAdmitted(false);
-                patientInformationRepository.save(patient);
-                admission.setIsActive(false);
-                admission.setToDateTime(request.getEndDateTime());
+              return bedRepository.findById(request.getBedId()).map(bed ->{
+                  if (!(admission.getIsActive() || patient.getIsAdmitted())) {
+                      cm.setMessage("Can't end inactive admission or un-admitted patient");
+                      return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+                  }
+                  /** Update patient set as no longer admitted **/
+                  patient.setIsAdmitted(false);
+                  patientInformationRepository.save(patient);
 
+                  /** Update Admission set as no longer active **/
+                  admission.setIsActive(false);
+                  admission.setToDateTime(request.getEndDateTime());
+                  admissionRepository.save(admission);
 
-                admissionRepository.save(admission);
-                cm.setMessage(String.format("Admission %2d for patient %s has being ended on %s ", request.getAdmissionId(), patient.getName(),request.getEndDateTime()));
-                return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK) ;
+                  /** Update bed set as active open for another admission **/
+                  bed.setIsOccupied(false);
+                  bedRepository.save(bed);
+
+                  /**Return Message status back to user**/
+                  cm.setMessage(String.format("Admission %2d for patient %s has being ended on %s ", request.getAdmissionId(), patient.getName(), request.getEndDateTime()));
+                  return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+              }).orElseThrow(()-> new BedNotFoundException(request.getBedId()));
             }).orElseThrow(() -> new AdmissionNotFoundException(request.getAdmissionId()));
         }).orElseThrow(() -> new PatientNotFoundException(request.getPatientId()));
 
