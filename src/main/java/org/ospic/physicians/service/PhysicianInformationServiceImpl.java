@@ -1,6 +1,6 @@
 package org.ospic.physicians.service;
 
-import org.ospic.payload.response.MessageResponse;
+import org.ospic.authentication.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.repository.PhysicianRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,6 @@
 package org.ospic.authentication;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,29 +13,28 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.ospic.authentication.privileges.domains.Privilege;
+import org.ospic.authentication.exceptions.UserAuthenticationException;
+import org.ospic.authentication.payload.request.UserRequestData;
+import org.ospic.authentication.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.authentication.users.User;
 import org.ospic.authentication.users.repository.UserRepository;
-import org.ospic.patient.contacts.services.ContactsInformationServicesImpl;
-import org.ospic.patient.infos.domain.Patient;
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.util.enums.RoleEnums;
 import org.ospic.authentication.roles.Role;
-import org.ospic.payload.request.LoginRequest;
-import org.ospic.payload.request.SignupRequest;
-import org.ospic.payload.response.JwtResponse;
-import org.ospic.payload.response.MessageResponse;
+import org.ospic.authentication.payload.request.LoginRequest;
+import org.ospic.authentication.payload.request.SignupRequest;
+import org.ospic.authentication.payload.response.JwtResponse;
+import org.ospic.authentication.payload.response.MessageResponse;
 import org.ospic.authentication.roles.repository.RoleRepository;
 import org.ospic.security.jwt.JwtUtils;
 import org.ospic.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -163,17 +160,8 @@ public class AuthController {
 		return ResponseEntity.ok(users);
 	}
 
-	@ApiOperation(
-			value = "LOGOUT Session",
-			notes = "LOGOUT Session"
-	)
-	@RequestMapping(
-			value = "/signout",
-			method = RequestMethod.GET,
-			produces = MediaType.ALL_VALUE
-
-	)
-
+	@ApiOperation(value = "LOGOUT Session", notes = "LOGOUT Session")
+	@RequestMapping(value = "/signout", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
 	@ResponseBody
 	public String logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -185,5 +173,29 @@ public class AuthController {
 		}
 		return "redirect:/";
 	}
+
+	@ApiOperation(value = "Update user password", notes = "Update user password")
+	@RequestMapping(value = "/password", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(@ApiResponse(code = 200, message ="", response = UserRequestDataApiResourceSwagger.GetUserRequestDataResponse.class))
+	@ResponseBody
+	public ResponseEntity<?> updateUserPassword(@Valid @RequestBody UserRequestData u){
+		CustomReponseMessage cm = new CustomReponseMessage();
+		HttpHeaders httpHeaders = new HttpHeaders();
+		return userRepository.findById(u.getUserId()).map(user -> {
+			String userPassword = user.getPassword();
+			if (!(encoder.matches(u.getOldPassword(), userPassword))){
+				cm.setMessage("Invalid old Password");
+				return new ResponseEntity<CustomReponseMessage>(cm,httpHeaders, HttpStatus.BAD_REQUEST);
+			}
+			user.setPassword(encoder.encode(u.getNewPassword()));
+			userRepository.save(user);
+			cm.setMessage("Password Updated Successfully ...");
+			return new ResponseEntity<CustomReponseMessage>(cm,httpHeaders, HttpStatus.OK);
+
+
+		}).orElseThrow(() -> new UserAuthenticationException(u.getUserId()));
+	}
+
+
 
 }
