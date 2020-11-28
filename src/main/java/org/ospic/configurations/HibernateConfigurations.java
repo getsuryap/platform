@@ -56,7 +56,7 @@ public class HibernateConfigurations {
         basicDataSource.setPassword("mysql");
         return basicDataSource;
     }
-    **/
+ **/
 
 
     @Bean

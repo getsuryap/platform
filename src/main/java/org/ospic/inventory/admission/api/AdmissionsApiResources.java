@@ -8,6 +8,7 @@ import org.ospic.authentication.payload.request.UserRequestDataApiResourceSwagge
 import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
+import org.ospic.inventory.admission.data.EndAdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
@@ -94,9 +95,15 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<CustomReponseMessage> createAdmitPatient(@Valid @RequestBody AdmissionRequest admissionRequest) {
+    ResponseEntity<CustomReponseMessage> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
+    }
 
+    @ApiOperation(value = "End patient admission", notes = "End patient admission admission")
+    @RequestMapping(value = "/{id}/end", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<CustomReponseMessage> requestPatientUnAdmission(@NotNull @PathVariable("id") Long id, @Valid @RequestBody EndAdmissionRequest r) {
+        return admissionsWriteService.endPatientAdmission(r);
     }
 
 }
