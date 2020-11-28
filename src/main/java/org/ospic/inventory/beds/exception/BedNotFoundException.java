@@ -1,12 +1,9 @@
-package org.ospic.inventory.admission.data;
+package org.ospic.inventory.beds.exception;
 
-import lombok.*;
-
-import java.io.Serializable;
-import java.util.Date;
+import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.inventory.admission.data
+ * This file was created by eli on 28/11/2020 for org.ospic.inventory.beds.exception
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,20 +23,12 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-@ToString
-public class EndAdmissionRequest implements Serializable {
-    private Long patientId;
-    private Long admissionId;
-    private Date endDateTime;
-    private Long bedId;
+public class BedNotFoundException extends AbstractResourceNotFoundException {
+    public BedNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
 
-    public EndAdmissionRequest(Long patientId, Long admissionId, Long bedId, Date endDateTime) {
-        this.patientId = patientId;
-        this.admissionId = admissionId;
-        this.endDateTime = endDateTime;
-        this.bedId  = bedId;
+    public BedNotFoundException(Long id){
+        super("error.message.not.found.bed",String.format("Bed with an ID %2d is not found", id));
     }
 }
