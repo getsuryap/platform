@@ -13,7 +13,7 @@
     <artifactId>ospic-platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ospic-platform</name>
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
 
     <description>Demo project for Ospic platform</description>
 
