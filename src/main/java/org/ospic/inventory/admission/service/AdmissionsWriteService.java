@@ -29,7 +29,7 @@ import org.springframework.http.ResponseEntity;
  */
 public interface AdmissionsWriteService {
     public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
-    public ResponseEntity<CustomReponseMessage> endPatientAdmission(EndAdmissionRequest request);
+    public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request);
     public ResponseEntity<String > updatePatientAdmissionInfo();
 }
 

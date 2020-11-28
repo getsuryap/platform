@@ -100,9 +100,9 @@ public class AdmissionsApiResources {
     }
 
     @ApiOperation(value = "End patient admission", notes = "End patient admission admission")
-    @RequestMapping(value = "/{id}/end", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/end", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<CustomReponseMessage> requestPatientUnAdmission(@NotNull @PathVariable("id") Long id, @Valid @RequestBody EndAdmissionRequest r) {
+    ResponseEntity<?> requestPatientUnAdmission( @Valid @RequestBody EndAdmissionRequest r) {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
