@@ -69,9 +69,10 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab.beds_id as bedId, " +
+            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab.beds_id as bedId, ap.patients_id as patientId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a  " +
                     " inner join m_admissions_m_beds ab ON ab.admissions_id = a.id " +
+                    " inner join m_admissions_m_patients ap ON ap.admissions_id = a.id "+
                     " inner join m_beds b on ab.beds_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id " +
                     " ";
@@ -80,15 +81,19 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
         @Override
         public AdmissionResponseData mapRow(final ResultSet rs, @SuppressWarnings("unused") final int rowNum) throws SQLException {
 
+
+
+
             final Long id = rs.getLong("id");
             final Date startDate = rs.getDate("startDate");
             final Date endDate = rs.getDate("endDate");
             final boolean isActive = rs.getBoolean("isActive");
             final Long bedId = rs.getLong("bedId");
             final Long wardId = rs.getLong("wardId");
+            final Long patientId = rs.getLong("patientId");
             final String bedIdentifier = rs.getString("bedIdentifier");
             final String wardName = rs.getString("wardName");
-            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier);
+            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier,patientId);
         }
     }
 
