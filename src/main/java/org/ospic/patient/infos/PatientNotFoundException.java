@@ -1,13 +1,9 @@
-package org.ospic.inventory.admission.service;
+package org.ospic.patient.infos;
 
-import org.ospic.domain.CustomReponseMessage;
-import org.ospic.fileuploads.message.ResponseMessage;
-import org.ospic.inventory.admission.data.AdmissionRequest;
-import org.ospic.inventory.admission.data.EndAdmissionRequest;
-import org.springframework.http.ResponseEntity;
+import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
+ * This file was created by eli on 28/11/2020 for org.ospic.patient.infos
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,9 +23,11 @@ import org.springframework.http.ResponseEntity;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface AdmissionsWriteService {
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
-    public ResponseEntity<CustomReponseMessage> endPatientAdmission(EndAdmissionRequest request);
-    public ResponseEntity<String > updatePatientAdmissionInfo();
+public class PatientNotFoundException extends AbstractResourceNotFoundException {
+    public PatientNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+    public PatientNotFoundException(Long id){
+        super("error.message.patient.not.found", String.format("Patient with id %2d is not found ", id), id);
+    }
 }
-

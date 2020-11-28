@@ -1,16 +1,12 @@
 package org.ospic.inventory.admission.data;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.data
+ * This file was created by eli on 28/11/2020 for org.ospic.inventory.admission.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -30,24 +26,18 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class AdmissionRequest implements Serializable {
-    private Boolean isActive;
-    private Long bedId;
+@ToString
+public class EndAdmissionRequest implements Serializable {
     private Long patientId;
-    private Date startDateTime;
-    private Date endDateTime;
     private Long admissionId;
+    private Date endDateTime;
 
-    public AdmissionRequest(
-            Boolean isActive, Long bedId, Long patientId
-            , Date startDateTime, Date endDateTime) {
-        this.isActive = isActive;
-        this.bedId = bedId;
+    public EndAdmissionRequest(Long patientId, Long admissionId, Date endDateTime) {
         this.patientId = patientId;
-        this.startDateTime = startDateTime;
+        this.admissionId = admissionId;
         this.endDateTime = endDateTime;
     }
 }

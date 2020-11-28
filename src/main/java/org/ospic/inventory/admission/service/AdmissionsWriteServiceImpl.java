@@ -1,12 +1,19 @@
 package org.ospic.inventory.admission.service;
 
+import org.ospic.authentication.AuthController;
 import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
+import org.ospic.inventory.admission.data.EndAdmissionRequest;
 import org.ospic.inventory.admission.domains.Admission;
+import org.ospic.inventory.admission.exception.AdmissionNotFoundException;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.patient.infos.PatientNotFoundException;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.util.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +47,9 @@ import java.util.Optional;
  */
 @Repository
 public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
+    private static final Logger logger = LoggerFactory.getLogger(AdmissionsWriteServiceImpl.class);
+
+
 
     @Autowired
     AdmissionRepository admissionRepository;
@@ -80,11 +90,28 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         }).orElseThrow(() -> new EntityNotFoundException());
     }
 
+    @Transactional
     @Override
-    public ResponseEntity<String> endPatientAdmission() {
-        return null;
+    public ResponseEntity<CustomReponseMessage> endPatientAdmission(EndAdmissionRequest request) {
+        CustomReponseMessage cm = new CustomReponseMessage();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        System.out.println(request.toString());
+        return patientInformationRepository.findById(request.getPatientId()).map(patient -> {
+            return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
+                patient.setIsAdmitted(false);
+                admission.setIsActive(false);
+                admission.setToDateTime(request.getEndDateTime());
+                patientInformationRepository.save(patient);
+                logger.info(request.toString());
+                admissionRepository.save(admission);
+                cm.setMessage(String.format("Admission %2d for patient %s has being ended on %s ", request.getAdmissionId(), patient.getName(),request.getEndDateTime()));
+                return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK) ;
+            }).orElseThrow(() -> new AdmissionNotFoundException(request.getAdmissionId()));
+        }).orElseThrow(() -> new PatientNotFoundException(request.getPatientId()));
+
     }
 
+    @Transactional
     @Override
     public ResponseEntity<String> updatePatientAdmissionInfo() {
         return null;
