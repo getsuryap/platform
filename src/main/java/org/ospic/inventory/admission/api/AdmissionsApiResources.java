@@ -2,6 +2,9 @@ package org.ospic.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.ospic.authentication.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
@@ -65,14 +68,14 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Admission>> retrieveAllAdmissions() {
+    ResponseEntity<?> retrieveAllAdmissions() {
         return admissionsReadService.retrieveAllAdmissions();
     }
 
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
+   @ResponseBody
+    ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
         if (null != command){
             if (command.equals("bed")){
                 return admissionsReadService.retrieveListOfAdmissionInBedId(id);

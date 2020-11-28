@@ -5,7 +5,6 @@ import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
-import org.ospic.payload.response.MessageResponse;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

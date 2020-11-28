@@ -1,6 +1,5 @@
 package org.ospic.patient.infos.service;
 
-import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.fileuploads.service.FilesStorageService;
@@ -9,7 +8,7 @@ import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.data.PatientTrendsDataRowMapper;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
-import org.ospic.payload.response.MessageResponse;
+import org.ospic.authentication.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.service.PhysicianInformationService;
 import org.ospic.util.constants.DatabaseConstants;
@@ -21,11 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
