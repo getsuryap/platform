@@ -1,12 +1,12 @@
-package org.ospic.inventory.admission.service;
+package org.ospic.domain;
 
-import org.ospic.domain.CustomReponseMessage;
-import org.ospic.fileuploads.message.ResponseMessage;
-import org.ospic.inventory.admission.data.AdmissionRequest;
-import org.springframework.http.ResponseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
+ * This file was created by eli on 27/11/2020 for org.ospic.domain
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,9 +26,12 @@ import org.springframework.http.ResponseEntity;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface AdmissionsWriteService {
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
-    public ResponseEntity<String> endPatientAdmission();
-    public ResponseEntity<String > updatePatientAdmissionInfo();
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+public class CustomReponseMessage {
+    private String message;
+    public CustomReponseMessage(String message){
+        this.message = message;
+    }
 }
-
