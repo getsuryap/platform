@@ -92,17 +92,21 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
     @Transactional
     @Override
-    public ResponseEntity<CustomReponseMessage> endPatientAdmission(EndAdmissionRequest request) {
+    public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
-        System.out.println(request.toString());
         return patientInformationRepository.findById(request.getPatientId()).map(patient -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
+                if (!(admission.getIsActive() || patient.getIsAdmitted())){
+                    cm.setMessage("Can't end inactive admission or un-admitted patient");
+                    return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK) ;
+                }
                 patient.setIsAdmitted(false);
+                patientInformationRepository.save(patient);
                 admission.setIsActive(false);
                 admission.setToDateTime(request.getEndDateTime());
-                patientInformationRepository.save(patient);
-                logger.info(request.toString());
+
+
                 admissionRepository.save(admission);
                 cm.setMessage(String.format("Admission %2d for patient %s has being ended on %s ", request.getAdmissionId(), patient.getName(),request.getEndDateTime()));
                 return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK) ;

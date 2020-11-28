@@ -39,7 +39,6 @@ public class AdmissionRequest implements Serializable {
     private Long patientId;
     private Date startDateTime;
     private Date endDateTime;
-    private Long admissionId;
 
     public AdmissionRequest(
             Boolean isActive, Long bedId, Long patientId
