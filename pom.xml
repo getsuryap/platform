@@ -15,7 +15,7 @@
     <name>ospic-platform</name>
     <!--<packaging>war</packaging>-->
 
-    <description>Demo project for Ospic platform</description>
+    <description>Ospic platform</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -193,7 +193,6 @@
 
 
         </plugins>
-        <finalName>ospic-platform</finalName>
     </build>
 
 
