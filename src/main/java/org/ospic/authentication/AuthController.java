@@ -36,6 +36,7 @@ import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -155,11 +156,21 @@ public class AuthController {
         return ResponseEntity.ok(users);
     }
 
+    @ApiOperation(value = "RETRIEVE Logged in user", notes = "RETRIEVE logged in user")
+    @RequestMapping(value = "/users/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveLoggerInUser() {
+        UserDetailsImpl  ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> optional = userRepository.findById(ud.getId());
+        return ResponseEntity.badRequest().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found")));
+
+    }
+
     @ApiOperation(value = "RETRIEVE User by ID", notes = "RETRIEVE User by ID")
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveAllUserById(@PathVariable("userId") Long userId) {
-        Optional<User> optional = userRepository.findById(userId);
+    ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
+      Optional<User> optional = userRepository.findById(userId);
         return ResponseEntity.badRequest().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found", userId)));
 
     }
