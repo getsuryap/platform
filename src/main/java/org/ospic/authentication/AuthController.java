@@ -157,12 +157,12 @@ public class AuthController {
     }
 
     @ApiOperation(value = "RETRIEVE Logged in user", notes = "RETRIEVE logged in user")
-    @RequestMapping(value = "/users/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/users/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveLoggerInUser() {
         UserDetailsImpl  ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
-        return ResponseEntity.badRequest().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found")));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found")));
 
     }
 
@@ -171,7 +171,7 @@ public class AuthController {
     @ResponseBody
     ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
       Optional<User> optional = userRepository.findById(userId);
-        return ResponseEntity.badRequest().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found", userId)));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found", userId)));
 
     }
 
