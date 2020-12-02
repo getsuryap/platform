@@ -1,6 +1,7 @@
 package org.ospic.authentication.users;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.envers.Audited;
@@ -48,6 +49,7 @@ public class User extends Auditable<String> implements Serializable {
 	@NotBlank
 	@NotNull
 	@Size(max = 120)
+	@JsonIgnore
 	private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)
