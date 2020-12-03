@@ -38,6 +38,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -162,7 +163,7 @@ public class AuthController {
     ResponseEntity<?> retrieveLoggerInUser() {
         UserDetailsImpl  ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
-        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found")));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND, String.format("User with ID %2d is not found")));
 
     }
 
@@ -171,7 +172,7 @@ public class AuthController {
     @ResponseBody
     ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
       Optional<User> optional = userRepository.findById(userId);
-        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(String.format("User with ID %2d is not found", userId)));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND,String.format("User with ID %2d is not found", userId)));
 
     }
 
@@ -196,19 +197,22 @@ public class AuthController {
     public ResponseEntity<?> updateUserPassword(@Valid @RequestBody UserRequestData u) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
-        return userRepository.findById(u.getUserId()).map(user -> {
+        UserDetailsImpl ud = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findById(ud.getId()).map(user -> {
             String userPassword = user.getPassword();
             if (!(encoder.matches(u.getOldPassword(), userPassword))) {
                 cm.setMessage("Invalid old Password");
+                cm.setHttpStatus(HttpStatus.FORBIDDEN);
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
             }
             user.setPassword(encoder.encode(u.getNewPassword()));
             userRepository.save(user);
             cm.setMessage("Password Updated Successfully ...");
+            cm.setHttpStatus(HttpStatus.OK);
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
 
 
-        }).orElseThrow(() -> new UserAuthenticationException(u.getUserId()));
+        }).orElseThrow(() -> new UserAuthenticationException(ud.getId()));
     }
 
 

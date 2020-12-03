@@ -30,18 +30,16 @@ import lombok.Setter;
 @Getter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class UserRequestData {
-    private Long userId;
     private String oldPassword;
     private String newPassword;
     private String username;
 
-    public static UserRequestData updatePasswordInstance(Long userId, String oldPassword, String newPassword){
-        return new UserRequestData(userId, oldPassword,newPassword, null);
+    public static UserRequestData updatePasswordInstance(String oldPassword, String newPassword) {
+        return new UserRequestData(oldPassword, newPassword, null);
     }
 
 
-    public UserRequestData(Long userId, String oldPassword, String newPassword, String username) {
-        this.userId = userId;
+    public UserRequestData(String oldPassword, String newPassword, String username) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
         this.username = username;
