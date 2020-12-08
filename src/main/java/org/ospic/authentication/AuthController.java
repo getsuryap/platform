@@ -108,9 +108,9 @@ public class AuthController {
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()), signUpRequest.getIsStaff());
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Set<Long> strRoles = signUpRequest.getRoles();
         List<Role> roles = new ArrayList<>();
 
         if (strRoles == null) {
@@ -119,23 +119,10 @@ public class AuthController {
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "mod":
-                        Role modRole = roleRepository.findByName(RoleEnums.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                Optional<Role> optionalRole = roleRepository.findById(role);
+                if (optionalRole.isPresent()){
+                    Role userRole = optionalRole.get();
+                    roles.add(userRole);
                 }
             });
         }
