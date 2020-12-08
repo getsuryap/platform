@@ -9,6 +9,7 @@ import org.ospic.authentication.roles.Role;
 import org.ospic.domain.Auditable;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,8 +30,7 @@ import javax.validation.constraints.Size;
 			@UniqueConstraint(columnNames = "email") 
 		})
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode(callSuper = true)
-public class User extends Auditable<String> implements Serializable {
+public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -40,11 +40,14 @@ public class User extends Auditable<String> implements Serializable {
 	@Size(max = 20)
 	private String username;
 
-	@NotBlank
+	@NotBlank(message = "Email may not be blank")
 	@NotNull
 	@Size(max = 50)
 	@Email
 	private String email;
+
+	@Column(name = "isStaff")
+	private Boolean isStaff = false;
 
 	@NotBlank
 	@NotNull
@@ -54,16 +57,17 @@ public class User extends Auditable<String> implements Serializable {
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles;
+				joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+				inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Collection<Role> roles;
 
 
 
-	public User(String username, String email, String password) {
+	public User(String username, String email, String password, Boolean isStaff) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
+		this.isStaff = isStaff;
 	}
 
 
