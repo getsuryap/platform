@@ -60,13 +60,7 @@ public class Admission implements Serializable {
             CascadeType.PERSIST,
             CascadeType.MERGE
     },  fetch = FetchType.EAGER)
-    /**
-    @JoinTable(
-            name = "p_admissions",
-            joinColumns = {@JoinColumn(name = "p_admission_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "patient_id", referencedColumnName = "id")}
-    )
-    **/
+
     @JsonIgnoreProperties({"admissions", "contactsInformation", "physician"})
     private Set<Patient> patients =new HashSet<>();
 
@@ -75,14 +69,6 @@ public class Admission implements Serializable {
             CascadeType.PERSIST,
             CascadeType.MERGE
     },fetch = FetchType.EAGER)
-    /**
-    @JoinTable(
-            name = "b_admissions",
-            joinColumns = {@JoinColumn(name = "b_admission_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "bed_id", referencedColumnName = "id")}
-    )
-
-    **/
     private Set<Bed> beds= new HashSet<>();
 
 

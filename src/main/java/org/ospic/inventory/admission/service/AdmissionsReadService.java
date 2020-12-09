@@ -37,6 +37,8 @@ public interface AdmissionsReadService {
 
     public Collection<AdmissionResponseData> retrieveAdmissionById(Long admissionId);
 
+    public ResponseEntity<?> retrieveAdmissionInThisBed(Long bedId);
+
     public ResponseEntity<List<Admission>> retrieveListOfAdmissionInWardId(Long wardId);
 
     public ResponseEntity<List<Admission>> retrieveListOfActiveAdmissions();

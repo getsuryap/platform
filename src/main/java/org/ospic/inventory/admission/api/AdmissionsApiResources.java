@@ -106,4 +106,11 @@ public class AdmissionsApiResources {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
+    @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed")
+    @RequestMapping(value = "/inbed/{bedId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
+        return admissionsReadService.retrieveAdmissionInThisBed(bedId);
+    }
+
 }

@@ -142,6 +142,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
                 " where ba.beds_id = 1 AND a.is_active = true) ";
         Session session = this.sessionFactory.openSession();
         List<Patient> patient = session.createQuery(sb).list();
+        session.close();
         return ResponseEntity.ok().body(patient);
     }
 
