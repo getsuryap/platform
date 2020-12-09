@@ -157,7 +157,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             return  "  p.id as id,p.address as address, p.age as age, p.blood_group as bloodGroup, p.blood_pressure as bloodPressure, "+
                     "  p.email_address as emailAddress, p.gender as gender, p.guardian_name as guardianName, p.height as height, "+
                     "  p.marital_status as martialStatus, p.name as name, p.thumbnail as thumbNail, p.weight as weight, p.phone as phone "+
-                    " from ospic_default.m_beds bd "+
+                    " from m_beds bd "+
                     " inner join m_admissions_m_beds adb on bd.id =  adb.beds_id "+
                     " inner join m_admissions_m_patients ap  on adb.admissions_id = ap.admissions_id "+
                     " inner join m_patients p ON ap.patients_id = p.id "+

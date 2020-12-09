@@ -1,8 +1,11 @@
 package org.ospic.inventory.beds.service;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.ospic.inventory.beds.data.BedData;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
+import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.exceptions.ResourceNotFoundException;
@@ -11,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.service
@@ -91,5 +97,39 @@ public class BedWriteServiceImpl implements BedWriteService {
         }
         return null;
 
+    }
+
+    @Override
+    public ResponseEntity<?> addBedsInWard(BedData bedData) {
+        List<Bed> beds = new ArrayList<>();
+        if (!wardRepository.existsById(bedData.getWardId())){
+            return ResponseEntity.ok().body(String.format("Ward with ID: %2d does not exist",bedData.getWardId()));
+        }
+        Ward ward = wardRepository.getOne(bedData.getWardId());
+        int count = bedData.getNumberOfBeds();
+        Bed bed = null;
+        for(int i=1; i<= count; i++){
+            bed = new Bed();
+            bed.setWard(ward);
+            bed.setIsOccupied(false);
+            bed.setIdentifier(null);
+            beds.add(bed);
+
+        }
+        bedRepository.saveAll(beds);
+        this.updateBedsIdentifiers(ward.getId());
+        return ResponseEntity.ok().body(String.format("%2d beds were added in ward %2d ", count, bedData.getWardId()));
+    }
+
+    private void updateBedsIdentifiers(Long wardId){
+        Session session = this.sessionFactory.openSession();
+        String queryString = String.format("from %s WHERE ward_id = %2d", DatabaseConstants.BEDS_TABLE, wardId);
+        List<Bed> beds = session.createQuery(queryString).list();
+        beds.forEach(bed ->{
+            Long wd = bed.getWard().getId() == null ? 1: bed.getWard().getId();
+            bed.setIdentifier(bed.getId() + "["+wd+"]");
+            bedRepository.save(bed);
+        });
+        session.close();
     }
 }

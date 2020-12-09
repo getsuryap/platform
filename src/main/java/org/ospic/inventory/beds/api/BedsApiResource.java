@@ -1,6 +1,7 @@
 package org.ospic.inventory.beds.api;
 
 import io.swagger.annotations.*;
+import org.ospic.inventory.beds.data.BedData;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.beds.service.BedReadService;
@@ -71,10 +72,10 @@ public class BedsApiResource {
     @ApiOperation(value = "CREATE beds by array", notes = "CREATE beds by an array")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<String> createBedsByListOfBeds(@Valid @RequestBody List<Bed> beds){
-        beds.forEach(bedWriteService::createNewBed);
-        return ResponseEntity.ok().body("All beds created successfully if it was not present before");
+    ResponseEntity<?> createBedsInThisWard(@Valid @RequestBody BedData bedData){
+       return bedWriteService.addBedsInWard(bedData);
     }
+
 
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{wardId}/ward", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
