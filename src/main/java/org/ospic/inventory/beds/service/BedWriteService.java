@@ -1,5 +1,6 @@
 package org.ospic.inventory.beds.service;
 
+import org.ospic.inventory.beds.data.BedData;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.wards.domain.Ward;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +29,5 @@ import org.springframework.http.ResponseEntity;
 public interface BedWriteService {
     public ResponseEntity<String> createNewBed(Bed bed);
     public ResponseEntity<String> updateBedInWardByAction(Long bedId, Long wardId, String action);
+    public ResponseEntity<?> addBedsInWard(BedData bedData);
 }

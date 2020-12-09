@@ -32,7 +32,7 @@ public interface BedRepository extends JpaRepository<Bed, Long> {
     Optional<List<Bed>> findByIdentifierEquals(String identifier);
     Optional<List<Bed>> findByIsOccupiedFalse();
     Optional<List<Bed>> findByIsOccupiedTrue();
-    List<Bed> findByWard(Long wardId);
+    List<Bed> findByWardId(Long wardId);
 
 
     Boolean existsByIdentifier(String identifier);

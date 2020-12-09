@@ -81,9 +81,8 @@ public class WardApiResources {
     @ApiOperation(value = "RETRIEVE ward by ID", notes = "RETRIEVE ward by ID")
     @RequestMapping(value = "/{wardId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Ward> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId){
-        Optional<Ward> ward = wardRepository.findById(wardId);
-        return ward.map(value -> ResponseEntity.ok().body(value)).orElse(null);
+    ResponseEntity<?> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId){
+        return wardReadService.findById(wardId);
     }
 
 

@@ -2,13 +2,17 @@ package org.ospic.inventory.wards.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.beds.domains.Bed;
+import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.wards.data.WardResponseData;
 import org.ospic.inventory.wards.data.WardResponseDataRowMapper;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.inventory.wards.repository.WardRepository;
 import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 07/11/2020 for org.ospic.inventory.wards.service
@@ -43,11 +48,14 @@ public class WardReadServiceImpl implements WardReadService {
     @Autowired
     WardRepository wardRepository;
     @Autowired
+    BedRepository bedRepository;
+    @Autowired
     SessionFactory sessionFactory;
     JdbcTemplate jdbcTemplate;
 
-    public WardReadServiceImpl(DataSource dataSource, WardRepository wardRepository) {
+    public WardReadServiceImpl(DataSource dataSource, WardRepository wardRepository, BedRepository bedRepository) {
         this.wardRepository = wardRepository;
+        this.bedRepository = bedRepository;
 
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -74,7 +82,20 @@ public class WardReadServiceImpl implements WardReadService {
     }
 
     @Override
-    public ResponseEntity<Ward> findById(Long id) {
-        return null;
+    public ResponseEntity<?> findById(Long id) {
+        CustomReponseMessage cm = new CustomReponseMessage();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        Optional<Ward> wardOptional =  wardRepository.findById(id);
+        List<Bed> beds = bedRepository.findByWardId(id);
+        if (!wardOptional.isPresent()){
+            cm.setHttpStatus(HttpStatus.NOT_FOUND);
+            cm.setMessage("Ward with ID "+ id + " is not found!");
+            return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
+        }
+        Ward ward = wardOptional.get();
+        ward.setBeds(null);
+        ward.setBeds(beds);
+
+        return ResponseEntity.ok(ward);
     }
 }

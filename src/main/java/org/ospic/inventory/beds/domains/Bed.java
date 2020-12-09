@@ -51,8 +51,8 @@ public class Bed implements Serializable {
     @Column(name = "id", unique = true)
     private @Setter(AccessLevel.PROTECTED) Long id;
 
-    @NotBlank
-    @Column(name = "identifier", nullable = false, unique = true, length = 20)
+
+    @Column(name = "identifier", unique = true, length = 20)
     private String identifier;
 
 
