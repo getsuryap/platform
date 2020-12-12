@@ -64,19 +64,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
 
         List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
-        createRoleIfNotFound(RoleEnums.ROLE_ADMIN, adminPrivileges);
-        createRoleIfNotFound(RoleEnums.ROLE_USER, Arrays.asList(readPrivilege));
+        createRoleIfNotFound(RoleEnums.ADMIN, adminPrivileges);
+        createRoleIfNotFound(RoleEnums.USER, Arrays.asList(readPrivilege));
 
 
-        Role adminRole = roleRepository.findByName(RoleEnums.ROLE_ADMIN).get();
+        Role adminRole = roleRepository.findByName(RoleEnums.ADMIN).get();
         User user = new User();
         user.setUsername("admin");
         user.setPassword(passwordEncoder.encode("password"));
         user.setEmail("admin@test.com");
         user.setRoles(Arrays.asList(adminRole));
-
-
-
         alreadySetup = true;
     }
 
@@ -95,7 +92,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     Role createRoleIfNotFound(
             RoleEnums name, Collection<Privilege> privileges) {
 
-        Role role = roleRepository.findByName(RoleEnums.ROLE_ADMIN).get();
+        Role role = roleRepository.findByName(RoleEnums.ADMIN).get();
         if (role == null) {
             role = new Role(name, name.name());
             roleRepository.save(role);

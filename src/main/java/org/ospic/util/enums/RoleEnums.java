@@ -1,13 +1,13 @@
 package org.ospic.util.enums;
 
 public enum RoleEnums {
-	ROLE_USER,
-    ROLE_MODERATOR,
-    ROLE_ADMIN,
-    ROLE_SUPER_USER,
-    ROLE_AUDITOR,
-    ROLE_DOCTOR,
-    ROLE_NURSE,
-    ROLE_LAB_TECHNICIAN,
-    ROLE_INSURANCE_OFFICER
+	USER,
+    MODERATOR,
+    ADMIN,
+    SUPER_USER,
+    AUDITOR,
+    DOCTOR,
+    NURSE,
+    LAB_TECHNICIAN,
+    INSURANCE_OFFICER
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ospic.authentication.privileges.domains.Privilege;
+import org.ospic.authentication.users.User;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.RoleEnums;
 
@@ -30,6 +31,9 @@ public class Role {
 
     @Column(length = 200)
     private String role_id;
+
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
 
 
     public Role(RoleEnums name, String role_id) {
