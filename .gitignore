@@ -29,3 +29,4 @@ build/
 uploads/*
 ### VS Code ###
 .vscode/
+logs/*

@@ -114,7 +114,7 @@ public class AuthController {
         List<Role> roles = new ArrayList<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(RoleEnums.ROLE_USER)
+            Role userRole = roleRepository.findByName(RoleEnums.USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
@@ -202,5 +202,12 @@ public class AuthController {
         }).orElseThrow(() -> new UserAuthenticationException(ud.getId()));
     }
 
+    @ApiOperation(value = "LOGOUT Session", notes = "LOGOUT Session")
+    @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<List<Role>> retrieveAllRoles(){
+        List<Role> roles = roleRepository.findAll();
+        return ResponseEntity.ok().body(roles);
+    }
 
 }
