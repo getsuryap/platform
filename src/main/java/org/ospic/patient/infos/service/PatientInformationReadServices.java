@@ -5,9 +5,7 @@ import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Pageable;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -39,6 +37,8 @@ public interface PatientInformationReadServices {
     public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
 
     public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData();
+
+    public ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);
 
     @Transactional
     public ResponseEntity<Patient> retrievePatientById(Long id) throws ResourceNotFoundException;

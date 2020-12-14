@@ -77,7 +77,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Override
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList) {
-        return patientInformationRepository.saveAll(patientInformationList);
+        return (List<Patient>) patientInformationRepository.saveAll(patientInformationList);
     }
     @Override
     public ResponseEntity deletePatientById(Long id) {
