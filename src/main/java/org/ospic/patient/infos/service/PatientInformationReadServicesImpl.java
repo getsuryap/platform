@@ -1,5 +1,6 @@
 package org.ospic.patient.infos.service;
 
+import org.ospic.domain.PageableResponse;
 import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.fileuploads.service.FilesStorageService;
@@ -16,13 +17,21 @@ import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.sql.DataSource;
+import java.net.InetAddress;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -135,15 +144,35 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId) {
         String sb =
                 " select p.id from  m_patients p where id =  " +
-                " (select  pa.patients_id from " +
-                " m_admissions a " +
-                " inner join m_admissions_m_beds ba ON a.id = ba.admissions_id " +
-                " inner join m_admissions_m_patients pa ON a.id = pa.admissions_id " +
-                " where ba.beds_id = 1 AND a.is_active = true) ";
+                        " (select  pa.patients_id from " +
+                        " m_admissions a " +
+                        " inner join m_admissions_m_beds ba ON a.id = ba.admissions_id " +
+                        " inner join m_admissions_m_patients pa ON a.id = pa.admissions_id " +
+                        " where ba.beds_id = 1 AND a.is_active = true) ";
         Session session = this.sessionFactory.openSession();
         List<Patient> patient = session.createQuery(sb).list();
         session.close();
         return ResponseEntity.ok().body(patient);
     }
 
+    @Override
+    public ResponseEntity<?> retrievePageablePatients(String group, Pageable pageable) {
+        try {
+            Page<Patient> page = patientInformationRepository.findAll(pageable);
+            /**List<Patient> patients = new ArrayList<>();
+            patients = page.getContent();
+            Map<String, Object> response = new HashMap<>();
+            response.put("currentPage", page.getNumber());
+            if (!page.isLast()) { response.put("next", page.getNumber() + 1); }
+            if (!page.isFirst()){ response.put("previous", page.getNumber() -1); }
+            response.put("totalItems", page.getTotalElements());
+            response.put("totalPages", page.getTotalPages());
+            response.put("data", patients);
+            **/
+            return new ResponseEntity<>(new PageableResponse().instance(page, Patient.class), HttpStatus.OK);
+        }catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 }

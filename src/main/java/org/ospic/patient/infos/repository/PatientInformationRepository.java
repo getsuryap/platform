@@ -1,9 +1,11 @@
 package org.ospic.patient.infos.repository;
 
 import org.ospic.patient.infos.domain.Patient;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.domain.Pageable;
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,4 +28,6 @@ import javax.transaction.Transactional;
 public interface PatientInformationRepository extends JpaRepository<Patient,Long> {
     @Transactional
     Patient getById(String id);
+   Page<Patient> findByBloodGroup(String bloodGroup, Pageable pageable);
+    Page<Patient> findAll(Pageable pageable);
 }
