@@ -136,12 +136,12 @@ public class PatientApiResources {
         return patientInformationWriteService.updatePatient(patientId, patient);
     }
 
-    @ApiOperation(value = "ASSIGN patient to Physician", notes = "ASSIGN Patient to Physician")
+    @ApiOperation(value = "ASSIGN patient to Staff", notes = "ASSIGN Patient to Staff")
     @RequestMapping(value = "/{patientId}/{physicianId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
-            @ApiParam(name = "Physician ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
+            @ApiParam(name = "Staff ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
         return patientInformationWriteService.assignPatientToPhysician(patientId, physicianId);
     }
 

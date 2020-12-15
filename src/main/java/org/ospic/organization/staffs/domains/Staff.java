@@ -1,4 +1,4 @@
-package org.ospic.physicians.domains;
+package org.ospic.organization.staffs.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.ospic.patient.infos.domain.Patient;
@@ -37,10 +37,10 @@ import java.util.List;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-@Entity(name = DatabaseConstants.PHYSICIAN_TABLE)
-@Table(name = DatabaseConstants.PHYSICIAN_TABLE)
+@Entity(name = DatabaseConstants.STAFFS_TABLE)
+@Table(name = DatabaseConstants.STAFFS_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Physician {
+public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
@@ -79,7 +79,7 @@ public class Physician {
     @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
 
-    public Physician(
+    public Staff(
             String firstname, String lastname,String username, String contacts,
             String specialities, String level) {
         this.firstname = firstname;
@@ -92,12 +92,12 @@ public class Physician {
 
     public void addPatient(Patient patient){
         patients.add(patient);
-        patient.setPhysician(this);
+        patient.setStaff(this);
     }
 
     public void deletePatient(Patient patient){
         patients.remove(patient);
-        patient.setPhysician(null);
+        patient.setStaff(null);
     }
 
 }

@@ -1,6 +1,6 @@
-package org.ospic.physicians.repository;
+package org.ospic.organization.staffs.repository;
 
-import org.ospic.physicians.domains.Physician;
+import org.ospic.organization.staffs.domains.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface PhysicianRepository extends JpaRepository<Physician, Long> {
+public interface StaffsRepository extends JpaRepository<Staff, Long> {
     Boolean existsByUsername(String username);
-    Physician getById(Long id);
+    Staff getById(Long id);
 }

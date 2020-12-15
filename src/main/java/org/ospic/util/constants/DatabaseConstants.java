@@ -27,7 +27,7 @@ public class DatabaseConstants {
     public static final String DOCTOR_INFORMATION = TI+"doctor";
     public static final String BEDS_TABLE = TI+"beds";
     public static final String WARDS_TABLE = TI+"wards";
-    public static final String PHYSICIAN_TABLE = TI+"physician";
+    public static final String STAFFS_TABLE = TI+"staff";
     public static final String TABLE_ADMISSION_INFO = TI+"admissions";
     public static final String DIAGNOSES_TABLE = TI+"diagnoses";
     public static final String PRIVILEGE_TABLE = TI+"privilege";
