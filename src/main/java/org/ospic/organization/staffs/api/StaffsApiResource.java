@@ -1,8 +1,9 @@
-package org.ospic.physicians.api;
+package org.ospic.organization.staffs.api;
 
-import org.ospic.physicians.domains.Physician;
-import org.ospic.physicians.service.PhysicianInformationService;
+import org.ospic.organization.staffs.domains.Staff;
+import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
 import io.swagger.annotations.Api;
+import org.ospic.organization.staffs.service.StaffsWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,43 +31,47 @@ import java.util.List;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/physicians")
-@Api(value = "/api/physicians", tags = "Physicians")
-public class PhysicianApiResource {
+@RequestMapping("/api/staffs")
+@Api(value = "/api/staffs", tags = "Physicians")
+public class StaffsApiResource {
 
-    PhysicianInformationService physicianInformationService;
+    StaffsReadPrinciplesService readServices;
+    StaffsWritePrinciplesService writeServices;
+    
 
     @Autowired
-    PhysicianApiResource(PhysicianInformationService physicianInformationService) {
-        this.physicianInformationService = physicianInformationService;
+    StaffsApiResource(StaffsReadPrinciplesService readServices,
+                      StaffsWritePrinciplesService writeServices) {
+        this.readServices = readServices;
+        this.writeServices = writeServices;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
-    List<Physician> all() {
-        return physicianInformationService.retrieveAllPhysicians();
+    List<Staff> all() {
+        return readServices.retrieveAllStaffs();
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity create(@Valid @RequestBody Physician physician) {
-        return physicianInformationService.createNewPhysician(physician);
+    ResponseEntity<?> create(@Valid @RequestBody Staff staff) {
+        return writeServices.createNewStaff(staff);
     }
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity createWithIteration(@Valid @RequestBody List<Physician> physician) {
-        return physicianInformationService.createByPhysicianListIterate(physician);
+    ResponseEntity<?> createWithIteration(@Valid @RequestBody List<Staff> staffs) {
+        return writeServices.createByStaffListIterate(staffs);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    ResponseEntity getOne(@PathVariable Long id) {
-        return physicianInformationService.getPhysicianById(id);
+    ResponseEntity<?> getOne(@PathVariable Long id) {
+        return readServices.getStaffById(id);
     }
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    ResponseEntity update(@PathVariable Long id, @RequestBody Physician physician){
-        return  physicianInformationService.updatePhysician(id,physician);
+    ResponseEntity<?> update(@PathVariable Long id, @RequestBody Staff staff){
+        return  writeServices.updateStaff(id, staff);
     }
 
 

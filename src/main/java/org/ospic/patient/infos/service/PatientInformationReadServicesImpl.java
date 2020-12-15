@@ -10,8 +10,8 @@ import org.ospic.patient.infos.data.PatientTrendsDataRowMapper;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
-import org.ospic.physicians.domains.Physician;
-import org.ospic.physicians.service.PhysicianInformationService;
+import org.ospic.organization.staffs.domains.Staff;
+import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
@@ -58,15 +58,15 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     SessionFactory sessionFactory;
     FilesStorageService filesStorageService;
 
-    PhysicianInformationService physicianInformationService;
+    StaffsReadPrinciplesService staffsReadPrinciplesService;
     JdbcTemplate jdbcTemplate;
 
     @Autowired
     public PatientInformationReadServicesImpl(
             DataSource dataSource,
-            PhysicianInformationService physicianInformationService,
+            StaffsReadPrinciplesService staffsReadPrinciplesService,
             FilesStorageService filesStorageService) {
-        this.physicianInformationService = physicianInformationService;
+        this.staffsReadPrinciplesService = staffsReadPrinciplesService;
         this.filesStorageService = filesStorageService;
 
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -84,7 +84,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllAssignedPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patients WHERE physician_id IS NOT NULL").list();
+        List<Patient> patients = session.createQuery("from m_patients WHERE staff_id IS NOT NULL").list();
         session.close();
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
@@ -92,18 +92,18 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients() {
         Session session = this.sessionFactory.openSession();
-        List<Patient> patients = session.createQuery("from m_patients WHERE physician_id IS NULL").list();
+        List<Patient> patients = session.createQuery("from m_patients WHERE staff_id IS NULL").list();
         session.close();
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
 
     @Override
     public ResponseEntity retrievePatientCreationDataTemplate() {
-        List<Physician> physiciansOptions = physicianInformationService.retrieveAllPhysicians();
-        for (int i = 0; i < physiciansOptions.size(); i++) {
-            physiciansOptions.get(i).getPatients().clear();
+        List<Staff> staffs = staffsReadPrinciplesService.retrieveAllStaffs();
+        for (int i = 0; i < staffs.size(); i++) {
+            staffs.get(i).getPatients().clear();
         }
-        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(physiciansOptions));
+        return ResponseEntity.ok().body(PatientData.patientCreationTemplate(staffs));
     }
 
     @Override
@@ -126,8 +126,8 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
         if (patientInformationRepository.existsById(id)) {
             Patient patient = patientInformationRepository.findById(id).get();
-            if (patient.getPhysician() != null) {
-                patient.getPhysician().getPatients().clear();
+            if (patient.getStaff() != null) {
+                patient.getStaff().getPatients().clear();
             }
             return ResponseEntity.ok().body(patient);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

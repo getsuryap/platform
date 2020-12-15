@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.ospic.domain.Auditable;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;

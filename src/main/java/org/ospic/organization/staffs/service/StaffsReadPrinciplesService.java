@@ -1,14 +1,15 @@
-package org.ospic.patient.infos.data;
+package org.ospic.organization.staffs.service;
+
 
 import org.ospic.organization.staffs.domains.Staff;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * This file was created by eli on 14/10/2020 for org.ospic.patient.infos.data
- * --
- * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -26,32 +27,10 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class PatientData implements Serializable {
-    private final Long id;
-    private final String name;
-    private final List<Staff> staffOptions;
-
-    public static PatientData patientCreationTemplate( final List<Staff> staffOptions) {
-        return new PatientData(null, null, staffOptions);
-    }
-
-    public PatientData(final Long id, final String name,
-                       final List<Staff> staffOptions) {
-        this.id = id;
-        this.name = name;
-        this.staffOptions = staffOptions;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Staff> getPhysicianOptions() {
-        return staffOptions;
-    }
-
+@Component
+@Service
+public interface StaffsReadPrinciplesService {
+    public List<Staff> retrieveAllStaffs();
+    public Optional<Staff> retrieveStaffById(Long id);
+    public ResponseEntity getStaffById(Long Id);
 }

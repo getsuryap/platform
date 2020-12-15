@@ -1,15 +1,16 @@
-package org.ospic.physicians.service;
+package org.ospic.organization.staffs.service;
 
-
-import org.ospic.physicians.domains.Physician;
+import org.ospic.organization.staffs.domains.Staff;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
+ * This file was created by eli on 15/12/2020 for org.ospic.physicians.service
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -29,16 +30,8 @@ import java.util.Optional;
  */
 @Component
 @Service
-public interface PhysicianInformationService {
-    public List<Physician> retrieveAllPhysicians();
-
-    public ResponseEntity createNewPhysician(Physician PhysicianInformation);
-
-    public ResponseEntity createByPhysicianListIterate(List<Physician> PhysicianInformationList);
-
-    public Optional<Physician> retrievePhysicianById(Long id);
-
-    public ResponseEntity updatePhysician(Long id, Physician physician);
-
-    public ResponseEntity getPhysicianById(Long Id);
+public interface StaffsWritePrinciplesService {
+    public ResponseEntity<?> createNewStaff(Staff staffInformation);
+    public ResponseEntity<?> createByStaffListIterate(List<Staff> staffInformationList);
+    public ResponseEntity<?> updateStaff(Long id, Staff staff);
 }

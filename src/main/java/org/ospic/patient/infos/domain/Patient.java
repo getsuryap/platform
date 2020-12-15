@@ -12,7 +12,7 @@ import org.ospic.domain.Auditable;
 import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
-import org.ospic.physicians.domains.Physician;
+import org.ospic.organization.staffs.domains.Staff;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.Gender;
 
@@ -129,7 +129,7 @@ public class Patient extends Auditable<String> implements Serializable {
     @ManyToOne
     @JoinColumn(name = "physician_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-    private Physician physician;
+    private Staff staff;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -148,9 +148,9 @@ public class Patient extends Auditable<String> implements Serializable {
 
     public Patient(
             String name, String guardianName, String phone, String address, String emailAddress,
-            String height,  String weight, String bloodPressure,  int age, Boolean isAdmitted, String patientPhoto,
-            String bloodGroup,String note,String symptoms, String marriageStatus, Gender gender,
-            ContactsInformation contactsInformation, Physician physician, List<Diagnosis> diagnoses) {
+            String height, String weight, String bloodPressure, int age, Boolean isAdmitted, String patientPhoto,
+            String bloodGroup, String note, String symptoms, String marriageStatus, Gender gender,
+            ContactsInformation contactsInformation, Staff staff, List<Diagnosis> diagnoses) {
         this.name = name;
         this.guardianName = guardianName;
         this.phone = phone;
@@ -168,7 +168,7 @@ public class Patient extends Auditable<String> implements Serializable {
         this.marriageStatus = marriageStatus;
         this.gender = gender;
         this.contactsInformation = contactsInformation;
-        this.physician = physician;
+        this.staff = staff;
         this.diagnoses = diagnoses;
     }
 

@@ -8,7 +8,7 @@ import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
-import org.ospic.physicians.service.PhysicianInformationService;
+import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,15 +55,15 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     SessionFactory sessionFactory;
     FilesStorageService filesStorageService;
 
-    PhysicianInformationService physicianInformationService;
+    StaffsReadPrinciplesService staffsReadPrinciplesService;
     JdbcTemplate jdbcTemplate;
 
     @Autowired
     public PatientInformationWriteServiceImpl(
             DataSource dataSource,
-            PhysicianInformationService physicianInformationService,
+            StaffsReadPrinciplesService staffsReadPrinciplesService,
             FilesStorageService filesStorageService) {
-        this.physicianInformationService = physicianInformationService;
+        this.staffsReadPrinciplesService = staffsReadPrinciplesService;
         this.filesStorageService = filesStorageService;
 
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -124,15 +124,15 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
         return patientInformationRepository.findById(patientId).map(patient -> {
-            physicianInformationService.retrievePhysicianById(physicianId).ifPresent(physician -> {
+            staffsReadPrinciplesService.retrieveStaffById(physicianId).ifPresent(physician -> {
 
-                patient.setPhysician(physician);
+                patient.setStaff(physician);
                 patientInformationRepository.save(patient);
 
             });
 
-            return ResponseEntity.ok(physicianInformationService.getPhysicianById(physicianId));
-        }).orElseThrow(() -> new ResourceNotFoundException("Physician not set"));
+            return ResponseEntity.ok(staffsReadPrinciplesService.getStaffById(physicianId));
+        }).orElseThrow(() -> new ResourceNotFoundException("Staff not set"));
 
     }
 

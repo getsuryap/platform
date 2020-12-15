@@ -1,19 +1,13 @@
 package org.ospic.inventory.wards.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.beds.domains.Bed;
-import org.ospic.patient.infos.domain.Patient;
-import org.ospic.physicians.domains.Physician;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
