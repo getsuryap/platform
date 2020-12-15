@@ -1,7 +1,10 @@
 package org.ospic.organization.staffs.domains;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
+import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -14,7 +17,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -42,33 +47,26 @@ import java.util.List;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Staff {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 
-    @NotBlank
-    @NotNull
-    @Column(length = 20, name = "first_name")
-    private String firstname;
-
-    @NotBlank
-    @NotNull
-    @Column(length = 20, name = "last_name")
-    private String lastname;
-
-    @NotBlank
-    @NotNull
-    @Column(name = "user_name",unique = true)
+    @Column(length = 20, name = "username", unique = true)
     private String username;
+
+    @Column(length = 20, name = "fullname")
+    private String fullName;
 
     @Column(name = "contacts")
     private String contacts;
 
-    @Column(name = "specialities")
-    private String specialities;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @Column(name = "doc_type")
     private String level;
+
+    @Column(name = "email")
+    private String email;
 
     @OneToMany(
             fetch = FetchType.EAGER,
@@ -77,17 +75,21 @@ public class Staff {
     )
     @JoinColumn(name = "physician_id")
     @JsonIgnore
-    private List<Patient> patients = new ArrayList<>();
+    private Set<Patient> patients = new HashSet<>();
 
-    public Staff(
-            String firstname, String lastname,String username, String contacts,
-            String specialities, String level) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.username = username;
+    @OneToOne
+    @MapsId
+    @ApiModelProperty(position = 1, required = false, hidden=true, notes = "used to display user name")
+    private User user;
+
+    public Staff(String username, String fullName, String contacts,
+                 String imageUrl, String level, String email) {
+        this.fullName = fullName;
         this.contacts = contacts;
-        this.specialities = specialities;
+        this.imageUrl = imageUrl;
         this.level = level;
+        this.email = email;
+        this.username = username;
     }
 
     public void addPatient(Patient patient){

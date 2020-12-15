@@ -22,6 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface StaffsRepository extends JpaRepository<Staff, Long> {
+    Boolean existsByFullName(String fullName);
     Boolean existsByUsername(String username);
     Staff getById(Long id);
 }

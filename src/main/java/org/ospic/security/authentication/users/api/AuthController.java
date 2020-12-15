@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.security.authentication.users.exceptions.UserAuthenticationException;
 import org.ospic.security.authentication.users.payload.request.UserRequestData;
 import org.ospic.security.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
@@ -37,6 +38,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +59,8 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    StaffsWritePrinciplesService staffsWritePrinciplesService;
     @Autowired
     RoleRepository roleRepository;
 
@@ -126,7 +129,10 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+       User _user = userRepository.save(user);
+       if (_user.getIsStaff()){
+           staffsWritePrinciplesService.createNewStaff(_user.getId());
+       }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

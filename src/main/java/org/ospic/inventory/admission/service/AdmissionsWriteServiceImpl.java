@@ -9,7 +9,7 @@ import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.exception.BedNotFoundException;
 import org.ospic.inventory.beds.repository.BedRepository;
-import org.ospic.patient.infos.PatientNotFoundException;
+import org.ospic.patient.infos.exceptions.PatientNotFoundException;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

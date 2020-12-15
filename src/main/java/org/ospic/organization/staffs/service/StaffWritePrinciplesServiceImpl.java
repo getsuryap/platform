@@ -2,7 +2,9 @@ package org.ospic.organization.staffs.service;
 
 import org.ospic.organization.staffs.domains.Staff;
 import org.ospic.organization.staffs.repository.StaffsRepository;
+import org.ospic.security.authentication.users.domain.User;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
+import org.ospic.security.authentication.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -11,7 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
- * This file was created by eli on 15/12/2020 for org.ospic.physicians.service
+ * This file was created by eli on 15/12/2020 for org.ospic.stffs.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -32,30 +34,35 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesService{
+public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesService {
     StaffsRepository staffsRepository;
+    UserRepository userRepository;
 
     @Autowired
-    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository){
+    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository, UserRepository userRepository) {
         this.staffsRepository = staffsRepository;
+        this.userRepository = userRepository;
     }
+
     @Override
-    public ResponseEntity<?> createNewStaff(Staff staff) {
-        if (staffsRepository.existsByUsername(staff.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username "+ staff.getUsername() + " is already taken!"));
-        }
-        return ResponseEntity.ok( staffsRepository.save(staff));
+    public ResponseEntity<?> createNewStaff(Long id) {
+        return userRepository.findById(id).map(user -> {
+            Staff staff = new Staff(user.getUsername(), null, null, null, null, user.getEmail());
+            user.setStaff(staff);
+            staff.setUser(user);
+            return ResponseEntity.ok().body(userRepository.save(user));
+        }).orElseGet(() -> {
+            return null;
+        });
     }
 
     @Override
     public ResponseEntity<?> createByStaffListIterate(List<Staff> staffs) {
-        for (Staff staff : staffs){
-            if (staffsRepository.existsByUsername(staff.getUsername())) {
+        for (Staff staff : staffs) {
+            if (staffsRepository.existsByFullName(staff.getFullName())) {
                 return ResponseEntity
                         .badRequest()
-                        .body(new MessageResponse("Error: Username "+ staff.getUsername() + " is already taken!"));
+                        .body(new MessageResponse("Error: Username " + staff.getFullName() + " is already taken!"));
             }
         }
         return ResponseEntity.ok(staffsRepository.saveAll(staffs));
@@ -63,16 +70,12 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
 
     @Override
     public ResponseEntity<?> updateStaff(Long id, Staff staff) {
-        return staffsRepository.findById(id)
-                .map(physician -> {
-                    physician.setContacts(staff.getContacts() == null ? physician.getContacts() : staff.getContacts() );
-                    physician.setFirstname(staff.getFirstname() ==null? physician.getFirstname() : staff.getFirstname());
-                    physician.setLastname(staff.getLastname() == null ?  physician.getLastname() : staff.getLastname());
-                    physician.setLevel(staff.getLevel() == null? physician.getLevel() : staff.getLevel());
-                    physician.setUsername(staff.getUsername() == null? physician.getUsername():staff.getUsername());
-                    physician.setSpecialities(staff.getSpecialities() == null ? physician.getSpecialities() : staff.getSpecialities());
+        return staffsRepository.findById(id).map(stff -> {
+                    stff.setContacts(staff.getContacts() == null ? stff.getContacts() : staff.getContacts());
+                    stff.setFullName(staff.getFullName() == null ? stff.getFullName() : staff.getFullName());
+                    stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
 
-                    return ResponseEntity.ok(staffsRepository.save(physician));
+                    return ResponseEntity.ok(staffsRepository.save(stff));
                 })
                 .orElseThrow(() -> new EntityNotFoundException());
     }

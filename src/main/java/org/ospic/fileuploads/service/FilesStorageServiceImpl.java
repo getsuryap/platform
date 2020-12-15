@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
     public static final Logger logger = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
+    public static final String documentRootPath = "/uploads";
     private final Path root = Paths.get("uploads");
 
     @Override
@@ -166,7 +167,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     private Path createDirectoryIfNotExists(Long patientId, String documentLocation) {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("uploads/");
+            sb.append(documentRootPath);
             sb.append(patientId);
             sb.append("/" + documentLocation);
             Path image = Paths.get(sb.toString());
@@ -178,7 +179,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     private Path retrieveEntityImagePath(String documentLocation, @NonNull Long patientId) {
         StringBuilder sb = new StringBuilder();
-        sb.append("uploads/");
+        sb.append(documentRootPath);
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);
@@ -187,7 +188,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     private Path retrieveDocumentOrImagePath(String documentLocation, @NonNull Long patientId, @NonNull String fileName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("uploads/");
+        sb.append(documentRootPath);
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);

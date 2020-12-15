@@ -67,8 +67,10 @@ public class BaseApplication implements CommandLineRunner {
                user.setUsername("admin");
                user.setPassword(passwordEncoder.encode("password"));
                user.setEmail("admin@test.com");
-               List<Role> roleList = roleRepository.findAll();
-               user.setRoles(roleList);
+               Optional<Role> role = roleRepository.findByName(RoleEnums.SUPER_USER);
+               List<Role> roles=  new ArrayList<>();
+               role.ifPresent(roles::add);
+               user.setRoles(roles);
                userRepository.save(user);
            }
 
