@@ -52,11 +52,13 @@ public class StaffsApiResource {
         return readServices.retrieveAllStaffs();
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+   /**
+    *  @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> create(@Valid @RequestBody Staff staff) {
         return writeServices.createNewStaff(staff);
     }
+    **/
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> createWithIteration(@Valid @RequestBody List<Staff> staffs) {

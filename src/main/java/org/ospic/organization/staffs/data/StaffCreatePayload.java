@@ -1,9 +1,7 @@
-package org.ospic.patient.infos;
-
-import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
+package org.ospic.organization.staffs.data;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.patient.infos
+ * This file was created by eli on 15/12/2020 for org.ospic.organization.staffs.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +21,5 @@ import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class PatientNotFoundException extends AbstractResourceNotFoundException {
-    public PatientNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
-        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
-    }
-    public PatientNotFoundException(Long id){
-        super("error.message.patient.not.found", String.format("Patient with id %2d is not found ", id), id);
-    }
+public class StaffCreatePayload {
 }

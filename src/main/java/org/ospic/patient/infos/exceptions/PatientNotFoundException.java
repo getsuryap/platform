@@ -1,15 +1,9 @@
-package org.ospic.organization.staffs.service;
+package org.ospic.patient.infos.exceptions;
 
-import org.ospic.organization.staffs.domains.Staff;
-import org.ospic.security.authentication.users.domain.User;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 15/12/2020 for org.ospic.physicians.service
+ * This file was created by eli on 28/11/2020 for org.ospic.patient.infos
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,10 +23,11 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface StaffsWritePrinciplesService {
-    public ResponseEntity<?> createNewStaff(Long id);
-    public ResponseEntity<?> createByStaffListIterate(List<Staff> staffInformationList);
-    public ResponseEntity<?> updateStaff(Long id, Staff staff);
+public class PatientNotFoundException extends AbstractResourceNotFoundException {
+    public PatientNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+    public PatientNotFoundException(Long id){
+        super("error.message.patient.not.found", String.format("Patient with id %2d is not found ", id), id);
+    }
 }

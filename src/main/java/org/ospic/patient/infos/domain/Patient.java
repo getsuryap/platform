@@ -127,7 +127,7 @@ public class Patient extends Auditable<String> implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name = "physician_id")
+    @JoinColumn(name = "staff_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     private Staff staff;
 
