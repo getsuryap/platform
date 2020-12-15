@@ -1,6 +1,5 @@
 package org.ospic.security.services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -10,9 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ospic.authentication.privileges.domains.Privilege;
-import org.ospic.authentication.roles.Role;
-import org.ospic.authentication.users.User;
+import org.ospic.security.authentication.users.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

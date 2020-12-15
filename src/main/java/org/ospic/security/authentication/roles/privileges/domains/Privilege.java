@@ -1,13 +1,15 @@
-package org.ospic.authentication.privileges.repository;
+package org.ospic.security.authentication.roles.privileges.domains;
 
-import org.ospic.authentication.privileges.domains.Privilege;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.ospic.util.constants.DatabaseConstants;
 
-import java.util.Optional;
+import javax.persistence.*;
 
 /**
- * This file was created by eli on 22/10/2020 for org.ospic.authentication.privileges.repository
+ * This file was created by eli on 22/10/2020 for org.ospic.security.authentication.roles.privileges.domains
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,8 +29,20 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Repository
-public interface PrivilegesRepository extends JpaRepository<Privilege,Long> {
+@Entity(name = DatabaseConstants.PRIVILEGE_TABLE)
+@Table(name =DatabaseConstants.PRIVILEGE_TABLE)
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+public class Privilege {
 
-    Privilege  findByName(String name);
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String name;
+
+    public Privilege(String name){
+        this.name = name;
+    }
 }

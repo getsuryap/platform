@@ -2,14 +2,10 @@ package org.ospic.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.ospic.authentication.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.admission.data.AdmissionRequest;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.data.EndAdmissionRequest;
-import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
 import org.ospic.inventory.admission.service.AdmissionsWriteService;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.api

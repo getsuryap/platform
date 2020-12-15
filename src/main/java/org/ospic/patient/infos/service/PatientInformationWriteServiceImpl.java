@@ -7,7 +7,7 @@ import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
-import org.ospic.authentication.payload.response.MessageResponse;
+import org.ospic.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.physicians.service.PhysicianInformationService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

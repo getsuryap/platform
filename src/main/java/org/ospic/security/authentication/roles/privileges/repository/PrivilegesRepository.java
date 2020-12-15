@@ -1,10 +1,11 @@
-package org.ospic.authentication.exceptions;
+package org.ospic.security.authentication.roles.privileges.repository;
 
-import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
-import org.springframework.security.core.Authentication;
+import org.ospic.security.authentication.roles.privileges.domains.Privilege;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.authentication.exceptions
+ * This file was created by eli on 22/10/2020 for org.ospic.security.authentication.roles.privileges.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,13 +25,8 @@ import org.springframework.security.core.Authentication;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class UserAuthenticationException extends AbstractResourceNotFoundException {
+@Repository
+public interface PrivilegesRepository extends JpaRepository<Privilege,Long> {
 
-    public UserAuthenticationException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
-        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
-    }
-
-    public UserAuthenticationException(Long id){
-        super("error.message.authentication.usernotfound","User with id "+ id+" does not exist", id);
-    }
+    Privilege  findByName(String name);
 }

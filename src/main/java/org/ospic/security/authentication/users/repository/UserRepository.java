@@ -1,6 +1,6 @@
-package org.ospic.authentication.users.repository;
+package org.ospic.security.authentication.users.repository;
 
-import org.ospic.authentication.users.User;
+import org.ospic.security.authentication.users.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

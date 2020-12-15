@@ -1,4 +1,4 @@
-package org.ospic.authentication.payload.request;
+package org.ospic.security.authentication.users.payload.request;
 
 import javax.validation.constraints.NotBlank;
 

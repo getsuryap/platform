@@ -1,4 +1,4 @@
-package org.ospic.authentication.payload.request;
+package org.ospic.security.authentication.users.payload.request;
 
 import lombok.Getter;
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.authentication.payload.request
+ * This file was created by eli on 28/11/2020 for org.ospic.security.authentication.users.payload.request
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

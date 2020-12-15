@@ -1,9 +1,9 @@
-package org.ospic.authentication.roles.repository;
+package org.ospic.security.authentication.roles.repository;
 
 import java.util.Optional;
 
 import org.ospic.util.enums.RoleEnums;
-import org.ospic.authentication.roles.Role;
+import org.ospic.security.authentication.roles.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
