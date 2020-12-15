@@ -1,18 +1,15 @@
-package org.ospic.authentication.roles;
+package org.ospic.security.authentication.roles.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.ospic.authentication.privileges.domains.Privilege;
-import org.ospic.authentication.users.User;
+import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.RoleEnums;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity(name = DatabaseConstants.ROLES_TABLE)
 @Setter(AccessLevel.PUBLIC)

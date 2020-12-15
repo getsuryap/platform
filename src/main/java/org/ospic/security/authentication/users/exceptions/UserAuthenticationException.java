@@ -1,10 +1,9 @@
-package org.ospic.authentication.payload.request;
+package org.ospic.security.authentication.users.exceptions;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import org.ospic.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.authentication.payload.request
+ * This file was created by eli on 28/11/2020 for org.ospic.security.authentication.users.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,12 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class UserRequestDataApiResourceSwagger {
-    public UserRequestDataApiResourceSwagger(){}
-    @ApiModel(value = "GetUserRequestDataApiResource")
-    public static final class GetUserRequestDataResponse{
-        private GetUserRequestDataResponse(){}
-        @ApiModelProperty(example = "Password Updated Successfully ...")
-        private String message;
+public class UserAuthenticationException extends AbstractResourceNotFoundException {
+
+    public UserAuthenticationException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+
+    public UserAuthenticationException(Long id){
+        super("error.message.authentication.usernotfound","User with id "+ id+" does not exist", id);
     }
 }

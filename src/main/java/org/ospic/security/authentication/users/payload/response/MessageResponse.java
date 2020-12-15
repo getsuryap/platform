@@ -1,4 +1,4 @@
-package org.ospic.authentication.payload.response;
+package org.ospic.security.authentication.users.payload.response;
 
 public class MessageResponse {
 	private String message;

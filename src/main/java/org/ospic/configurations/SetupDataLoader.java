@@ -1,11 +1,11 @@
 package org.ospic.configurations;
 
-import org.ospic.authentication.privileges.domains.Privilege;
-import org.ospic.authentication.privileges.repository.PrivilegesRepository;
-import org.ospic.authentication.roles.Role;
-import org.ospic.authentication.users.User;
-import org.ospic.authentication.roles.repository.RoleRepository;
-import org.ospic.authentication.users.repository.UserRepository;
+import org.ospic.security.authentication.roles.privileges.domains.Privilege;
+import org.ospic.security.authentication.roles.privileges.repository.PrivilegesRepository;
+import org.ospic.security.authentication.roles.domain.Role;
+import org.ospic.security.authentication.users.domain.User;
+import org.ospic.security.authentication.roles.repository.RoleRepository;
+import org.ospic.security.authentication.users.repository.UserRepository;
 import org.ospic.util.enums.RoleEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

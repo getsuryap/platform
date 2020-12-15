@@ -1,4 +1,4 @@
-package org.ospic.authentication.payload.response;
+package org.ospic.security.authentication.users.payload.response;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.data.PatientTrendsDataRowMapper;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
-import org.ospic.authentication.payload.response.MessageResponse;
+import org.ospic.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.physicians.domains.Physician;
 import org.ospic.physicians.service.PhysicianInformationService;
 import org.ospic.util.constants.DatabaseConstants;
@@ -23,15 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.sql.DataSource;
-import java.net.InetAddress;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

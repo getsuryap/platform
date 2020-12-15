@@ -1,18 +1,13 @@
-package org.ospic.authentication.users;
+package org.ospic.security.authentication.users.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
-import org.hibernate.envers.Audited;
-import org.ospic.authentication.roles.Role;
-import org.ospic.domain.Auditable;
+import org.ospic.security.authentication.roles.domain.Role;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

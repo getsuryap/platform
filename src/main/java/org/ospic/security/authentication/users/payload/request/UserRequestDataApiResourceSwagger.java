@@ -1,17 +1,10 @@
-package org.ospic.authentication.privileges.domains;
+package org.ospic.security.authentication.users.payload.request;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.ospic.authentication.roles.Role;
-import org.ospic.util.constants.DatabaseConstants;
-
-import javax.persistence.*;
-import java.util.Collection;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * This file was created by eli on 22/10/2020 for org.ospic.authentication.privileges.domains
+ * This file was created by eli on 28/11/2020 for org.ospic.security.authentication.users.payload.request
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,20 +24,12 @@ import java.util.Collection;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Entity(name = DatabaseConstants.PRIVILEGE_TABLE)
-@Table(name =DatabaseConstants.PRIVILEGE_TABLE)
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-public class Privilege {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String name;
-
-    public Privilege(String name){
-        this.name = name;
+public class UserRequestDataApiResourceSwagger {
+    public UserRequestDataApiResourceSwagger(){}
+    @ApiModel(value = "GetUserRequestDataApiResource")
+    public static final class GetUserRequestDataResponse{
+        private GetUserRequestDataResponse(){}
+        @ApiModelProperty(example = "Password Updated Successfully ...")
+        private String message;
     }
 }
