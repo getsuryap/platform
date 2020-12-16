@@ -1,6 +1,7 @@
 package org.ospic.organization.staffs.service;
 
 import org.ospic.organization.staffs.domains.Staff;
+import org.ospic.organization.staffs.exceptions.StaffNotFoundException;
 import org.ospic.organization.staffs.repository.StaffsRepository;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
@@ -74,9 +75,8 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
                     stff.setContacts(staff.getContacts() == null ? stff.getContacts() : staff.getContacts());
                     stff.setFullName(staff.getFullName() == null ? stff.getFullName() : staff.getFullName());
                     stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
-
                     return ResponseEntity.ok(staffsRepository.save(stff));
                 })
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(() -> new StaffNotFoundException(id));
     }
 }

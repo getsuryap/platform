@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.ospic.organization.staffs.service.StaffsWritePrinciplesService;
+import org.ospic.security.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.security.authentication.users.exceptions.UserAuthenticationException;
 import org.ospic.security.authentication.users.payload.request.UserRequestData;
 import org.ospic.security.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
@@ -63,6 +64,8 @@ public class AuthController {
     StaffsWritePrinciplesService staffsWritePrinciplesService;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    RoleReadPrincipleServices roleReadPrincipleServices;
 
     @Autowired
     PasswordEncoder encoder;
@@ -207,11 +210,10 @@ public class AuthController {
     }
 
     @ApiOperation(value = "LOGOUT Session", notes = "LOGOUT Session")
-    @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Role>> retrieveAllRoles(){
-        List<Role> roles = roleRepository.findAll();
-        return ResponseEntity.ok().body(roles);
+    ResponseEntity<?> retrieveAllRoles(){
+        return  roleReadPrincipleServices.retrieveAllRoles();
     }
 
 }
