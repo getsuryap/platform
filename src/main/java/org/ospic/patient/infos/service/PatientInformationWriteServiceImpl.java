@@ -80,7 +80,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         return (List<Patient>) patientInformationRepository.saveAll(patientInformationList);
     }
     @Override
-    public ResponseEntity deletePatientById(Long id) {
+    public ResponseEntity<?> deletePatientById(Long id) {
         if (patientInformationRepository.existsById(id)) {
             patientInformationRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
@@ -91,7 +91,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     }
 
     @Override
-    public ResponseEntity updatePatient(Long id, Patient update) {
+    public ResponseEntity<?> updatePatient(Long id, Patient update) {
         return patientInformationRepository.findById(id)
                 .map(patient -> {
               patient.setContactsInformation(patient.getContactsInformation());
@@ -122,7 +122,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Transactional
     @Override
-    public ResponseEntity assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
+    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
         return patientInformationRepository.findById(patientId).map(patient -> {
             staffsReadPrinciplesService.retrieveStaffById(physicianId).ifPresent(physician -> {
 
@@ -138,7 +138,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Transactional
     @Override
-    public ResponseEntity uploadPatientImage(Long patientId, MultipartFile file) {
+    public ResponseEntity<?> uploadPatientImage(Long patientId, MultipartFile file) {
         try {
             return patientInformationRepository.findById(patientId).map(patient -> {
                 String imagePath = filesStorageService.uploadPatientImage(patientId, "images", file);
@@ -153,7 +153,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Transactional
     @Override
-    public ResponseEntity deletePatientImage(Long patientId, String fileName) {
+    public ResponseEntity<?> deletePatientImage(Long patientId, String fileName) {
         try {
             patientInformationRepository.findById(patientId).map(patient -> {
                 filesStorageService.deletePatientFileOrDocument("images", patientId, fileName);

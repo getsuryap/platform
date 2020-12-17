@@ -29,5 +29,6 @@ public interface PatientInformationRepository extends JpaRepository<Patient,Long
     @Transactional
     Patient getById(String id);
    Page<Patient> findByBloodGroup(String bloodGroup, Pageable pageable);
+   List<Patient> findByStaffId(Long staffId);
     Page<Patient> findAll(Pageable pageable);
 }

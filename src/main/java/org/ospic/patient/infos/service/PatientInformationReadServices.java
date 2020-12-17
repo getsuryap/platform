@@ -38,15 +38,18 @@ public interface PatientInformationReadServices {
 
     public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData();
 
+
     public ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);
 
     @Transactional
-    public ResponseEntity<Patient> retrievePatientById(Long id) throws ResourceNotFoundException;
+    public ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException;
 
-    public ResponseEntity retrievePatientCreationDataTemplate();
+    public ResponseEntity<?> retrievePatientCreationDataTemplate();
 
 
     public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId);
 
+
+    public ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId);
 
 }

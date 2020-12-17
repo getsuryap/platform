@@ -73,7 +73,7 @@ public class Staff {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "physician_id")
+    @JoinColumn(name = "staff_id")
     @JsonIgnore
     private Set<Patient> patients = new HashSet<>();
 

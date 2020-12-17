@@ -123,11 +123,12 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
 
     @Override
-    public ResponseEntity retrievePatientById(Long id) throws ResourceNotFoundException {
+    public ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException {
         if (patientInformationRepository.existsById(id)) {
             Patient patient = patientInformationRepository.findById(id).get();
             if (patient.getStaff() != null) {
                 patient.getStaff().getPatients().clear();
+                patient.getStaff().setUser(null);
             }
             return ResponseEntity.ok().body(patient);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -168,5 +169,10 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId) {
+        return ResponseEntity.ok().body(patientInformationRepository.findByStaffId(staffId));
     }
 }
