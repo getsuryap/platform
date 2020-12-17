@@ -91,7 +91,7 @@ public class PatientApiResources {
     @ApiOperation(value = "RETRIEVE Patient creation Template for creating new Patient", notes = "RETRIEVE Patient creation Template for creating new Patient")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
+    ResponseEntity<?> retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("template")) {
                 return patientInformationReadServices.retrievePatientCreationDataTemplate();
@@ -107,7 +107,7 @@ public class PatientApiResources {
     @ApiOperation(value = "GET specific Patient information by patient ID", notes = "GET specific Patient information by patient ID")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Patient> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
+    ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
         return patientInformationReadServices.retrievePatientById(patientId);
     }
 
@@ -126,20 +126,17 @@ public class PatientApiResources {
         return patientInformationReadServices.retrieveAllPatientTrendData();
     }
 
-
     @ApiOperation(value = "UPDATE specific Patient information", notes = "UPDATE specific Patient information")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity updatePatient(
-            @ApiParam(name = "patient ID", required = true) @PathVariable Long patientId,
-            @ApiParam(name = "Patient Entity", required = true) @RequestBody Patient patient) {
+    ResponseEntity<?> updatePatient(@ApiParam(name = "patient ID", required = true) @PathVariable Long patientId, @ApiParam(name = "Patient Entity", required = true) @RequestBody Patient patient) {
         return patientInformationWriteService.updatePatient(patientId, patient);
     }
 
     @ApiOperation(value = "ASSIGN patient to Staff", notes = "ASSIGN Patient to Staff")
     @RequestMapping(value = "/{patientId}/{physicianId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity assignPatientToPhysician(
+    ResponseEntity<?> assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Staff ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
         return patientInformationWriteService.assignPatientToPhysician(patientId, physicianId);
@@ -169,11 +166,10 @@ public class PatientApiResources {
     @RequestMapping(value = "/{patientId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
-    public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
+    public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
-            ResponseEntity responseEntity = patientInformationWriteService.uploadPatientImage(patientId, file);
-            return responseEntity;
+            return patientInformationWriteService.uploadPatientImage(patientId, file);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
@@ -184,7 +180,7 @@ public class PatientApiResources {
     @ApiOperation(value = "DELETE Patient", notes = "DELETE Patient")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
+    ResponseEntity<?> deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
         return patientInformationWriteService.deletePatientById(id);
     }
 
@@ -206,7 +202,7 @@ public class PatientApiResources {
 
     @RequestMapping(value = "/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
+    public ResponseEntity<?> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
         //filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
         return patientInformationWriteService.deletePatientImage(patientId, filename);
     }

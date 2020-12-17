@@ -36,17 +36,16 @@ import java.util.List;
 @Service
 public interface PatientInformationWriteService {
     @Transactional
-    public ResponseEntity deletePatientById(Long id);
+    public ResponseEntity<?> deletePatientById(Long id);
 
     @Transactional
-    public ResponseEntity updatePatient(Long id, Patient patient);
+    public ResponseEntity<?> updatePatient(Long id, Patient patient);
 
     @Transactional
-    public ResponseEntity assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException;
+    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException;
 
     @Transactional
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);
-
 
     @Transactional
     public Patient createNewPatient(Patient patientInformation);
@@ -55,8 +54,8 @@ public interface PatientInformationWriteService {
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList);
 
 
-    public ResponseEntity uploadPatientImage(Long patientId,  MultipartFile file);
+    public ResponseEntity<?> uploadPatientImage(Long patientId,  MultipartFile file);
 
-    public ResponseEntity deletePatientImage(Long patientId ,String fileName);
+    public ResponseEntity<?> deletePatientImage(Long patientId ,String fileName);
 
 }

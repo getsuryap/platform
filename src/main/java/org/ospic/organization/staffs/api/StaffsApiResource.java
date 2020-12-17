@@ -1,10 +1,13 @@
 package org.ospic.organization.staffs.api;
 
+import io.swagger.annotations.ApiOperation;
 import org.ospic.organization.staffs.domains.Staff;
 import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
 import io.swagger.annotations.Api;
 import org.ospic.organization.staffs.service.StaffsWritePrinciplesService;
+import org.ospic.patient.infos.service.PatientInformationReadServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +40,15 @@ public class StaffsApiResource {
 
     StaffsReadPrinciplesService readServices;
     StaffsWritePrinciplesService writeServices;
+    PatientInformationReadServices patientReadServices;
     
 
     @Autowired
     StaffsApiResource(StaffsReadPrinciplesService readServices,
-                      StaffsWritePrinciplesService writeServices) {
+                      StaffsWritePrinciplesService writeServices, PatientInformationReadServices patientReadServices) {
         this.readServices = readServices;
         this.writeServices = writeServices;
+        this.patientReadServices = patientReadServices;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -52,13 +57,6 @@ public class StaffsApiResource {
         return readServices.retrieveAllStaffs();
     }
 
-   /**
-    *  @RequestMapping(value = "/", method = RequestMethod.POST)
-    @ResponseBody
-    ResponseEntity<?> create(@Valid @RequestBody Staff staff) {
-        return writeServices.createNewStaff(staff);
-    }
-    **/
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     ResponseEntity<?> createWithIteration(@Valid @RequestBody List<Staff> staffs) {
@@ -74,6 +72,13 @@ public class StaffsApiResource {
     @ResponseBody
     ResponseEntity<?> update(@PathVariable Long id, @RequestBody Staff staff){
         return  writeServices.updateStaff(id, staff);
+    }
+
+    @ApiOperation(value = "GET patients assigned to this staff",notes = "GET patients assigned to this staff")
+    @RequestMapping(value = "/{staffId}/patients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> getPatientAssignedToThisStaff(@PathVariable Long staffId) {
+        return ResponseEntity.ok().body(patientReadServices.retrievePatientAssignedToThisStaff(staffId));
     }
 
 

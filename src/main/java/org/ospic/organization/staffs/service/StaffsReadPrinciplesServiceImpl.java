@@ -46,7 +46,7 @@ public class StaffsReadPrinciplesServiceImpl implements StaffsReadPrinciplesServ
         return staffsRepository.findById(id);
     }
     @Override
-    public ResponseEntity getStaffById(Long id) {
+    public ResponseEntity<?> getStaffById(Long id) {
         return ResponseEntity.ok(staffsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException()));
     }
 }
