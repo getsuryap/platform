@@ -9,10 +9,16 @@ import org.ospic.inventory.admission.data.EndAdmissionRequest;
 import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.admission.service.AdmissionsReadService;
 import org.ospic.inventory.admission.service.AdmissionsWriteService;
+import org.ospic.inventory.admission.visits.data.VisitPayload;
+import org.ospic.inventory.admission.visits.service.VisitsReadPrincipleService;
+import org.ospic.inventory.admission.visits.service.VisitsWritePrincipleService;
+import org.ospic.inventory.admission.visits.service.VisitsWritePrincipleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -52,13 +58,21 @@ public class AdmissionsApiResources {
     AdmissionsReadService admissionsReadService;
     @Autowired
     AdmissionRepository admissionRepository;
+    @Autowired
+    VisitsWritePrincipleService visitsWritePrincipleService;
+    @Autowired
+    VisitsReadPrincipleService visitsReadPrincipleService;
 
     public AdmissionsApiResources(AdmissionsWriteService admissionsWriteService,
                                   AdmissionsReadService admissionsReadService,
-                                  AdmissionRepository admissionRepository) {
+                                  AdmissionRepository admissionRepository,
+                                  VisitsWritePrincipleServiceImpl visitsWritePrincipleService,
+                                  VisitsReadPrincipleService visitsReadPrincipleService) {
         this.admissionsWriteService = admissionsWriteService;
         this.admissionsReadService = admissionsReadService;
         this.admissionRepository = admissionRepository;
+        this.visitsReadPrincipleService = visitsReadPrincipleService;
+        this.visitsWritePrincipleService = visitsWritePrincipleService;
     }
 
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions")
@@ -87,6 +101,7 @@ public class AdmissionsApiResources {
 
 
 
+
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -106,6 +121,20 @@ public class AdmissionsApiResources {
     @ResponseBody
     ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
         return admissionsReadService.retrieveAdmissionInThisBed(bedId);
+    }
+
+    @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits")
+    @RequestMapping(value = "/{admissionId}/visits", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
+        return visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
+    }
+
+    @ApiOperation(value = "CREATE Admission visits", notes = "CREATE Admission visits")
+    @RequestMapping(value = "/visits", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> visitAdmission(@Valid @RequestBody VisitPayload visitPayload){
+        return visitsWritePrincipleService.createVisits(visitPayload);
     }
 
 }

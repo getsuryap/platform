@@ -3,11 +3,16 @@ package org.ospic.inventory.admission.domains;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.inventory.admission.data.AdmissionRequest;
+import org.ospic.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.wards.domain.Ward;
+import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.constants.DatabaseConstants;
 
@@ -85,6 +90,16 @@ public class Admission implements Serializable {
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     private Date toDateTime;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "admission_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<AdmissionVisit>  visits = new ArrayList<>();
 
     public Admission(
             Boolean isActive,  Date fromDateTime, Date toDateTime) {

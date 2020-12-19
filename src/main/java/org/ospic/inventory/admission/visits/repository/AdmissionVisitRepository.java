@@ -1,15 +1,14 @@
-package org.ospic.inventory.admission.service;
+package org.ospic.inventory.admission.visits.repository;
 
-import org.ospic.domain.CustomReponseMessage;
-import org.ospic.fileuploads.message.ResponseMessage;
-import org.ospic.inventory.admission.data.AdmissionRequest;
-import org.ospic.inventory.admission.data.EndAdmissionRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.ospic.inventory.admission.visits.domain.AdmissionVisit;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Collection;
+import java.util.Optional;
 
 /**
- * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
+ * This file was created by eli on 19/12/2020 for org.ospic.inventory.admission.visits.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,11 +28,8 @@ import org.springframework.stereotype.Service;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface AdmissionsWriteService {
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
-    public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request);
-    public ResponseEntity<String > updatePatientAdmissionInfo();
+@Repository
+public interface AdmissionVisitRepository extends JpaRepository<AdmissionVisit, Long> {
+    Collection<AdmissionVisit> findByAdmissionId(Long admissionId);
+    Optional<AdmissionVisit> findById(Long visitId);
 }
-
