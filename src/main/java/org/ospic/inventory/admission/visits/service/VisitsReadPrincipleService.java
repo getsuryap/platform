@@ -1,15 +1,11 @@
-package org.ospic.inventory.admission.service;
+package org.ospic.inventory.admission.visits.service;
 
-import org.ospic.domain.CustomReponseMessage;
-import org.ospic.fileuploads.message.ResponseMessage;
-import org.ospic.inventory.admission.data.AdmissionRequest;
-import org.ospic.inventory.admission.data.EndAdmissionRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
- * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
+ * This file was created by eli on 19/12/2020 for org.ospic.inventory.admission.visits.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,9 +27,6 @@ import org.springframework.stereotype.Service;
  */
 @Component
 @Service
-public interface AdmissionsWriteService {
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
-    public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request);
-    public ResponseEntity<String > updatePatientAdmissionInfo();
+public interface VisitsReadPrincipleService {
+    ResponseEntity<?> retrieveAdmissionVisits(Long admissionId);
 }
-

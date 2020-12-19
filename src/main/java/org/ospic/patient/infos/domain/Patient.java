@@ -108,7 +108,7 @@ public class Patient extends Auditable<String> implements Serializable {
     private String note;
 
     @NotBlank
-    @Column(name = "symptoms", length = 250)
+    @Column(name = "symptoms", length = 550)
     private String symptoms;
 
     @NotBlank

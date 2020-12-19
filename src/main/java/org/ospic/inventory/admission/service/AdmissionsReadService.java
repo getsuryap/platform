@@ -3,6 +3,8 @@ package org.ospic.inventory.admission.service;
 import org.ospic.inventory.admission.data.AdmissionResponseData;
 import org.ospic.inventory.admission.domains.Admission;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Component
+@Service
 public interface AdmissionsReadService {
     public ResponseEntity<List<Admission>> retrieveAllAdmissions();
 
