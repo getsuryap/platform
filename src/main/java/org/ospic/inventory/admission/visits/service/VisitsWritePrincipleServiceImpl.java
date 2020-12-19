@@ -7,6 +7,7 @@ import org.ospic.inventory.admission.visits.data.VisitPayload;
 import org.ospic.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.inventory.admission.visits.repository.AdmissionVisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -46,7 +47,14 @@ public class VisitsWritePrincipleServiceImpl implements VisitsWritePrincipleServ
     }
     @Override
     public ResponseEntity<?> createVisits(VisitPayload payload) {
+        CustomReponseMessage cm = new CustomReponseMessage();
+        HttpHeaders httpHeaders = new HttpHeaders();
         return admissionRepository.findById(payload.getAdmissionId()).map(admission -> {
+            if (!admission.getIsActive()){
+                cm.setMessage("An admission with ID: "+admission.getId() + " is inactive ");
+                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
+            }
+
             AdmissionVisit visit = new AdmissionVisit();
             visit.setAdmission(admission);
             visit.setSymptoms(payload.getSymptoms());
