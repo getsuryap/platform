@@ -7,6 +7,7 @@ import org.ospic.fileuploads.service.FilesStorageService;
 import org.ospic.patient.infos.data.PatientData;
 import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.data.PatientTrendsDataRowMapper;
+import org.ospic.patient.infos.data.StatisticsData;
 import org.ospic.patient.infos.domain.Patient;
 import org.ospic.patient.infos.repository.PatientInformationRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
@@ -174,5 +175,25 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId) {
         return ResponseEntity.ok().body(patientInformationRepository.findByStaffId(staffId));
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveStatisticalData() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" SELECT ");
+        sb.append(" COUNT(*) as total,  ");
+        sb.append(" COUNT(IF(isAdmitted,1, NULL))'ipd', ");
+        sb.append(" COUNT(IF(isAdmitted = 0,1, NULL))'opd', ");
+        sb.append(" COUNT(IF(staff_id ,1, NULL))'assigned', ");
+        sb.append(" SUM(ISNULL(staff_id)) AS unassigned, ");
+        sb.append(" COUNT(IF(gender = 1 ,1, NULL))'male', ");
+        sb.append(" COUNT(IF(gender = 2 ,1, NULL))'female', ");
+        sb.append(" COUNT(IF(gender = 0 ,1, NULL))'unspecified' ");
+        sb.append(" FROM m_patients; ");
+        String queryString = sb.toString();
+        Session session = this.sessionFactory.openSession();
+        List<StatisticsData> statisticsData =  jdbcTemplate.query(queryString, new StatisticsData.StatisticsDataRowMapper());
+        session.close();
+        return ResponseEntity.ok().body(statisticsData);
     }
 }

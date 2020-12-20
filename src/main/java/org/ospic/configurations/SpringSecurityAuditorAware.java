@@ -32,8 +32,8 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor(){
-        return Optional.of(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-        //return Optional.of("Naresh");//Optional.of(SecurityContextHolder.getContext().getAuthentication().getName());
+        //return Optional.of(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        return Optional.of("Naresh");//Optional.of(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
 }

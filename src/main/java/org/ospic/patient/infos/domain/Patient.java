@@ -13,6 +13,7 @@ import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.organization.staffs.domains.Staff;
+import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.Gender;
 
@@ -52,7 +53,7 @@ import java.util.Set;
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = true)
-public class Patient extends Auditable<String> implements Serializable {
+public class Patient extends Auditable<User> implements Serializable {
     private static final long serialVersionUID = -1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
