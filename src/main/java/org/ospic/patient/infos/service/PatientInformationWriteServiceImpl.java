@@ -71,6 +71,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     }
 
     @Override
+    @Transactional
     public Patient createNewPatient(Patient patientInformation) {
         return patientInformationRepository.save(patientInformation);
     }

@@ -6,6 +6,8 @@ import org.ospic.patient.infos.domain.Patient;
 import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Component
+@Service
 public interface PatientInformationReadServices {
     @Transactional
     public ResponseEntity<List<Patient>> retrieveAllPatients();
@@ -37,6 +41,8 @@ public interface PatientInformationReadServices {
     public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
 
     public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData();
+
+    public ResponseEntity<?> retrieveStatisticalData();
 
 
     public ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);

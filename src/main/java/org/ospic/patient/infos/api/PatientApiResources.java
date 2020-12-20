@@ -73,6 +73,13 @@ public class PatientApiResources {
         return patientInformationReadServices.retrieveAllUnAssignedPatients();
     }
 
+    @ApiOperation(value = "GET patient statistical data", notes = "Get Patient statistical data")
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> getPatientStatisticalData() {
+        return patientInformationReadServices.retrieveStatisticalData();
+    }
+
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
     @RequestMapping(value = "/assigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

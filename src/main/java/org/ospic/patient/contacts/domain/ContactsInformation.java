@@ -70,7 +70,6 @@ public class ContactsInformation {
 
     @OneToOne
     @MapsId
-    @JsonIgnore
     @ApiModelProperty(position = 1, required = true, hidden=true, notes = "used to display user name")
     private Patient patient;
 
