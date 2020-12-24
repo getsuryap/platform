@@ -62,20 +62,18 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
 
     @Override
     public ResponseEntity<?> createNewService(Long patientId) {
-        Optional<Patient> patientOptional = patientRepository.findById(patientId);
-        if (!patientOptional.isPresent()) {
-            return ResponseEntity.badRequest().body(String.format("A patient with id %2d does not exist", patientId));
-        }
-        if (resourceJpaRepository.existsByPatientIdAndIsActiveTrue(patientId)) {
-            return ResponseEntity.badRequest().body(String.format("A patient with ID: %2d already have an active instance running", patientId));
-        }
+        return patientRepository.findById(patientId).map(patient -> {
+            if (resourceJpaRepository.existsByPatientIdAndIsActiveTrue(patientId)) {
+                return ResponseEntity.badRequest().body(String.format("A patient with ID: %2d already have an active instance running", patientId));
+            }
+            ServiceResource sr = new ServiceResource();
+            sr.setPatient(patient);
+            sr.setIsActive(true);
+            sr.setFromdate(new Date());
+            sr.setTodate(new Date());
+            return ResponseEntity.ok().body(resourceJpaRepository.save(sr).getId());
+        }).orElseThrow(()-> new PatientNotFoundException(patientId));
 
-        ServiceResource sr = new ServiceResource();
-        sr.setPatient(patientOptional.get());
-        sr.setIsActive(true);
-        sr.setFromdate(new Date());
-        sr.setTodate(new Date());
-        return ResponseEntity.ok().body(resourceJpaRepository.save(sr).getId());
     }
 
     @Override
@@ -88,7 +86,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
                 staff.addService(service);
                 staffsRepository.save(staff);
                 cm.setMessage("A Service assigned successfully ");
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
+                return ResponseEntity.ok().body("Service assigned successfully");
             }).orElseThrow(() -> new ServiceNotFoundException(serviceId));
         }).orElseThrow(() -> new StaffNotFoundException(staffId));
     }
