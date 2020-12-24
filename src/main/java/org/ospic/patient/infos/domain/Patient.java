@@ -13,6 +13,7 @@ import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.organization.staffs.domains.Staff;
+import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
 import org.ospic.util.enums.Gender;
@@ -118,41 +119,28 @@ public class Patient extends Auditable<User> implements Serializable {
 
     @NonNull
     @Column(name = "gender")
-    private Gender gender;
+    private String gender;
 
-
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default false")
+    private Boolean isActive;
 
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private ContactsInformation contactsInformation;
 
-
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-
-    private Staff staff;
-
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Diagnosis> diagnoses = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "patients")
-    @JsonIgnore
-    private Set<Admission> admissions = new HashSet<>();
+    private List<ServiceResource> serviceResources = new ArrayList<>();
 
 
     public Patient(
             String name, String guardianName, String phone, String address, String emailAddress,
             String height, String weight, String bloodPressure, int age, Boolean isAdmitted, String patientPhoto,
-            String bloodGroup, String note, String symptoms, String marriageStatus, Gender gender,
-            ContactsInformation contactsInformation, Staff staff, List<Diagnosis> diagnoses) {
+            String bloodGroup, String note, String symptoms, String marriageStatus, String gender,
+            ContactsInformation contactsInformation, Boolean isActive) {
         this.name = name;
         this.guardianName = guardianName;
         this.phone = phone;
@@ -170,8 +158,8 @@ public class Patient extends Auditable<User> implements Serializable {
         this.marriageStatus = marriageStatus;
         this.gender = gender;
         this.contactsInformation = contactsInformation;
-        this.staff = staff;
-        this.diagnoses = diagnoses;
+        this.isActive = isActive;
+
     }
 
 

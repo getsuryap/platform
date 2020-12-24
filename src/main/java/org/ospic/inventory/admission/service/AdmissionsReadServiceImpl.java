@@ -8,17 +8,15 @@ import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.patient.infos.data.PatientAdmissionData;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.repository.PatientRepository;
+import org.ospic.patient.resource.repository.ServiceResourceJpaRepository;
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.util.enums.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,17 +53,17 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Autowired
     BedRepository bedRepository;
     @Autowired
-    PatientInformationRepository patientRepository;
+    ServiceResourceJpaRepository serviceRJRepositoryy;
     @Autowired
     SessionFactory sessionFactory;
 
     public AdmissionsReadServiceImpl(
             BedRepository bedRepository,
-            PatientInformationRepository patientRepository, final DataSource dataSource,
+            ServiceResourceJpaRepository serviceRJRepositoryy, final DataSource dataSource,
             AdmissionRepository admissionRepository) {
         this.admissionRepository = admissionRepository;
         this.bedRepository = bedRepository;
-        this.patientRepository = patientRepository;
+        this.serviceRJRepositoryy = serviceRJRepositoryy;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -85,7 +83,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public Collection<AdmissionResponseData> retrieveAdmissionById(Long admissionId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
-        final String sql = "select " + rm.schema() + " where a.id = ?  order by a.id DESC ";
+        final String sql = "select distinct " + rm.schema() + " where a.id = ?  order by a.id DESC ";
         return this.jdbcTemplate.query(sql, rm, new Object[]{admissionId});
     }
 
@@ -102,16 +100,16 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public Collection<AdmissionResponseData> retrieveListOfPatientAdmission(Long patientId) {
+    public Collection<?> retrieveListOfServiceAdmission(Long serviceId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
-        final String sql = "select " + rm.schema() + " where a.id in (select pa.admissions_id from m_admissions_m_patients pa where pa.patients_id = ? ) order by a.id DESC ";
-        return this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
+        final String sql = "select " + rm.schema() + " where a.id in (select sa.admission_id from service_admission sa where sa.sid = ? ) order by a.id DESC ";
+        return this.jdbcTemplate.query(sql, rm, new Object[]{serviceId});
     }
 
     @Override
     public ResponseEntity<?> retrieveAdmissionInThisBed(Long bedId) {
         final PatientAdmissionRowMapper rm = new PatientAdmissionRowMapper();
-        final String sql =  "select " +rm.schema() +  " where bd.id = ? order by adb.admissions_id desc limit 0, 1";
+        final String sql =  "select " +rm.schema() +  " where bd.id = ? order by adb.admission_id desc limit 0, 1";
         return ResponseEntity.ok().body(this.jdbcTemplate.query(sql,rm,new Object[]{bedId}));
     }
 
@@ -128,11 +126,11 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab.beds_id as bedId, ap.patients_id as patientId, " +
+            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab. bed_id as bedId, ap.sid as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a  " +
-                    " inner join m_admissions_m_beds ab ON ab.admissions_id = a.id " +
-                    " inner join m_admissions_m_patients ap ON ap.admissions_id = a.id "+
-                    " inner join m_beds b on ab.beds_id = b.id " +
+                    " inner join  admission_bed  ab ON ab.admission_id = a.id " +
+                    " inner join service_admission ap ON ap.admission_id = a.id "+
+                    " inner join m_beds b on ab. bed_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id " +
                     " ";
         }
@@ -145,22 +143,22 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             final boolean isActive = rs.getBoolean("isActive");
             final Long bedId = rs.getLong("bedId");
             final Long wardId = rs.getLong("wardId");
-            final Long patientId = rs.getLong("patientId");
+            final Long serviceId = rs.getLong("serviceId");
             final String bedIdentifier = rs.getString("bedIdentifier");
             final String wardName = rs.getString("wardName");
-            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier,patientId);
+            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier,serviceId);
         }
     }
     private static final class PatientAdmissionRowMapper implements RowMapper<PatientAdmissionData> {
 
         public String schema() {
-            return  "  p.id as id,p.address as address, p.age as age, p.blood_group as bloodGroup, p.blood_pressure as bloodPressure, "+
+            return  "  p.id as id, p.address as address, p.age as age, p.blood_group as bloodGroup, p.blood_pressure as bloodPressure, "+
                     "  p.email_address as emailAddress, p.gender as gender, p.guardian_name as guardianName, p.height as height, "+
                     "  p.marital_status as martialStatus, p.name as name, p.thumbnail as thumbNail, p.weight as weight, p.phone as phone "+
                     " from m_beds bd "+
-                    " inner join m_admissions_m_beds adb on bd.id =  adb.beds_id "+
-                    " inner join m_admissions_m_patients ap  on adb.admissions_id = ap.admissions_id "+
-                    " inner join m_patients p ON ap.patients_id = p.id "+
+                    " inner join  admission_bed  adb on bd.id =  adb. bed_id "+
+                    " inner join service_admission ap  on adb.admission_id = ap.admission_id "+
+                    " inner join m_service p ON ap.sid = p.id "+
                     " " ;
         }
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -59,20 +60,20 @@ public class Diagnosis implements Serializable {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "sid")
     @JsonIgnore
-    private Patient patient;
+    private ServiceResource service;
 
-    public Diagnosis( String symptoms, Date date, Patient patient) {
+    public Diagnosis( String symptoms, Date date, ServiceResource service) {
         this.symptoms = symptoms;
         this.date = date;
-        this.patient = patient;
+        this.service = service;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Patient )) return false;
+        if (!(o instanceof Diagnosis )) return false;
         return id != null && id.equals(((Diagnosis) o).id);
     }
 

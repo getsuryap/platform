@@ -2,12 +2,14 @@ package org.ospic.patient.diagnosis.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.diagnosis.repository.DiagnosisRepository;
-import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.resource.repository.ServiceResourceJpaRepository;
 import org.ospic.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -38,39 +40,48 @@ import java.util.List;
 public class DiagnosisServiceImpl implements DiagnosisService {
 
     DiagnosisRepository diagnosisRepository;
-    PatientInformationRepository patientInformationRepository;
+    ServiceResourceJpaRepository serviceRepository;
     @Autowired
     SessionFactory sessionFactory;
+    CustomReponseMessage cm;
+    HttpHeaders httpHeaders;
+
     @Autowired
     public DiagnosisServiceImpl(
             DiagnosisRepository diagnosisRepository,
-            PatientInformationRepository patientInformationRepository){
+            ServiceResourceJpaRepository serviceRepository) {
         this.diagnosisRepository = diagnosisRepository;
-        this.patientInformationRepository = patientInformationRepository;
-    }
-    @Override
-    public ResponseEntity<String> saveDiagnosisReport(Long patientId, Diagnosis diagnosis) {
-        return patientInformationRepository.findById(patientId).map(patient -> {
-            diagnosis.setPatient(patient);
-            diagnosisRepository.save(diagnosis);
-            return ResponseEntity.ok().body("Diagnosis added successfully ");
-        }).orElseGet(() -> {
-            return null;
-        });
+        this.serviceRepository = serviceRepository;
+        cm  = new CustomReponseMessage();
+        httpHeaders = new HttpHeaders();
     }
 
     @Override
-    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReports() {
+    public ResponseEntity<?> saveDiagnosisReport(Long serviceId, Diagnosis diagnosis) {
+        return serviceRepository.findById(serviceId).map(service -> {
+            if (!service.getIsActive()){
+                cm.setMessage( String.format("A service with ID: %2d does not exist ", serviceId));
+                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
+            }
+            diagnosis.setService(service);
+            diagnosisRepository.save(diagnosis);
+            cm.setMessage(String.format("Diagnosis added in service %2d successfully ", serviceId));
+            return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
+        }).orElseGet(() -> { return null; });
+    }
+
+    @Override
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports() {
         Session session = this.sessionFactory.openSession();
-        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s order by date ASC" ,  DatabaseConstants.DIAGNOSES_TABLE)).list();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s order by date ASC", DatabaseConstants.DIAGNOSES_TABLE)).list();
         session.close();
         return ResponseEntity.ok().body(diagnoses);
     }
 
     @Override
-    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByPatientId(Long patientId) {
+    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByServiceId(Long serviceId) {
         Session session = this.sessionFactory.openSession();
-        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s WHERE patient_id = %2d order by date ASC" ,  DatabaseConstants.DIAGNOSES_TABLE, patientId)).list();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s WHERE service_id = %2d order by date ASC", DatabaseConstants.DIAGNOSES_TABLE, serviceId)).list();
         session.close();
         return ResponseEntity.ok().body(diagnoses);
     }

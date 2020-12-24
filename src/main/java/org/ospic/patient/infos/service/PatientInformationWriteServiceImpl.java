@@ -6,7 +6,7 @@ import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.repository.PatientRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
@@ -46,7 +46,7 @@ import java.util.List;
 @Repository
 public class PatientInformationWriteServiceImpl implements PatientInformationWriteService {
     @Autowired
-    private PatientInformationRepository patientInformationRepository;
+    private PatientRepository patientRepository;
     @Autowired
     ContactsInformationRepository contactsInformationRepository;
     @Autowired
@@ -73,17 +73,17 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     @Transactional
     public Patient createNewPatient(Patient patientInformation) {
-        return patientInformationRepository.save(patientInformation);
+        return patientRepository.save(patientInformation);
     }
 
     @Override
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList) {
-        return (List<Patient>) patientInformationRepository.saveAll(patientInformationList);
+        return (List<Patient>) patientRepository.saveAll(patientInformationList);
     }
     @Override
     public ResponseEntity<?> deletePatientById(Long id) {
-        if (patientInformationRepository.existsById(id)) {
-            patientInformationRepository.deleteById(id);
+        if (patientRepository.existsById(id)) {
+            patientRepository.deleteById(id);
             return ResponseEntity.ok(new MessageResponse("Patient deleted Successfully"));
 
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -93,18 +93,18 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Override
     public ResponseEntity<?> updatePatient(Long id, Patient update) {
-        return patientInformationRepository.findById(id)
+        return patientRepository.findById(id)
                 .map(patient -> {
               patient.setContactsInformation(patient.getContactsInformation());
                     patient.setIsAdmitted(update.getIsAdmitted());
-                    return ResponseEntity.ok(patientInformationRepository.save(patient));
+                    return ResponseEntity.ok(patientRepository.save(patient));
 
                 }).orElseThrow(() -> new EntityNotFoundException());
     }
 
     @Override
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest) {
-        return patientInformationRepository.findById(patientId).map(patientInformation -> {
+        return patientRepository.findById(patientId).map(patientInformation -> {
             ContactsInformation contactsInformation = new ContactsInformation(
                     contactsInformationRequest.getIsReachable(), contactsInformationRequest.getEmail_address(),
                     contactsInformationRequest.getZipcode(), contactsInformationRequest.getCity(),
@@ -114,7 +114,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
             patientInformation.setContactsInformation(contactsInformation);
             contactsInformation.setPatient(patientInformation);
 
-            patientInformationRepository.save(patientInformation);
+            patientRepository.save(patientInformation);
             return contactsInformation;
         }).orElseGet(() -> {
             return null;
@@ -124,11 +124,11 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Transactional
     @Override
     public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
-        return patientInformationRepository.findById(patientId).map(patient -> {
+        return patientRepository.findById(patientId).map(patient -> {
             staffsReadPrinciplesService.retrieveStaffById(physicianId).ifPresent(physician -> {
 
-                patient.setStaff(physician);
-                patientInformationRepository.save(patient);
+               // patient.setStaff(physician);
+                patientRepository.save(patient);
 
             });
 
@@ -141,10 +141,10 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity<?> uploadPatientImage(Long patientId, MultipartFile file) {
         try {
-            return patientInformationRepository.findById(patientId).map(patient -> {
+            return patientRepository.findById(patientId).map(patient -> {
                 String imagePath = filesStorageService.uploadPatientImage(patientId, "images", file);
                 patient.setPatientPhoto(imagePath);
-                return ResponseEntity.ok().body(patientInformationRepository.save(patient));
+                return ResponseEntity.ok().body(patientRepository.save(patient));
             }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
@@ -156,11 +156,11 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity<?> deletePatientImage(Long patientId, String fileName) {
         try {
-            patientInformationRepository.findById(patientId).map(patient -> {
+            patientRepository.findById(patientId).map(patient -> {
                 filesStorageService.deletePatientFileOrDocument("images", patientId, fileName);
                 patient.setPatientPhoto(null);
-                patientInformationRepository.save(patient);
-                return ResponseEntity.ok().body(patientInformationRepository.findById(patientId));
+                patientRepository.save(patient);
+                return ResponseEntity.ok().body(patientRepository.findById(patientId));
             }).orElseThrow(() -> new ResourceNotFoundException("patient with id: " + patientId + "not found"));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();

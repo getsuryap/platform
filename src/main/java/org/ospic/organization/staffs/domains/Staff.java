@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -16,6 +17,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,8 +47,9 @@ import java.util.Set;
 @Entity(name = DatabaseConstants.STAFFS_TABLE)
 @Table(name = DatabaseConstants.STAFFS_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Staff {
+public class Staff implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 
@@ -75,7 +78,7 @@ public class Staff {
     )
     @JoinColumn(name = "staff_id")
     @JsonIgnore
-    private Set<Patient> patients = new HashSet<>();
+    private Set<ServiceResource> services = new HashSet<>();
 
     @OneToOne
     @MapsId
@@ -92,14 +95,14 @@ public class Staff {
         this.username = username;
     }
 
-    public void addPatient(Patient patient){
-        patients.add(patient);
-        patient.setStaff(this);
+    public void addService(ServiceResource service){
+        services.add(service);
+        service.setStaff(this);
     }
 
-    public void deletePatient(Patient patient){
-        patients.remove(patient);
-        patient.setStaff(null);
+    public void deleteService(ServiceResource service){
+        services.remove(service);
+        service.setStaff(null);
     }
 
 }

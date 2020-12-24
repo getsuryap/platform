@@ -32,8 +32,8 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface AdmissionsWriteService {
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest);
+    public ResponseEntity<?> admitPatient(AdmissionRequest admissionRequest);
     public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request);
-    public ResponseEntity<String > updatePatientAdmissionInfo();
+    public ResponseEntity<? > updatePatientAdmissionInfo();
 }
 

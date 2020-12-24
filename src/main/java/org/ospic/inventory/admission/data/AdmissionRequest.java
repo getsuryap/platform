@@ -36,16 +36,16 @@ import java.util.Date;
 public class AdmissionRequest implements Serializable {
     private Boolean isActive;
     private Long bedId;
-    private Long patientId;
+    private Long serviceId;
     private Date startDateTime;
     private Date endDateTime;
 
     public AdmissionRequest(
-            Boolean isActive, Long bedId, Long patientId
+            Boolean isActive, Long bedId, Long serviceId
             , Date startDateTime, Date endDateTime) {
         this.isActive = isActive;
         this.bedId = bedId;
-        this.patientId = patientId;
+        this.serviceId = serviceId;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

@@ -28,7 +28,6 @@ import java.util.Optional;
  * under the License.
  */
 public interface DiagnosisRepository extends JpaRepository<Diagnosis, Long> {
-    List<Diagnosis> findByPatientId(Long patientId);
     Optional<Diagnosis> findById(Long diagnosticId);
 
 }

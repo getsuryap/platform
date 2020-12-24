@@ -60,7 +60,7 @@ public class User implements Serializable {
 	private Collection<Role> roles;
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user")
 	private Staff staff;
 
 

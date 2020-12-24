@@ -1,20 +1,22 @@
 package org.ospic.inventory.beds.api;
 
 import io.swagger.annotations.*;
+import org.ospic.domain.CustomReponseMessage;
 import org.ospic.inventory.beds.data.BedData;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.inventory.beds.service.BedReadService;
 import org.ospic.inventory.beds.service.BedWriteService;
-import org.ospic.patient.infos.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.inventory.beds.api
@@ -107,13 +109,14 @@ public class BedsApiResource {
     @ApiOperation(value = "RETRIEVE list of occupied beds", notes = "RETRIEVE list of occupied beds")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Bed>> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
+    ResponseEntity<?> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
         if (!(command == null || command.isEmpty())) {
             if (command.equals("occupied")){
                 return ResponseEntity.ok().body(bedRepository.findByIsOccupiedTrue().get());
             }
             if (command.equals("unoccupied")){
-                return ResponseEntity.ok().body(bedRepository.findByIsOccupiedFalse().get());
+                Optional<List<Bed>> beds = bedRepository.findByIsOccupiedFalse();
+                return ResponseEntity.ok().body(beds.isPresent() ? beds.get() : new CustomReponseMessage(HttpStatus.OK, "Sorry. Seems like all beds are now occupied"));
             }
         }
         return bedReadService.retrieveBedList();

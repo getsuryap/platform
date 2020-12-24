@@ -14,6 +14,7 @@ import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.wards.domain.Ward;
 import org.ospic.patient.diagnosis.domains.Diagnosis;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -51,7 +52,7 @@ import java.util.*;
 
 public class Admission implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private @Setter(AccessLevel.PROTECTED)
     Long id;
@@ -65,20 +66,27 @@ public class Admission implements Serializable {
             CascadeType.PERSIST,
             CascadeType.MERGE
     },  fetch = FetchType.EAGER)
-
-    @JsonIgnoreProperties({"admissions", "contactsInformation", "physician"})
-    private Set<Patient> patients =new HashSet<>();
+    @JoinTable(
+            name = "service_admission",
+            joinColumns = @JoinColumn(name = "admission_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "sid", referencedColumnName = "id"))
+    @JsonIgnoreProperties({"admission", "contactsInformation", "physician"})
+    private Set<ServiceResource> services =new HashSet<>();
 
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     },fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "admission_bed",
+            joinColumns = @JoinColumn(name = "admission_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "bed_id", referencedColumnName = "id"))
     private Set<Bed> beds= new HashSet<>();
 
 
 
-    @Column(name = "start_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "start_date", nullable = false,  columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -121,9 +129,9 @@ public class Admission implements Serializable {
         bed.getAdmissions().add(this);
     }
 
-    public void addPatient(Patient patient){
-        patients.add(patient);
-        patient.getAdmissions().add(this);
+    public void addService(ServiceResource service){
+        services.add(service);
+        service.getAdmissions().add(this);
     }
 
 

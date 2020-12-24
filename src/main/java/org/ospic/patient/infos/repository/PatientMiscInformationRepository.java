@@ -1,9 +1,24 @@
+<<<<<<< Updated upstream:src/main/java/org/ospic/patient/infos/repository/PatientMiscInformationRepository.java
 package org.ospic.patient.infos.repository;
 
 import org.ospic.patient.infos.domain.PatientMiscInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
+=======
+package org.ospic.patient.resource.repository;
+
+import org.ospic.patient.resource.domain.ServiceResource;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * This file was created by eli on 23/12/2020 for org.ospic.patient.resource.repository
+ * --
+ * --
+>>>>>>> Stashed changes:src/main/java/org/ospic/patient/resource/repository/ServiceResourceJpaRepository.java
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -21,6 +36,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * specific language governing permissions and limitations
  * under the License.
  */
+<<<<<<< Updated upstream:src/main/java/org/ospic/patient/infos/repository/PatientMiscInformationRepository.java
 public interface PatientMiscInformationRepository extends JpaRepository<PatientMiscInfo,Long> {
     PatientMiscInfo getById(String id);
+=======
+public interface ServiceResourceJpaRepository extends JpaRepository<ServiceResource, Long> {
+    Optional<List<ServiceResource>> findByIsActiveTrue();
+    Optional<List<ServiceResource>> findByIsActiveFalse();
+    List<ServiceResource> findByPatientId(Long patientId);
+    boolean existsByPatientIdAndIsActiveTrue(Long patientId);
+    List<ServiceResource> findByPatientIdAndIsActiveTrue(Long patientId);
+    List<ServiceResource> findByPatientIdAndIsActiveFalse(Long patientId);
+>>>>>>> Stashed changes:src/main/java/org/ospic/patient/resource/repository/ServiceResourceJpaRepository.java
 }

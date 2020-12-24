@@ -49,57 +49,33 @@ public class DiagnosisApiResources {
     DiagnosisRepository diagnosisRepository;
 
     @Autowired
-    public DiagnosisApiResources(
-            DiagnosisService diagnosisService,
-            DiagnosisRepository diagnosisRepository) {
+    public DiagnosisApiResources(DiagnosisService diagnosisService, DiagnosisRepository diagnosisRepository) {
         this.diagnosisService = diagnosisService;
         this.diagnosisRepository = diagnosisRepository;
     }
 
-    @ApiOperation(
-            value = "LIST all available diagnosis",
-            notes = "LIST all available diagnosis"
-    )
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "LIST all available diagnosis", notes = "LIST all available diagnosis")
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports() {
-        //List<Diagnosis> diagnoses = diagnosisRepository.findAll();
         return diagnosisService.retrieveAllDiagnosisReports();
     }
 
 
-    @ApiOperation(
-            value = "LIST Patient diagnosis",
-            notes = "LIST Patient diagnosis"
-    )
-    @RequestMapping(
-            value = "/{patientId}",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "LIST Patient diagnosis", notes = "LIST Patient diagnosis")
+    @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByPatientId(@PathVariable("patientId") @NotNull Long patientId) {
-        return diagnosisService.retrieveAllDiagnosisReportsByPatientId(patientId);
+    public ResponseEntity<?> retrieveAllDiagnosisReportsByServiceId(@PathVariable("serviceId") @NotNull Long serviceId) {
+        return diagnosisService.retrieveAllDiagnosisReportsByServiceId(serviceId);
     }
 
 
-    @ApiOperation(
-            value = "CREATE new diagnosis Report",
-            notes = "CREATE new diagnosis Report")
-
-    @RequestMapping(
-            value = "/{patientId}",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "CREATE new diagnosis Report", notes = "CREATE new diagnosis Report")
+    @RequestMapping(value = "/{serviceId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity createNewPatientDiagnosisReport( @PathVariable Long patientId, @RequestBody Diagnosis diagnosticReport) {
+    public ResponseEntity<?> createNewPatientDiagnosisReport( @PathVariable Long serviceId, @RequestBody Diagnosis diagnosticReport) {
 
-        return diagnosisService.saveDiagnosisReport(patientId, diagnosticReport);
+        return diagnosisService.saveDiagnosisReport(serviceId, diagnosticReport);
     }
 
 

@@ -60,20 +60,20 @@ public class MedicineCategory implements Serializable {
 
 
     @Column(name = "descriptions", length = 250)
-    private String description;
+    private String descriptions;
 
     @OneToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "grp_id")
+    @JoinColumn(name = "category_id")
     @JsonIgnore
     private Set<Medicine> medicines = new HashSet<>();
 
-    public MedicineCategory(String name, String description) {
+    public MedicineCategory(String name, String descriptions) {
         this.name = name;
-        this.description = description;
+        this.descriptions = descriptions;
     }
 
     @Override

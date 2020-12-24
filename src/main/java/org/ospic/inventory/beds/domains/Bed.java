@@ -56,7 +56,12 @@ public class Bed implements Serializable {
     private String identifier;
 
 
-    @ManyToMany(mappedBy = "beds", fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "admission_bed",
+            joinColumns = @JoinColumn(name = "bed_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "admission_id", referencedColumnName = "id"))
     @JsonIgnore
     private Set<Admission> admissions = new HashSet<>();
 
@@ -68,7 +73,7 @@ public class Bed implements Serializable {
     private Boolean isOccupied;
 
     @ManyToOne
-    @JoinColumn(name = "ward_id")
+    @JoinColumn(name = "ward_id", nullable = false)
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
     @JsonIgnore
     private Ward ward;

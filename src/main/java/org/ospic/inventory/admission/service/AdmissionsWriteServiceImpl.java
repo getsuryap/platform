@@ -10,7 +10,9 @@ import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.exception.BedNotFoundException;
 import org.ospic.inventory.beds.repository.BedRepository;
 import org.ospic.patient.infos.exceptions.PatientNotFoundException;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.repository.PatientRepository;
+import org.ospic.patient.resource.exception.ServiceNotFoundException;
+import org.ospic.patient.resource.repository.ServiceResourceJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,25 +55,27 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     @Autowired
     BedRepository bedRepository;
     @Autowired
-    PatientInformationRepository patientInformationRepository;
+    ServiceResourceJpaRepository serviceResourceJpaRepository;
 
     public AdmissionsWriteServiceImpl(
             AdmissionRepository admissionRepository,
             BedRepository bedRepository,
-            PatientInformationRepository patientInformationRepository) {
+            ServiceResourceJpaRepository serviceResourceJpaRepository) {
         this.admissionRepository = admissionRepository;
         this.bedRepository = bedRepository;
-        this.patientInformationRepository = patientInformationRepository;
+        this.serviceResourceJpaRepository = serviceResourceJpaRepository;
     }
 
     @Transactional
     @Override
-    public ResponseEntity<CustomReponseMessage> admitPatient(AdmissionRequest admissionRequest) {
-        return patientInformationRepository.findById(admissionRequest.getPatientId()).map(patient -> {
+    public ResponseEntity<?> admitPatient(AdmissionRequest admissionRequest) {
+        return serviceResourceJpaRepository.findById(admissionRequest.getServiceId()).map(service -> {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
-
-            if (patient.getIsAdmitted()) {
+            if (!service.getIsActive()){
+                return ResponseEntity.ok().body("Cannot admit patient in inactive service");
+            }
+            if (service.getPatient().getIsAdmitted()) {
                 cm.setMessage("Cannot re-admit an admitted patient");
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
             }
@@ -86,7 +90,8 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
             }
             /**Create new admission **/
             Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(), admissionRequest.getStartDateTime());
-            admission.addPatient(patient);
+            admission.addService(service);
+            admission.setIsActive(true);
             admission.addBed(bed);
             admissionRepository.save(admission);
 
@@ -97,8 +102,8 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
             /**
              * Update patient set as admitted to prevent re-admission**/
-            patient.setIsAdmitted(true);
-            patientInformationRepository.save(patient);
+            service.getPatient().setIsAdmitted(true);
+            serviceResourceJpaRepository.save(service);
 
 
             /**Return Message **/
@@ -112,16 +117,16 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
-        return patientInformationRepository.findById(request.getPatientId()).map(patient -> {
+        return serviceResourceJpaRepository.findById(request.getServiceId()).map(service -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
               return bedRepository.findById(request.getBedId()).map(bed ->{
-                  if (!(admission.getIsActive() || patient.getIsAdmitted())) {
-                      cm.setMessage("Can't end inactive admission or un-admitted patient");
+                  if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
+                      cm.setMessage("Can't end inactive admission or un-admitted serviceI");
                       return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
                   }
-                  /** Update patient set as no longer admitted **/
-                  patient.setIsAdmitted(false);
-                  patientInformationRepository.save(patient);
+                  /** Update serviceI set as no longer admitted **/
+                  service.getPatient().setIsAdmitted(false);
+                  serviceResourceJpaRepository.save(service);
 
                   /** Update Admission set as no longer active **/
                   admission.setIsActive(false);
@@ -133,11 +138,11 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                   bedRepository.save(bed);
 
                   /**Return Message status back to user**/
-                  cm.setMessage(String.format("Admission %2d for patient %s has being ended on %s ", request.getAdmissionId(), patient.getName(), request.getEndDateTime()));
+                  cm.setMessage(String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime()));
                   return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
               }).orElseThrow(()-> new BedNotFoundException(request.getBedId()));
             }).orElseThrow(() -> new AdmissionNotFoundException(request.getAdmissionId()));
-        }).orElseThrow(() -> new PatientNotFoundException(request.getPatientId()));
+        }).orElseThrow(() -> new ServiceNotFoundException(request.getServiceId()));
 
     }
 

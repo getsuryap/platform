@@ -55,8 +55,8 @@ public class MedicineGroup  {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "descriptions", length = 250)
-    private String description;
+    @Column(name = "descriptions", length = 250, nullable = false)
+    private String descriptions;
 
     @OneToMany(
             fetch = FetchType.EAGER,
@@ -65,12 +65,12 @@ public class MedicineGroup  {
 
     )
     @JsonIgnore
-    @JoinColumn(name = "grp_id")
+    @JoinColumn(name = "group_id")
     private Set<Medicine> medicines = new HashSet<>();
 
-    public MedicineGroup(String name, String description) {
+    public MedicineGroup(String name, String descriptions) {
         this.name = name;
-        this.description = description;
+        this.descriptions = descriptions;
     }
 
     @Override

@@ -70,12 +70,12 @@ public class Medicine implements Serializable {
     @Column(name = "units", length = 5)
     private int units;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "grp_id")
+    @ManyToOne
+    @JoinColumn(name = "group_id")
     private MedicineGroup group;
 
     @ManyToOne
-    @JoinColumn(name = "cat_id")
+    @JoinColumn(name = "category_id")
     private MedicineCategory category;
 
     public Medicine(

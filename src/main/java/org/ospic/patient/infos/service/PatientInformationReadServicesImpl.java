@@ -9,7 +9,7 @@ import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.data.PatientTrendsDataRowMapper;
 import org.ospic.patient.infos.data.StatisticsData;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.repository.PatientRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.organization.staffs.domains.Staff;
 import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
@@ -50,7 +50,7 @@ import java.util.List;
 public class PatientInformationReadServicesImpl implements PatientInformationReadServices {
 
     @Autowired
-    private PatientInformationRepository patientInformationRepository;
+    private PatientRepository patientRepository;
     @Autowired
     ContactsInformationRepository contactsInformationRepository;
     @Autowired
@@ -102,7 +102,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity retrievePatientCreationDataTemplate() {
         List<Staff> staffs = staffsReadPrinciplesService.retrieveAllStaffs();
         for (int i = 0; i < staffs.size(); i++) {
-            staffs.get(i).getPatients().clear();
+            //staffs.get(i).getPatients().clear();
         }
         return ResponseEntity.ok().body(PatientData.patientCreationTemplate(staffs));
     }
@@ -125,11 +125,12 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
     @Override
     public ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException {
-        if (patientInformationRepository.existsById(id)) {
-            Patient patient = patientInformationRepository.findById(id).get();
-            if (patient.getStaff() != null) {
-                patient.getStaff().getPatients().clear();
-                patient.getStaff().setUser(null);
+        if (patientRepository.existsById(id)) {
+            Patient patient = patientRepository.findById(id).get();
+            if (
+                    patient.getServiceResources() != null) {
+                //patient.getStaff().getPatients().clear();
+               // patient.getStaff().setUser(null);
             }
             return ResponseEntity.ok().body(patient);
         } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -140,11 +141,11 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId) {
         String sb =
                 " select p.id from  m_patients p where id =  " +
-                        " (select  pa.patients_id from " +
+                        " (select  pa.patient_id from " +
                         " m_admissions a " +
-                        " inner join m_admissions_m_beds ba ON a.id = ba.admissions_id " +
-                        " inner join m_admissions_m_patients pa ON a.id = pa.admissions_id " +
-                        " where ba.beds_id = 1 AND a.is_active = true) ";
+                        " inner join  admission_bed  ba ON a.id = ba.admission_id " +
+                        " inner join m_admissions_m_patients pa ON a.id = pa.admission_id " +
+                        " where ba. bed_id = 1 AND a.is_active = true) ";
         Session session = this.sessionFactory.openSession();
         List<Patient> patient = session.createQuery(sb).list();
         session.close();
@@ -154,7 +155,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     @Override
     public ResponseEntity<?> retrievePageablePatients(String group, Pageable pageable) {
         try {
-            Page<Patient> page = patientInformationRepository.findAll(pageable);
+            Page<Patient> page = patientRepository.findAll(pageable);
             /**List<Patient> patients = new ArrayList<>();
             patients = page.getContent();
             Map<String, Object> response = new HashMap<>();
@@ -174,7 +175,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
     @Override
     public ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId) {
-        return ResponseEntity.ok().body(patientInformationRepository.findByStaffId(staffId));
+        return ResponseEntity.ok().body(patientRepository.findById(staffId));
     }
 
     @Override
@@ -184,8 +185,8 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         sb.append(" COUNT(*) as total,  ");
         sb.append(" COUNT(IF(isAdmitted,1, NULL))'ipd', ");
         sb.append(" COUNT(IF(isAdmitted = 0,1, NULL))'opd', ");
-        sb.append(" COUNT(IF(staff_id ,1, NULL))'assigned', ");
-        sb.append(" SUM(ISNULL(staff_id)) AS unassigned, ");
+        sb.append(" COUNT(IF(is_active,1,NULL))'assigned', ");
+        sb.append(" COUNT(IF(is_active = 0,1,NULL)) AS unassigned, ");
         sb.append(" COUNT(IF(gender = 1 ,1, NULL))'male', ");
         sb.append(" COUNT(IF(gender = 2 ,1, NULL))'female', ");
         sb.append(" COUNT(IF(gender = 0 ,1, NULL))'unspecified' ");

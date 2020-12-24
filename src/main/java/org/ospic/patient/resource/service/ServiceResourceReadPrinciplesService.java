@@ -1,12 +1,11 @@
-package org.ospic.inventory.admission.data;
+package org.ospic.patient.resource.service;
 
-import lombok.*;
-
-import java.io.Serializable;
-import java.util.Date;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.inventory.admission.data
+ * This file was created by eli on 23/12/2020 for org.ospic.patient.resource.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,20 +25,14 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-@ToString
-public class EndAdmissionRequest implements Serializable {
-    private Long serviceId;
-    private Long admissionId;
-    private Date endDateTime;
-    private Long bedId;
-
-    public EndAdmissionRequest(Long serviceId, Long admissionId, Long bedId, Date endDateTime) {
-        this.serviceId = serviceId;
-        this.admissionId = admissionId;
-        this.endDateTime = endDateTime;
-        this.bedId  = bedId;
-    }
+@Component
+@Service
+public interface ServiceResourceReadPrinciplesService {
+    ResponseEntity<?> retrieveAllServices();
+    ResponseEntity<?> retrialAllActiveServices();
+    ResponseEntity<?> retrieveAllInactiveServices();
+    ResponseEntity<?> retrieveAServiceById(Long serviceId);
+    ResponseEntity<?> retrieveServiceByPatientId(Long patientId);
+    ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveTrue(Long patientId);
+    ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveFalse(Long patientId);
 }

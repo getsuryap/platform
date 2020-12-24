@@ -32,9 +32,9 @@ import java.util.List;
 @Component
 @Service
 public interface DiagnosisService {
-    public ResponseEntity<String> saveDiagnosisReport(@NonNull Long patientId, @NonNull Diagnosis diagnosis);
+    public ResponseEntity<?> saveDiagnosisReport(@NonNull Long serviceId, @NonNull Diagnosis diagnosis);
 
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports();
 
-    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByPatientId(Long patientId);
+    public ResponseEntity<List<Diagnosis>>  retrieveAllDiagnosisReportsByServiceId(Long serviceId);
 }

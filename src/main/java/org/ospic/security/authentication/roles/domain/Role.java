@@ -27,14 +27,13 @@ public class Role {
     private RoleEnums name;
 
     @Column(length = 200)
-    private String role_id;
+    private String role;
 
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-
-    public Role(RoleEnums name, String role_id) {
-        this.role_id = role_id;
+    public Role(RoleEnums name, String role) {
+        this.role = role;
         this.name = name;
     }
 

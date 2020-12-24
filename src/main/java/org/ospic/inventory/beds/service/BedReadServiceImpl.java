@@ -72,7 +72,7 @@ public class BedReadServiceImpl implements BedReadService {
     @Override
     public ResponseEntity<List<Bed>> retrieveBedListByWard(Long wardId) {
         Session session = this.sessionFactory.openSession();
-        String queryString = String.format("from %s WHERE ward_id = %2d", DatabaseConstants.BEDS_TABLE, wardId);
+        String queryString = String.format("from %s WHERE ward = %2d", DatabaseConstants.BEDS_TABLE, wardId);
         List<Bed> bedsList = session.createQuery(queryString).list();
         bedsList.forEach(bed -> {
             bed.setWard(null);

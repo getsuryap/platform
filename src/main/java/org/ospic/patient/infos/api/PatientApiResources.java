@@ -2,10 +2,9 @@ package org.ospic.patient.infos.api;
 
 import org.ospic.fileuploads.message.ResponseMessage;
 import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.patient.infos.data.PatientData;
 import org.ospic.patient.infos.data.PatientTrendDatas;
 import org.ospic.patient.infos.domain.Patient;
-import org.ospic.patient.infos.repository.PatientInformationRepository;
+import org.ospic.patient.infos.repository.PatientRepository;
 import org.ospic.patient.infos.service.PatientInformationReadServices;
 import org.ospic.patient.infos.service.PatientInformationWriteService;
 import org.ospic.util.exceptions.ResourceNotFoundException;
@@ -19,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -53,12 +51,12 @@ public class PatientApiResources {
     PatientInformationReadServices patientInformationReadServices;
     PatientInformationWriteService patientInformationWriteService;
     FilesStorageService filesStorageService;
-    PatientInformationRepository patientRepository;
+    PatientRepository patientRepository;
 
     @Autowired
     public PatientApiResources(PatientInformationReadServices patientInformationReadServices,
                                PatientInformationWriteService patientInformationWriteService,
-                               FilesStorageService filesStorageService, PatientInformationRepository patientRepository) {
+                               FilesStorageService filesStorageService, PatientRepository patientRepository) {
         this.patientInformationReadServices = patientInformationReadServices;
         this.patientInformationWriteService = patientInformationWriteService;
         this.filesStorageService = filesStorageService;

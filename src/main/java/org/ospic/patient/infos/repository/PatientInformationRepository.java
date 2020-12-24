@@ -25,7 +25,7 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface PatientInformationRepository extends JpaRepository<Patient,Long> {
+public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Transactional
     Patient getById(String id);
    Page<Patient> findByBloodGroup(String bloodGroup, Pageable pageable);

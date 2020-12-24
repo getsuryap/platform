@@ -90,8 +90,8 @@ public class AdmissionsApiResources {
             if (command.equals("bed")){
                 return admissionsReadService.retrieveListOfAdmissionInBedId(id);
             }
-            if (command.equals("patient")){
-                return ResponseEntity.ok().body(admissionsReadService.retrieveListOfPatientAdmission(id));
+            if (command.equals("service")){
+                return ResponseEntity.ok().body(admissionsReadService.retrieveListOfServiceAdmission(id));
             }
 
         }
@@ -105,7 +105,7 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<CustomReponseMessage> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
+    ResponseEntity<?> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
     }
 

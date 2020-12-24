@@ -30,9 +30,7 @@ import java.util.Optional;
 public interface AdmissionRepository extends JpaRepository<Admission,Long> {
     boolean isActive(Long admissionId);
     boolean existsByBedsId(Long bedId);
-    boolean existsByPatientsId(Long patientId);
     Optional<Admission> findById(Long admissionId);
-    List<Admission> findByPatientsId(Long patientId);
     List<Admission> findByBedsId(Long bedId);
 
 }

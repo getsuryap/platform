@@ -35,7 +35,7 @@ import java.util.List;
 public interface AdmissionsReadService {
     public ResponseEntity<List<Admission>> retrieveAllAdmissions();
 
-    public Collection<AdmissionResponseData> retrieveListOfPatientAdmission(Long patientId);
+    public Collection<?> retrieveListOfServiceAdmission(Long patientId);
 
     public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId);
 
