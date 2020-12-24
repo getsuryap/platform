@@ -185,16 +185,16 @@ CREATE TABLE IF NOT EXISTS `m_diagnoses`(
 DROP TABLE IF EXISTS  `admission_bed`;
 CREATE TABLE IF NOT EXISTS  `admission_bed`(
   admission_id BIGINT  NOT NULL, bed_id BIGINT  NOT NULL,
-  CONSTRAINT `FK_admissions_admission_id` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `FK_admissions_bed_id` FOREIGN KEY (bed_id) REFERENCES `m_beds`(id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT `FK_admissions_admission_id` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE ,
+  CONSTRAINT `FK_admissions_bed_id` FOREIGN KEY (bed_id) REFERENCES `m_beds`(id) ON DELETE CASCADE ON UPDATE CASCADE 
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `service_admission`;
 CREATE TABLE IF NOT EXISTS  `service_admission`(
   admission_id BIGINT  NOT NULL, sid BIGINT ,
-  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE ,
+  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS  `user_roles`;
