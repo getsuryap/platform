@@ -47,18 +47,18 @@ public class HibernateConfigurations {
     }
 
 
-    /**
+
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic_default?useSSL=true");
+        basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic-schema?useSSL=true");
         basicDataSource.setUsername("root");
         basicDataSource.setPassword("mysql");
         return basicDataSource;
     }
-      **/
 
+    /**
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
@@ -68,6 +68,7 @@ public class HibernateConfigurations {
         basicDataSource.setPassword("OOTnKY9r3I");
         return basicDataSource;
     }
+     **/
 
 
 
@@ -82,7 +83,7 @@ public class HibernateConfigurations {
 
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "none");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         hibernateProperties.setProperty("show-sql", "true");
         return hibernateProperties;
