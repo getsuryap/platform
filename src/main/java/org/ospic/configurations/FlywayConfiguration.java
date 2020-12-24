@@ -1,13 +1,13 @@
-package org.ospic.patient.infos.repository;
+package org.ospic.configurations;
 
-import org.ospic.patient.infos.domain.Patient;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.domain.Pageable;
-import javax.transaction.Transactional;
-import java.util.List;
-
+import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import javax.sql.DataSource;
 /**
+ * This file was created by eli on 22/12/2020 for org.ospic.configurations
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -25,10 +25,20 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface PatientInformationRepository extends JpaRepository<Patient,Long> {
-    @Transactional
-    Patient getById(String id);
-   Page<Patient> findByBloodGroup(String bloodGroup, Pageable pageable);
-   List<Patient> findByStaffId(Long staffId);
-    Page<Patient> findAll(Pageable pageable);
+@Configuration
+public class FlywayConfiguration {
+
+    @Autowired
+    public FlywayConfiguration(DataSource dataSource) {
+        Flyway.configure()
+                .baselineOnMigrate(true)
+                .table("schema_version")
+                .sqlMigrationPrefix("V")
+                .sqlMigrationSeparator("__")
+                .sqlMigrationSuffixes(".sql")
+
+                .connectRetries(10)
+                .dataSource(dataSource).load().migrate();
+    }
 }
+
