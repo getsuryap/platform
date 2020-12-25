@@ -111,9 +111,9 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT date(created_date) as date, count(*) as total,");
-        sb.append("count(case when gender = '1' then 1 else null end) as male, ");
-        sb.append("count(case when gender = '2' then 1 else null end) as female, ");
-        sb.append("count(case when gender = '0' then 1 else null end) as other FROM m_patients group by date(created_date)");
+        sb.append("count(case when gender = 'male' then 1 else null end) as male, ");
+        sb.append("count(case when gender = 'female' then 1 else null end) as female, ");
+        sb.append("count(case when gender = 'unspecified' then 1 else null end) as other FROM m_patients group by date(created_date)");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
         List<PatientTrendDatas> patientstrends = jdbcTemplate.query(queryString, new PatientTrendsDataRowMapper());
