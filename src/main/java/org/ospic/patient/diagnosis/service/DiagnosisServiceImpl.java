@@ -81,7 +81,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReportsByServiceId(Long serviceId) {
         Session session = this.sessionFactory.openSession();
-        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s WHERE service_id = %2d order by date ASC", DatabaseConstants.DIAGNOSES_TABLE, serviceId)).list();
+        List<Diagnosis> diagnoses = session.createQuery(String.format("from %s WHERE sid = %2d order by date ASC", DatabaseConstants.DIAGNOSES_TABLE, serviceId)).list();
         session.close();
         return ResponseEntity.ok().body(diagnoses);
     }

@@ -126,10 +126,10 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab. bed_id as bedId, ap.sid as serviceId, " +
+            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab. bed_id as bedId, sa.sid as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a  " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
-                    " inner join service_admission ap ON ap.admission_id = a.id "+
+                    " inner join service_admission sa ON sa.admission_id = a.id "+
                     " inner join m_beds b on ab. bed_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id " +
                     " ";
@@ -179,7 +179,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             final String imageUrl = rs.getString("thumbNail");
             final String weight = rs.getString("weight");
             final String phone = rs.getString("phone");
-            return new PatientAdmissionData(id,name,phone,gender, height, weight, guardianName, bloodPressure, age, emailAddress,martiaStatus, imageUrl,bloodGroup );
+            return new PatientAdmissionData(id,name,phone,gender, height, weight, guardianName, bloodPressure, age, emailAddress,martiaStatus, imageUrl,bloodGroup,address );
         }
     }
 

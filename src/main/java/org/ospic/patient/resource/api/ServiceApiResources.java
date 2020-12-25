@@ -81,6 +81,21 @@ public class ServiceApiResources {
         return serviceRead.retrieveServiceByPatientId(patientId);
     }
 
+    @ApiOperation(value = "RETRIEVE staff assigned services by staff Id", notes = "RETRIEVE staff assigned service by staff Id")
+    @RequestMapping(value = "/staff/{staffId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveServiceByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
+        if (!(command == null || command.isEmpty())) {
+            if (command.equals("true")) {
+                return serviceRead.retrieveServiceByStaffIdAndIsActiveTrue(staffId);
+            }
+            if (command.equals("false")) {
+                return serviceRead.retrieveServiceByStaffIdAndIsActiveFalse(staffId);
+            }
+        }
+        return serviceRead.retrieveServiceByStaffIdAll(staffId);
+    }
+
     @ApiOperation(value = "CREATE new patient service", notes = "CREATE new patient service")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

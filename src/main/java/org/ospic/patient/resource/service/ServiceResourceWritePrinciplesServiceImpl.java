@@ -71,6 +71,8 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             sr.setIsActive(true);
             sr.setFromdate(new Date());
             sr.setTodate(new Date());
+            patient.setIsActive(true);
+            patientRepository.save(patient);
             return ResponseEntity.ok().body(resourceJpaRepository.save(sr).getId());
         }).orElseThrow(()-> new PatientNotFoundException(patientId));
 

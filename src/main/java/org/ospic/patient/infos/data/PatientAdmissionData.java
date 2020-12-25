@@ -47,8 +47,9 @@ public class PatientAdmissionData {
     private String martiaStatus;
     private String patientPhoto;
     private String bloodGroup;
+    private String address;
 
-    public PatientAdmissionData(Long id, String name, String phone, String gender, String height, String weight, String guardianName, String bloodPressure, Integer age, String email, String martiaStatus, String patientPhoto, String bloodGroup) {
+    public PatientAdmissionData(Long id, String name, String phone, String gender, String height, String weight, String guardianName, String bloodPressure, Integer age, String email, String martiaStatus, String patientPhoto, String bloodGroup, String address) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -62,5 +63,6 @@ public class PatientAdmissionData {
         this.martiaStatus = martiaStatus;
         this.patientPhoto = patientPhoto;
         this.bloodGroup = bloodGroup;
+        this.address = address;
     }
 }

@@ -105,7 +105,7 @@ public class Admission implements Serializable {
     )
     @JoinColumn(name = "admission_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-    @JsonIgnore
+
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<AdmissionVisit>  visits = new ArrayList<>();
 

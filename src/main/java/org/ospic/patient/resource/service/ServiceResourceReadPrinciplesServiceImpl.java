@@ -1,14 +1,21 @@
 package org.ospic.patient.resource.service;
 
 import org.ospic.patient.infos.repository.PatientRepository;
+import org.ospic.patient.resource.data.ServicePayload;
 import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.patient.resource.exception.ServiceNotFoundException;
+import org.ospic.patient.resource.mappers.ServiceResourceMapper;
 import org.ospic.patient.resource.repository.ServiceResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.patient.resource.service
@@ -37,18 +44,23 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
     PatientRepository patientRepository;
     @Autowired
     ServiceResourceJpaRepository resourceJpaRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public ServiceResourceReadPrinciplesServiceImpl(
-            PatientRepository patientRepository, ServiceResourceJpaRepository resourceJpaRepository) {
+            PatientRepository patientRepository, ServiceResourceJpaRepository resourceJpaRepository,
+            final DataSource dataSource) {
         this.patientRepository = patientRepository;
         this.resourceJpaRepository = resourceJpaRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ResponseEntity<?> retrieveAllServices() {
-        Collection<ServiceResource> resources = resourceJpaRepository.findAll();
-        return ResponseEntity.ok().body(resources);
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + "";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(payloads);
     }
 
     @Override
@@ -63,23 +75,56 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
 
     @Override
     public ResponseEntity<?> retrieveAServiceById(Long serviceId) {
-        return resourceJpaRepository.findById(serviceId).map(service->{
+        return resourceJpaRepository.findById(serviceId).map(service -> {
             return ResponseEntity.ok().body(resourceJpaRepository.findById(serviceId));
-        }).orElseThrow(()-> new ServiceNotFoundException(serviceId));
+        }).orElseThrow(() -> new ServiceNotFoundException(serviceId));
     }
 
     @Override
     public ResponseEntity<?> retrieveServiceByPatientId(Long patientId) {
-        return ResponseEntity.ok().body(resourceJpaRepository.findByPatientId(patientId));
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ?";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
+        return ResponseEntity.ok().body(payloads);
     }
 
     @Override
     public ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveFalse(Long patientId) {
-        return ResponseEntity.ok().body(resourceJpaRepository.findByPatientIdAndIsActiveFalse(patientId));
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND !s.is_active";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
+        return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveTrue(Long staffId) {
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND s.is_active";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
+        return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveFalse(Long staffId) {
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND! s.is_active";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
+        return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveServiceByStaffIdAll(Long staffId) {
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? ";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
+        return ResponseEntity.ok().body(payloads);
     }
 
     @Override
     public ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveTrue(Long patientId) {
-        return ResponseEntity.ok().body(resourceJpaRepository.findByPatientIdAndIsActiveTrue(patientId));
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND s.is_active";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
+        return ResponseEntity.ok().body(payloads);
     }
 }
