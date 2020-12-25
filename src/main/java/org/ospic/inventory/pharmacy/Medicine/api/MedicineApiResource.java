@@ -65,12 +65,9 @@ public class MedicineApiResource {
     @ApiOperation(value = "RETRIEVE list of available Medicines", notes = "RETRIEVE list of available Medicines", response = Medicine.class)
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Medicine>> retrieveAllMedicineProductsOrTemplate() {
-        List<Medicine> medicines = medicineReadService.fetchAllMedicine();
-        if (medicines.isEmpty()){
-            return new ResponseEntity<List<Medicine>>(HttpStatus.NO_CONTENT);
-        }
-        return  ResponseEntity.ok().body(medicines);
+    ResponseEntity<?> retrieveAllMedicineProductsOrTemplate() {
+     
+        return  ResponseEntity.ok().body(medicineReadService.retrieveAllMedicines());
     }
 
     @ApiOperation(value = "RETRIEVE  Medicines by ID", notes = "RETRIEVE  Medicines by ID", response = Medicine.class)

@@ -62,7 +62,7 @@ public class MedicineReadServiceImpl implements MedicineReadService {
     }
 
     @Override
-    public List<Medicine> fetchAllMedicine() {
+    public ResponseEntity<?> retrieveAllMedicines() {
         Session session = this.sessionFactory.openSession();
         List<Medicine> medicines = session.createQuery(String.format("from %s", DatabaseConstants.TABLE_PHARMACY_MEDICINES)).list();
         medicines.forEach(medicine -> {
@@ -77,7 +77,7 @@ public class MedicineReadServiceImpl implements MedicineReadService {
         });
 
         session.close();
-        return medicines;
+        return ResponseEntity.ok().body(medicines);
     }
 
     @Override
