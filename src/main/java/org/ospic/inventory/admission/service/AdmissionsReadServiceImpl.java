@@ -158,7 +158,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " from m_beds bd "+
                     " inner join  admission_bed  adb on bd.id =  adb. bed_id "+
                     " inner join service_admission ap  on adb.admission_id = ap.admission_id "+
-                    " inner join m_service p ON ap.sid = p.id "+
+                    " inner join m_patients p ON ap.sid = p.id "+
                     " " ;
         }
 
