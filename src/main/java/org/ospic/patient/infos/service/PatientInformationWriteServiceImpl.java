@@ -6,6 +6,7 @@ import org.ospic.patient.contacts.domain.ContactsInformation;
 import org.ospic.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.patient.contacts.services.ContactsInformationService;
 import org.ospic.patient.infos.domain.Patient;
+import org.ospic.patient.infos.exceptions.PatientNotFoundException;
 import org.ospic.patient.infos.repository.PatientRepository;
 import org.ospic.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.organization.staffs.service.StaffsReadPrinciplesService;
@@ -81,6 +82,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     public List<Patient> createByPatientListIterate(List<Patient> patientInformationList) {
         return (List<Patient>) patientRepository.saveAll(patientInformationList);
     }
+
     @Override
     public ResponseEntity<?> deletePatientById(Long id) {
         if (patientRepository.existsById(id)) {
@@ -96,11 +98,24 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     public ResponseEntity<?> updatePatient(Long id, Patient update) {
         return patientRepository.findById(id)
                 .map(patient -> {
-              patient.setContactsInformation(patient.getContactsInformation());
-                    patient.setIsAdmitted(update.getIsAdmitted());
+                    patient.setIsAdmitted(update.getIsAdmitted()==null ? patient.getIsAdmitted() : update.getIsAdmitted());
+                    patient.setAddress(update.getAddress() == null ? patient.getAddress() :  update.getAddress());
+                    patient.setName(update.getName() == null ? patient.getName() : update.getName());
+                    patient.setGuardianName(update.getGuardianName()== null ? patient.getGuardianName() :  update.getGuardianName());
+                    patient.setBloodGroup(update.getBloodGroup()== null ? patient.getBloodGroup(): update.getBloodGroup());
+                    patient.setBloodGroup(update.getBloodGroup()== null ? patient.getBloodGroup() :  update.getBloodGroup());
+                    patient.setWeight(update.getWeight()== null ? patient.getWeight() : update.getWeight());
+                    patient.setHeight(update.getWeight()== null ? patient.getWeight():update.getWeight());
+                    patient.setAge(update.getAge());
+                    patient.setEmailAddress(update.getEmailAddress()== null ? patient.getEmailAddress() : update.getEmailAddress());
+                    patient.setGender(update.getGender()== null ? patient.getGender(): update.getGender());
+                    patient.setMarriageStatus(update.getMarriageStatus()== null ? patient.getMarriageStatus() : update.getMarriageStatus());
+                    patient.setPhone(update.getPhone()== null ? patient.getPhone() : update.getPhone());
+                    patient.setNote(update.getNote()== null ? patient.getNote(): update.getNote());
+                    patient.setSymptoms(update.getSymptoms()== null ? patient.getSymptoms() :update.getSymptoms());
                     return ResponseEntity.ok(patientRepository.save(patient));
 
-                }).orElseThrow(() -> new EntityNotFoundException());
+                }).orElseThrow(() -> new PatientNotFoundException(id));
     }
 
     @Override
@@ -128,7 +143,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         return patientRepository.findById(patientId).map(patient -> {
             staffsReadPrinciplesService.retrieveStaffById(physicianId).ifPresent(physician -> {
 
-               // patient.setStaff(physician);
+                // patient.setStaff(physician);
                 patientRepository.save(patient);
 
             });
