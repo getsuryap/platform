@@ -51,7 +51,7 @@ public class RoleReadPrincipleServicesImpl implements RoleReadPrincipleServices{
 
     public static final class RolePayloadDataRowMapper implements RowMapper<RolePayload>{
         public String schema() {
-            return "id as id, name as name, role_id as roleId ";
+            return "id as id, name as name, role as roleId ";
         }
 
         @Override
