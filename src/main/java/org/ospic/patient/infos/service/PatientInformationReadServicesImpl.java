@@ -187,9 +187,10 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         sb.append(" COUNT(IF(isAdmitted = 0,1, NULL))'opd', ");
         sb.append(" COUNT(IF(is_active,1,NULL))'assigned', ");
         sb.append(" COUNT(IF(is_active = 0,1,NULL)) AS unassigned, ");
-        sb.append(" COUNT(IF(gender = 1 ,1, NULL))'male', ");
-        sb.append(" COUNT(IF(gender = 2 ,1, NULL))'female', ");
-        sb.append(" COUNT(IF(gender = 0 ,1, NULL))'unspecified' ");
+        sb.append(" COUNT(IF(gender = 'male' ,1, NULL))'male', ");
+        sb.append(" COUNT(IF(gender = 'female' ,1, NULL))'female', ");
+        sb.append(" SUM(case when gender like 'male' then 1 else 0 end) 'males', ");
+        sb.append(" COUNT(IF(gender = 'unspecified' ,1, NULL))'unspecified' ");
         sb.append(" FROM m_patients; ");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
