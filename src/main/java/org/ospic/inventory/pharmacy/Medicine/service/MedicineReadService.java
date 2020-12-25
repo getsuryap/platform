@@ -2,6 +2,7 @@ package org.ospic.inventory.pharmacy.Medicine.service;
 
 import org.ospic.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
 import org.ospic.inventory.pharmacy.Medicine.domains.Medicine;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,7 @@ import java.util.List;
 @Component
 @Service
 public interface MedicineReadService {
-    @Transactional
-    public List<Medicine>  fetchAllMedicine();
+    ResponseEntity<?> retrieveAllMedicines();
 
     public MedicineDataTemplate readMedicineDataTemplate();
 }
