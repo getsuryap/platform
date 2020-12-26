@@ -102,7 +102,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public Collection<?> retrieveListOfServiceAdmission(Long serviceId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
-        final String sql = "select " + rm.schema() + " where a.id in (select sa.admission_id from service_admission sa where sa.sid = ? ) order by a.id DESC ";
+        final String sql = "select distinct " + rm.schema() + "  where a.sid = ? order by a.id DESC; ";
         return this.jdbcTemplate.query(sql, rm, new Object[]{serviceId});
     }
 
@@ -126,12 +126,13 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, a.end_date as endDate, ab. bed_id as bedId, sa.sid as serviceId, " +
-                    " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a  " +
+            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, " +
+                    " a.end_date as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
+                    " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
-                    " inner join service_admission sa ON sa.admission_id = a.id "+
+                    " inner join m_service sa ON sa.id = a.sid " +
                     " inner join m_beds b on ab. bed_id = b.id " +
-                    " inner join m_wards w on b.ward_id = w.id " +
+                    " inner join m_wards w on b.ward_id = w.id  " +
                     " ";
         }
 

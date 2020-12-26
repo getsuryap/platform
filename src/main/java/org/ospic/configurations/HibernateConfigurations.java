@@ -60,7 +60,7 @@ public class HibernateConfigurations {
         return basicDataSource;
     }
     **/
-    
+
 
     @Bean
     public DataSource dataSource() {
@@ -71,7 +71,7 @@ public class HibernateConfigurations {
         basicDataSource.setPassword("OOTnKY9r3I");
         return basicDataSource;
     }
-
+    
     @Bean(name = "transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {
         HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
