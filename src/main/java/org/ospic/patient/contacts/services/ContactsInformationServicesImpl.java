@@ -7,11 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.io.*;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -39,10 +38,8 @@ public class ContactsInformationServicesImpl implements ContactsInformationServi
     ContactsInformationRepository contactsInformationRepository;
 
     @Override
-    public ContactsInformation createNewContact(Long id, ContactsInformation contactsInformation) {
-        contactsInformation.setId(id);
-        logger.info(contactsInformation.toString());
-       return contactsInformation;//contactsInformationRepository.save(contactsInformation);
+    public ContactsInformation createNewContact(Long patientId, ContactsInformation contactsInformation) {
+        return null;
     }
 
     @Override

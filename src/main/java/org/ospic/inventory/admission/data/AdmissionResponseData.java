@@ -40,18 +40,18 @@ public class AdmissionResponseData implements Serializable {
     private final Long bedId;
     private final String bedIdentifier;
     private final String wardName;
-    private final Long patientId;
+    private final Long serviceId;
 
     public static AdmissionResponseData responseTemplate(
             Long id, Date startDate, Date endDate, Boolean isActive,Long wardId,
-            Long bedId,String wardName, String bedIdentifier, Long patientId){
-        return new AdmissionResponseData(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, patientId);
+            Long bedId,String wardName, String bedIdentifier, Long serviceId){
+        return new AdmissionResponseData(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
     }
 
     public AdmissionResponseData(
             Long id, Date startDate, Date endDate, Boolean isActive,
             Long wardId, Long bedId,String wardName, String bedIdentifier,
-            Long patientId) {
+            Long serviceId) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -60,6 +60,6 @@ public class AdmissionResponseData implements Serializable {
         this.bedId = bedId;
         this.bedIdentifier = bedIdentifier;
         this.wardName = wardName;
-        this.patientId = patientId;
+        this.serviceId = serviceId;
     }
 }

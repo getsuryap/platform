@@ -103,6 +103,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             service.getPatient().setIsAdmitted(false);
             service.getPatient().setIsActive(false);
             service.setIsActive(false);
+            patientRepository.save(service.getPatient());
             resourceJpaRepository.save(service);
             return ResponseEntity.ok().body("Service de-activated successfully");
         }).orElseThrow(() -> new ServiceNotFoundException(serviceId));
