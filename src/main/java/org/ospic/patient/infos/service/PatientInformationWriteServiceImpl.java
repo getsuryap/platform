@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,6 +48,17 @@ import java.util.List;
  */
 @Repository
 public class PatientInformationWriteServiceImpl implements PatientInformationWriteService {
+
+    private final List<String> samples = Arrays.asList(
+            "Abbey Patton", "Emily Glover", "Brianne Shelton", "Sidney Henderson", "Gilbert Duncan",
+            "Madelyn Malone", "Judith Cobb", "Jacob Barnett", "Ramon Cole", "Stacey Fowler", "Marina Strickland",
+            "Gabriella Gomez", "Wilson Warren", "Gabriel Armstrong","Naomi Moran", "Kelly Hayes", "Corey Floyd",
+            "Zachary Young", "Kourtney Wheeler", "Sterling Frank", "Zachariah Austin", "Katelynn Harris", "Nicolas Lane",
+            "Marlene James", "Kailey Price", "Anastasia Holt", "Seth Harris", "Diego Ford", "Diego Carter", "Felix Baker",
+            "Makenzie Barber", "Walter Holland", "Trisha Norton","Bridget Fischer", "Timothy Bush", "Ciara Steele",
+            "Lorenzo Rogers", "Lucas Deleon", "Asia Lane", "Javon Goodman", "Josephine Acosta", "Kari Patton",
+            "Tiara Floyd", "Perry Ball", "Shayla Duncan", "Brenda Hopkins", "Brooklyn Pope", "Barbara Goodman",
+            "Tatiana Bell", "Dustin Farmer");
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
@@ -98,21 +111,21 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     public ResponseEntity<?> updatePatient(Long id, Patient update) {
         return patientRepository.findById(id)
                 .map(patient -> {
-                    patient.setIsAdmitted(update.getIsAdmitted()==null ? patient.getIsAdmitted() : update.getIsAdmitted());
-                    patient.setAddress(update.getAddress() == null ? patient.getAddress() :  update.getAddress());
+                    patient.setIsAdmitted(update.getIsAdmitted() == null ? patient.getIsAdmitted() : update.getIsAdmitted());
+                    patient.setAddress(update.getAddress() == null ? patient.getAddress() : update.getAddress());
                     patient.setName(update.getName() == null ? patient.getName() : update.getName());
-                    patient.setGuardianName(update.getGuardianName()== null ? patient.getGuardianName() :  update.getGuardianName());
-                    patient.setBloodGroup(update.getBloodGroup()== null ? patient.getBloodGroup(): update.getBloodGroup());
-                    patient.setBloodGroup(update.getBloodGroup()== null ? patient.getBloodGroup() :  update.getBloodGroup());
-                    patient.setWeight(update.getWeight()== null ? patient.getWeight() : update.getWeight());
-                    patient.setHeight(update.getWeight()== null ? patient.getWeight():update.getWeight());
+                    patient.setGuardianName(update.getGuardianName() == null ? patient.getGuardianName() : update.getGuardianName());
+                    patient.setBloodGroup(update.getBloodGroup() == null ? patient.getBloodGroup() : update.getBloodGroup());
+                    patient.setBloodGroup(update.getBloodGroup() == null ? patient.getBloodGroup() : update.getBloodGroup());
+                    patient.setWeight(update.getWeight() == null ? patient.getWeight() : update.getWeight());
+                    patient.setHeight(update.getWeight() == null ? patient.getWeight() : update.getWeight());
                     patient.setAge(update.getAge());
-                    patient.setEmailAddress(update.getEmailAddress()== null ? patient.getEmailAddress() : update.getEmailAddress());
-                    patient.setGender(update.getGender()== null ? patient.getGender(): update.getGender());
-                    patient.setMarriageStatus(update.getMarriageStatus()== null ? patient.getMarriageStatus() : update.getMarriageStatus());
-                    patient.setPhone(update.getPhone()== null ? patient.getPhone() : update.getPhone());
-                    patient.setNote(update.getNote()== null ? patient.getNote(): update.getNote());
-                    patient.setSymptoms(update.getSymptoms()== null ? patient.getSymptoms() :update.getSymptoms());
+                    patient.setEmailAddress(update.getEmailAddress() == null ? patient.getEmailAddress() : update.getEmailAddress());
+                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
+                    patient.setMarriageStatus(update.getMarriageStatus() == null ? patient.getMarriageStatus() : update.getMarriageStatus());
+                    patient.setPhone(update.getPhone() == null ? patient.getPhone() : update.getPhone());
+                    patient.setNote(update.getNote() == null ? patient.getNote() : update.getNote());
+                    patient.setSymptoms(update.getSymptoms() == null ? patient.getSymptoms() : update.getSymptoms());
                     return ResponseEntity.ok(patientRepository.save(patient));
 
                 }).orElseThrow(() -> new PatientNotFoundException(id));
@@ -184,5 +197,17 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new MessageResponse(String.format("Patient with given Id is not available "))
         );
+    }
+
+    @Override
+    public ResponseEntity<?> initialSampleData(Patient patient) {
+        List<Patient> patients = new ArrayList<>();
+        samples.forEach(sample->{
+            patient.setName(sample);
+            patients.add(patient);
+            patients.add(patient);
+        });
+
+        return ResponseEntity.ok().body(this.createByPatientListIterate(patients));
     }
 }

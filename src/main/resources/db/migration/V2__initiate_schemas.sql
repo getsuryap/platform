@@ -193,8 +193,8 @@ CREATE TABLE IF NOT EXISTS  `admission_bed`(
 DROP TABLE IF EXISTS `service_admission`;
 CREATE TABLE IF NOT EXISTS  `service_admission`(
   admission_id BIGINT  NOT NULL, sid BIGINT ,
-  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE ,
-  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE RESTRICT  ,
+  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE RESTRICT
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS  `user_roles`;

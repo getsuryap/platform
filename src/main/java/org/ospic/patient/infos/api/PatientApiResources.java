@@ -212,4 +212,12 @@ public class PatientApiResources {
         return patientInformationWriteService.deletePatientImage(patientId, filename);
     }
 
+
+    @ApiOperation(value = "INITIATE patients sample data`s ", notes = "INITIATE patients sample data`s",hidden = true, response = Patient.class)
+    @RequestMapping(value = "/initiate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> initiateSampleDatas( @Valid @RequestBody Patient patient) {
+        return patientInformationWriteService.initialSampleData(patient);
+    }
+
 }

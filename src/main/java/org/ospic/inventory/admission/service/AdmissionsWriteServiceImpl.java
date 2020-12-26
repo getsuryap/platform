@@ -107,8 +107,8 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
 
             /**Return Message **/
-            cm.setMessage("Patient Admitted successfully");
-            return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
+
+            return ResponseEntity.ok().body(admissionRequest.getServiceId());
         }).orElseThrow(() -> new EntityNotFoundException());
     }
 
