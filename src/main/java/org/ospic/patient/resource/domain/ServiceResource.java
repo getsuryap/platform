@@ -84,13 +84,15 @@ public class ServiceResource implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "service_admission",
-            joinColumns = @JoinColumn(name = "admission_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "sid", referencedColumnName = "id"))
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "sid")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
 
-    private Set<Admission> admissions = new HashSet<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Admission> admissions = new ArrayList<>();
 
     public ServiceResource(Long id, Date fromdate, Date todate, Boolean isActive, Patient patient, Staff staff) {
         this.id = id;

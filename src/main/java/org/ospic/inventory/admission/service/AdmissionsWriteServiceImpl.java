@@ -90,11 +90,10 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
             }
             /**Create new admission **/
             Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(), admissionRequest.getStartDateTime());
-            admission.addService(service);
+            admission.setService(service);
             admission.setIsActive(true);
             admission.addBed(bed);
             admissionRepository.save(admission);
-
 
             /** Update Bed set it as active. Not open for new admission **/
             bed.setIsOccupied(true);

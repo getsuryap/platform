@@ -60,18 +60,10 @@ public class Admission implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
-
-
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    },  fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "service_admission",
-            joinColumns = @JoinColumn(name = "admission_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "sid", referencedColumnName = "id"))
-    @JsonIgnoreProperties({"admission", "contactsInformation", "physician"})
-    private Set<ServiceResource> services =new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "sid")
+    @JsonIgnore
+    private ServiceResource service;
 
 
     @ManyToMany(cascade = {
@@ -129,10 +121,6 @@ public class Admission implements Serializable {
         bed.getAdmissions().add(this);
     }
 
-    public void addService(ServiceResource service){
-        services.add(service);
-        service.getAdmissions().add(this);
-    }
 
 
     @Override

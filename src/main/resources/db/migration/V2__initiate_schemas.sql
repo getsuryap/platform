@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `m_admissions`(
   is_active BOOLEAN NOT NULL DEFAULT true ,
   start_date TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   end_date TIMESTAMP,
+  `sid` BIGINT REFERENCES `m_service`(`id`),
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
@@ -190,12 +191,12 @@ CREATE TABLE IF NOT EXISTS  `admission_bed`(
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
-DROP TABLE IF EXISTS `service_admission`;
-CREATE TABLE IF NOT EXISTS  `service_admission`(
-  admission_id BIGINT  NOT NULL, sid BIGINT ,
-  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE RESTRICT  ,
-  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE RESTRICT
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+-- DROP TABLE IF EXISTS `service_admission`;
+-- CREATE TABLE IF NOT EXISTS  `service_admission`(
+--  admission_id BIGINT  NOT NULL, sid BIGINT ,
+--  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE   ,
+--  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE CASCADE
+-- ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS  `user_roles`;
 CREATE TABLE IF NOT EXISTS  `user_roles`(
@@ -219,6 +220,8 @@ ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_categories FOREIGN KEY(`cat
 ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_groups FOREIGN KEY(`group_id`) REFERENCES `m_mdc_groups`(`id`);
 ALTER TABLE `m_diagnoses` ADD CONSTRAINT FK_service_diagnoes FOREIGN KEY(`sid`) REFERENCES `m_service`(`id`);
 ALTER TABLE `m_beds` ADD CONSTRAINT FK_bed_ward FOREIGN KEY(`ward_id`) REFERENCES `m_wards`(`id`);
+ALTER TABLE `m_admissions` ADD CONSTRAINT FK_service_admissions FOREIGN KEY(`sid`) REFERENCES `m_service`(`id`);
+
 -- ALTER TABLE m_service
      --   ADD constraint  fk_patient_service_resource foreign key (`patient_id`) references `m_patients`(`id`),
    --     ADD constraint  fk_staff_service_resource foreign key(`staff_id`) references `m_staff`(`id`);
