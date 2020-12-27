@@ -68,9 +68,6 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
 
-
-
-
     @Override
     public ResponseEntity<List<Admission>> retrieveAllAdmissions() {
         Session session = this.sessionFactory.openSession();
@@ -109,8 +106,8 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public ResponseEntity<?> retrieveAdmissionInThisBed(Long bedId) {
         final PatientAdmissionRowMapper rm = new PatientAdmissionRowMapper();
-        final String sql =  "select " +rm.schema() +  " where bd.id = ? order by adb.admission_id desc limit 0, 1";
-        return ResponseEntity.ok().body(this.jdbcTemplate.query(sql,rm,new Object[]{bedId}));
+        final String sql = "select " + rm.schema() + " where bd.id = ? order by adb.admission_id desc limit 0, 1";
+        return ResponseEntity.ok().body(this.jdbcTemplate.query(sql, rm, new Object[]{bedId}));
     }
 
     @Override
@@ -126,7 +123,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return  " a.id as id, a.is_active as isActive, a.start_date as startDate, " +
+            return " a.id as id, a.is_active as isActive, a.start_date as startDate, " +
                     " a.end_date as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
@@ -147,20 +144,22 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             final Long serviceId = rs.getLong("serviceId");
             final String bedIdentifier = rs.getString("bedIdentifier");
             final String wardName = rs.getString("wardName");
-            return  AdmissionResponseData.responseTemplate(id,startDate,endDate,isActive, wardId,bedId, wardName, bedIdentifier,serviceId);
+            return AdmissionResponseData.responseTemplate(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
         }
     }
+
     private static final class PatientAdmissionRowMapper implements RowMapper<PatientAdmissionData> {
 
         public String schema() {
-            return  "  p.id as id, p.address as address, p.age as age, p.blood_group as bloodGroup, p.blood_pressure as bloodPressure, "+
-                    "  p.email_address as emailAddress, p.gender as gender, p.guardian_name as guardianName, p.height as height, "+
-                    "  p.marital_status as martialStatus, p.name as name, p.thumbnail as thumbNail, p.weight as weight, p.phone as phone "+
-                    " from m_beds bd "+
-                    " inner join  admission_bed  adb on bd.id =  adb. bed_id "+
-                    " inner join service_admission ap  on adb.admission_id = ap.admission_id "+
-                    " inner join m_patients p ON ap.sid = p.id "+
-                    " " ;
+            return "  p.id as id, p.address as address, p.age as age, p.blood_group as bloodGroup, p.blood_pressure as bloodPressure, " +
+                    " p.email_address as emailAddress, p.gender as gender, p.guardian_name as guardianName, p.height as height, " +
+                    " p.marital_status as martialStatus, p.name as name, p.thumbnail as thumbNail, p.weight as weight, p.phone as phone " +
+                    " from m_beds bd " +
+                    " inner join  admission_bed  adb on bd.id =  adb.bed_id " +
+                    " inner join m_admissions ap  on adb.admission_id = ap.sid " +
+                    " inner join m_patients p ON ap.sid = p.id " +
+                    " inner join m_service s on p.id = s.patient_id " +
+                    " ";
         }
 
         @Override
@@ -180,7 +179,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             final String imageUrl = rs.getString("thumbNail");
             final String weight = rs.getString("weight");
             final String phone = rs.getString("phone");
-            return new PatientAdmissionData(id,name,phone,gender, height, weight, guardianName, bloodPressure, age, emailAddress,martiaStatus, imageUrl,bloodGroup,address );
+            return new PatientAdmissionData(id, name, phone, gender, height, weight, guardianName, bloodPressure, age, emailAddress, martiaStatus, imageUrl, bloodGroup, address);
         }
     }
 
