@@ -54,11 +54,11 @@ public class Medicine implements Serializable {
 
 
     @NotBlank
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", length = 200, nullable = false)
     private String name;
 
     @NotBlank
-    @Column(name = "company", length = 50, nullable = false)
+    @Column(name = "company", length = 200, nullable = false)
     private String company;
 
     @NotBlank

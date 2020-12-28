@@ -1,23 +1,19 @@
 package org.ospic.security.authentication.roles.services;
 
-import org.ospic.security.authentication.roles.data.RolePayload;
 import org.ospic.security.authentication.roles.domain.Role;
+import org.ospic.security.authentication.roles.privileges.domains.Privilege;
 import org.ospic.security.authentication.roles.privileges.repository.PrivilegesRepository;
 import org.ospic.security.authentication.roles.repository.RoleRepository;
+import org.ospic.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Locale;
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import java.util.*;
 
 /**
- * This file was created by eli on 16/12/2020 for org.ospic.security.authentication.roles.services
+ * This file was created by eli on 28/12/2020 for org.ospic.security.authentication.roles.services
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -38,29 +34,30 @@ import java.util.Optional;
  * under the License.
  */
 @Repository
-public class RoleReadPrincipleServicesImpl implements RoleReadPrincipleServices {
+public class RoleWritePrincipleServiceImpl implements RoleWritePrincipleService {
     private RoleRepository roleRepository;
     private PrivilegesRepository privilegeRepository;
 
     @Autowired
-    RoleReadPrincipleServicesImpl( RoleRepository roleRepository,PrivilegesRepository privilegeRepository) {
+    RoleWritePrincipleServiceImpl(RoleRepository roleRepository, PrivilegesRepository privilegeRepository) {
         this.roleRepository = roleRepository;
         this.privilegeRepository = privilegeRepository;
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllRoles() {
-        return ResponseEntity.ok().body(this.roleRepository.findAll());
-    }
+    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges) {
+        List<Privilege> privilegeList = new ArrayList<>();
+        return roleRepository.findById(roleId).map(role -> {
+            privileges.forEach(id -> {
+                Privilege privilege = privilegeRepository.getOne(id);
+                privilegeList.add(privilege);
+            });
+            role.setPrivileges(privilegeList);
+            this.roleRepository.save(role);
+             Map<String, Long> roleRep = new HashMap<>();
+            roleRep.put("id", roleId );
+            return ResponseEntity.ok().body(roleRep);
+        }).orElseThrow(()-> new EntityNotFoundException());
 
-    @Override
-    public ResponseEntity<?> fetchRoleById(Long roleId) {
-        Optional<Role> role = this.roleRepository.findById(roleId);
-        return ResponseEntity.ok().body(role.isPresent() ? role.get() : "No role with ID "+roleId);
-    }
-
-    @Override
-    public ResponseEntity<?> fetchAuthorities() {
-        return ResponseEntity.ok().body(privilegeRepository.findAll());
     }
 }

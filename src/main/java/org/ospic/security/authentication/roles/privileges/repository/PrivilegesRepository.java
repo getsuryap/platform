@@ -27,6 +27,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PrivilegesRepository extends JpaRepository<Privilege,Long> {
-
     Privilege  findByName(String name);
 }

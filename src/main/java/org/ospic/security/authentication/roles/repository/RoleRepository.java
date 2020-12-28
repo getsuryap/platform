@@ -2,7 +2,6 @@ package org.ospic.security.authentication.roles.repository;
 
 import java.util.Optional;
 
-import org.ospic.util.enums.RoleEnums;
 import org.ospic.security.authentication.roles.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-	Optional<Role> findByName(RoleEnums name);
+	Optional<Role> findByName(String name);
 
-	Boolean existsByName(RoleEnums name);
+	Boolean existsByName(String name);
 
 }

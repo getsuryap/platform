@@ -32,15 +32,13 @@ import lombok.Setter;
 public class RolePayload {
     Long id;
     String name;
-    String roleId;
 
-    public static RolePayload instance(Long id, String name, String roleId) {
-        return new RolePayload(id, name, roleId);
+    public static RolePayload instance(Long id, String name) {
+        return new RolePayload(id, name);
     }
 
-    public RolePayload(Long id, String name, String roleId) {
+    public RolePayload(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.roleId = roleId;
     }
 }

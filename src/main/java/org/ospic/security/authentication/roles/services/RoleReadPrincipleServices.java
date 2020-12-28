@@ -29,4 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public  interface RoleReadPrincipleServices {
     public ResponseEntity<?> retrieveAllRoles();
+    public ResponseEntity<?> fetchRoleById(Long roleId);
+    ResponseEntity<?> fetchAuthorities();
 }
