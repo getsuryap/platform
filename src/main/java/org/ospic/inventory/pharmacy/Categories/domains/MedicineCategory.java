@@ -55,11 +55,11 @@ public class MedicineCategory implements Serializable {
 
 
     @NotBlank
-    @Column(name = "name", length = 20, nullable = false)
+    @Column(name = "name", length = 200, nullable = false)
     private String name;
 
 
-    @Column(name = "descriptions", length = 250)
+    @Column(name = "descriptions", length = 350)
     private String descriptions;
 
     @OneToMany(

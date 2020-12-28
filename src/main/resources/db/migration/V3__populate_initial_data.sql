@@ -1,4 +1,6 @@
 
+INSERT INTO `users` (`id`, `username`, `email`,`password`,`isStaff`) VALUES (1,"demo", "demo@ospic.com","$2a$10$r2Z0AMhunNh87cmLYbpmi.h.gLizSsKNy56S.cJ86MUyQBkELP0qO", 0);
+
 REPLACE INTO `m_blood_bank` (`id`, `bags_count`, `blood_group`)
 VALUES (1, 0,"A+"),(2, 0,"A-"),(3, 0,"B+"),(4, 0,"B-"),(5, 0,"O+"),
 (6, 0,"O-"),(7, 0,"AB+"),(8, 0,"AB-");
@@ -20,3 +22,18 @@ REPLACE INTO `m_patients` (`id`, `name`, `gender`, `address`, `guardian_name`, `
 (6, 'Willie Curtis', 'female', '123 Hawaii, 31ST, H32KL', 'John Doe', '2193801221312', 'email@example.com', '10KG', '10KG', 'Pa34', 'AB', 34, 'none', 'note', 'Single', 0, 0, NULL, NULL, '2020-12-26 15:09:56', NULL),
 (7, 'Lori Henderson', 'female', '123 Hawaii, 31ST, H32KL', 'John Doe', '2193801221312', 'email@example.com', '10KG', '10KG', 'Pa34', 'AB', 34, 'none', 'note', 'Single', 0, 0, NULL, NULL, '2020-12-26 15:09:01', NULL),
 (8, 'Callie Marshall', 'female', '123 Hawaii, 31ST, H32KL', 'John Doe', '2193801221312', 'email@example.com', '10KG', '10KG', 'Pa34', 'AB', 34, 'none', 'note', 'Single', 0, 0, NULL, NULL, '2020-12-26 15:39:01', NULL);
+
+
+INSERT INTO `m_roles` (`id`, `name`) VALUES
+(1, "SUPER_USER"),(2,"MODERATOR"), (3, "ADMIN"), (4,"USER"), (5,"AUDITOR"),
+(6, "DOCTOR"),(7, "NURSE"),(8, "LAB_TECHNICIAN"), (9,"INSURANCE_OFFICER");
+
+INSERT INTO `m_privilege` (`id`, `name`) VALUES
+(13, "CREATE_PATIENT"),(14, "UPDATE_PATIENT"),(3, "DELETE_PATIENT"),
+(4, "START_SERVICE"),(5, "END_SERVICE"),(6, "UPDATE_PHARMACY"),
+(7, "CREATE_USER"),(8, "UPDATE_USER"),(9, "DELETE_USER"),
+(10, "CREATE_STAFF"),(11, "EDIT_STAFF"),(12, "DELETE_STAFF"),
+(2, "READ_PRIVILEGE"), (1, "WRITE_PRIVILEGE");
+
+INSERT INTO `user_roles` (`user_id`,`role_id`) VALUES (1,1);
+INSERT INTO `role_privileges` (`role_id`,`privilege_id`) VALUES (1,1),(1,2);

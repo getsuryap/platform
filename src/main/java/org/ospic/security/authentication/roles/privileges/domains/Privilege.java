@@ -1,12 +1,12 @@
 package org.ospic.security.authentication.roles.privileges.domains;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.ospic.security.authentication.roles.domain.Role;
 import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * This file was created by eli on 22/10/2020 for org.ospic.security.authentication.roles.privileges.domains
@@ -31,16 +31,18 @@ import javax.persistence.*;
  */
 @Entity(name = DatabaseConstants.PRIVILEGE_TABLE)
 @Table(name =DatabaseConstants.PRIVILEGE_TABLE)
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
+@Data
 @NoArgsConstructor
-public class Privilege {
+public class Privilege implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
 
     public Privilege(String name){
         this.name = name;

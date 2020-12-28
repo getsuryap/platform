@@ -1,12 +1,10 @@
 package org.ospic.configurations;
 
+import org.ospic.security.authentication.roles.domain.Role;
 import org.ospic.security.authentication.roles.privileges.domains.Privilege;
 import org.ospic.security.authentication.roles.privileges.repository.PrivilegesRepository;
-import org.ospic.security.authentication.roles.domain.Role;
-import org.ospic.security.authentication.users.domain.User;
 import org.ospic.security.authentication.roles.repository.RoleRepository;
 import org.ospic.security.authentication.users.repository.UserRepository;
-import org.ospic.util.enums.RoleEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -14,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This file was created by eli on 22/10/2020 for org.ospic.configurations
@@ -60,20 +56,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (alreadySetup)
             return;
-        Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
-        Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-
-        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
-        createRoleIfNotFound(RoleEnums.ADMIN, adminPrivileges);
-        createRoleIfNotFound(RoleEnums.USER, Arrays.asList(readPrivilege));
-
-
-        Role adminRole = roleRepository.findByName(RoleEnums.ADMIN).get();
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("password"));
-        user.setEmail("admin@test.com");
-        user.setRoles(Arrays.asList(adminRole));
         alreadySetup = true;
     }
 
@@ -89,12 +71,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    Role createRoleIfNotFound(
-            RoleEnums name, Collection<Privilege> privileges) {
+    Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
 
-        Role role = roleRepository.findByName(RoleEnums.ADMIN).get();
+        Role role = roleRepository.findByName("ADMIN").get();
         if (role == null) {
-            role = new Role(name, name.name());
+            role = new Role(name);
             roleRepository.save(role);
         }
         return role;

@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS  `users` (
 DROP TABLE IF EXISTS  `m_roles`;
 CREATE TABLE IF NOT EXISTS  `m_roles` (
   id BIGINT  NOT NULL AUTO_INCREMENT,
-  name INT NOT NULL,
-  `role` VARCHAR (250) NOT NULL,
+  name VARCHAR (20) NOT NULL,
   constraint  uc_role_name unique(`name`),
   constraint roles_pk primary key (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
@@ -32,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `m_blood_bank`(
 DROP TABLE IF EXISTS `m_mdc_groups`;
 CREATE TABLE IF NOT EXISTS `m_mdc_groups`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  name VARCHAR (20) NOT NULL ,
+  name VARCHAR (200) NOT NULL ,
   descriptions VARCHAR (250) NOT NULL,
   CONSTRAINT  uc_medicine_group_name UNIQUE(`name`),
   PRIMARY KEY (`id`)
@@ -42,8 +41,8 @@ CREATE TABLE IF NOT EXISTS `m_mdc_groups`(
 DROP TABLE IF EXISTS `m_mdc_categories`;
 CREATE TABLE IF NOT EXISTS `m_mdc_categories`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  name VARCHAR (20) UNIQUE NOT NULL ,
-  descriptions VARCHAR (250) NOT NULL,
+  name VARCHAR (200) UNIQUE NOT NULL ,
+  descriptions VARCHAR (350) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT uc_medicine_category_name UNIQUE(`name`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
@@ -51,8 +50,8 @@ CREATE TABLE IF NOT EXISTS `m_mdc_categories`(
 DROP TABLE IF EXISTS `m_medicines`;
 CREATE TABLE IF NOT EXISTS `m_medicines`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  name VARCHAR (20) NOT NULL,
-  company VARCHAR (20) NOT NULL,
+  name VARCHAR (200) NOT NULL,
+  company VARCHAR (200) NOT NULL,
   compositions VARCHAR (250) NOT NULL,
   units INT NOT NULL DEFAULT 0,
   group_id BIGINT REFERENCES `m_mdc_groups`(`id`),
@@ -191,13 +190,6 @@ CREATE TABLE IF NOT EXISTS  `admission_bed`(
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
--- DROP TABLE IF EXISTS `service_admission`;
--- CREATE TABLE IF NOT EXISTS  `service_admission`(
---  admission_id BIGINT  NOT NULL, sid BIGINT ,
---  CONSTRAINT `FK_admissions_service` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE   ,
---  CONSTRAINT `FK_admissions_service_resource` FOREIGN KEY (sid) REFERENCES `m_service`(id) ON DELETE CASCADE ON UPDATE CASCADE
--- ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
-
 DROP TABLE IF EXISTS  `user_roles`;
 CREATE TABLE IF NOT EXISTS  `user_roles`(
   user_id BIGINT  NOT NULL, role_id BIGINT  NOT NULL,
@@ -208,9 +200,9 @@ CREATE TABLE IF NOT EXISTS  `user_roles`(
 
 DROP TABLE IF EXISTS `role_privileges`;
 CREATE TABLE IF NOT EXISTS `role_privileges`(
-  role_id BIGINT NOT NULL , priviledge_id BIGINT ,
+  role_id BIGINT NOT NULL , privilege_id BIGINT ,
   CONSTRAINT `FK_role_privileges` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `FK_privilege_roles` FOREIGN KEY (priviledge_id) REFERENCES `m_privilege`(id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT `FK_privilege_roles` FOREIGN KEY (privilege_id) REFERENCES `m_privilege`(id) ON DELETE CASCADE ON UPDATE RESTRICT
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 

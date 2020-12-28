@@ -1,6 +1,16 @@
-package org.ospic.util.enums;
+package org.ospic.security.authentication.roles.services;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 /**
+ * This file was created by eli on 28/12/2020 for org.ospic.security.authentication.roles.services
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -18,9 +28,8 @@ package org.ospic.util.enums;
  * specific language governing permissions and limitations
  * under the License.
  */
-public enum BedSizeEnums {
-    SMALL_SIZE,
-    MEDIUM_SIZE,
-    LARGE_SIZE,
-    DEFAULT_SIZE
+@Service
+@Component
+public interface RoleWritePrincipleService {
+    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges);
 }

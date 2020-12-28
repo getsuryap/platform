@@ -1,11 +1,12 @@
 package org.ospic;
 
 import org.ospic.security.authentication.roles.domain.Role;
+import org.ospic.security.authentication.roles.privileges.domains.Privilege;
+import org.ospic.security.authentication.roles.privileges.repository.PrivilegesRepository;
 import org.ospic.security.authentication.roles.repository.RoleRepository;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.security.authentication.users.repository.UserRepository;
 import org.ospic.fileuploads.service.FilesStorageService;
-import org.ospic.util.enums.RoleEnums;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -24,15 +25,9 @@ import java.util.*;
 exclude = HibernateJpaAutoConfiguration.class)
 @ComponentScan
 public class BaseApplication implements CommandLineRunner {
-
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
     @Resource
     FilesStorageService filesStorageService;
-    @Autowired
-    UserRepository userRepository;
+
 
 
     public static void main(String[] args) {
@@ -52,29 +47,6 @@ public class BaseApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception{
         filesStorageService.init();
-    }
-
-    @Bean
-    InitializingBean sendDatabase() {
-        return () -> {
-            for (RoleEnums roleEnums : RoleEnums.values()) {
-                if (!roleRepository.existsByName(roleEnums)) {
-                    roleRepository.save(new Role(roleEnums, roleEnums.name()));
-                }
-            }
-           if (!userRepository.existsByUsername("admin")){
-               User user = new User();
-               user.setUsername("admin");
-               user.setPassword(passwordEncoder.encode("password"));
-               user.setEmail("admin@test.com");
-               Optional<Role> role = roleRepository.findByName(RoleEnums.SUPER_USER);
-               List<Role> roles=  new ArrayList<>();
-               role.ifPresent(roles::add);
-               user.setRoles(roles);
-               userRepository.save(user);
-           }
-
-        };
     }
 
 

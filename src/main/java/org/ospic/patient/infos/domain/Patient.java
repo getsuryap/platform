@@ -9,23 +9,17 @@ import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.domain.Auditable;
-import org.ospic.inventory.admission.domains.Admission;
 import org.ospic.patient.contacts.domain.ContactsInformation;
-import org.ospic.patient.diagnosis.domains.Diagnosis;
-import org.ospic.organization.staffs.domains.Staff;
 import org.ospic.patient.resource.domain.ServiceResource;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.util.enums.Gender;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one

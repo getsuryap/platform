@@ -1,9 +1,6 @@
 package org.ospic.security.authentication.users.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,13 +13,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.ospic.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.security.authentication.roles.services.RoleReadPrincipleServices;
+import org.ospic.security.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.security.authentication.users.exceptions.UserAuthenticationException;
 import org.ospic.security.authentication.users.payload.request.UserRequestData;
 import org.ospic.security.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.security.authentication.users.repository.UserRepository;
 import org.ospic.domain.CustomReponseMessage;
-import org.ospic.util.enums.RoleEnums;
 import org.ospic.security.authentication.roles.domain.Role;
 import org.ospic.security.authentication.users.payload.request.LoginRequest;
 import org.ospic.security.authentication.users.payload.request.SignupRequest;
@@ -35,11 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +63,8 @@ public class AuthController {
     RoleRepository roleRepository;
     @Autowired
     RoleReadPrincipleServices roleReadPrincipleServices;
+    @Autowired
+    RoleWritePrincipleService roleWriteService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -87,12 +86,15 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        List<String> permissions = userDetails.getRoles().stream()
+                .map(role -> role.getAuthority())
+                .collect(Collectors.toList());
         logger.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles));
+                roles, permissions));
     }
 
     @PostMapping("/signup")
@@ -118,7 +120,7 @@ public class AuthController {
         List<Role> roles = new ArrayList<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(RoleEnums.USER)
+            Role userRole = roleRepository.findByName("USER")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
@@ -209,11 +211,32 @@ public class AuthController {
         }).orElseThrow(() -> new UserAuthenticationException(ud.getId()));
     }
 
-    @ApiOperation(value = "LOGOUT Session", notes = "LOGOUT Session")
+    @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllRoles(){
         return  roleReadPrincipleServices.retrieveAllRoles();
+    }
+
+    @ApiOperation(value = "RETRIEVE role by ID", notes = "RETRIEVE role by ID")
+    @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveRoleById(@PathVariable Long roleId){
+        return  roleReadPrincipleServices.fetchRoleById(roleId);
+    }
+
+    @ApiOperation(value = "UPDATE role privilege", notes = "UPDATE role privilege")
+    @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody List<Long> privileges){
+        return  roleWriteService.updateRole(roleId,  privileges);
+    }
+
+    @ApiOperation(value = "RETRIEVE all authorities", notes = "RETRIEVE all authorities")
+    @RequestMapping(value = "/authorities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> fetchAllAvailableAuthorities(){
+        return  roleReadPrincipleServices.fetchAuthorities();
     }
 
 }

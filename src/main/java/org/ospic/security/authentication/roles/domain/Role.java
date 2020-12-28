@@ -1,39 +1,43 @@
 package org.ospic.security.authentication.roles.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.ospic.security.authentication.roles.privileges.domains.Privilege;
 import org.ospic.security.authentication.users.domain.User;
 import org.ospic.util.constants.DatabaseConstants;
-import org.ospic.util.enums.RoleEnums;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity(name = DatabaseConstants.ROLES_TABLE)
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
+@Data
 @NoArgsConstructor
 @Table(name = DatabaseConstants.ROLES_TABLE, uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
-
-public class Role {
+public class Role  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Setter(AccessLevel.PROTECTED)
     Long id;
 
     @Column(length = 200)
-    private RoleEnums name;
-
-    @Column(length = 200)
-    private String role;
+    private String name;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Collection<User> users;
 
-    public Role(RoleEnums name, String role) {
-        this.role = role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_privileges",
+            joinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "privilege_id", referencedColumnName = "id"))
+    private Collection<Privilege> privileges;
+
+
+    public Role(String name) {
         this.name = name;
     }
 
