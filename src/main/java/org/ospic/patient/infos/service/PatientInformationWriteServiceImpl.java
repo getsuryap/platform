@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This file was created by eli on 02/11/2020 for org.ospic.patient.infos.service
@@ -88,6 +89,8 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Transactional
     public Patient createNewPatient(Patient patient) {
         patient.setIsActive(false);
+        String gender = patient.getGender().toLowerCase();
+        patient.setGender(gender);
         return patientRepository.save(patient);
     }
 
@@ -121,7 +124,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
                     patient.setHeight(update.getWeight() == null ? patient.getWeight() : update.getWeight());
                     patient.setAge(update.getAge());
                     patient.setEmailAddress(update.getEmailAddress() == null ? patient.getEmailAddress() : update.getEmailAddress());
-                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender());
+                    patient.setGender(update.getGender() == null ? patient.getGender() : update.getGender().toLowerCase(Locale.ROOT));
                     patient.setMarriageStatus(update.getMarriageStatus() == null ? patient.getMarriageStatus() : update.getMarriageStatus());
                     patient.setPhone(update.getPhone() == null ? patient.getPhone() : update.getPhone());
                     patient.setNote(update.getNote() == null ? patient.getNote() : update.getNote());
