@@ -159,7 +159,7 @@ public class AuthController {
     ResponseEntity<?> retrieveLoggerInUser() {
         UserDetailsImpl  ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
-        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND, String.format("User with ID %2d is not found")));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found")));
 
     }
 
@@ -168,7 +168,7 @@ public class AuthController {
     @ResponseBody
     ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
       Optional<User> optional = userRepository.findById(userId);
-        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND,String.format("User with ID %2d is not found", userId)));
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(),String.format("User with ID %2d is not found", userId)));
 
     }
 
@@ -198,13 +198,13 @@ public class AuthController {
             String userPassword = user.getPassword();
             if (!(encoder.matches(u.getOldPassword(), userPassword))) {
                 cm.setMessage("Invalid old Password");
-                cm.setHttpStatus(HttpStatus.FORBIDDEN);
+                cm.setHttpStatus(HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
             }
             user.setPassword(encoder.encode(u.getNewPassword()));
             userRepository.save(user);
             cm.setMessage("Password Updated Successfully ...");
-            cm.setHttpStatus(HttpStatus.OK);
+            cm.setHttpStatus(HttpStatus.OK.value());
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
 
 

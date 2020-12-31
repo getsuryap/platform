@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -44,7 +45,7 @@ public abstract class Auditable<U> {
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    protected Date createdDate;
+    protected LocalDate createdDate;
 
     @CreatedBy
     @Column(name = "created_by",nullable = true, updatable = false)
@@ -53,7 +54,7 @@ public abstract class Auditable<U> {
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    protected Date lastModifiedDate;
+    protected LocalDate lastModifiedDate;
 
     @LastModifiedBy
     @Column(name = "last_modified_by", nullable = true, updatable = true)

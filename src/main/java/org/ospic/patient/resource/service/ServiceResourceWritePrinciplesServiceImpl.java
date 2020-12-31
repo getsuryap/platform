@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,8 +70,8 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             ServiceResource sr = new ServiceResource();
             sr.setPatient(patient);
             sr.setIsActive(true);
-            sr.setFromdate(new Date());
-            sr.setTodate(new Date());
+            sr.setFromdate(LocalDate.now());
+            sr.setTodate(LocalDate.now());
             patient.setIsActive(true);
             patientRepository.save(patient);
             return ResponseEntity.ok().body(resourceJpaRepository.save(sr).getId());
@@ -103,6 +104,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             service.getPatient().setIsAdmitted(false);
             service.getPatient().setIsActive(false);
             service.setIsActive(false);
+            service.setTodate(LocalDate.now());
             patientRepository.save(service.getPatient());
             resourceJpaRepository.save(service);
             return ResponseEntity.ok().body("Service de-activated successfully");

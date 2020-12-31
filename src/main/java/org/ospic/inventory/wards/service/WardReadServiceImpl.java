@@ -88,7 +88,7 @@ public class WardReadServiceImpl implements WardReadService {
         Optional<Ward> wardOptional =  wardRepository.findById(id);
         List<Bed> beds = bedRepository.findByWardId(id);
         if (!wardOptional.isPresent()){
-            cm.setHttpStatus(HttpStatus.NOT_FOUND);
+            cm.setHttpStatus(HttpStatus.NOT_FOUND.value());
             cm.setMessage("Ward with ID "+ id + " is not found!");
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
         }

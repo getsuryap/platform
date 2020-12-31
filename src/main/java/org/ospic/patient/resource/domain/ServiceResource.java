@@ -17,6 +17,7 @@ import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -56,11 +57,11 @@ public class ServiceResource implements Serializable {
 
     @Column(name = "fromdate",  nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fromdate;
+    private  LocalDate fromdate;
 
     @Column(name = "todate",  nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date todate;
+    private LocalDate todate;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
@@ -94,7 +95,7 @@ public class ServiceResource implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Admission> admissions = new ArrayList<>();
 
-    public ServiceResource(Long id, Date fromdate, Date todate, Boolean isActive, Patient patient, Staff staff) {
+    public ServiceResource(Long id, LocalDate fromdate, LocalDate todate, Boolean isActive, Patient patient, Staff staff) {
         this.id = id;
         this.fromdate = fromdate;
         this.todate = todate;

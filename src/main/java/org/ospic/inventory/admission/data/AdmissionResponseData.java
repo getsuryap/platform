@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -32,9 +33,9 @@ import java.util.Date;
 public class AdmissionResponseData implements Serializable {
     private final Long id;
     @JsonFormat(pattern = "yy/MM/dd")
-    private final Date startDate;
+    private final LocalDate startDate;
     @JsonFormat(pattern = "yy/MM/dd")
-    private final Date endDate;
+    private final LocalDate endDate;
     private final Boolean isActive;
     private final Long wardId;
     private final Long bedId;
@@ -42,16 +43,13 @@ public class AdmissionResponseData implements Serializable {
     private final String wardName;
     private final Long serviceId;
 
-    public static AdmissionResponseData responseTemplate(
-            Long id, Date startDate, Date endDate, Boolean isActive,Long wardId,
-            Long bedId,String wardName, String bedIdentifier, Long serviceId){
+    public static AdmissionResponseData responseTemplate(Long id, LocalDate startDate, LocalDate endDate, Boolean isActive, Long wardId,
+            Long bedId, String wardName, String bedIdentifier, Long serviceId){
         return new AdmissionResponseData(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
     }
 
-    public AdmissionResponseData(
-            Long id, Date startDate, Date endDate, Boolean isActive,
-            Long wardId, Long bedId,String wardName, String bedIdentifier,
-            Long serviceId) {
+    public AdmissionResponseData(Long id, LocalDate startDate, LocalDate endDate, Boolean isActive,
+            Long wardId, Long bedId,String wardName, String bedIdentifier, Long serviceId) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;

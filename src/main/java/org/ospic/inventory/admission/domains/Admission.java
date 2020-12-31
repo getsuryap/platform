@@ -19,6 +19,8 @@ import org.ospic.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -81,15 +83,13 @@ public class Admission implements Serializable {
     @Column(name = "start_date", nullable = false,  columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fromDateTime;
+    private LocalDateTime fromDateTime;
 
 
     @Column(name = "end_date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date toDateTime;
+    private LocalDateTime toDateTime;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -101,8 +101,7 @@ public class Admission implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<AdmissionVisit>  visits = new ArrayList<>();
 
-    public Admission(
-            Boolean isActive,  Date fromDateTime, Date toDateTime) {
+    public Admission(Boolean isActive,  LocalDateTime fromDateTime, LocalDateTime toDateTime) {
         this.isActive = isActive;
         this.fromDateTime = fromDateTime;
         this.toDateTime = toDateTime;
@@ -110,8 +109,6 @@ public class Admission implements Serializable {
 
     public Admission addFromRequest(AdmissionRequest admissionRequest) {
         Admission admission = new Admission();
-        admission.setFromDateTime(admissionRequest.getStartDateTime());
-        admission.setToDateTime(admissionRequest.getEndDateTime());
         admission.setIsActive(admissionRequest.getIsActive());
         return admission;
     }

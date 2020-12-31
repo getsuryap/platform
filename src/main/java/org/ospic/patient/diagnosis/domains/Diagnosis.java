@@ -13,6 +13,7 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -57,14 +58,14 @@ public class Diagnosis implements Serializable {
 
     @Column(name = "date",  nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "sid")
     @JsonIgnore
     private ServiceResource service;
 
-    public Diagnosis( String symptoms, Date date, ServiceResource service) {
+    public Diagnosis( String symptoms, LocalDate date, ServiceResource service) {
         this.symptoms = symptoms;
         this.date = date;
         this.service = service;

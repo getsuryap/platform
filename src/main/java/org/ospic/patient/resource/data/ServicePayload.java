@@ -2,6 +2,9 @@ package org.ospic.patient.resource.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
+
+import java.time.LocalDate;
 
 /**
  * This file was created by eli on 25/12/2020 for org.ospic.patient.resource.data
@@ -28,8 +31,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ServicePayload {
     private Long id;
-    private String fromDate;
-    private String toDate;
+    private LocalDate fromDate;
+    private LocalDate toDate;
     private Boolean isActive;
     private Long patientId;
     private String patientName;
@@ -37,12 +40,12 @@ public class ServicePayload {
     private String staffName;
 
     public static ServicePayload instance(
-            Long id, String fromDate, String toDate, Boolean isActive,
+            Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,
             Long patientId, String patientName, Long staffId, String staffName) {
         return new ServicePayload(id, fromDate, toDate, isActive, patientId, patientName, staffId, staffName);
     }
 
-    public ServicePayload(Long id, String fromDate, String toDate, Boolean isActive, Long patientId, String patientName, Long staffId, String staffName) {
+    public ServicePayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive, Long patientId, String patientName, Long staffId, String staffName) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;

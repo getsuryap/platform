@@ -63,6 +63,7 @@ public class AdmissionsApiResources {
     @Autowired
     VisitsReadPrincipleService visitsReadPrincipleService;
 
+    @Autowired
     public AdmissionsApiResources(AdmissionsWriteService admissionsWriteService,
                                   AdmissionsReadService admissionsReadService,
                                   AdmissionRepository admissionRepository,
