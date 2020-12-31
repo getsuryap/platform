@@ -16,6 +16,8 @@ import org.ospic.util.constants.DatabaseConstants;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -60,8 +62,7 @@ public class AdmissionVisit {
     @Column(name = "date_time", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     @JoinColumn(name = "admission_id")

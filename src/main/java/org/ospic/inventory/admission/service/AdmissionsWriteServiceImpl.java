@@ -9,10 +9,9 @@ import org.ospic.inventory.admission.repository.AdmissionRepository;
 import org.ospic.inventory.beds.domains.Bed;
 import org.ospic.inventory.beds.exception.BedNotFoundException;
 import org.ospic.inventory.beds.repository.BedRepository;
-import org.ospic.patient.infos.exceptions.PatientNotFoundException;
-import org.ospic.patient.infos.repository.PatientRepository;
 import org.ospic.patient.resource.exception.ServiceNotFoundException;
 import org.ospic.patient.resource.repository.ServiceResourceJpaRepository;
+import org.ospic.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.inventory.admission.service
@@ -69,9 +71,15 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     @Transactional
     @Override
     public ResponseEntity<?> admitPatient(AdmissionRequest admissionRequest) {
+        final LocalDateTime startLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getStartDateTime());
+        final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getEndDateTime());
+
         return serviceResourceJpaRepository.findById(admissionRequest.getServiceId()).map(service -> {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
+            if (endLocalDateTime.isBefore(startLocalDateTime)){
+                return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.BAD_REQUEST.value(), "Admission and date can not be day before it's start date"));
+            }
             if (!service.getIsActive()){
                 return ResponseEntity.ok().body("Cannot admit patient in inactive service");
             }
@@ -89,7 +97,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
             }
             /**Create new admission **/
-            Admission admission = new Admission(admissionRequest.getIsActive(), admissionRequest.getEndDateTime(), admissionRequest.getStartDateTime());
+            Admission admission = new Admission(admissionRequest.getIsActive(), startLocalDateTime, endLocalDateTime);
             admission.setService(service);
             admission.setIsActive(true);
             admission.addBed(bed);
@@ -116,11 +124,18 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
+        final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(request.getEndDateTime());
         return serviceResourceJpaRepository.findById(request.getServiceId()).map(service -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
               return bedRepository.findById(request.getBedId()).map(bed ->{
                   if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
-                      cm.setMessage("Can't end inactive admission or un-admitted serviceI");
+                      cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
+                      cm.setMessage("Can't end inactive admission or un-admitted service");
+                      return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+                  }
+                  if (endLocalDateTime.isBefore(admission.getFromDateTime())){
+                      cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
+                      cm.setMessage("Admission end date can not be before admission start date");
                       return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
                   }
                   /** Update serviceI set as no longer admitted **/
@@ -129,7 +144,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
                   /** Update Admission set as no longer active **/
                   admission.setIsActive(false);
-                  admission.setToDateTime(request.getEndDateTime());
+                  admission.setToDateTime(endLocalDateTime);
                   admissionRepository.save(admission);
 
                   /** Update bed set as active open for another admission **/

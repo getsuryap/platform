@@ -60,7 +60,7 @@ public class BloodBankWritePrincipleServiceImpl implements BloodBankWritePrincip
         return bloodBankRepository.findById(payload.getGroupId()).map(group ->{
             group.setCounts(group.getCounts() + payload.getBagsCount());
             bloodBankRepository.save(group);
-            return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK,"Blood group updated successfully"));
+            return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),"Blood group updated successfully"));
         }).orElseThrow(() -> new ResourceNotFoundException("Blood group with such an ID os not found"));
     }
 
@@ -73,6 +73,6 @@ public class BloodBankWritePrincipleServiceImpl implements BloodBankWritePrincip
                return null;
             });
         });
-        return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK,"Blood group updated successfully"));
+        return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),"Blood group updated successfully"));
     }
 }

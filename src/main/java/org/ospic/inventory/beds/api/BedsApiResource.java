@@ -116,7 +116,7 @@ public class BedsApiResource {
             }
             if (command.equals("unoccupied")){
                 Optional<List<Bed>> beds = bedRepository.findByIsOccupiedFalse();
-                return ResponseEntity.ok().body(beds.isPresent() ? beds.get() : new CustomReponseMessage(HttpStatus.OK, "Sorry. Seems like all beds are now occupied"));
+                return ResponseEntity.ok().body(beds.isPresent() ? beds.get() : new CustomReponseMessage(HttpStatus.NO_CONTENT.value(), "Sorry. Seems like all beds are now occupied"));
             }
         }
         return bedReadService.retrieveBedList();

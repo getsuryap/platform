@@ -20,6 +20,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -144,7 +146,10 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
             final Long serviceId = rs.getLong("serviceId");
             final String bedIdentifier = rs.getString("bedIdentifier");
             final String wardName = rs.getString("wardName");
-            return AdmissionResponseData.responseTemplate(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
+            final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(startDate));
+            final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(endDate));
+
+            return AdmissionResponseData.responseTemplate(id, fromDateLocal, toDateLocal, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
         }
     }
 

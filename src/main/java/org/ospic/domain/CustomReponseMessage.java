@@ -32,8 +32,8 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class CustomReponseMessage {
     private String message;
-    private HttpStatus httpStatus;
-    public CustomReponseMessage(HttpStatus httpStatus, String message){
+    private int httpStatus;
+    public CustomReponseMessage(int httpStatus, String message){
         this.httpStatus = httpStatus;
         this.message = message;
     }

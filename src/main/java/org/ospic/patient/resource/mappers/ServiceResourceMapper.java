@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -41,13 +43,15 @@ public class ServiceResourceMapper implements RowMapper<ServicePayload> {
     @Override
     public ServicePayload mapRow(ResultSet rs, int i) throws SQLException {
         final Long id = rs.getLong("id");
-        final String fromDate = rs.getString("fromDate");
-        final String toDate = rs.getString("toDate");
+        final Date fromDate = rs.getDate("fromDate");
+        final Date toDate = rs.getDate("toDate");
         final Boolean isActive = rs.getBoolean("isActive");
         final Long patientId = rs.getLong("patientId");
         final String patientName = rs.getString("patientName");
         final Long staffId = rs.getLong("staffId");
         final String staffName = rs.getString("staffName");
-        return ServicePayload.instance(id, fromDate, toDate, isActive, patientId, patientName, staffId, staffName);
+        final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(fromDate));
+        final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(toDate));
+        return ServicePayload.instance(id, fromDateLocal, toDateLocal, isActive, patientId, patientName, staffId, staffName);
     }
 }
