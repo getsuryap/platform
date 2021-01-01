@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -46,15 +47,8 @@ public class MedicineCategoriesApiResources {
         this.medicineGroupRepository = medicineGroupRepository;
     }
 
-    @ApiOperation(
-            value = "RETRIEVE list of available Medicine groups available",
-            notes = "RETRIEVE list of available Medicine groups available",
-            response = MedicineGroup.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "RETRIEVE list of available Medicine groups available", notes = "RETRIEVE list of available Medicine groups available", response = MedicineGroup.class)
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 
     @ResponseBody
     ResponseEntity<List<MedicineGroup>> retrieveAllMedicineGroups() {
@@ -63,17 +57,8 @@ public class MedicineCategoriesApiResources {
     }
 
 
-    @ApiOperation(
-            value = "ADD new Medicine group",
-            notes = "ADD new Medicine group",
-            response = MedicineGroup.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-
+    @ApiOperation(value = "ADD new Medicine group", notes = "ADD new Medicine group", response = MedicineGroup.class)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineGroup medicineGroup) {
         if (medicineGroupRepository.existsByName(medicineGroup.getName())) {
@@ -81,6 +66,16 @@ public class MedicineCategoriesApiResources {
         }
         medicineGroupRepository.save(medicineGroup);
         return ResponseEntity.ok().body("Medicine group added successfully");
-
     }
+
+    @ApiOperation(value = "RETRIEVE Medicine group by ID", notes = "RETRIEVE Medicine group by ID")
+    @RequestMapping(value = "/{medicineGroupId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveMedicineGroupById(@PathVariable Long medicineGroupId) {
+        Optional<MedicineGroup> medicineGroupsResponse = medicineGroupRepository.findById(medicineGroupId);
+        return ResponseEntity.ok().body(medicineGroupsResponse.get());
+    }
+
+
+
 }
