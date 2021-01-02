@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.ospic</groupId>
-    <artifactId>ospic-platform</artifactId>
+    <artifactId>platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ospic-platform</name>
+    <name>platform</name>
     <!--<packaging>war</packaging>-->
 
     <description>Ospic platform</description>
@@ -150,7 +150,16 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
