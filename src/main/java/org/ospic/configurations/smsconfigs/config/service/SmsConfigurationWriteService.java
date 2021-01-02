@@ -31,5 +31,6 @@ import org.springframework.stereotype.Service;
 public interface SmsConfigurationWriteService {
     public ResponseEntity<?> createSmsConfiguration(SmsConfig config);
     public ResponseEntity<?>  activateSmsConfiguration(Long configId);
+    public ResponseEntity<?> updateSmsConfiguration(Long id, SmsConfig config);
 
 }

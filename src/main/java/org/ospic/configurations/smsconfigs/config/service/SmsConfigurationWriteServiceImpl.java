@@ -55,8 +55,20 @@ public class SmsConfigurationWriteServiceImpl implements SmsConfigurationWriteSe
             });
             config.setIsActive(true);
             configurationsJpaRepository.save(config);
-            return ResponseEntity.ok().body("Updated successfully");
+            return ResponseEntity.ok().body("Activated successfully");
         }).orElseThrow(EntityNotFoundException::new);
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> updateSmsConfiguration(Long id, SmsConfig cf) {
+       return configurationsJpaRepository.findById(id).map(config -> {
+            config.setName(cf.getName().isEmpty() ? config.getName() : cf.getName());
+            config.setPhoneNumber(cf.getPhoneNumber().isEmpty()  ? config.getPhoneNumber() : cf.getPhoneNumber());
+            config.setSid(cf.getSid().isEmpty() ? config.getSid() : cf.getSid());
+            config.setToken(cf.getToken().isEmpty() ?  config.getToken() :  cf.getToken());
+            configurationsJpaRepository.save(config);
+            return ResponseEntity.ok().body("Updated successfully");
+        }).orElseThrow(EntityNotFoundException::new);
     }
 }

@@ -69,6 +69,7 @@ public class HibernateConfigurations {
     }
 
 
+
     
     @Bean(name = "transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {
