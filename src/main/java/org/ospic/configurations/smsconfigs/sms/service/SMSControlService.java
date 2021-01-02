@@ -1,11 +1,11 @@
-package org.ospic.util.smsconfigs.service;
+package org.ospic.configurations.smsconfigs.sms.service;
 
-import org.ospic.util.smsconfigs.SMS;
+import org.ospic.configurations.smsconfigs.sms.SMS;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs.service
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.message.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -24,7 +24,7 @@ public class DatabaseConstants {
     public static final String SMS_MESSAGE_TABLE = TI+"sms";
     public static final String CONTACTS_INFO_TABLE = TI+"contacts";
     public static final String ROLES_TABLE = TI+"roles";
-    public static final String DOCTOR_INFORMATION = TI+"doctor";
+    public static final String SMS_CONFIGURATION_TABLE = TI+"sms_configuration";
     public static final String BEDS_TABLE = TI+"beds";
     public static final String WARDS_TABLE = TI+"wards";
     public static final String STAFFS_TABLE = TI+"staff";

@@ -1,10 +1,10 @@
-package org.ospic.util.smsconfigs.repository;
+package org.ospic.configurations.smsconfigs.sms.repository;
 
-import org.ospic.util.smsconfigs.domain.SmsCampaign;
+import org.ospic.configurations.smsconfigs.sms.domain.SmsCampaign;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs.repository
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.message.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,9 +1,8 @@
-package org.ospic.util.smsconfigs.domain;
+package org.ospic.configurations.smsconfigs.sms.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.joda.time.DateTime;
@@ -13,10 +12,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
-import java.util.Map;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs.domain
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.message.domain
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
