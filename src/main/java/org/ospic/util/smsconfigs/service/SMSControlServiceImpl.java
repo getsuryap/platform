@@ -4,6 +4,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import org.ospic.util.smsconfigs.SMS;
+import org.ospic.util.smsconfigs.domain.SmsCampaign;
+import org.ospic.util.smsconfigs.repository.SmsCampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -32,8 +34,11 @@ import org.springframework.util.MultiValueMap;
 @Component
 public class SMSControlServiceImpl implements SMSControlService {
     @Autowired
-    public SMSControlServiceImpl(){}
-
+    SmsCampaignRepository smsRepository;
+    @Autowired
+    public SMSControlServiceImpl( SmsCampaignRepository smsRepository){
+        this.smsRepository = smsRepository;
+    }
 
     private final String ACCOUNT_SID = "AC451130a2493121dfe309ac8a8734d82f";
 
@@ -43,11 +48,11 @@ public class SMSControlServiceImpl implements SMSControlService {
 
     @Override
     public void sendMessage(SMS sms) {
+        SmsCampaign smsCampaign = new SmsCampaign();
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(FROM_NUMBER), sms.getMessage())
-                .create();
-        System.out.println("here is my id:" + message.getSid());// Unique resource ID created to manage this transaction
-
+        Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(FROM_NUMBER), sms.getMessage()).create();
+        System.out.println(smsCampaign.instance(message).toString());// Unique resource ID created to manage this transaction
+        smsRepository.save(smsCampaign.instance(message));
     }
     @Override
     public void receive(MultiValueMap<String, String> callback) {
