@@ -1,19 +1,13 @@
-package org.ospic.util.reporting.service;
+package org.ospic.configurations.smsconfigs.config.repository;
 
-import javassist.bytecode.ByteArray;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.ospic.patient.infos.domain.Patient;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.ospic.configurations.smsconfigs.config.domain.SmsConfig;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.io.IOException;
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.reporting
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.config.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -33,9 +27,7 @@ import java.util.Collection;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface PatientReportingReadPrincipleService {
-    public ResponseEntity<Resource> patientListReport() throws IOException;
-    public Workbook workbook();
+public interface SmsConfigurationsJpaRepository extends JpaRepository<SmsConfig, Long> {
+   Optional<SmsConfig> findByIsActiveTrue();
+
 }

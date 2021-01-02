@@ -1,22 +1,17 @@
-package org.ospic.util.reporting.api;
+package org.ospic.configurations.reporting.api;
 
 import io.swagger.annotations.Api;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.hibernate.jdbc.Work;
-import org.ospic.patient.contacts.domain.ContactsInformation;
-import org.ospic.patient.contacts.services.ContactsInformationService;
-import org.ospic.patient.infos.service.PatientInformationWriteService;
-import org.ospic.util.reporting.service.PatientReportingReadPrincipleService;
+import org.ospic.configurations.reporting.service.PatientReportingReadPrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.reporting.api
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.reporting.api
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

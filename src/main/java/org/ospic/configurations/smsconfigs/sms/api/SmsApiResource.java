@@ -1,7 +1,8 @@
-package org.ospic.util.smsconfigs.service;
+package org.ospic.configurations.smsconfigs.sms.api;
 
 import io.swagger.annotations.Api;
-import org.ospic.util.smsconfigs.SMS;
+import org.ospic.configurations.smsconfigs.sms.SMS;
+import org.ospic.configurations.smsconfigs.sms.service.SMSControlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs.service
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.message.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -36,7 +37,7 @@ import java.time.format.DateTimeFormatter;
 @RestController
 @RequestMapping("/api/sms")
 @Api(value = "/api/sms", tags = "Message campaign")
-public class SmsController {
+public class SmsApiResource {
 
     @Autowired
     SMSControlService service;

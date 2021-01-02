@@ -1,4 +1,4 @@
-package org.ospic.util.smsconfigs;
+package org.ospic.configurations.smsconfigs.sms;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,10 +1,15 @@
-package org.ospic.util.smsconfigs;
+package org.ospic.configurations.reporting.service;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.reporting
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,14 +29,9 @@ import lombok.NoArgsConstructor;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
-@NoArgsConstructor
-public class SMS {
-    private String to;
-    private String message;
-
-    public SMS(String to, String message) {
-        this.to = to;
-        this.message = message;
-    }
+@Component
+@Service
+public interface PatientReportingReadPrincipleService {
+    public ResponseEntity<Resource> patientListReport() throws IOException;
+    public Workbook workbook();
 }

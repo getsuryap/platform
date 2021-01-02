@@ -1,17 +1,21 @@
-package org.ospic.util.smsconfigs.service;
+package org.ospic.configurations.smsconfigs.sms.service;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
-import org.ospic.util.smsconfigs.SMS;
-import org.ospic.util.smsconfigs.domain.SmsCampaign;
-import org.ospic.util.smsconfigs.repository.SmsCampaignRepository;
+import org.ospic.configurations.smsconfigs.config.domain.SmsConfig;
+import org.ospic.configurations.smsconfigs.config.repository.SmsConfigurationsJpaRepository;
+import org.ospic.configurations.smsconfigs.sms.SMS;
+import org.ospic.configurations.smsconfigs.sms.domain.SmsCampaign;
+import org.ospic.configurations.smsconfigs.sms.repository.SmsCampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Optional;
+
 /**
- * This file was created by eli on 02/01/2021 for org.ospic.util.smsconfigs.service
+ * This file was created by eli on 02/01/2021 for org.ospic.configurations.smsconfigs.message.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -36,10 +40,13 @@ public class SMSControlServiceImpl implements SMSControlService {
     @Autowired
     SmsCampaignRepository smsRepository;
     @Autowired
-    public SMSControlServiceImpl( SmsCampaignRepository smsRepository){
-        this.smsRepository = smsRepository;
-    }
+    SmsConfigurationsJpaRepository configuration;
 
+    @Autowired
+    public SMSControlServiceImpl( SmsCampaignRepository smsRepository, SmsConfigurationsJpaRepository configuration){
+        this.smsRepository = smsRepository;
+        this.configuration = configuration;
+    }
     private final String ACCOUNT_SID = "AC451130a2493121dfe309ac8a8734d82f";
 
     private final String AUTH_TOKEN = "cc532013188c932f0052dcec28c8c6ab";
@@ -48,11 +55,17 @@ public class SMSControlServiceImpl implements SMSControlService {
 
     @Override
     public void sendMessage(SMS sms) {
-        SmsCampaign smsCampaign = new SmsCampaign();
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(FROM_NUMBER), sms.getMessage()).create();
-        System.out.println(smsCampaign.instance(message).toString());// Unique resource ID created to manage this transaction
-        smsRepository.save(smsCampaign.instance(message));
+        Optional<SmsConfig> configOptional = configuration.findByIsActiveTrue();
+        if (configOptional.isPresent()) {
+            SmsCampaign smsCampaign = new SmsCampaign();
+            SmsConfig config = configOptional.get();
+            Twilio.init(config.getSid(),config.getToken());
+            Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(config.getPhoneNumber()), sms.getMessage()).create();
+            System.out.println(smsCampaign.instance(message).toString());// Unique resource ID created to manage this transaction
+            smsRepository.save(smsCampaign.instance(message));
+        }else {
+            System.out.println("Null sms configurations or no active configuration");
+        }
     }
     @Override
     public void receive(MultiValueMap<String, String> callback) {
