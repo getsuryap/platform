@@ -21,7 +21,7 @@ package org.ospic.util.constants;
 public class DatabaseConstants {
     private static final String TI = "m_";
     public static final String PATIENT_INFO_TABLE = TI+"patients";
-    public static final String MISC_INFO_TABLE = TI+"misc";
+    public static final String SMS_MESSAGE_TABLE = TI+"sms";
     public static final String CONTACTS_INFO_TABLE = TI+"contacts";
     public static final String ROLES_TABLE = TI+"roles";
     public static final String DOCTOR_INFORMATION = TI+"doctor";
