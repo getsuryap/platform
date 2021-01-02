@@ -70,9 +70,16 @@ public class ConfigurationApiResource {
     }
 
     @ApiOperation(value = "ACTIVATE sms configurations", notes = "ACTIVATE sms configurations")
-    @RequestMapping(value = "/sms/{Id}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/sms/{Id}/activate", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveSmsConfigurations(@PathVariable Long Id) {
         return writeService.activateSmsConfiguration(Id);
+    }
+
+    @ApiOperation(value = "ACTIVATE sms configurations", notes = "ACTIVATE sms configurations")
+    @RequestMapping(value = "/sms/{Id}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateSmsConfiguration(@PathVariable Long Id, @Valid @RequestBody  SmsConfig config) {
+        return writeService.updateSmsConfiguration(Id, config);
     }
 }
