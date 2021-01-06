@@ -5,8 +5,8 @@ Spring platform for [WebApp Application](https://hmis.netlify.app/)
 Steps to install
 ---
 - Clone this repository
-- Run `mvn clean install` 
-- Then run `mvn spring-boot:run`
+- Run `gradle clean` 
+- Then run `gradle boorRun`
 - Read the Api documentations from http://localhost:8080/swagger-ui.html#/
 
 ## Contribution Guidelines
