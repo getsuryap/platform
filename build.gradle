@@ -1,0 +1,73 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+
+}
+allprojects {
+    apply plugin: "java"
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+}
+
+group = 'org.ospic.platform'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+    implementationOnly {
+        extendsFrom annotationProcessor
+    }
+}
+/* define the valid syntax level for source files */
+sourceCompatibility = JavaVersion.VERSION_1_8
+/* define binary compatibility version */
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    google()
+}
+
+dependencies {
+
+    implementation(
+            'org.springframework.boot:spring-boot-starter-data-jpa',
+            'org.springframework.boot:spring-boot-starter-security',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-websocket',
+            'org.springframework:spring-web',
+            'org.flywaydb:flyway-core:5.2.4',
+            'io.springfox:springfox-swagger2:3.0.0',
+            'io.springfox:springfox-swagger-ui:3.0.0',
+            'io.springfox:springfox-bean-validators:3.0.0'
+    )
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testCompile 'junit:junit:4.12'
+
+    compile([group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'],
+            [group: 'org.hibernate', name: 'hibernate-envers', version: '5.3.11.Final'],
+            [group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.11.Final'],
+            [group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.6.Final'],
+            [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5', version: '2.9.8'],
+            [group: 'org.apache.tomcat', name: 'tomcat-dbcp', version: '9.0.1'],
+            [group: 'org.apache.poi', name: 'poi', version: '4.1.2'],
+            [group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'],
+            [group: 'com.twilio.sdk', name: 'twilio', version: '7.1.0'],
+            ['org.projectreactor:reactor-spring:1.0.1.RELEASE']
+    )
+
+
+    runtimeOnly 'mysql:mysql-connector-java:8.0.17'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2:1.4.199'
+
+}
+
+test {
+    useJUnitPlatform()
+}
