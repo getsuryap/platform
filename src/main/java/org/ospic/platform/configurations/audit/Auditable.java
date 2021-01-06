@@ -1,7 +1,8 @@
-package org.ospic.platform.domain;
+package org.ospic.platform.configurations.audit;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -37,11 +39,10 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
+@Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<U> {
+public abstract class Auditable implements Serializable {
     @CreationTimestamp
     @Column(name = "created_date", nullable = false, updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -49,7 +50,7 @@ public abstract class Auditable<U> {
 
     @CreatedBy
     @Column(name = "created_by",nullable = true, updatable = false)
-    protected U createdBy;
+    protected String createdBy;
 
     @UpdateTimestamp
     @Column(name = "last_modified_date")
@@ -58,7 +59,7 @@ public abstract class Auditable<U> {
 
     @LastModifiedBy
     @Column(name = "last_modified_by", nullable = true, updatable = true)
-    protected U lastModifiedBy;
+    protected String lastModifiedBy;
 
 
 

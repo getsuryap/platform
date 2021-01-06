@@ -11,6 +11,8 @@ import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +75,8 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     StaffsReadPrinciplesService staffsReadPrinciplesService;
     JdbcTemplate jdbcTemplate;
 
+    Logger logger = LoggerFactory.getLogger(PatientInformationWriteServiceImpl.class);
+
     @Autowired
     public PatientInformationWriteServiceImpl(
             DataSource dataSource,
@@ -91,6 +95,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         patient.setIsActive(false);
         String gender = patient.getGender().toLowerCase();
         patient.setGender(gender);
+        logger.info(patient.toString());
         return patientRepository.save(patient);
     }
 

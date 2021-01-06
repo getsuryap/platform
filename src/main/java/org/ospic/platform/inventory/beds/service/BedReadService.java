@@ -25,8 +25,6 @@ import java.util.List;
  */
 public interface BedReadService {
     public ResponseEntity<List<Bed>> retrieveBedList();
-
     public ResponseEntity<Bed> retrieveBedById(Long id);
-
     public ResponseEntity<List<Bed>> retrieveBedListByWard(Long wardId);
 }

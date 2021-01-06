@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.ospic.platform.domain.Auditable;
+import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.resource.domain.ServiceResource;
 import org.ospic.platform.security.authentication.users.domain.User;
@@ -46,7 +46,7 @@ import java.util.List;
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = true)
-public class Patient extends Auditable<User> implements Serializable {
+public class Patient extends Auditable implements Serializable {
     private static final long serialVersionUID = -1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
