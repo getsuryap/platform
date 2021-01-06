@@ -1,14 +1,15 @@
-package org.ospic.platform.configurations;
+package org.ospic.platform.configurations.audit;
 
+import org.ospic.platform.configurations.audit.SpringSecurityAuditorAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-
-import java.util.Optional;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * This file was created by eli on 22/10/2020 for org.ospic.platform.configurations
+ * This file was created by eli on 14/10/2020 for org.ospic.platform.configurations
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,12 +29,14 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class SpringSecurityAuditorAware implements AuditorAware<String> {
+@Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableTransactionManagement
+public class PersistenceContext {
 
-    @Override
-    public Optional<String> getCurrentAuditor(){
-        //return Optional.of(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-        return Optional.of("Naresh");//Optional.of(SecurityContextHolder.getContext().getAuthentication().getName());
+    @Bean
+    public AuditorAware<String> auditorAware(){
+        return new SpringSecurityAuditorAware();
     }
-
 }
