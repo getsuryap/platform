@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.Properties;
 
-@SpringBootApplication(scanBasePackages ={"org.ospic"},
+@SpringBootApplication(scanBasePackages ={"org.ospic.platform"},
 		exclude = HibernateJpaAutoConfiguration.class)
 @ComponentScan
 public class PlatformApplication implements CommandLineRunner {
