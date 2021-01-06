@@ -1,0 +1,74 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name:  GitHub CICD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ opened, labeled, master ]
+  issues:
+    types: [opened, labeled]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+  MY_GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Re install dependencies
+      run: mvn clean install
+    - name: Clean mvn repository
+      run: mvn clean verify
+    - name: pom goal of help plugin(tool)	Displays the effective POM as an XML for this build
+      run: mvn help:effective-pom
+    - name: Lists all Maven dependencies from our project
+      run: mvn dependency:list
+    - name: Compiles the source code of the projects.
+      run: mvn compile
+    - name: Build with Maven
+      run: mvn clean package
+
+  assign_one_project:
+
+    runs-on: ubuntu-latest
+    name: Assign to One Project
+    steps:
+    - name: Assign NEW issues and NEW pull requests to CHILD project
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: github.event.action == 'opened'
+      with:
+        project: 'https://github.com/ospic/platform/projects/2'
+
+    - name: Assign issues and pull requests with `enhancement` label to CHILD project
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: |
+        contains(github.event.issue.labels.*.name, 'enhancement') ||
+        contains(github.event.pull_request.labels.*.name, 'enhancement')
+      with:
+        project: 'https://github.com/ospic/platform/projects/2'
+        column_name: 'To do'
+    - name: Assign NEW issues and NEW pull requests to HEADER project
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: github.event.action == 'opened'
+      with:
+        project: 'https://github.com/orgs/ospic/projects/1'
+
+    - name: Assign issues and pull requests with `enhancement` label to HEADER project
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: |
+        contains(github.event.issue.labels.*.name, 'enhancement') ||
+        contains(github.event.pull_request.labels.*.name, 'enhancement')
+      with:
+        project: 'https://github.com/orgs/ospic/projects/1'
+        column_name: 'To do'
+
