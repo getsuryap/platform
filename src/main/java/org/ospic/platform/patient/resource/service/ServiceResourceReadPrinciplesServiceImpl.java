@@ -129,7 +129,7 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
     @Override
     public ResponseEntity<?> retrieveAllActiveServicesInIpd() {
         ServiceResourceMapper rm = new ServiceResourceMapper();
-        final String sql = "select  " + rm.schema() + " WHERE  s.is_active AND s.is_admitted = true ";
+        final String sql = "select  " + rm.schema() + " WHERE  s.is_active = true AND s.is_admitted = true ";
         List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
         return ResponseEntity.ok().body(payloads);
     }
@@ -137,7 +137,7 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
     @Override
     public ResponseEntity<?> retrialAllAllActiveServiceInOpd() {
         ServiceResourceMapper rm = new ServiceResourceMapper();
-        final String sql = "select  " + rm.schema() + " WHERE s.is_active AND s.is_admitted =false";
+        final String sql = "select  " + rm.schema() + " WHERE s.is_active = true AND s.is_admitted =false";
         List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
         return ResponseEntity.ok().body(payloads);
     }
