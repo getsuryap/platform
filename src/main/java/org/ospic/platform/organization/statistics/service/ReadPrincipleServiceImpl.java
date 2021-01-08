@@ -98,7 +98,7 @@ public class ReadPrincipleServiceImpl implements ReadPrincipleService {
                 "  COUNT(IF(is_active,1,NULL))'totalActive', " +
                 "  COUNT(IF(is_active = 0,1,NULL))'totalInActive', " +
                 "  COUNT(IF(staff_id,1,NULL))'totalAssigned', " +
-                "  COUNT(IF(staff_id IS NULL,1,NULL))'totalUnAssigned', " +
+                "  SUM(case WHEN staff_id IS NULL then 1 else 0 end)'totalUnAssigned', "+
                 "  COUNT(IF(is_admitted,1,NULL))'totalIpd', " +
                 "  COUNT(IF(is_admitted = 0,1,NULL))'totalOpd'  " +
                 "  FROM m_service; ";
@@ -112,7 +112,7 @@ public class ReadPrincipleServiceImpl implements ReadPrincipleService {
         String queryString =
                         "  SELECT COUNT(*) AS total, " +
                         "  COUNT(IF(is_occupied, 1,NULL))'occupied', " +
-                        "  COUNT(IF(is_occupied = 0, 1,NULL))'unoccupied' " +
+                        "  SUM(case when is_occupied = 0 then 1 else 0 end)'unoccupied' " +
                         "  FROM m_beds;";
         Session session = this.sessionFactory.openSession();
         List<WardStatistics> wardStatistics = jdbcTemplate.query(queryString, new WardStatistics.WardStatisticsRowMapper());
