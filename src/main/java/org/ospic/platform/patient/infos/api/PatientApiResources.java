@@ -2,7 +2,6 @@ package org.ospic.platform.patient.infos.api;
 
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
-import org.ospic.platform.patient.infos.data.PatientTrendDatas;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.patient.infos.service.PatientInformationReadServices;
@@ -101,9 +100,6 @@ public class PatientApiResources {
             if (command.equals("template")) {
                 return patientInformationReadServices.retrievePatientCreationDataTemplate();
             }
-            if (command.equals("trends")) {
-                return patientInformationReadServices.retrieveAllPatientTrendData();
-            }
         }
         return ResponseEntity.ok().body(patientInformationReadServices.retrieveAllPatients());
     }
@@ -123,13 +119,6 @@ public class PatientApiResources {
         return patientInformationReadServices.retrievePatientAdmittedInThisBed(bedId);
     }
 
-
-    @ApiOperation(value = "GET patients trend data by sex and date", notes = "GET patients trend data by sex and date")
-    @RequestMapping(value = "/trends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<List<PatientTrendDatas>> getPatientTrendBySexAndDate() {
-        return patientInformationReadServices.retrieveAllPatientTrendData();
-    }
 
     @ApiOperation(value = "UPDATE specific Patient information", notes = "UPDATE specific Patient information")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

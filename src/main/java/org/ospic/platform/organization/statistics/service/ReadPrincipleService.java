@@ -1,14 +1,9 @@
-package org.ospic.platform.patient.infos.data;
+package org.ospic.platform.organization.statistics.service;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.Serializable;
+import org.springframework.http.ResponseEntity;
 
 /**
- * This file was created by eli on 01/11/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 08/01/2021 for org.ospic.platform.organization.statistics.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,21 +23,6 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-public class PatientTrendDatas implements Serializable {
-    private String date;
-    private  Long total;
-    private  Long male;
-    private  Long female;
-    private  Long other;
-
-    public PatientTrendDatas(String date, Long total, Long male, Long female, Long other) {
-        this.date = date;
-        this.male = male;
-        this.female = female;
-        this.other = other;
-        this.total = total;
-    }
+public interface ReadPrincipleService {
+    ResponseEntity<?> retrieveStatistic();
 }
