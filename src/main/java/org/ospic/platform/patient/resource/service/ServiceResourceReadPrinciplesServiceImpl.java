@@ -65,12 +65,18 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
 
     @Override
     public ResponseEntity<?> retrialAllActiveServices() {
-        return ResponseEntity.ok(resourceJpaRepository.findByIsActiveTrue());
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.is_active = true";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok(payloads);
     }
 
     @Override
     public ResponseEntity<?> retrieveAllInactiveServices() {
-        return ResponseEntity.ok(resourceJpaRepository.findByIsActiveFalse());
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.is_active = false";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok(payloads);
     }
 
     @Override
