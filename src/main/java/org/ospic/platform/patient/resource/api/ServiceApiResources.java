@@ -61,6 +61,12 @@ public class ServiceApiResources {
             if (command.equals("false")) {
                 return serviceRead.retrieveAllInactiveServices();
             }
+            if(command.equals("activeipd")){
+                return serviceRead.retrieveAllActiveServicesInIpd();
+            }
+            if (command.equals("activeopd")){
+                return serviceRead.retrialAllAllActiveServiceInOpd();
+            }
         }
         return ResponseEntity.ok().body(serviceRead.retrieveAllServices());
     }

@@ -70,6 +70,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             ServiceResource sr = new ServiceResource();
             sr.setPatient(patient);
             sr.setIsActive(true);
+            sr.setIsAdmitted(false);
             sr.setFromdate(LocalDate.now());
             sr.setTodate(LocalDate.now());
             patient.setIsActive(true);

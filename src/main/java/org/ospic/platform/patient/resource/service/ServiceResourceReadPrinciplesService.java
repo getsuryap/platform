@@ -38,4 +38,7 @@ public interface ServiceResourceReadPrinciplesService {
     ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveTrue(Long staffId);
     ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveFalse(Long staffId);
     ResponseEntity<?> retrieveServiceByStaffIdAll(Long staffId);
+    ResponseEntity<?> retrieveAllActiveServicesInIpd();
+    ResponseEntity<?> retrialAllAllActiveServiceInOpd();
+
 }

@@ -34,6 +34,7 @@ public class ServicePayload {
     private LocalDate fromDate;
     private LocalDate toDate;
     private Boolean isActive;
+    private Boolean isAdmitted;
     private Long patientId;
     private String patientName;
     private Long staffId;
@@ -41,15 +42,17 @@ public class ServicePayload {
 
     public static ServicePayload instance(
             Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,
+           Boolean isAdmitted,
             Long patientId, String patientName, Long staffId, String staffName) {
-        return new ServicePayload(id, fromDate, toDate, isActive, patientId, patientName, staffId, staffName);
+        return new ServicePayload(id, fromDate, toDate, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 
-    public ServicePayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive, Long patientId, String patientName, Long staffId, String staffName) {
+    public ServicePayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,Boolean isAdmitted, Long patientId, String patientName, Long staffId, String staffName) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.isActive = isActive;
+        this.isAdmitted = isAdmitted;
         this.patientId = patientId;
         this.patientName = patientName;
         this.staffId = staffId;

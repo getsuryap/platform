@@ -110,6 +110,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
             /**
              * Update patient set as admitted to prevent re-admission**/
+            service.setIsAdmitted(true);
             service.getPatient().setIsAdmitted(true);
             serviceResourceJpaRepository.save(service);
 
@@ -139,7 +140,10 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                       cm.setMessage("Admission end date can not be before admission start date");
                       return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
                   }
-                  /** Update serviceI set as no longer admitted **/
+
+                  /** Update this service set as no longer admitted
+                   * Update patient under this service set as no longer admitted **/
+                  service.setIsAdmitted(false);
                   service.getPatient().setIsAdmitted(false);
                   serviceResourceJpaRepository.save(service);
 

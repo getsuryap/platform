@@ -1,0 +1,1 @@
+ALTER TABLE `m_service` add `is_admitted` boolean  default false  after `is_active`;
