@@ -37,10 +37,6 @@ public class PatientStatistics {
     private  Long totalMale;
     private  Long totalFemale;
     private  Long totalUnspecified;
-    private  Long totalIpd;
-    private  Long totalOpd;
-    private  Long totalAssigned;
-    private  Long totalUnassigned;
 
 
     public PatientStatistics(Long total, Long totalMale, Long totalFemale, Long totalUnspecified, Long totalIpd, Long totalOpd, Long totalAssigned, Long totalUnassigned) {
@@ -48,10 +44,7 @@ public class PatientStatistics {
         this.totalMale = totalMale;
         this.totalFemale = totalFemale;
         this.totalUnspecified = totalUnspecified;
-        this.totalIpd = totalIpd;
-        this.totalOpd = totalOpd;
-        this.totalAssigned = totalAssigned;
-        this.totalUnassigned = totalUnassigned;
+
     }
 
     public static class StatisticsDataRowMapper implements RowMapper<PatientStatistics>{
@@ -60,10 +53,6 @@ public class PatientStatistics {
         public PatientStatistics mapRow(ResultSet rs, int i) throws SQLException {
             PatientStatistics st = new PatientStatistics();
             st.setTotal(rs.getLong("total"));
-            st.setTotalAssigned(rs.getLong("assigned"));
-            st.setTotalUnassigned(rs.getLong("unassigned"));
-            st.setTotalIpd(rs.getLong("ipd"));
-            st.setTotalOpd(rs.getLong("opd"));
             st.setTotalFemale(rs.getLong("female"));
             st.setTotalMale(rs.getLong("male"));
             st.setTotalUnspecified(rs.getLong("unspecified"));

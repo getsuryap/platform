@@ -81,10 +81,6 @@ public class ReadPrincipleServiceImpl implements ReadPrincipleService {
     private PatientStatistics retrieveStatisticalData() {
         String queryString = " SELECT " +
                 " COUNT(*) as total,  " +
-                " COUNT(IF(isAdmitted,1, NULL))'ipd', " +
-                " COUNT(IF(isAdmitted = 0,1, NULL))'opd', " +
-                " COUNT(IF(is_active,1,NULL))'assigned', " +
-                " COUNT(IF(is_active = 0,1,NULL)) AS unassigned, " +
                 " COUNT(IF(gender = 'male' ,1, NULL))'male', " +
                 " COUNT(IF(gender = 'female' ,1, NULL))'female', " +
                 " SUM(case when gender like 'male' then 1 else 0 end) 'males', " +
