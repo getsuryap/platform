@@ -63,8 +63,11 @@ public class ServiceResource implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate todate;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "is_active",  columnDefinition = "boolean default true")
     private Boolean isActive;
+
+    @Column(name = "is_admitted",  columnDefinition = "boolean default false")
+    private Boolean isAdmitted;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")

@@ -34,8 +34,8 @@ public class ServiceResourceMapper implements RowMapper<ServicePayload> {
     public String schema() {
         return  " s.id as id, s.fromdate as fromDate, s.todate as toDate, s.is_active as isActive, " +
                 " s.patient_id as patientId, p.name as patientName, " +
-                " s.staff_id as staffId, st.fullName as staffName  " +
-                " FROM m_service s " +
+                " s.staff_id as staffId, st.fullName as staffName,  " +
+                " s.is_admitted as isAdmitted FROM m_service s " +
                 " left join m_patients p on p.id = s.patient_id  " +
                 " left join m_staff st on st.user_id = s.staff_id ";
     }
@@ -46,12 +46,13 @@ public class ServiceResourceMapper implements RowMapper<ServicePayload> {
         final Date fromDate = rs.getDate("fromDate");
         final Date toDate = rs.getDate("toDate");
         final Boolean isActive = rs.getBoolean("isActive");
+        final Boolean  isAdmitted = rs.getBoolean("isAdmitted");
         final Long patientId = rs.getLong("patientId");
         final String patientName = rs.getString("patientName");
         final Long staffId = rs.getLong("staffId");
         final String staffName = rs.getString("staffName");
         final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(fromDate));
         final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(toDate));
-        return ServicePayload.instance(id, fromDateLocal, toDateLocal, isActive, patientId, patientName, staffId, staffName);
+        return ServicePayload.instance(id, fromDateLocal, toDateLocal, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 }

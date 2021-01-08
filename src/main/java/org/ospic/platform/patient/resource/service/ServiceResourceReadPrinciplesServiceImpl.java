@@ -127,6 +127,22 @@ public class ServiceResourceReadPrinciplesServiceImpl implements ServiceResource
     }
 
     @Override
+    public ResponseEntity<?> retrieveAllActiveServicesInIpd() {
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE  s.is_active AND s.is_admitted = true ";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
+    public ResponseEntity<?> retrialAllAllActiveServiceInOpd() {
+        ServiceResourceMapper rm = new ServiceResourceMapper();
+        final String sql = "select  " + rm.schema() + " WHERE s.is_active AND s.is_admitted =false";
+        List<ServicePayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
     public ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveTrue(Long patientId) {
         ServiceResourceMapper rm = new ServiceResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND s.is_active";
