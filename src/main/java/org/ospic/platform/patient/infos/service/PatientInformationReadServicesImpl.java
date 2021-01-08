@@ -5,9 +5,7 @@ import org.ospic.platform.patient.contacts.repository.ContactsInformationReposit
 import org.ospic.platform.patient.contacts.services.ContactsInformationService;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.patient.infos.data.PatientData;
-import org.ospic.platform.patient.infos.data.PatientTrendDatas;
-import org.ospic.platform.patient.infos.data.PatientTrendsDataRowMapper;
-import org.ospic.platform.patient.infos.data.StatisticsData;
+import org.ospic.platform.organization.statistics.data.PatientStatistics;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
@@ -69,7 +67,6 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
             FilesStorageService filesStorageService) {
         this.staffsReadPrinciplesService = staffsReadPrinciplesService;
         this.filesStorageService = filesStorageService;
-
         jdbcTemplate = new JdbcTemplate(dataSource);
 
     }
@@ -107,20 +104,6 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         return ResponseEntity.ok().body(PatientData.patientCreationTemplate(staffs));
     }
 
-    @Override
-    public ResponseEntity<List<PatientTrendDatas>> retrieveAllPatientTrendData() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT date(created_date) as date, count(*) as total,");
-        sb.append("count(case when gender = 'male' then 1 else null end) as male, ");
-        sb.append("count(case when gender = 'female' then 1 else null end) as female, ");
-        sb.append("count(case when gender = 'unspecified' then 1 else null end) as other FROM m_patients group by date(created_date)");
-        String queryString = sb.toString();
-        Session session = this.sessionFactory.openSession();
-        List<PatientTrendDatas> patientstrends = jdbcTemplate.query(queryString, new PatientTrendsDataRowMapper());
-        session.close();
-
-        return ResponseEntity.ok().body(patientstrends);
-    }
 
 
     @Override
@@ -194,8 +177,8 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         sb.append(" FROM m_patients; ");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
-        List<StatisticsData> statisticsData =  jdbcTemplate.query(queryString, new StatisticsData.StatisticsDataRowMapper());
+        List<PatientStatistics> patientStatisticsData =  jdbcTemplate.query(queryString, new PatientStatistics.StatisticsDataRowMapper());
         session.close();
-        return ResponseEntity.ok().body(statisticsData);
+        return ResponseEntity.ok().body(patientStatisticsData);
     }
 }

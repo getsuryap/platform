@@ -1,13 +1,14 @@
-package org.ospic.platform.patient.infos.data;
+package org.ospic.platform.organization.statistics.data;
 
-import org.ospic.platform.organization.statistics.data.PatientTrendStatistics;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 08/01/2021 for org.ospic.platform.organization.statistics.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,16 +28,26 @@ import java.sql.SQLException;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class PatientTrendsDataRowMapper implements RowMapper<PatientTrendStatistics> {
-    @Override
-    public PatientTrendStatistics mapRow(ResultSet resultSet, int i) throws SQLException {
-        PatientTrendStatistics pt = new PatientTrendStatistics();
-        pt.setDate(resultSet.getString("date"));
-        pt.setFemale(resultSet.getLong("female"));
-        pt.setMale(resultSet.getLong("male"));
-        pt.setOther(resultSet.getLong("other"));
-        pt.setTotal(resultSet.getLong("total"));
-        return pt;
+@Data
+@NoArgsConstructor
+public class UserStatistics {
+    private Long totalUsers;
+    private Long totalStaffs;
+
+    public UserStatistics(Long totalUsers, Long totalStaffs) {
+        this.totalUsers = totalUsers;
+        this.totalStaffs = totalStaffs;
     }
 
+    public static class  UserStatisticsRowMapper implements RowMapper< UserStatistics>{
+
+        @Override
+        public UserStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
+            UserStatistics us = new  UserStatistics();
+            us.setTotalStaffs(rs.getLong("staff"));
+            us.setTotalUsers(rs.getLong("users"));
+
+            return us;
+        }
+    }
 }

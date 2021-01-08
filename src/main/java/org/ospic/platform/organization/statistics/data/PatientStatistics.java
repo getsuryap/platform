@@ -1,11 +1,11 @@
-package org.ospic.platform.patient.infos.data;
+package org.ospic.platform.organization.statistics.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 import org.springframework.jdbc.core.RowMapper;
-import javax.swing.tree.TreePath;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -32,7 +32,7 @@ import java.sql.SQLException;
  */
 @Data
 @NoArgsConstructor
-public class StatisticsData {
+public class PatientStatistics {
     private  Long total;
     private  Long totalMale;
     private  Long totalFemale;
@@ -43,7 +43,7 @@ public class StatisticsData {
     private  Long totalUnassigned;
 
 
-    public StatisticsData(Long total, Long totalMale, Long totalFemale, Long totalUnspecified, Long totalIpd, Long totalOpd, Long totalAssigned, Long totalUnassigned) {
+    public PatientStatistics(Long total, Long totalMale, Long totalFemale, Long totalUnspecified, Long totalIpd, Long totalOpd, Long totalAssigned, Long totalUnassigned) {
         this.total = total;
         this.totalMale = totalMale;
         this.totalFemale = totalFemale;
@@ -54,11 +54,11 @@ public class StatisticsData {
         this.totalUnassigned = totalUnassigned;
     }
 
-    public static class StatisticsDataRowMapper implements RowMapper<StatisticsData>{
+    public static class StatisticsDataRowMapper implements RowMapper<PatientStatistics>{
 
         @Override
-        public StatisticsData mapRow(ResultSet rs, int i) throws SQLException {
-            StatisticsData st = new StatisticsData();
+        public PatientStatistics mapRow(ResultSet rs, int i) throws SQLException {
+            PatientStatistics st = new PatientStatistics();
             st.setTotal(rs.getLong("total"));
             st.setTotalAssigned(rs.getLong("assigned"));
             st.setTotalUnassigned(rs.getLong("unassigned"));
