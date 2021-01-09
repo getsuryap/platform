@@ -50,7 +50,7 @@ import java.util.List;
 @Entity(name = DatabaseConstants.DEPARTMENT_TABLE)
 @Table(name = DatabaseConstants.DEPARTMENT_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode()
+@EqualsAndHashCode(callSuper = false)
 public class Department extends AbstractPersistableCustom implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
