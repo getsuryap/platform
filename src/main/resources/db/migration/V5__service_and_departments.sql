@@ -8,20 +8,19 @@ CREATE TABLE `m_department` (
   `extra_id` varchar(100) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
   `descriptions` varchar (300),
-  `opening_date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_org` (`name`),
-  UNIQUE KEY `extra_id_org` (`extra_id`),
+  `opening_date` TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `uc_department_name` UNIQUE (`name`),
   KEY `FK2291C477E2551DCC` (`parent_id`),
-  CONSTRAINT `FK2291C477E2551DCC` FOREIGN KEY (`parent_id`) REFERENCES `m_department` (`id`)
+  CONSTRAINT `FK2291C477E2551DCC` FOREIGN KEY (`parent_id`) REFERENCES `m_department` (`id`),
+  PRIMARY KEY (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 ALTER TABLE `m_staff` add `department_id` bigint after `user_id`;
 ALTER TABLE `m_staff` ADD  constraint  fk_staff_department FOREIGN KEY(`department_id`) REFERENCES `m_department`(`id`);
 
 INSERT INTO `m_department` VALUES
-  (1, NULL, NULL,"MAIN", "Highest Board","Highest Board",  now()),
-  (2, 1,NULL, "Administration", "Administration Board","Administration Board", now()),
-  (3, 2,NULL, "Information", "Information Service", "Information Service", now()),
-  (4, 2,NULL, "Therapeutic", "Therapeutic Service", "Therapeutic Service", now()),
-  (5, 2,NULL, "Diagnostic", "Diagnostic Service","Diagnostic Service", now()),
-  (6, 2,NULL, "Support", "Support Service","Support Service", now());
+  (1, NULL, NULL,"MAIN", "Highest Board","Highest Board",  CURDATE()),
+  (2, 1,NULL, "Administration", "Administration Board","Administration Board", CURDATE()),
+  (3, 2,NULL, "Information", "Information Service", "Information Service", CURDATE()),
+  (4, 2,NULL, "Therapeutic", "Therapeutic Service", "Therapeutic Service", CURDATE()),
+  (5, 2,NULL, "Diagnostic", "Diagnostic Service","Diagnostic Service", CURDATE()),
+  (6, 2,NULL, "Support", "Support Service","Support Service", CURDATE());

@@ -1,12 +1,9 @@
-package org.ospic.platform.infrastructure.app.domain;
+package org.ospic.platform.organization.departments.exceptions;
 
-import org.springframework.data.domain.Persistable;
-
-import javax.persistence.*;
-import java.io.Serializable;
+import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 09/01/2021 for org.ospic.platform.infrastructure.app.domain
+ * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,23 +23,12 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
-@MappedSuperclass
-public class AbstractPersistableCustom  implements Persistable<Long>, Serializable {
-
-    private static final long serialVersionUID = 9181640245194391246L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
-
-    @Override
-    public Long getId() {
-        return this.id;
+public class DepartmentNotFoundExceptions extends AbstractResourceNotFoundException{
+    public DepartmentNotFoundExceptions(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    @Override
-    public boolean isNew() {
-        return false;
+    public DepartmentNotFoundExceptions(Long id){
+        super("error.message.department.not.found", String.format("Department with id %2d is not found ", id), id);
     }
 }
