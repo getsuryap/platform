@@ -89,5 +89,12 @@ public class StaffsApiResource {
         return writeServices.assignStaffToDepartment(request);
     }
 
+    @ApiOperation(value = "RETRIEVE staff in department", notes =  "RETRIEVE staff in department")
+    @RequestMapping(value = "/dep/{departmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> getStaffOfThisDepartment(@PathVariable(name = "departmentId") Long departmentId){
+        return readServices.getStaffInDepartment(departmentId);
+    }
+
 
 }

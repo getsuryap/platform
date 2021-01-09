@@ -3,6 +3,8 @@ package org.ospic.platform.organization.staffs.repository;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -25,4 +27,5 @@ public interface StaffsRepository extends JpaRepository<Staff, Long> {
     Boolean existsByFullName(String fullName);
     Boolean existsByUsername(String username);
     Staff getById(Long id);
+    Collection<Staff> findByDepartmentId(Long departmentId);
 }
