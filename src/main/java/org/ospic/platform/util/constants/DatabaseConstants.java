@@ -38,6 +38,4 @@ public class DatabaseConstants {
     public static final String TABLE_BLOOD_GROUP =TI+"blood_bank";
     public static final String SERVICE_RESOURCES_TABLE = TI+"service";
     public static final String DEPARTMENT_TABLE = TI+"department";
-
-    public static final String GENDER_TABLE = TI+"gender";
 }
