@@ -3,6 +3,7 @@ package org.ospic.platform.organization.staffs.domains;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.infos.domain.Patient;
@@ -45,12 +46,8 @@ import java.util.Set;
 @Entity(name = DatabaseConstants.STAFFS_TABLE)
 @Table(name = DatabaseConstants.STAFFS_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode()
-public class Staff implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
+@EqualsAndHashCode(callSuper = false)
+public class Staff extends AbstractPersistableCustom implements Serializable {
 
     @Column(length = 20, name = "username", unique = true)
     private String username;

@@ -2,12 +2,16 @@ package org.ospic.platform.organization.departments.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
 import org.ospic.platform.organization.departments.services.DepartmentReadServicePrinciple;
 import org.ospic.platform.organization.departments.services.DepartmentWriteServicePrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.api
@@ -34,15 +38,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/departments")
 @Api(value = "/api/departments", tags = "Department Api's")
+@Transactional
 public class DepartmentApiResource {
     @Autowired
     DepartmentReadServicePrinciple departmentRead;
     @Autowired
     DepartmentWriteServicePrinciple departmentWrite;
+
     @Autowired
     public DepartmentApiResource(
             DepartmentReadServicePrinciple departmentRead,
-            DepartmentWriteServicePrinciple departmentWrite){
+            DepartmentWriteServicePrinciple departmentWrite) {
         this.departmentRead = departmentRead;
         this.departmentWrite = departmentWrite;
     }
@@ -52,6 +58,14 @@ public class DepartmentApiResource {
     @ResponseBody
     ResponseEntity<?> retrieveAllDepartments() {
         return departmentRead.retrieveAllDepartments();
+    }
+
+
+    @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments")
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> createNameDepartment(@Valid @RequestBody DepartmentReqPayload payload) {
+        return departmentWrite.createDepartment(payload);
     }
 
 }

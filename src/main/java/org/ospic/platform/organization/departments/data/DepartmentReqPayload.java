@@ -34,18 +34,18 @@ public class DepartmentReqPayload {
     private Long parent;
     private String name;
     private String hierarchy;
-    private String knownAs;
+    private String description;
     private String extraId;
 
-    public static DepartmentReqPayload fromJson(final Long parent, final String name, final String hierarchy, final String knownAs, final String extraId){
-        return new DepartmentReqPayload(parent, name, hierarchy, knownAs, extraId);
+    public static DepartmentReqPayload fromJson(final Long parent, final String name, final String hierarchy, final String description, final String extraId){
+        return new DepartmentReqPayload(parent, name, hierarchy, description, extraId);
     }
 
-    private DepartmentReqPayload(final Long parent, final String name, final String hierarchy, final String knownAs, final String extraId) {
+    private DepartmentReqPayload(final Long parent, final String name, final String hierarchy, final String description, final String extraId) {
         this.parent = parent;
         this.name = name;
         this.hierarchy = hierarchy;
-        this.knownAs = knownAs;
+        this.description = description;
         this.extraId = extraId;
     }
 }

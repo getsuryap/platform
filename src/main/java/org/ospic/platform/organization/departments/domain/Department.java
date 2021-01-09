@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.departments.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -13,6 +14,8 @@ import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.patient.resource.domain.ServiceResource;
 import org.ospic.platform.util.DateUtil;
 import org.ospic.platform.util.constants.DatabaseConstants;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -45,19 +48,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.DEPARTMENT_TABLE)
-@Table(name = DatabaseConstants.DEPARTMENT_TABLE,
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"name"}, name = "name_org"),
-        @UniqueConstraint(columnNames = {"extra_id"}, name = "extra_id_org")})
+@Table(name = DatabaseConstants.DEPARTMENT_TABLE)
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode()
 public class Department extends AbstractPersistableCustom implements Serializable {
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private List<Department> children = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private Department parent;
 
@@ -68,11 +68,12 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Column(name = "hierarchy", nullable = true, length = 50)
     private String hierarchy;
 
-    @Column(length = 300, name = "descriptions", unique = true)
+    @Column(length = 300, name = "descriptions")
     private String descriptions;
 
     @Column(name = "opening_date", nullable = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date openingDate;
 
 
@@ -86,8 +87,11 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Staff> staffs = new ArrayList<>();
 
-    public static Department headDepartment(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId){
+    public static Department withParentDepartment(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId){
         return new Department(parent, name, openingDate, descriptions, extraId);
+    }
+    public static Department withoutParentDepartment(final String name, final LocalDate openingDate, final String descriptions, final String extraId){
+        return new Department(null, name, openingDate, descriptions, extraId);
     }
 
     private Department(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId) {
