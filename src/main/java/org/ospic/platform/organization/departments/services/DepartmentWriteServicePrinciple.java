@@ -1,5 +1,8 @@
 package org.ospic.platform.organization.departments.services;
 
+import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
+import org.ospic.platform.organization.departments.domain.Department;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +30,5 @@ import org.springframework.stereotype.Service;
 @Service
 @Component
 public interface DepartmentWriteServicePrinciple {
+    public ResponseEntity<?> createDepartment(DepartmentReqPayload payload);
 }

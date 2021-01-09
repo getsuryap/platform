@@ -1,10 +1,13 @@
 package org.ospic.platform.organization.departments.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.departments.services.DepartmentReadServicePrinciple;
+import org.ospic.platform.organization.departments.services.DepartmentWriteServicePrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.api
@@ -32,7 +35,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/departments")
 @Api(value = "/api/departments", tags = "Department Api's")
 public class DepartmentApiResource {
-
     @Autowired
-    public DepartmentApiResource(){}
+    DepartmentReadServicePrinciple departmentRead;
+    @Autowired
+    DepartmentWriteServicePrinciple departmentWrite;
+    @Autowired
+    public DepartmentApiResource(
+            DepartmentReadServicePrinciple departmentRead,
+            DepartmentWriteServicePrinciple departmentWrite){
+        this.departmentRead = departmentRead;
+        this.departmentWrite = departmentWrite;
+    }
+
+    @ApiOperation(value = "RETRIEVE Departments", notes = "RETRIEVE  Departments")
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveAllDepartments() {
+        return departmentRead.retrieveAllDepartments();
+    }
+
 }
