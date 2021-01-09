@@ -44,7 +44,7 @@ uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}, name = "name_org"),
         @UniqueConstraint(columnNames = {"extra_id"}, name = "extra_id_org")})
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode()
+@EqualsAndHashCode(callSuper = false)
 public class Department extends AbstractPersistableCustom implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY)
