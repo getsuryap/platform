@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.services
@@ -47,20 +48,10 @@ public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServi
     @Transactional
     @Override
     public ResponseEntity<?> createDepartment(DepartmentReqPayload payload) {
-       /** if (payload.getParent() != null) {
-            repository.findById(payload.getParent()).map(department -> {
-                Department dp = new Department();
-                dp.setName(payload.getName());
-                dp.setOpeningDate(new DateUtil().convertToDateViaSqlDate(LocalDate.now()));
-                dp.setDescriptions(payload.getDescription());
-                dp.setExtraId(payload.getExtraId());
-                dp.setParent(department);
-                //department.getChildren().add(dp);
-                return ResponseEntity.ok().body(repository.save(dp));
-            }).orElseThrow(() -> new DepartmentNotFoundExceptions(payload.getParent()));
-        }
-        **/
+        Optional<Department> parent = repository.findById(payload.getParent());
         Department dp = Department.withoutParentDepartment(payload.getName(), LocalDate.now(), payload.getDescription(), payload.getExtraId());
-        return ResponseEntity.ok().body( repository.save(dp));
+        dp.setParent(parent.orElse(null));
+        Department response  = repository.save(dp);
+        return ResponseEntity.ok().body(response);
     }
 }
