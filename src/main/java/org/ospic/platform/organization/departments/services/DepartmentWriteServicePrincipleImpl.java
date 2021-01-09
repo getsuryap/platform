@@ -1,5 +1,9 @@
 package org.ospic.platform.organization.departments.services;
 
+import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,4 +29,17 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServicePrinciple {
+    @Autowired
+    DepartmentJpaRepository repository;
+
+
+    @Autowired
+    public DepartmentWriteServicePrincipleImpl(DepartmentJpaRepository repository){
+        this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<?> createDepartment(DepartmentReqPayload payload) {
+        return null;
+    }
 }

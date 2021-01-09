@@ -3,6 +3,7 @@ package org.ospic.platform.organization.staffs.domains;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.resource.domain.ServiceResource;
@@ -77,6 +78,10 @@ public class Staff implements Serializable {
     @JoinColumn(name = "staff_id")
     @JsonIgnore
     private Set<ServiceResource> services = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @OneToOne
     @MapsId

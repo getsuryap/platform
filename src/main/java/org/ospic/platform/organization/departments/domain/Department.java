@@ -1,10 +1,16 @@
 package org.ospic.platform.organization.departments.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.apache.http.client.utils.DateUtils;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
+import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.patient.resource.domain.ServiceResource;
 import org.ospic.platform.util.DateUtil;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
@@ -62,8 +68,8 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Column(name = "hierarchy", nullable = true, length = 50)
     private String hierarchy;
 
-    @Column(length = 300, name = "known_as", unique = true)
-    private String knownAs;
+    @Column(length = 300, name = "descriptions", unique = true)
+    private String descriptions;
 
     @Column(name = "opening_date", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -73,13 +79,20 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Column(name = "extra_id", length = 100)
     private String extraId;
 
-    public static Department headDepartment(final Department parent, final String name, final LocalDate openingDate, final String knownAs, final String extraId){
-        return new Department(parent, name, openingDate, knownAs, extraId);
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "department_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display staffs")
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Staff> staffs = new ArrayList<>();
+
+    public static Department headDepartment(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId){
+        return new Department(parent, name, openingDate, descriptions, extraId);
     }
 
-    private Department(final Department parent, final String name, final LocalDate openingDate, final String knownAs, final String extraId) {
+    private Department(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId) {
         this.name = name;
-        this.knownAs = knownAs;
+        this.descriptions = descriptions;
         this.extraId = extraId;
         this.openingDate = new DateUtil().convertToDateViaSqlDate(openingDate);
         this.parent = parent;

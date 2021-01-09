@@ -1,6 +1,12 @@
 package org.ospic.platform.organization.departments.services;
 
+import org.ospic.platform.organization.departments.domain.Department;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.services
@@ -25,4 +31,16 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class DepartmentReadServicePrincipleImpl implements DepartmentReadServicePrinciple{
+    @Autowired
+    DepartmentJpaRepository repository;
+    @Autowired
+    public DepartmentReadServicePrincipleImpl(DepartmentJpaRepository repository){
+        this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveAllDepartments() {
+        Collection<Department> departments = repository.findAll();
+        return ResponseEntity.ok(departments);
+    }
 }
