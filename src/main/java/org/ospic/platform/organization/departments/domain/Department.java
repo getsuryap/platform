@@ -80,7 +80,7 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Column(name = "extra_id", length = 100)
     private String extraId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "department_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display staffs")
     @JsonIgnore

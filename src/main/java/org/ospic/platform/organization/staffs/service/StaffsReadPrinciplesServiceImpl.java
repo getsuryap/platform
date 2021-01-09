@@ -49,4 +49,10 @@ public class StaffsReadPrinciplesServiceImpl implements StaffsReadPrinciplesServ
     public ResponseEntity<?> getStaffById(Long id) {
         return ResponseEntity.ok(staffsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException()));
     }
+
+    @Override
+    public ResponseEntity<?> getStaffInDepartment(Long departmentId) {
+        List<Staff> staffs = (List<Staff>) staffsRepository.findByDepartmentId(departmentId);
+        return ResponseEntity.ok(staffs);
+    }
 }

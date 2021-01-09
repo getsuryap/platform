@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.services
@@ -42,5 +43,11 @@ public class DepartmentReadServicePrincipleImpl implements DepartmentReadService
     public ResponseEntity<?> retrieveAllDepartments() {
         Collection<Department> departments = repository.findAll();
         return ResponseEntity.ok(departments);
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveDepartmentsById(Long departmentId) {
+        Optional<Department> departmentOptional = repository.findById(departmentId);
+        return ResponseEntity.ok().body(departmentOptional.isPresent() ? departmentOptional.get() :  "No department with such an ID");
     }
 }

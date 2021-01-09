@@ -29,4 +29,5 @@ import org.springframework.stereotype.Service;
 @Component
 public interface DepartmentReadServicePrinciple {
     public ResponseEntity<?> retrieveAllDepartments();
+    ResponseEntity<?> retrieveDepartmentsById(Long departmentId);
 }

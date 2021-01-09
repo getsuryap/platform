@@ -61,6 +61,14 @@ public class DepartmentApiResource {
     }
 
 
+    @ApiOperation(value = "RETRIEVE Departments by id ", notes = "RETRIEVE  Departments by id")
+    @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveAllDepartments(@PathVariable(name = "departmentId") Long departmentId) {
+        return departmentRead.retrieveDepartmentsById(departmentId);
+    }
+
+
     @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
