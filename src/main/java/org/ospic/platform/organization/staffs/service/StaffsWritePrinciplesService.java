@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.staffs.service;
 
+import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.security.authentication.users.domain.User;
 import org.springframework.http.ResponseEntity;
@@ -35,4 +36,5 @@ public interface StaffsWritePrinciplesService {
     public ResponseEntity<?> createNewStaff(Long id);
     public ResponseEntity<?> createByStaffListIterate(List<Staff> staffInformationList);
     public ResponseEntity<?> updateStaff(Long id, Staff staff);
+    public ResponseEntity<?> assignStaffToDepartment(StaffToDepartmentRequest request);
 }
