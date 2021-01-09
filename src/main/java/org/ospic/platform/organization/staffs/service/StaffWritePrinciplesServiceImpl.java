@@ -1,5 +1,8 @@
 package org.ospic.platform.organization.staffs.service;
 
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptions;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundException;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
@@ -38,11 +41,14 @@ import java.util.List;
 public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesService {
     StaffsRepository staffsRepository;
     UserRepository userRepository;
+    DepartmentJpaRepository departmentJpaRepository;
 
     @Autowired
-    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository, UserRepository userRepository) {
+    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository, UserRepository userRepository,
+                                           DepartmentJpaRepository departmentJpaRepository) {
         this.staffsRepository = staffsRepository;
         this.userRepository = userRepository;
+        this.departmentJpaRepository = departmentJpaRepository;
     }
 
     @Override
@@ -72,11 +78,22 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
     @Override
     public ResponseEntity<?> updateStaff(Long id, Staff staff) {
         return staffsRepository.findById(id).map(stff -> {
-                    stff.setContacts(staff.getContacts() == null ? stff.getContacts() : staff.getContacts());
-                    stff.setFullName(staff.getFullName() == null ? stff.getFullName() : staff.getFullName());
-                    stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
-                    return ResponseEntity.ok(staffsRepository.save(stff));
-                })
+            stff.setContacts(staff.getContacts() == null ? stff.getContacts() : staff.getContacts());
+            stff.setFullName(staff.getFullName() == null ? stff.getFullName() : staff.getFullName());
+            stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
+            return ResponseEntity.ok(staffsRepository.save(stff));
+        })
                 .orElseThrow(() -> new StaffNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> assignStaffToDepartment(StaffToDepartmentRequest request) {
+        return departmentJpaRepository.findById(request.getDepartmentId()).map(department -> {
+            return staffsRepository.findById(request.getStaffId()).map(staff -> {
+                staff.setDepartment(department);
+                staffsRepository.save(staff);
+                return ResponseEntity.ok().body(staff);
+            }).orElseThrow(() -> new StaffNotFoundException(request.getStaffId()));
+        }).orElseThrow(() -> new DepartmentNotFoundExceptions(request.getDepartmentId()));
     }
 }

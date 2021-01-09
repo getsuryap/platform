@@ -1,6 +1,7 @@
 package org.ospic.platform.organization.staffs.api;
 
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
 import io.swagger.annotations.Api;
@@ -81,6 +82,12 @@ public class StaffsApiResource {
         return ResponseEntity.ok().body(patientReadServices.retrievePatientAssignedToThisStaff(staffId));
     }
 
+    @ApiOperation(value = "ASSIGN staff to department", notes = "ASSIGN staff to department")
+    @RequestMapping(value = "/assign", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> assignStaffToDepartment(@Valid @RequestBody StaffToDepartmentRequest request){
+        return writeServices.assignStaffToDepartment(request);
+    }
 
 
 }
