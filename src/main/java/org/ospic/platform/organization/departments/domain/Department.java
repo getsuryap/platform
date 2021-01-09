@@ -3,11 +3,14 @@ package org.ospic.platform.organization.departments.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.apache.http.client.utils.DateUtils;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
+import org.ospic.platform.util.DateUtil;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +42,7 @@ import java.util.List;
 @Table(name = DatabaseConstants.DEPARTMENT_TABLE,
 uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}, name = "name_org"),
-        @UniqueConstraint(columnNames = {"knownAs"}, name = "known_as_org")})
+        @UniqueConstraint(columnNames = {"extra_id"}, name = "extra_id_org")})
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @EqualsAndHashCode()
 public class Department extends AbstractPersistableCustom implements Serializable {
@@ -56,6 +59,9 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Column(length = 100, name = "name", unique = true)
     private String name;
 
+    @Column(name = "hierarchy", nullable = true, length = 50)
+    private String hierarchy;
+
     @Column(length = 300, name = "known_as", unique = true)
     private String knownAs;
 
@@ -63,8 +69,27 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @Temporal(TemporalType.DATE)
     private Date openingDate;
 
-    public Department( String name, String knownAs) {
+
+    @Column(name = "extra_id", length = 100)
+    private String extraId;
+
+    public static Department headDepartment(final Department parent, final String name, final LocalDate openingDate, final String knownAs, final String extraId){
+        return new Department(parent, name, openingDate, knownAs, extraId);
+    }
+
+    private Department(final Department parent, final String name, final LocalDate openingDate, final String knownAs, final String extraId) {
         this.name = name;
         this.knownAs = knownAs;
+        this.extraId = extraId;
+        this.openingDate = new DateUtil().convertToDateViaSqlDate(openingDate);
+        this.parent = parent;
+        if (parent != null){
+            this.parent.addChild(this);
+        }
+
+    }
+
+    private void addChild(final Department department) {
+        this.children.add(department);
     }
 }
