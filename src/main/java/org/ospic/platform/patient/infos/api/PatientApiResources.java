@@ -66,7 +66,7 @@ public class PatientApiResources {
     @ApiOperation(value = "GET List all un-assigned patients", notes = "Get list of all un-assigned patients")
     @RequestMapping(value = "/unassigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Patient>> getAllUnassignedPatients() {
+    ResponseEntity<?> getAllUnassignedPatients() {
         return patientInformationReadServices.retrieveAllUnAssignedPatients();
     }
 
@@ -80,7 +80,7 @@ public class PatientApiResources {
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
     @RequestMapping(value = "/assigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Patient>> getAllAssignedPatients() {
+    ResponseEntity<?> getAllAssignedPatients() {
         return patientInformationReadServices.retrieveAllAssignedPatients();
     }
 
@@ -93,7 +93,7 @@ public class PatientApiResources {
     }
 
     @ApiOperation(value = "RETRIEVE Patient creation Template for creating new Patient", notes = "RETRIEVE Patient creation Template for creating new Patient")
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     ResponseEntity<?> retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
@@ -101,7 +101,7 @@ public class PatientApiResources {
                 return patientInformationReadServices.retrievePatientCreationDataTemplate();
             }
         }
-        return ResponseEntity.ok().body(patientInformationReadServices.retrieveAllPatients());
+        return patientInformationReadServices.retrieveAllPatients();
     }
 
 
@@ -115,7 +115,7 @@ public class PatientApiResources {
     @ApiOperation(value = "GET patient admitted in this bedId", notes = "GET patient admitted in this bedId")
     @RequestMapping(value = "/{bedId}/admitted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<Patient>> findPatientAdmittedInBedId(@PathVariable Long bedId) {
+    ResponseEntity<?> findPatientAdmittedInBedId(@PathVariable Long bedId) {
         return patientInformationReadServices.retrievePatientAdmittedInThisBed(bedId);
     }
 

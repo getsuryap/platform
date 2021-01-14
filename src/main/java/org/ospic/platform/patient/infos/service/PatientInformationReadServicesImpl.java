@@ -46,9 +46,7 @@ import java.util.List;
  */
 @Repository
 public class PatientInformationReadServicesImpl implements PatientInformationReadServices {
-
-    @Autowired
-    private PatientRepository patientRepository;
+     PatientRepository patientRepository;
     @Autowired
     ContactsInformationRepository contactsInformationRepository;
     @Autowired
@@ -62,25 +60,24 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
     @Autowired
     public PatientInformationReadServicesImpl(
-            DataSource dataSource,
+            DataSource dataSource,PatientRepository patientRepository,
             StaffsReadPrinciplesService staffsReadPrinciplesService,
             FilesStorageService filesStorageService) {
         this.staffsReadPrinciplesService = staffsReadPrinciplesService;
         this.filesStorageService = filesStorageService;
+        this.patientRepository = patientRepository;
         jdbcTemplate = new JdbcTemplate(dataSource);
 
     }
 
     @Override
     public ResponseEntity<List<Patient>> retrieveAllPatients() {
-        Session session = this.sessionFactory.openSession();
-        List<Patient> patientList = session.createQuery(String.format("from %s", DatabaseConstants.PATIENT_INFO_TABLE)).list();
-        session.close();
-        return ResponseEntity.ok().body(patientList);
+        List<Patient> patientList = patientRepository.findAll();
+        return ResponseEntity.ok(patientList);
     }
 
     @Override
-    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients() {
+    public ResponseEntity<?> retrieveAllAssignedPatients() {
         Session session = this.sessionFactory.openSession();
         List<Patient> patients = session.createQuery("from m_patients WHERE staff_id IS NOT NULL").list();
         session.close();
@@ -88,7 +85,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     }
 
     @Override
-    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients() {
+    public ResponseEntity<?> retrieveAllUnAssignedPatients() {
         Session session = this.sessionFactory.openSession();
         List<Patient> patients = session.createQuery("from m_patients WHERE staff_id IS NULL").list();
         session.close();
@@ -96,7 +93,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     }
 
     @Override
-    public ResponseEntity retrievePatientCreationDataTemplate() {
+    public ResponseEntity<?> retrievePatientCreationDataTemplate() {
         List<Staff> staffs = staffsReadPrinciplesService.retrieveAllStaffs();
         for (int i = 0; i < staffs.size(); i++) {
             //staffs.get(i).getPatients().clear();
@@ -121,7 +118,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     }
 
     @Override
-    public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId) {
+    public ResponseEntity<?> retrievePatientAdmittedInThisBed(Long bedId) {
         String sb =
                 " select p.id from  m_patients p where id =  " +
                         " (select  pa.patient_id from " +
@@ -163,19 +160,17 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
     @Override
     public ResponseEntity<?> retrieveStatisticalData() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(" SELECT ");
-        sb.append(" COUNT(*) as total,  ");
-        sb.append(" COUNT(IF(isAdmitted,1, NULL))'ipd', ");
-        sb.append(" COUNT(IF(isAdmitted = 0,1, NULL))'opd', ");
-        sb.append(" COUNT(IF(is_active,1,NULL))'assigned', ");
-        sb.append(" COUNT(IF(is_active = 0,1,NULL)) AS unassigned, ");
-        sb.append(" COUNT(IF(gender = 'male' ,1, NULL))'male', ");
-        sb.append(" COUNT(IF(gender = 'female' ,1, NULL))'female', ");
-        sb.append(" SUM(case when gender like 'male' then 1 else 0 end) 'males', ");
-        sb.append(" COUNT(IF(gender = 'unspecified' ,1, NULL))'unspecified' ");
-        sb.append(" FROM m_patients; ");
-        String queryString = sb.toString();
+        String queryString = " SELECT " +
+                " COUNT(*) as total,  " +
+                " COUNT(IF(isAdmitted,1, NULL))'ipd', " +
+                " COUNT(IF(isAdmitted = 0,1, NULL))'opd', " +
+                " COUNT(IF(is_active,1,NULL))'assigned', " +
+                " COUNT(IF(is_active = 0,1,NULL)) AS unassigned, " +
+                " COUNT(IF(gender = 'male' ,1, NULL))'male', " +
+                " COUNT(IF(gender = 'female' ,1, NULL))'female', " +
+                " SUM(case when gender like 'male' then 1 else 0 end) 'males', " +
+                " COUNT(IF(gender = 'unspecified' ,1, NULL))'unspecified' " +
+                " FROM m_patients; ";
         Session session = this.sessionFactory.openSession();
         List<PatientStatistics> patientStatisticsData =  jdbcTemplate.query(queryString, new PatientStatistics.StatisticsDataRowMapper());
         session.close();
