@@ -68,7 +68,7 @@ public class ServiceApiResources {
                 return serviceRead.retrialAllAllActiveServiceInOpd();
             }
         }
-        return ResponseEntity.ok().body(serviceRead.retrieveAllServices());
+        return serviceRead.retrieveAllServices();
     }
 
 

@@ -30,28 +30,24 @@ import java.util.List;
  */
 @Component
 @Service
-public interface PatientInformationReadServices {
-    @Transactional
-    public ResponseEntity<List<Patient>> retrieveAllPatients();
+ public  interface PatientInformationReadServices {
+     ResponseEntity<List<Patient>> retrieveAllPatients();
 
-    public ResponseEntity<List<Patient>> retrieveAllAssignedPatients();
+     ResponseEntity<?> retrieveAllAssignedPatients();
 
-    public ResponseEntity<List<Patient>> retrieveAllUnAssignedPatients();
+     ResponseEntity<?> retrieveAllUnAssignedPatients();
 
-    public ResponseEntity<?> retrieveStatisticalData();
+     ResponseEntity<?> retrieveStatisticalData();
 
+     ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);
 
-    public ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);
+     ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException;
 
-    @Transactional
-    public ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException;
+     ResponseEntity<?> retrievePatientCreationDataTemplate();
 
-    public ResponseEntity<?> retrievePatientCreationDataTemplate();
-
-
-    public ResponseEntity<List<Patient>> retrievePatientAdmittedInThisBed(Long bedId);
+     ResponseEntity<?> retrievePatientAdmittedInThisBed(Long bedId);
 
 
-    public ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId);
+     ResponseEntity<?> retrievePatientAssignedToThisStaff(Long staffId);
 
 }
