@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -27,14 +27,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
-			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+			if (StringUtils.hasText(jwt) && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);

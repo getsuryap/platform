@@ -36,7 +36,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfigurations {
 
-    @Bean(name="entityManagerFactory")
+    @Bean(name = "entityManagerFactory")
     public LocalSessionFactoryBean sessionFactoryBean() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource());
@@ -46,19 +46,16 @@ public class HibernateConfigurations {
         return sessionFactoryBean;
     }
 
-     /**
-    @Bean
-    public DataSource dataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic-schema?useSSL=true");
-        basicDataSource.setUsername("root");
-        basicDataSource.setPassword("mysql");
-        return basicDataSource;
-    }
+    /**
+     * @Bean public DataSource dataSource() {
+     * BasicDataSource basicDataSource = new BasicDataSource();
+     * basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+     * basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic-schema?useSSL=true");
+     * basicDataSource.setUsername("root");
+     * basicDataSource.setPassword("mysql");
+     * return basicDataSource;
+     * };
      **/
-
-   
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
@@ -68,10 +65,8 @@ public class HibernateConfigurations {
         basicDataSource.setPassword("OOTnKY9r3I");
         return basicDataSource;
     }
-    
 
 
-    
     @Bean(name = "transactionManager")
     public PlatformTransactionManager hibernateTransactionManager() {
         HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();

@@ -1,7 +1,8 @@
 package org.ospic.platform.security;
 
-import org.ospic.platform.security.jwt.AuthEntryPointJwt;
-import org.ospic.platform.security.jwt.AuthTokenFilter;
+import org.ospic.platform.security.jwt.CustomJwtAuthenticationFilter;
+import org.ospic.platform.security.jwt.JwtAuthenticationEntryPointJwt;
+import org.ospic.platform.security.jwt.JwtAuthenticationTokenFilter;
 import org.ospic.platform.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private JwtAuthenticationEntryPointJwt unauthorizedHandler;
+
+    @Autowired
+    private CustomJwtAuthenticationFilter customJwtAuthenticationFilter;
+
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
@@ -42,13 +47,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/configuration/security",
             "/swagger-ui.html",
             "/swagger-resources/configuration/ui",
-            "/webjars/**"
+            "/webjars/**",
+            "/api/auth/signin",
+            "/api/patients/**/documents/**",
+            "/api/patients/**/images/**"
             // other public endpoints of your API may be appended to this array
     };
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+    public JwtAuthenticationTokenFilter authenticationJwtTokenFilter() {
+        return new JwtAuthenticationTokenFilter();
     }
 
     @Override
@@ -70,25 +78,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-
-                /**.antMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole("ADMIN", "USER")
-                 .antMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN", "USER")
-                 .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
-                 .antMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
-                 **/
-                .antMatchers("/api/patients/**/images/**").permitAll()
-                .antMatchers("/api/patients/**/documents/**").permitAll()
-                .antMatchers("/api/auth/signin").permitAll()
                 .antMatchers("/api/auth/signup").hasRole("SUPER_USER")
-                /**.antMatchers("/api/test/**").permitAll()
-                 .antMatchers("/login").permitAll()
-                 .antMatchers("/").permitAll()
-                 **/
+
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

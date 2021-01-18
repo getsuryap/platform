@@ -34,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -74,11 +76,16 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        Authentication authentication = null;
+        JwtResponse rs = new JwtResponse();
+        try {
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -91,11 +98,10 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         logger.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles, permissions));
+
+
+        return ResponseEntity.ok(rs.loginResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+                userDetails.getEmail(), roles, permissions));
     }
 
     @PostMapping("/signup")
@@ -127,7 +133,7 @@ public class AuthController {
         } else {
             strRoles.forEach(role -> {
                 Optional<Role> optionalRole = roleRepository.findById(role);
-                if (optionalRole.isPresent()){
+                if (optionalRole.isPresent()) {
                     Role userRole = optionalRole.get();
                     roles.add(userRole);
                 }
@@ -135,10 +141,10 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-       User _user = userRepository.save(user);
-       if (_user.getIsStaff()){
-           staffsWritePrinciplesService.createNewStaff(_user.getId());
-       }
+        User _user = userRepository.save(user);
+        if (_user.getIsStaff()) {
+            staffsWritePrinciplesService.createNewStaff(_user.getId());
+        }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
@@ -158,7 +164,7 @@ public class AuthController {
     @RequestMapping(value = "/users/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveLoggerInUser() {
-        UserDetailsImpl  ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
         return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found")));
 
@@ -168,8 +174,8 @@ public class AuthController {
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
-      Optional<User> optional = userRepository.findById(userId);
-        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(),String.format("User with ID %2d is not found", userId)));
+        Optional<User> optional = userRepository.findById(userId);
+        return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found", userId)));
 
     }
 
@@ -194,7 +200,7 @@ public class AuthController {
     public ResponseEntity<?> updateUserPassword(@Valid @RequestBody UserRequestData u) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
-        UserDetailsImpl ud = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findById(ud.getId()).map(user -> {
             String userPassword = user.getPassword();
             if (!(encoder.matches(u.getOldPassword(), userPassword))) {
@@ -215,29 +221,29 @@ public class AuthController {
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveAllRoles(){
-        return  roleReadPrincipleServices.retrieveAllRoles();
+    ResponseEntity<?> retrieveAllRoles() {
+        return roleReadPrincipleServices.retrieveAllRoles();
     }
 
     @ApiOperation(value = "RETRIEVE role by ID", notes = "RETRIEVE role by ID")
     @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveRoleById(@PathVariable Long roleId){
-        return  roleReadPrincipleServices.fetchRoleById(roleId);
+    ResponseEntity<?> retrieveRoleById(@PathVariable Long roleId) {
+        return roleReadPrincipleServices.fetchRoleById(roleId);
     }
 
     @ApiOperation(value = "UPDATE role privilege", notes = "UPDATE role privilege")
     @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody List<Long> privileges){
-        return  roleWriteService.updateRole(roleId,  privileges);
+    ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody List<Long> privileges) {
+        return roleWriteService.updateRole(roleId, privileges);
     }
 
     @ApiOperation(value = "RETRIEVE all authorities", notes = "RETRIEVE all authorities")
     @RequestMapping(value = "/authorities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> fetchAllAvailableAuthorities(){
-        return  roleReadPrincipleServices.fetchAuthorities();
+    ResponseEntity<?> fetchAllAvailableAuthorities() {
+        return roleReadPrincipleServices.fetchAuthorities();
     }
 
 }
