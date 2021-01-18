@@ -30,11 +30,10 @@ public class JwtUtils {
     @Value("${mod.app.jwtExpirationMs}")
     private int jwtExpirationInMs;
 
-    @Value("${mod.app.jwt.refreshExpirationDateInMs}")
+    @Value("${mod.app.jwtRefreshExpirationDateInMs}")
     public void setRefreshExpirationDateInMs(int refreshExpirationDateInMs) {
         this.refreshExpirationDateInMs = refreshExpirationDateInMs;
     }
-
     private UserDetailsImpl userDetails;
 
     @Autowired
