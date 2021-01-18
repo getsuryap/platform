@@ -47,24 +47,26 @@ public class HibernateConfigurations {
     }
 
     /**
-     * @Bean public DataSource dataSource() {
-     * BasicDataSource basicDataSource = new BasicDataSource();
-     * basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-     * basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic-schema?useSSL=true");
-     * basicDataSource.setUsername("root");
-     * basicDataSource.setPassword("mysql");
-     * return basicDataSource;
-     * };
-     **/
     @Bean
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        basicDataSource.setUrl("jdbc:mysql://remotemysql.com:3306/1GT19qmaZr?useSSL=true");
-        basicDataSource.setUsername("1GT19qmaZr");
-        basicDataSource.setPassword("OOTnKY9r3I");
+        basicDataSource.setUrl("jdbc:mysql://localhost:3306/ospic-schema?useSSL=true");
+        basicDataSource.setUsername("root");
+        basicDataSource.setPassword("mysql");
         return basicDataSource;
-    }
+    };
+    **/
+
+
+      @Bean public DataSource dataSource() {
+      BasicDataSource basicDataSource = new BasicDataSource();
+      basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+      basicDataSource.setUrl("jdbc:mysql://remotemysql.com:3306/1GT19qmaZr?useSSL=true");
+      basicDataSource.setUsername("1GT19qmaZr");
+      basicDataSource.setPassword("OOTnKY9r3I");
+      return basicDataSource;
+      }
 
 
     @Bean(name = "transactionManager")

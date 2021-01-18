@@ -7,6 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+
+import io.jsonwebtoken.impl.DefaultClaims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,6 +22,7 @@ import io.swagger.annotations.ApiResponses;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.security.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.security.authentication.roles.services.RoleWritePrincipleService;
+import org.ospic.platform.security.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.security.authentication.users.exceptions.UserAuthenticationException;
 import org.ospic.platform.security.authentication.users.payload.request.UserRequestData;
 import org.ospic.platform.security.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
@@ -244,6 +253,24 @@ public class AuthController {
     @ResponseBody
     ResponseEntity<?> fetchAllAvailableAuthorities() {
         return roleReadPrincipleServices.fetchAuthorities();
+    }
+
+    @RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+    public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+        // From the HttpRequest get the claims
+        DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
+
+        Map<String, Object> expectedMap = getMapFromIoJsonWebTokenClaims(claims);
+        String token = jwtUtils.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+        return ResponseEntity.ok(new RefreshTokenResponse(token));
+    }
+
+    public Map<String, Object> getMapFromIoJsonWebTokenClaims(DefaultClaims claims) {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        for (Entry<String, Object> entry : claims.entrySet()) {
+            expectedMap.put(entry.getKey(), entry.getValue());
+        }
+        return expectedMap;
     }
 
 }
