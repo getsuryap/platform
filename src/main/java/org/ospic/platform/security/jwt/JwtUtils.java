@@ -1,11 +1,7 @@
 package org.ospic.platform.security.jwt;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+import io.jsonwebtoken.*;
 import org.ospic.platform.security.services.UserDetailsImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
