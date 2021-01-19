@@ -8,12 +8,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class JwtResponse {
-    private String accessToken;
     private Long id;
     private String username;
     private String email;
     private List<String> roles;
     private List<String> permissions;
+    private String accessToken;
 
     public JwtResponse loginResponse(String accessToken, Long id, String username,
                                      String email, List<String> roles, List<String> permissions) {
