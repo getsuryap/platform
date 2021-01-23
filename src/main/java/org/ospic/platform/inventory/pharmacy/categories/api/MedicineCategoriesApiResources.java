@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,19 @@ public class MedicineCategoriesApiResources {
     ResponseEntity<?> retrieveMedicineGroupById(@PathVariable Long medicineGroupId) {
         Optional<MedicineGroup> medicineGroupsResponse = medicineGroupRepository.findById(medicineGroupId);
         return ResponseEntity.ok().body(medicineGroupsResponse.get());
+    }
+
+
+    @ApiOperation(value = "UPDATE Medicine group", notes = "UPDATE Medicine group")
+    @RequestMapping(value = "/{medicineGroupId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateMedicineGroupById(@PathVariable Long medicineGroupId, @Valid @RequestBody MedicineGroup request) {
+        return medicineGroupRepository.findById(medicineGroupId).map(mg -> {
+            mg.setName(request.getName());
+            mg.setDescriptions(request.getDescriptions());
+            return ResponseEntity.ok().body(medicineGroupRepository.save(mg));
+        }).orElseThrow(()-> new EntityNotFoundException());
+
     }
 
 
