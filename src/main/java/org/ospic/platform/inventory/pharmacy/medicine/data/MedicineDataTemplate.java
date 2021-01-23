@@ -1,14 +1,14 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.data;
+package org.ospic.platform.inventory.pharmacy.medicine.data;
 
 import lombok.*;
-import org.ospic.platform.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 
 import java.util.List;
 
 /**
- * This file was created by eli on 16/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.data
+ * This file was created by eli on 16/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

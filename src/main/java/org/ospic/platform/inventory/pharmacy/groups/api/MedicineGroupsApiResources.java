@@ -1,7 +1,7 @@
-package org.ospic.platform.inventory.pharmacy.Groups.api;
+package org.ospic.platform.inventory.pharmacy.groups.api;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Groups.api
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.api
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,10 +24,10 @@ package org.ospic.platform.inventory.pharmacy.Groups.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.Categories.repository.MedicineCategoryRepository;
-import org.ospic.platform.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.ospic.platform.inventory.pharmacy.Groups.repository.MedicineGroupRepository;
+import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
+import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

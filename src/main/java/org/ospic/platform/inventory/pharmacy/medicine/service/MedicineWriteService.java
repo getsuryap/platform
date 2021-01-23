@@ -1,13 +1,13 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.service;
+package org.ospic.platform.inventory.pharmacy.medicine.service;
 
-import org.ospic.platform.inventory.pharmacy.Medicine.data.MedicineRequest;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.service
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

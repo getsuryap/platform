@@ -1,11 +1,11 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.data;
+package org.ospic.platform.inventory.pharmacy.medicine.data;
 
 import lombok.*;
 
 import javax.validation.constraints.Min;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.data
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

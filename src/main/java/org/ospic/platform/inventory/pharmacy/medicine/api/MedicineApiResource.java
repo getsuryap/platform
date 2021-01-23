@@ -1,13 +1,13 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.api;
+package org.ospic.platform.inventory.pharmacy.medicine.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
-import org.ospic.platform.inventory.pharmacy.Medicine.data.MedicineRequest;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
-import org.ospic.platform.inventory.pharmacy.Medicine.repository.MedicineRepository;
-import org.ospic.platform.inventory.pharmacy.Medicine.service.MedicineReadService;
-import org.ospic.platform.inventory.pharmacy.Medicine.service.MedicineWriteService;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineDataTemplate;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
+import org.ospic.platform.inventory.pharmacy.medicine.service.MedicineReadService;
+import org.ospic.platform.inventory.pharmacy.medicine.service.MedicineWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.api
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.api
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

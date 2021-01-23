@@ -1,15 +1,15 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.service;
+package org.ospic.platform.inventory.pharmacy.medicine.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.ospic.platform.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.Categories.repository.MedicineCategoryRepository;
-import org.ospic.platform.inventory.pharmacy.Groups.api.MedicineGroupsApiResources;
-import org.ospic.platform.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.ospic.platform.inventory.pharmacy.Groups.repository.MedicineGroupRepository;
-import org.ospic.platform.inventory.pharmacy.Medicine.data.MedicineDataTemplate;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
-import org.ospic.platform.inventory.pharmacy.Medicine.repository.MedicineRepository;
+import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
+import org.ospic.platform.inventory.pharmacy.groups.api.MedicineGroupsApiResources;
+import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineDataTemplate;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * This file was created by eli on 14/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.service
+ * This file was created by eli on 14/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
