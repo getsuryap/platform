@@ -1,15 +1,15 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.service;
+package org.ospic.platform.inventory.pharmacy.medicine.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.ospic.platform.inventory.pharmacy.Categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.Categories.repository.MedicineCategoryRepository;
-import org.ospic.platform.inventory.pharmacy.Groups.domains.MedicineGroup;
-import org.ospic.platform.inventory.pharmacy.Groups.repository.MedicineGroupRepository;
-import org.ospic.platform.inventory.pharmacy.Medicine.data.MedicineRequest;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
-import org.ospic.platform.inventory.pharmacy.Medicine.repository.MedicineRepository;
+import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
+import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.service
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

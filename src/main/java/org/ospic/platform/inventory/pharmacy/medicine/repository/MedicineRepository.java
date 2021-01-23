@@ -1,10 +1,10 @@
-package org.ospic.platform.inventory.pharmacy.Medicine.repository;
+package org.ospic.platform.inventory.pharmacy.medicine.repository;
 
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Medicine.repository
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,13 +1,13 @@
-package org.ospic.platform.inventory.pharmacy.Groups.repository;
+package org.ospic.platform.inventory.pharmacy.groups.repository;
 
-import org.ospic.platform.inventory.pharmacy.Groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Groups.repository
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,11 +1,11 @@
-package org.ospic.platform.inventory.pharmacy.Categories.domains;
+package org.ospic.platform.inventory.pharmacy.categories.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.ospic.platform.inventory.pharmacy.Medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.Groups.domains
+ * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.domains
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
