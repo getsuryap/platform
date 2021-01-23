@@ -136,16 +136,6 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     public ResponseEntity<?> retrievePageablePatients(String group, Pageable pageable) {
         try {
             Page<Patient> page = patientRepository.findAll(pageable);
-            /**List<Patient> patients = new ArrayList<>();
-            patients = page.getContent();
-            Map<String, Object> response = new HashMap<>();
-            response.put("currentPage", page.getNumber());
-            if (!page.isLast()) { response.put("next", page.getNumber() + 1); }
-            if (!page.isFirst()){ response.put("previous", page.getNumber() -1); }
-            response.put("totalItems", page.getTotalElements());
-            response.put("totalPages", page.getTotalPages());
-            response.put("data", patients);
-            **/
             return new ResponseEntity<>(new PageableResponse().instance(page, Patient.class), HttpStatus.OK);
         }catch (Exception ex){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
