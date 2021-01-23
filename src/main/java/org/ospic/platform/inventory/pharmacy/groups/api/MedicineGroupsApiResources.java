@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,52 +49,39 @@ public class MedicineGroupsApiResources {
         this.medicineCategoryRepository = medicineCategoryRepository;
     }
 
-    @ApiOperation(
-            value = "RETRIEVE list of available Medicine categories ",
-            notes = "RETRIEVE list of available Medicine categories",
-            response = MedicineCategory.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class)
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<MedicineCategory>> retrieveAllMedicineCategories() {
         List<MedicineCategory> medicineCategoriesResponse = medicineCategoryRepository.findAll();
         return ResponseEntity.ok().body(medicineCategoriesResponse);
     }
 
-    @ApiOperation(
-            value = "RETRIEVE Medicine category by ID",
-            notes = "RETRIEVE  Medicine category by ID",
-            response = MedicineCategory.class)
-    @RequestMapping(
-            value = "/{medicineCategoryId}",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
+    @ApiOperation(value = "RETRIEVE Medicine category by ID", notes = "RETRIEVE  Medicine category by ID", response = MedicineCategory.class)
+    @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity retrieveMedicineCategoryById(@PathVariable Long medicationCategoryId) {
+    ResponseEntity<?> retrieveMedicineCategoryById(@PathVariable Long medicationCategoryId) {
         if (medicineCategoryRepository.findById(medicationCategoryId).isPresent()) {
             return ResponseEntity.ok().body(medicineCategoryRepository.findById(medicationCategoryId).get());
         }
         return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicationCategoryId));
     }
+    @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category")
+    @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId,  @Valid @RequestBody MedicineCategory request) {
+        Optional<MedicineCategory> medicineCategoryOptional = medicineCategoryRepository.findById(medicineCategoryId);
+        if (medicineCategoryOptional.isPresent()) {
+            MedicineCategory md = medicineCategoryOptional.get();
+            md.setName(request.getName());
+            md.setDescriptions(request.getDescriptions());
+            return ResponseEntity.ok().body(medicineCategoryRepository.save(md));
+        }
+        return ResponseEntity.ok().body("Medicine category with id" + medicineCategoryId + " is not found ...!");
+    }
 
-
-    @ApiOperation(
-            value = "ADD new Medicine category",
-            notes = "ADD new Medicine category",
-            response = MedicineCategory.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-
+    @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategory medicineCategory) {
         if (medicineCategoryRepository.existsByName(medicineCategory.getName())) {
@@ -104,17 +92,8 @@ public class MedicineGroupsApiResources {
 
     }
 
-    @ApiOperation(
-            value = "ADD new Medicine categories",
-            notes = "ADD new Medicine categories",
-            response = MedicineCategory.class)
-    @RequestMapping(
-            value = "/list",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-
+    @ApiOperation(value = "ADD new Medicine categories", notes = "ADD new Medicine categories", response = MedicineCategory.class)
+    @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewMedicineCategories(@Valid @RequestBody List<MedicineCategory> medicineCategories) {
         StringBuilder sb = new StringBuilder();
