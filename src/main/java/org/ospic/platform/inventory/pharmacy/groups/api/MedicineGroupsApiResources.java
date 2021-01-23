@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundException;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -60,24 +61,21 @@ public class MedicineGroupsApiResources {
     @ApiOperation(value = "RETRIEVE Medicine category by ID", notes = "RETRIEVE  Medicine category by ID", response = MedicineCategory.class)
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveMedicineCategoryById(@PathVariable Long medicationCategoryId) {
-        if (medicineCategoryRepository.findById(medicationCategoryId).isPresent()) {
-            return ResponseEntity.ok().body(medicineCategoryRepository.findById(medicationCategoryId).get());
+    ResponseEntity<?> retrieveMedicineCategoryById(@PathVariable Long medicineCategoryId) {
+        if (medicineCategoryRepository.findById(medicineCategoryId).isPresent()) {
+            return ResponseEntity.ok().body(medicineCategoryRepository.findById(medicineCategoryId).get());
         }
-        return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicationCategoryId));
+        return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicineCategoryId));
     }
     @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category")
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId,  @Valid @RequestBody MedicineCategory request) {
-        Optional<MedicineCategory> medicineCategoryOptional = medicineCategoryRepository.findById(medicineCategoryId);
-        if (medicineCategoryOptional.isPresent()) {
-            MedicineCategory md = medicineCategoryOptional.get();
+         return  medicineCategoryRepository.findById(medicineCategoryId).map(md ->{
             md.setName(request.getName());
             md.setDescriptions(request.getDescriptions());
             return ResponseEntity.ok().body(medicineCategoryRepository.save(md));
-        }
-        return ResponseEntity.ok().body("Medicine category with id" + medicineCategoryId + " is not found ...!");
+         }).orElseThrow(()->new MedicineGroupNotFoundException("Medicine category with id" + medicineCategoryId + " is not found ...!"));
     }
 
     @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
