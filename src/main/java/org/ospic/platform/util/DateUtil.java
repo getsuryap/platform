@@ -41,7 +41,7 @@ public class DateUtil {
                 .toLocalDateTime();
     }
 
-    public LocalDateTime convertToLocalDateTimeViaMilisecond(Date dateToConvert) {
+    public LocalDateTime convertToLocalDateTimeViaMiliSeconds(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();

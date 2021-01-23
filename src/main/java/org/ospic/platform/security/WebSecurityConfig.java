@@ -50,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/api/auth/signin",
             "/api/patients/**/documents/**",
-            "/api/patients/**/images/**"
+            "/api/patients/**/images/**",
+            "/api/test/**"
             // other public endpoints of your API may be appended to this array
     };
 
@@ -63,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
+
 
     @Bean
     @Override

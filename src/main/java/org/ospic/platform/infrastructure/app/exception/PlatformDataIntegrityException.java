@@ -1,6 +1,7 @@
 package org.ospic.platform.infrastructure.app.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * This file was created by eli on 19/01/2021 for org.ospic.platform.infrastructure.app.exception
@@ -23,7 +24,9 @@ import lombok.Data;
  * specific language governing permissions and limitations
  * under the License.
  */
+
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PlatformDataIntegrityException extends RuntimeException {
 
     private final String globalisationMessageCode;
