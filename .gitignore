@@ -37,3 +37,4 @@ out/
 .vscode/
 logs/*
 target/*
+uploads/*

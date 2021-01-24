@@ -101,7 +101,6 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
             admission.setService(service);
             admission.setIsActive(true);
             admission.addBed(bed);
-            System.out.println(admission.toString());
             admissionRepository.save(admission);
 
             /** Update Bed set it as active. Not open for new admission **/
