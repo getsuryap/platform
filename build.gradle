@@ -27,6 +27,8 @@ repositories {
     mavenCentral()
     jcenter()
     google()
+    maven{url "http://jasperreports.sourceforge.net/maven2/"}
+    maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
 }
 
 dependencies {
@@ -41,6 +43,7 @@ dependencies {
             'io.springfox:springfox-swagger2:2.6.1',
             'io.springfox:springfox-swagger-ui:2.6.1',
             'io.springfox:springfox-bean-validators:2.6.1',
+            'org.springframework.boot:spring-boot-starter-thymeleaf',
             [group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'],
             [group: 'org.hibernate', name: 'hibernate-envers', version: '5.3.11.Final'],
             [group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.11.Final'],
@@ -50,8 +53,14 @@ dependencies {
             [group: 'org.apache.poi', name: 'poi', version: '4.1.2'],
             [group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'],
             [group: 'com.twilio.sdk', name: 'twilio', version: '7.1.0'],
-            ['org.projectreactor:reactor-spring:1.0.1.RELEASE']
+            ['org.projectreactor:reactor-spring:1.0.1.RELEASE'],
+
     )
+    implementation ('net.sf.jasperreports:jasperreports:6.16.0') {
+        exclude group: 'com.itextpdf'
+    }
+    runtime 'com.itextpdf:itextpdf:5.5.0'
+    runtime 'com.itextpdf:itext-pdfa:5.5.0'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
