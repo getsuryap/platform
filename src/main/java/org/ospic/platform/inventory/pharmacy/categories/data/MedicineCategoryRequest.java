@@ -1,15 +1,11 @@
-package org.ospic.platform.inventory.pharmacy.categories.repository;
+package org.ospic.platform.inventory.pharmacy.categories.data;
 
-import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
- * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.repository
+ * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.categories.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,14 +25,17 @@ import java.util.Optional;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface MedicineCategoryRepository extends JpaRepository<MedicineCategory, Long> {
-    @Override
-    Optional<MedicineCategory> findById(Long aLong);
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode()
+public class MedicineCategoryRequest {
+    private String name;
+    private String descriptions;
+    private Long measurementId;
 
-    @Override
-    List<MedicineCategory> findAll();
-
-    boolean existsByName(String name);
-    boolean existsById(Long id);
-
+    public MedicineCategoryRequest(String name, String descriptions, Long measurementId) {
+        this.name = name;
+        this.descriptions = descriptions;
+        this.measurementId = measurementId;
+    }
 }

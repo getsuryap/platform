@@ -1,6 +1,7 @@
 package org.ospic.platform.infrastructure.app.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * This file was created by eli on 28/11/2020 for org.ospic.platform.infrastructure.app.exception
@@ -24,6 +25,7 @@ import lombok.Data;
  * under the License.
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public abstract  class AbstractResourceNotFoundException extends RuntimeException {
     private final String globalisationMessageCode;
     private final String defaultUserMessage;
