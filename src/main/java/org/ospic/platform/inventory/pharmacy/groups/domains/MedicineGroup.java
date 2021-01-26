@@ -3,10 +3,7 @@ package org.ospic.platform.inventory.pharmacy.groups.domains;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
@@ -45,6 +42,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = {"name"}),
         })
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode
 public class MedicineGroup  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,17 +72,6 @@ public class MedicineGroup  {
         this.descriptions = descriptions;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MedicineGroup)) return false;
-        return id != null && id.equals(((MedicineGroup) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
 
 
 }
