@@ -45,7 +45,6 @@ import java.util.Date;
 @Table(name = DatabaseConstants.DIAGNOSES_TABLE)
 @ApiModel(value = "Diagnosis", description = "A Diagnosis row containing specific patient information's")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@EqualsAndHashCode()
 public class Diagnosis implements Serializable {
     @Id
     @Column(name = "id", unique = true)
@@ -72,4 +71,15 @@ public class Diagnosis implements Serializable {
         this.service = service;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Diagnosis )) return false;
+        return id != null && id.equals(((Diagnosis) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

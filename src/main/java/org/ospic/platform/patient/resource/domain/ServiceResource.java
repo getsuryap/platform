@@ -47,7 +47,7 @@ import java.util.*;
 @Table(name = DatabaseConstants.SERVICE_RESOURCES_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode
+
 public class ServiceResource implements Serializable {
 
     @Id
@@ -108,4 +108,15 @@ public class ServiceResource implements Serializable {
         this.staff = staff;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceResource)) return false;
+        return id != null && id.equals(((ServiceResource) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

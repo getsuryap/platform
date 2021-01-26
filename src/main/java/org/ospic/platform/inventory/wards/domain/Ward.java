@@ -38,7 +38,6 @@ import java.util.List;
 @Table(name = DatabaseConstants.WARDS_TABLE)
 @ApiModel(value = "Wards", description = "A Wards ")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,5 +69,15 @@ public class Ward {
         beds.remove(bed);
         bed.setWard(null);
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ward)) return false;
+        return id != null && id.equals(((Ward) o).id);
+    }
 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }
