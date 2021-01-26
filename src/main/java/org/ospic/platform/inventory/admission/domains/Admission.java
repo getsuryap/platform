@@ -51,7 +51,7 @@ import java.util.*;
 @Table(name = DatabaseConstants.TABLE_ADMISSION_INFO)
 @ApiModel(value = "Admission", description = "Admission ")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode
+
 public class Admission implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -118,5 +118,15 @@ public class Admission implements Serializable {
         bed.getAdmissions().add(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Admission)) return false;
+        return id != null && id.equals(((Admission) o).id);
+    }
 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

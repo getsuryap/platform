@@ -42,7 +42,6 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = {"name"}),
         })
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode
 public class MedicineGroup  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,7 +70,17 @@ public class MedicineGroup  {
         this.name = name;
         this.descriptions = descriptions;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MedicineGroup)) return false;
+        return id != null && id.equals(((MedicineGroup) o).id);
+    }
 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
 
 }

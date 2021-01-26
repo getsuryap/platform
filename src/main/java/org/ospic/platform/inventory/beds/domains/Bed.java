@@ -43,7 +43,7 @@ import java.util.*;
 @Table(name = DatabaseConstants.BEDS_TABLE)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode
+
 public class Bed implements Serializable {
     private static final long serialVersionUID = -1L;
     @Id
@@ -82,5 +82,16 @@ public class Bed implements Serializable {
         this.isOccupied = isOccupied;
         this.identifier = identifier;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bed tag = (Bed) o;
+        return Objects.equals(identifier, tag.identifier);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
+    }
 }
