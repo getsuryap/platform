@@ -46,6 +46,7 @@ import java.util.*;
         })
 @ApiModel(value = "Medicine", description = "Contain all medicine's available")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode
 public class MedicineCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,21 +82,5 @@ public class MedicineCategory implements Serializable {
         this.name = name;
         this.descriptions = descriptions;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        MedicineCategory other = (MedicineCategory) obj;
-        return Objects.equals(id, other.getId());
-    }
+    
 }
