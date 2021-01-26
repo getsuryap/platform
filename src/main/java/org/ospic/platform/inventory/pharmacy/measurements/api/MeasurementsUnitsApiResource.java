@@ -1,13 +1,15 @@
 package org.ospic.platform.inventory.pharmacy.measurements.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsReadPrincipleService;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsWritePrincipleService;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.api
@@ -33,16 +35,22 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Validated
 @RestController
-@RequestMapping("/api/pharmacy/medicines/measures")
-@Api(value = "/api/pharmacy/medicines/measures", tags = "Medicines measurement units")
+@RequestMapping("/api/pharmacy/measures")
+@Api(value = "/api/pharmacy/measures", tags = "Medicines measurement units")
 public class MeasurementsUnitsApiResource {
     public MeasurementUnitsReadPrincipleService readPrincipleService;
     public MeasurementUnitsWritePrincipleService writePrincipleService;
 
     @Autowired
-    MeasurementsUnitsApiResource(MeasurementUnitsReadPrincipleService readPrincipleService,
-                                 MeasurementUnitsWritePrincipleService writePrincipleService) {
+    MeasurementsUnitsApiResource(MeasurementUnitsReadPrincipleService readPrincipleService, MeasurementUnitsWritePrincipleService writePrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
+    }
+
+    @ApiOperation(value = "RETRIEVE medicine measurement units", notes = "RETRIEVE medicine measurement units")
+    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveListOfMedicineMeasurementUnits() {
+        return  readPrincipleService.fetchAllMedicineMeasurementUnit();
     }
 }
