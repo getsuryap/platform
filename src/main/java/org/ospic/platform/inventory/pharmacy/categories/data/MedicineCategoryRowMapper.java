@@ -30,7 +30,7 @@ import java.sql.SQLException;
 public class MedicineCategoryRowMapper implements RowMapper<MedicineCategoryRequest> {
 
     public String schema() {
-        return "select mc.name,mc.descriptions,u.unit as unit, u.id as unitId from "+
+        return "select mc.id as id, mc.name,mc.descriptions,u.unit as unit, u.id as unitId from "+
                 " m_mdc_categories mc inner join m_units u on mc.unit_id = u.id";
     }
     @Override
@@ -39,8 +39,10 @@ public class MedicineCategoryRowMapper implements RowMapper<MedicineCategoryRequ
         final String description = rs.getString("descriptions");
         final String unit = rs.getString("unit");
         final Long unitId = rs.getLong("unitId");
+        final Long Id = rs.getLong("id");
         MedicineCategoryRequest req = new MedicineCategoryRequest(name, description, unit);
         req.setMeasurementId(unitId);
+        req.setId(Id);
         return req;
     }
 }

@@ -29,6 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode()
 public class MedicineCategoryRequest {
+    private Long id;
     private String name;
     private String descriptions;
     private Long measurementId;
