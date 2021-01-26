@@ -42,6 +42,7 @@ import java.util.Objects;
 @Table(name = DatabaseConstants.TABLE_BLOOD_GROUP)
 @ApiModel(value = "Blood group", description = "A blood group")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode()
 public class BloodGroup implements Serializable {
     private static final long serialVersionUID = -2L;
     @Id
@@ -67,16 +68,4 @@ public class BloodGroup implements Serializable {
        return new BloodGroup(group, counts);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BloodGroup bg = (BloodGroup) o;
-        return Objects.equals(bg, bg.group);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(group);
-    }
 }
