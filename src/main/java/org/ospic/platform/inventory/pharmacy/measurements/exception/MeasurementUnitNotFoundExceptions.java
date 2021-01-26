@@ -1,12 +1,9 @@
-package org.ospic.platform.inventory.pharmacy.measurements.services;
+package org.ospic.platform.inventory.pharmacy.measurements.exception;
 
-import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
- * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.services
+ * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.exception
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,9 +23,11 @@ import org.springframework.stereotype.Service;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface MeasurementUnitsWritePrincipleService {
-    ResponseEntity<?> createMeasurementUnit(MeasurementUnit payload);
-    ResponseEntity<?> updateMeasurementUnit(Long unitId, MeasurementUnit payload);
+public class MeasurementUnitNotFoundExceptions extends AbstractResourceNotFoundException {
+    public MeasurementUnitNotFoundExceptions(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+    public MeasurementUnitNotFoundExceptions(Long id){
+        super("error.message.not.unit.with.given.id.not.found",String.format("Measurement unit with an ID %2d is not found", id));
+    }
 }

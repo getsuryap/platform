@@ -1,6 +1,7 @@
 package org.ospic.platform.inventory.pharmacy.measurements.services;
 
 import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
+import org.ospic.platform.inventory.pharmacy.measurements.exception.MeasurementUnitNotFoundExceptions;
 import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,13 @@ public class MeasurementUnitsWritePrincipleServiceImpl implements MeasurementUni
     @Override
     public ResponseEntity<?> createMeasurementUnit(MeasurementUnit payload) {
         return ResponseEntity.ok().body(repository.save(payload));
+    }
+
+    @Override
+    public ResponseEntity<?> updateMeasurementUnit(Long unitId, MeasurementUnit payload) {
+        return repository.findById(unitId).map(unit -> {
+            payload.setId(unit.getId());
+            return ResponseEntity.ok().body(repository.save(payload));
+        }).orElseThrow(() -> new MeasurementUnitNotFoundExceptions(unitId));
     }
 }
