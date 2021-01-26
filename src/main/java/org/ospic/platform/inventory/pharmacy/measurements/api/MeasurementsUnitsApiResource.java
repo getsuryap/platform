@@ -2,6 +2,7 @@ package org.ospic.platform.inventory.pharmacy.measurements.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsReadPrincipleService;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsWritePrincipleService;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.api
@@ -52,5 +55,12 @@ public class MeasurementsUnitsApiResource {
     @ResponseBody
     ResponseEntity<?> retrieveListOfMedicineMeasurementUnits() {
         return  readPrincipleService.fetchAllMedicineMeasurementUnit();
+    }
+
+    @ApiOperation(value = "CREATE new medicine measurement units", notes = "CREATE new  medicine measurement units")
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> createNewMedicineMeasurementUnits(@Validated @Valid @RequestBody MeasurementUnit payload) {
+        return  writePrincipleService.createMeasurementUnit(payload);
     }
 }

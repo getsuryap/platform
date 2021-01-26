@@ -1,5 +1,7 @@
 package org.ospic.platform.inventory.pharmacy.measurements.services;
 
+import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +29,5 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface MeasurementUnitsWritePrincipleService {
+    ResponseEntity<?> createMeasurementUnit(MeasurementUnit payload);
 }
