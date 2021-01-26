@@ -1,5 +1,6 @@
 package org.ospic.platform.inventory.pharmacy.groups.exception;
 
+import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -25,9 +26,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * under the License.
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class MedicineGroupNotFoundException extends RuntimeException {
+public class MedicineGroupNotFoundException extends AbstractResourceNotFoundException {
     public static final long serialVersionUID = 1L;
-    public MedicineGroupNotFoundException(String message){
-        super(message);
+
+    public MedicineGroupNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+
+    public MedicineGroupNotFoundException(Long id){
+        super("msg.exception.medicine.not.found", "Medicine with given id is not found");
     }
 }

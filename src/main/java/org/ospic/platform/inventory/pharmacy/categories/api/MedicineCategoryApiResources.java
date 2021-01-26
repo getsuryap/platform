@@ -77,32 +77,36 @@ public class MedicineCategoryApiResources {
         }
         return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicineCategoryId));
     }
+
     @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category")
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId,  @Valid @RequestBody MedicineCategory request) {
-         return  medicineCategoryRepository.findById(medicineCategoryId).map(md ->{
-            md.setName(request.getName());
-            md.setDescriptions(request.getDescriptions());
-            return ResponseEntity.ok().body(medicineCategoryRepository.save(md));
-         }).orElseThrow(()->new MedicineGroupNotFoundException("Medicine category with id" + medicineCategoryId + " is not found ...!"));
+    ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId, @Valid @RequestBody MedicineCategoryRequest request) {
+        return medicineCategoryRepository.findById(medicineCategoryId).map(md -> {
+            return measurementUnitRepository.findById(request.getMeasurementId()).map(unit -> {
+                md.setMeasurementUnit(unit);
+                md.setName(request.getName());
+                md.setDescriptions(request.getDescriptions());
+                return ResponseEntity.ok().body(medicineCategoryRepository.save(md));
+            }).orElseThrow(() -> new MeasurementUnitNotFoundExceptions(request.getMeasurementId()));
+        }).orElseThrow(() -> new MedicineGroupNotFoundException(medicineCategoryId));
     }
 
     @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategoryRequest payload) throws SQLIntegrityConstraintViolationException {
-        try{
+        try {
             MedicineCategory category = new MedicineCategory().instance(payload.getName(), payload.getDescriptions());
             measurementUnitRepository.findById(payload.getMeasurementId()).map(measurementUnit -> {
                 category.setMeasurementUnit(measurementUnit);
                 return ResponseEntity.ok(medicineCategoryRepository.save(category));
             });
 
-        }catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             throw new MeasurementUnitNotFoundExceptions(payload.getMeasurementId());
         }
-      return ResponseEntity.ok("Medicine category saved successfully...");
+        return ResponseEntity.ok("Medicine category saved successfully...");
     }
 
     @ApiOperation(value = "ADD new Medicine categories", notes = "ADD new Medicine categories", response = MedicineCategory.class)
