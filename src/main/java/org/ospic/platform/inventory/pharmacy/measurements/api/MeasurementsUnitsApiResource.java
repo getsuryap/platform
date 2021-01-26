@@ -60,7 +60,15 @@ public class MeasurementsUnitsApiResource {
     @ApiOperation(value = "CREATE new medicine measurement units", notes = "CREATE new  medicine measurement units")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> createNewMedicineMeasurementUnits(@Validated @Valid @RequestBody MeasurementUnit payload) {
+    ResponseEntity<?> createNewMedicineMeasurementUnits( @Valid @RequestBody MeasurementUnit payload) {
         return  writePrincipleService.createMeasurementUnit(payload);
+    }
+
+
+    @ApiOperation(value = "UPDATE medicine measurement units", notes = "UPDATE  medicine measurement units")
+    @RequestMapping(value = "/{unitId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateMedicineMeasurementUnits(@PathVariable("unitId") Long  unitId,  @Valid @RequestBody MeasurementUnit payload) {
+        return  writePrincipleService.updateMeasurementUnit(unitId, payload);
     }
 }

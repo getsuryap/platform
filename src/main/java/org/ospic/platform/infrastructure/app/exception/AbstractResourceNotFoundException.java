@@ -1,5 +1,7 @@
 package org.ospic.platform.infrastructure.app.exception;
 
+import lombok.Data;
+
 /**
  * This file was created by eli on 28/11/2020 for org.ospic.platform.infrastructure.app.exception
  * --
@@ -21,6 +23,7 @@ package org.ospic.platform.infrastructure.app.exception;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Data
 public abstract  class AbstractResourceNotFoundException extends RuntimeException {
     private final String globalisationMessageCode;
     private final String defaultUserMessage;
@@ -31,17 +34,5 @@ public abstract  class AbstractResourceNotFoundException extends RuntimeExceptio
         this.globalisationMessageCode = globalisationMessageCode;
         this.defaultUserMessage = defaultUserMessage;
         this.defaultUserMessageArgs = defaultUserMessageArgs;
-    }
-
-    public String getGlobalisationMessageCode() {
-        return this.globalisationMessageCode;
-    }
-
-    public String getDefaultUserMessage() {
-        return this.defaultUserMessage;
-    }
-
-    public Object[] getDefaultUserMessageArgs() {
-        return this.defaultUserMessageArgs;
     }
 }
