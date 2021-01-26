@@ -33,7 +33,6 @@ public interface MedicineCategoryRepository extends JpaRepository<MedicineCatego
     Optional<MedicineCategory> findById(Long aLong);
 
     @Override
-    @Query(nativeQuery = true, value = "SELECT mc.name,mc.descriptions,u.unit as measurementUnit from  m_mdc_categories mc inner join m_units u on mc.unit_id = u.id")
     List<MedicineCategory> findAll();
 
     boolean existsByName(String name);
