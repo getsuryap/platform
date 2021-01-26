@@ -57,6 +57,13 @@ public class MeasurementsUnitsApiResource {
         return  readPrincipleService.fetchAllMedicineMeasurementUnit();
     }
 
+    @ApiOperation(value = "RETRIEVE medicine measurement unit by id", notes = "RETRIEVE medicine measurement unit by id")
+    @RequestMapping(value = "/{unitId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> getMedicineMeasurementUnitById(@PathVariable("unitId") Long  unitId) {
+        return  readPrincipleService.fetchMeasurementUnitById(unitId);
+    }
+
     @ApiOperation(value = "CREATE new medicine measurement units", notes = "CREATE new  medicine measurement units")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
