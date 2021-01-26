@@ -1,7 +1,9 @@
 package org.ospic.platform.inventory.pharmacy.measurements.services;
 
+import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
 import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -26,10 +28,16 @@ import org.springframework.stereotype.Repository;
  * under the License.
  */
 @Repository
-public class MeasurementUnitsWritePrincipleServiceImpl implements MeasurementUnitsWritePrincipleService{
+public class MeasurementUnitsWritePrincipleServiceImpl implements MeasurementUnitsWritePrincipleService {
     public MeasurementUnitRepository repository;
+
     @Autowired
-    public MeasurementUnitsWritePrincipleServiceImpl(MeasurementUnitRepository repository){
+    public MeasurementUnitsWritePrincipleServiceImpl(MeasurementUnitRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<?> createMeasurementUnit(MeasurementUnit payload) {
+        return ResponseEntity.ok().body(repository.save(payload));
     }
 }
