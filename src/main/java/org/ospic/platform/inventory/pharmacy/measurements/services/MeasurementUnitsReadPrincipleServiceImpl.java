@@ -1,5 +1,6 @@
 package org.ospic.platform.inventory.pharmacy.measurements.services;
 
+import org.ospic.platform.inventory.pharmacy.measurements.exception.MeasurementUnitNotFoundExceptions;
 import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MeasurementUnitsReadPrincipleServiceImpl implements MeasurementUnitsReadPrincipleService {
     public MeasurementUnitRepository repository;
+
     @Autowired
-    public MeasurementUnitsReadPrincipleServiceImpl(MeasurementUnitRepository repository){
+    public MeasurementUnitsReadPrincipleServiceImpl(MeasurementUnitRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public ResponseEntity<?> fetchAllMedicineMeasurementUnit() {
         return ResponseEntity.ok().body(repository.findAll());
+    }
+
+    @Override
+    public ResponseEntity<?> fetchMeasurementUnitById(Long id) {
+        return repository.findById(id).map(unit -> {
+            return ResponseEntity.ok().body(unit);
+        }).orElseThrow(() -> new MeasurementUnitNotFoundExceptions(id));
     }
 }

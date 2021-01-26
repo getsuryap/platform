@@ -29,4 +29,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MeasurementUnitsReadPrincipleService {
     ResponseEntity<?> fetchAllMedicineMeasurementUnit();
+    ResponseEntity<?> fetchMeasurementUnitById(Long id);
 }
