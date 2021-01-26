@@ -24,7 +24,9 @@ package org.ospic.platform.inventory.pharmacy.categories.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.inventory.admission.service.AdmissionsReadServiceImpl;
 import org.ospic.platform.inventory.pharmacy.categories.data.MedicineCategoryRequest;
+import org.ospic.platform.inventory.pharmacy.categories.data.MedicineCategoryRowMapper;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
@@ -35,10 +37,12 @@ import org.ospic.platform.inventory.pharmacy.measurements.repository.Measurement
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.sql.DataSource;
 import javax.validation.Valid;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -51,21 +55,26 @@ import java.util.Optional;
 @Api(value = "/api/pharmacy/medicines/categories", tags = "Medicine Categories")
 public class MedicineCategoryApiResources {
 
-    public MedicineCategoryRepository medicineCategoryRepository;
-    public MeasurementUnitRepository measurementUnitRepository;
+    private final MedicineCategoryRepository medicineCategoryRepository;
+    private final MeasurementUnitRepository measurementUnitRepository;
+    private final JdbcTemplate jdbcTemplate;
 
-    public MedicineCategoryApiResources(MedicineCategoryRepository medicineCategoryRepository,
-                                        MeasurementUnitRepository measurementUnitRepository) {
+    @Autowired
+   MedicineCategoryApiResources(MedicineCategoryRepository medicineCategoryRepository,
+                                        MeasurementUnitRepository measurementUnitRepository,
+                                        final DataSource dataSource) {
         this.medicineCategoryRepository = medicineCategoryRepository;
         this.measurementUnitRepository = measurementUnitRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class)
     @RequestMapping(value = "", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<List<MedicineCategory>> retrieveAllMedicineCategories() {
-        List<MedicineCategory> medicineCategoriesResponse = medicineCategoryRepository.findAll();
-        return ResponseEntity.ok().body(medicineCategoriesResponse);
+    ResponseEntity<?> retrieveAllMedicineCategories() {
+        final MedicineCategoryRowMapper rm = new MedicineCategoryRowMapper();
+        final String sql = rm.schema();
+        return ResponseEntity.ok().body(this.jdbcTemplate.query(sql, rm, new Object[]{}));
     }
 
     @ApiOperation(value = "RETRIEVE Medicine category by ID", notes = "RETRIEVE  Medicine category by ID", response = MedicineCategory.class)

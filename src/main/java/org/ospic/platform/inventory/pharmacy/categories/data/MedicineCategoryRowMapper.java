@@ -1,8 +1,10 @@
 package org.ospic.platform.inventory.pharmacy.categories.data;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.categories.data
@@ -25,24 +27,20 @@ import lombok.NoArgsConstructor;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
-@NoArgsConstructor
-@EqualsAndHashCode()
-public class MedicineCategoryRequest {
-    private String name;
-    private String descriptions;
-    private Long measurementId;
-    private String measureName;
+public class MedicineCategoryRowMapper implements RowMapper<MedicineCategoryRequest> {
 
-    public MedicineCategoryRequest(String name, String descriptions, Long measurementId) {
-        this.name = name;
-        this.descriptions = descriptions;
-        this.measurementId = measurementId;
+    public String schema() {
+        return "select mc.name,mc.descriptions,u.unit as unit, u.id as unitId from "+
+                " m_mdc_categories mc inner join m_units u on mc.unit_id = u.id";
     }
-
-    public MedicineCategoryRequest(String name, String descriptions, String measureName) {
-        this.name = name;
-        this.descriptions = descriptions;
-        this.measureName = measureName;
+    @Override
+    public MedicineCategoryRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+        final String name= rs.getString("name");
+        final String description = rs.getString("descriptions");
+        final String unit = rs.getString("unit");
+        final Long unitId = rs.getLong("unitId");
+        MedicineCategoryRequest req = new MedicineCategoryRequest(name, description, unit);
+        req.setMeasurementId(unitId);
+        return req;
     }
 }

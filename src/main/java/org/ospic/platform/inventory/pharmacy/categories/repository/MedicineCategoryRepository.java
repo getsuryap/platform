@@ -1,9 +1,8 @@
 package org.ospic.platform.inventory.pharmacy.categories.repository;
 
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
-import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +33,7 @@ public interface MedicineCategoryRepository extends JpaRepository<MedicineCatego
     Optional<MedicineCategory> findById(Long aLong);
 
     @Override
+    @Query(nativeQuery = true, value = "SELECT mc.name,mc.descriptions,u.unit as measurementUnit from  m_mdc_categories mc inner join m_units u on mc.unit_id = u.id")
     List<MedicineCategory> findAll();
 
     boolean existsByName(String name);
