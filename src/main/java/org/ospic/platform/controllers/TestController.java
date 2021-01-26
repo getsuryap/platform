@@ -9,11 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController
+@Controller
 @ApiIgnore
 @RequestMapping("/api/test")
 public class TestController {
@@ -55,11 +56,6 @@ public class TestController {
 		return "Moderator Board.";
 	}
 
-	@GetMapping("/admin")
-	@PreAuthorize("hasRole('ADMIN')")
-	public String adminAccess() {
-		return "Admin Board.";
-	}
 
 	@GetMapping(value= "/welcome")
 	public ModelAndView index() {
@@ -71,12 +67,11 @@ public class TestController {
 	// Method to create the pdf report via jasper framework.
 
 	@GetMapping("/view")
+	@ResponseBody
 	public void viewReport(HttpServletResponse response) throws IOException, JRException, SQLException {
-		//response.setContentType("application/x-download");
+		OutputStream out = response.getOutputStream();
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "inline; filename=" + "example.pdf");
-		//response.setHeader("Content-Disposition", String.format("attachment: filename=\"patients.pdf\""));
-		OutputStream out = response.getOutputStream();
 		this.exportPdfReport(repository.findAll(), out);
 	}
 

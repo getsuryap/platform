@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/signin",
             "/api/patients/**/documents/**",
             "/api/patients/**/images/**",
-            "/api/test/**"
+            "/api/test/**",
+            "/webapp/**"
             // other public endpoints of your API may be appended to this array
     };
 
@@ -80,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+
                 .authorizeRequests()
                 .and()
                 .exceptionHandling()
@@ -100,6 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        http.headers().frameOptions().sameOrigin();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
