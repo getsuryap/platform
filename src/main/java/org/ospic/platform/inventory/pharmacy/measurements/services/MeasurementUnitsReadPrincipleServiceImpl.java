@@ -2,6 +2,7 @@ package org.ospic.platform.inventory.pharmacy.measurements.services;
 
 import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,5 +32,10 @@ public class MeasurementUnitsReadPrincipleServiceImpl implements MeasurementUnit
     @Autowired
     public MeasurementUnitsReadPrincipleServiceImpl(MeasurementUnitRepository repository){
         this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<?> fetchAllMedicineMeasurementUnit() {
+        return ResponseEntity.ok().body(repository.findAll());
     }
 }
