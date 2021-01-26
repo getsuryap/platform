@@ -1,4 +1,4 @@
-package org.ospic.platform.inventory.pharmacy.categories.api;
+package org.ospic.platform.inventory.pharmacy.groups.api;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.api
@@ -41,11 +41,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/pharmacy/medicines/groups")
 @Api(value = "/api/pharmacy/medicines/groups", tags = "Medicine Groups")
-public class MedicineCategoriesApiResources {
+public class MedicineGroupApiResources {
     @Autowired
     MedicineGroupRepository medicineGroupRepository;
 
-    public MedicineCategoriesApiResources(MedicineGroupRepository medicineGroupRepository) {
+    public MedicineGroupApiResources(MedicineGroupRepository medicineGroupRepository) {
         this.medicineGroupRepository = medicineGroupRepository;
     }
 

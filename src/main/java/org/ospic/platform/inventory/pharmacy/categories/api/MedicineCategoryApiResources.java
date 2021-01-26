@@ -1,4 +1,4 @@
-package org.ospic.platform.inventory.pharmacy.groups.api;
+package org.ospic.platform.inventory.pharmacy.categories.api;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.groups.api
@@ -24,17 +24,24 @@ package org.ospic.platform.inventory.pharmacy.groups.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.inventory.pharmacy.categories.data.MedicineCategoryRequest;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundException;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
+import org.ospic.platform.inventory.pharmacy.measurements.exception.MeasurementUnitNotFoundExceptions;
+import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,16 +49,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/pharmacy/medicines/categories")
 @Api(value = "/api/pharmacy/medicines/categories", tags = "Medicine Categories")
-public class MedicineGroupsApiResources {
-    @Autowired
-    MedicineCategoryRepository medicineCategoryRepository;
+public class MedicineCategoryApiResources {
 
-    public MedicineGroupsApiResources(MedicineCategoryRepository medicineCategoryRepository) {
+    public MedicineCategoryRepository medicineCategoryRepository;
+    public MeasurementUnitRepository measurementUnitRepository;
+
+    public MedicineCategoryApiResources(MedicineCategoryRepository medicineCategoryRepository,
+                                        MeasurementUnitRepository measurementUnitRepository) {
         this.medicineCategoryRepository = medicineCategoryRepository;
+        this.measurementUnitRepository = measurementUnitRepository;
     }
 
     @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class)
-    @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<MedicineCategory>> retrieveAllMedicineCategories() {
         List<MedicineCategory> medicineCategoriesResponse = medicineCategoryRepository.findAll();
@@ -79,15 +89,20 @@ public class MedicineGroupsApiResources {
     }
 
     @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategory medicineCategory) {
-        if (medicineCategoryRepository.existsByName(medicineCategory.getName())) {
-            return ResponseEntity.ok().body(String.format("Another Medicine Category with same name '%s' already exist", medicineCategory.getName()));
-        }
-        medicineCategoryRepository.save(medicineCategory);
-        return ResponseEntity.ok().body("Medicine category added successfully");
+    ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategoryRequest payload) throws SQLIntegrityConstraintViolationException {
+        try{
+            MedicineCategory category = new MedicineCategory().instance(payload.getName(), payload.getDescriptions());
+            measurementUnitRepository.findById(payload.getMeasurementId()).map(measurementUnit -> {
+                category.setMeasurementUnit(measurementUnit);
+                return ResponseEntity.ok(medicineCategoryRepository.save(category));
+            });
 
+        }catch (EntityNotFoundException e) {
+            throw new MeasurementUnitNotFoundExceptions(payload.getMeasurementId());
+        }
+      return ResponseEntity.ok("Medicine category saved successfully...");
     }
 
     @ApiOperation(value = "ADD new Medicine categories", notes = "ADD new Medicine categories", response = MedicineCategory.class)

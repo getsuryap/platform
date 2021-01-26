@@ -78,7 +78,11 @@ public class MedicineCategory implements Serializable {
     @JoinColumn(name = "unit_id")
     private MeasurementUnit measurementUnit;
 
-    public MedicineCategory(String name, String descriptions) {
+    public MedicineCategory instance(String name, String descriptions){
+        return new MedicineCategory(name, descriptions);
+    }
+
+    private MedicineCategory(String name, String descriptions) {
         this.name = name;
         this.descriptions = descriptions;
     }
