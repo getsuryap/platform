@@ -100,7 +100,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Override
     public Collection<?> retrieveListOfServiceAdmission(Long serviceId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
-        final String sql = "select distinct " + rm.schema() + "  where a.sid = ? order by a.id DESC; ";
+        final String sql = "select distinct " + rm.schema() + "  where a.cid = ? order by a.id DESC; ";
         return this.jdbcTemplate.query(sql, rm, new Object[]{serviceId});
     }
 
@@ -128,7 +128,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " a.end_date as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
-                    " inner join m_consultations sa ON sa.id = a.sid " +
+                    " inner join m_consultations sa ON sa.id = a.cid " +
                     " inner join m_beds b on ab. bed_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id  " +
                     " ";
@@ -161,7 +161,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " from m_beds bd " +
                     " inner join  admission_bed  adb on bd.id =  adb.bed_id " +
                     " inner join m_admissions a on adb.admission_id = a.id " +
-                    " inner join m_consultations s on a.sid = s.id " +
+                    " inner join m_consultations s on a.cid = s.id " +
                     " inner join m_patients p  on s.patient_id = p.id  ";
         }
 
