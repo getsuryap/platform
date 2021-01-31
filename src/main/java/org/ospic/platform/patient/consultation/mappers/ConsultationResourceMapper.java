@@ -1,6 +1,6 @@
-package org.ospic.platform.patient.resource.mappers;
+package org.ospic.platform.patient.consultation.mappers;
 
-import org.ospic.platform.patient.resource.data.ServicePayload;
+import org.ospic.platform.patient.consultation.data.ConsultationPayload;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -30,18 +30,18 @@ import java.util.Date;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class ServiceResourceMapper implements RowMapper<ServicePayload> {
+public class ConsultationResourceMapper implements RowMapper<ConsultationPayload> {
     public String schema() {
         return  " s.id as id, s.fromdate as fromDate, s.todate as toDate, s.is_active as isActive, " +
                 " s.patient_id as patientId, p.name as patientName, " +
                 " s.staff_id as staffId, st.fullName as staffName,  " +
-                " s.is_admitted as isAdmitted FROM m_service s " +
+                " s.is_admitted as isAdmitted FROM m_consultations s " +
                 " left join m_patients p on p.id = s.patient_id  " +
                 " left join m_staff st on st.user_id = s.staff_id ";
     }
 
     @Override
-    public ServicePayload mapRow(ResultSet rs, int i) throws SQLException {
+    public ConsultationPayload mapRow(ResultSet rs, int i) throws SQLException {
         final Long id = rs.getLong("id");
         final Date fromDate = rs.getDate("fromDate");
         final Date toDate = rs.getDate("toDate");
@@ -53,6 +53,6 @@ public class ServiceResourceMapper implements RowMapper<ServicePayload> {
         final String staffName = rs.getString("staffName");
         final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(fromDate));
         final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(toDate));
-        return ServicePayload.instance(id, fromDateLocal, toDateLocal, isActive,isAdmitted, patientId, patientName, staffId, staffName);
+        return ConsultationPayload.instance(id, fromDateLocal, toDateLocal, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 }

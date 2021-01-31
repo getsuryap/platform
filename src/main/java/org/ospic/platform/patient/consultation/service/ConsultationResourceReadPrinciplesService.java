@@ -1,11 +1,11 @@
-package org.ospic.platform.patient.resource.service;
+package org.ospic.platform.patient.consultation.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.resource.service
+ * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
  */
 @Component
 @Service
-public interface ServiceResourceReadPrinciplesService {
+public interface ConsultationResourceReadPrinciplesService {
     ResponseEntity<?> retrieveAllServices();
     ResponseEntity<?> retrialAllActiveServices();
     ResponseEntity<?> retrieveAllInactiveServices();

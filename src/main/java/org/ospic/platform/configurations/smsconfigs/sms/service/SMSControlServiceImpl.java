@@ -61,7 +61,7 @@ public class SMSControlServiceImpl implements SMSControlService {
             SmsConfig config = configOptional.get();
             Twilio.init(config.getSid(),config.getToken());
             Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(config.getPhoneNumber()), sms.getMessage()).create();
-            System.out.println(smsCampaign.instance(message).toString());// Unique resource ID created to manage this transaction
+            System.out.println(smsCampaign.instance(message).toString());// Unique consultation ID created to manage this transaction
             smsRepository.save(smsCampaign.instance(message));
         }else {
             System.out.println("Null sms configurations or no active configuration");

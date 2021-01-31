@@ -1,12 +1,12 @@
-package org.ospic.platform.patient.resource.repository;
+package org.ospic.platform.patient.consultation.repository;
 
-import org.ospic.platform.patient.resource.domain.ServiceResource;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 /**
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.resource.repository
+ * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,11 +26,11 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface ServiceResourceJpaRepository extends JpaRepository<ServiceResource, Long> {
-    List<ServiceResource> findByIsActiveFalse();
-    List<ServiceResource> findByIsActiveTrue();
-    List<ServiceResource> findByPatientId(Long patientId);
-    List<ServiceResource> findByPatientIdAndIsActiveFalse(Long patientId);
-    List<ServiceResource> findByPatientIdAndIsActiveTrue(Long patientId);
+public interface ConsultationResourceJpaRepository extends JpaRepository<ConsultationResource, Long> {
+    List<ConsultationResource> findByIsActiveFalse();
+    List<ConsultationResource> findByIsActiveTrue();
+    List<ConsultationResource> findByPatientId(Long patientId);
+    List<ConsultationResource> findByPatientIdAndIsActiveFalse(Long patientId);
+    List<ConsultationResource> findByPatientIdAndIsActiveTrue(Long patientId);
     boolean existsByPatientIdAndIsActiveTrue(Long patientId);
 }

@@ -1,29 +1,25 @@
-package org.ospic.platform.patient.resource.service;
+package org.ospic.platform.patient.consultation.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundException;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.infos.exceptions.PatientNotFoundException;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
-import org.ospic.platform.patient.resource.exception.ServiceNotFoundException;
-import org.ospic.platform.patient.resource.repository.ServiceResourceJpaRepository;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.resource.service
+ * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -44,17 +40,17 @@ import java.util.Optional;
  * under the License.
  */
 @Repository
-public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourceWritePrinciplesService {
+public class ConsultationResourceWritePrinciplesServiceImpl implements ConsultationResourceWritePrinciplesService {
     @Autowired
     PatientRepository patientRepository;
     @Autowired
-    ServiceResourceJpaRepository resourceJpaRepository;
+    ConsultationResourceJpaRepository resourceJpaRepository;
     @Autowired
     StaffsRepository staffsRepository;
 
     @Autowired
-    public ServiceResourceWritePrinciplesServiceImpl(
-            PatientRepository patientRepository, ServiceResourceJpaRepository resourceJpaRepository,
+    public ConsultationResourceWritePrinciplesServiceImpl(
+            PatientRepository patientRepository, ConsultationResourceJpaRepository resourceJpaRepository,
             StaffsRepository staffsRepository) {
         this.patientRepository = patientRepository;
         this.resourceJpaRepository = resourceJpaRepository;
@@ -67,7 +63,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             if (resourceJpaRepository.existsByPatientIdAndIsActiveTrue(patientId)) {
                 return ResponseEntity.badRequest().body(String.format("A patient with ID: %2d already have an active instance running", patientId));
             }
-            ServiceResource sr = new ServiceResource();
+            ConsultationResource sr = new ConsultationResource();
             sr.setPatient(patient);
             sr.setIsActive(true);
             sr.setIsAdmitted(false);
@@ -91,7 +87,7 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
                 staffsRepository.save(staff);
                 cm.setMessage("A Service assigned successfully ");
                 return ResponseEntity.ok().body("Service assigned successfully");
-            }).orElseThrow(() -> new ServiceNotFoundException(serviceId));
+            }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
         }).orElseThrow(() -> new StaffNotFoundException(staffId));
     }
 
@@ -109,6 +105,6 @@ public class ServiceResourceWritePrinciplesServiceImpl implements ServiceResourc
             patientRepository.save(service.getPatient());
             resourceJpaRepository.save(service);
             return ResponseEntity.ok().body("Service de-activated successfully");
-        }).orElseThrow(() -> new ServiceNotFoundException(serviceId));
+        }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
     }
 }

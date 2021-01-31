@@ -11,7 +11,6 @@ import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
-import org.ospic.platform.util.constants.DatabaseConstants;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -108,7 +107,7 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
         if (patientRepository.existsById(id)) {
             Patient patient = patientRepository.findById(id).get();
             if (
-                    patient.getServiceResources() != null) {
+                    patient.getConsultationResources() != null) {
                 //patient.getStaff().getPatients().clear();
                // patient.getStaff().setUser(null);
             }

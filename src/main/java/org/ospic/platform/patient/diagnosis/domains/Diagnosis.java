@@ -6,15 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * This file was created by eli on 19/10/2020 for org.ospic.platform.patient.diagnosis.domains
@@ -61,11 +59,11 @@ public class Diagnosis implements Serializable {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "sid")
+    @JoinColumn(name = "cid")
     @JsonIgnore
-    private ServiceResource service;
+    private ConsultationResource service;
 
-    public Diagnosis( String symptoms, LocalDate date, ServiceResource service) {
+    public Diagnosis( String symptoms, LocalDate date, ConsultationResource service) {
         this.symptoms = symptoms;
         this.date = date;
         this.service = service;

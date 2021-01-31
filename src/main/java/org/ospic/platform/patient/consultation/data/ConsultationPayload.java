@@ -1,13 +1,12 @@
-package org.ospic.platform.patient.resource.data;
+package org.ospic.platform.patient.consultation.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 
 /**
- * This file was created by eli on 25/12/2020 for org.ospic.platform.patient.resource.data
+ * This file was created by eli on 25/12/2020 for org.ospic.platform.patient.consultation.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,7 +28,7 @@ import java.time.LocalDate;
  */
 @Data
 @NoArgsConstructor
-public class ServicePayload {
+public class ConsultationPayload {
     private Long id;
     private LocalDate fromDate;
     private LocalDate toDate;
@@ -40,14 +39,14 @@ public class ServicePayload {
     private Long staffId;
     private String staffName;
 
-    public static ServicePayload instance(
+    public static ConsultationPayload instance(
             Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,
            Boolean isAdmitted,
             Long patientId, String patientName, Long staffId, String staffName) {
-        return new ServicePayload(id, fromDate, toDate, isActive,isAdmitted, patientId, patientName, staffId, staffName);
+        return new ConsultationPayload(id, fromDate, toDate, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 
-    public ServicePayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,Boolean isAdmitted, Long patientId, String patientName, Long staffId, String staffName) {
+    public ConsultationPayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive, Boolean isAdmitted, Long patientId, String patientName, Long staffId, String staffName) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;

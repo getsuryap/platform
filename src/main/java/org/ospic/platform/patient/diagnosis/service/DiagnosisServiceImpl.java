@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
 import org.ospic.platform.patient.diagnosis.repository.DiagnosisRepository;
-import org.ospic.platform.patient.resource.repository.ServiceResourceJpaRepository;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -40,7 +40,7 @@ import java.util.List;
 public class DiagnosisServiceImpl implements DiagnosisService {
 
     DiagnosisRepository diagnosisRepository;
-    ServiceResourceJpaRepository serviceRepository;
+    ConsultationResourceJpaRepository serviceRepository;
     @Autowired
     SessionFactory sessionFactory;
     CustomReponseMessage cm;
@@ -49,7 +49,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Autowired
     public DiagnosisServiceImpl(
             DiagnosisRepository diagnosisRepository,
-            ServiceResourceJpaRepository serviceRepository) {
+            ConsultationResourceJpaRepository serviceRepository) {
         this.diagnosisRepository = diagnosisRepository;
         this.serviceRepository = serviceRepository;
         cm  = new CustomReponseMessage();

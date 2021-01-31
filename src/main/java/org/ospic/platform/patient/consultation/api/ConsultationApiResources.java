@@ -1,20 +1,16 @@
-package org.ospic.platform.patient.resource.api;
+package org.ospic.platform.patient.consultation.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.resource.service.ServiceResourceReadPrinciplesService;
-import org.ospic.platform.patient.resource.service.ServiceResourceWritePrinciplesService;
+import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
+import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 /**
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.resource.api
+ * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.api
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -38,13 +34,13 @@ import javax.validation.Valid;
 @RestController()
 @RequestMapping("/api/services")
 @Api(value = "/api/services", tags = "Patients service instances", description = "Patient  services instances")
-public class ServiceApiResources {
-    ServiceResourceReadPrinciplesService serviceRead;
-    ServiceResourceWritePrinciplesService serviceWrite;
+public class ConsultationApiResources {
+    ConsultationResourceReadPrinciplesService serviceRead;
+    ConsultationResourceWritePrinciplesService serviceWrite;
 
     @Autowired
-    public ServiceApiResources(
-            ServiceResourceReadPrinciplesService serviceRead, ServiceResourceWritePrinciplesService serviceWrite) {
+    public ConsultationApiResources(
+            ConsultationResourceReadPrinciplesService serviceRead, ConsultationResourceWritePrinciplesService serviceWrite) {
         this.serviceRead = serviceRead;
         this.serviceWrite = serviceWrite;
     }

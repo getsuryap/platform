@@ -8,8 +8,7 @@ import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.patient.infos.data.PatientAdmissionData;
 import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.patient.resource.repository.ServiceResourceJpaRepository;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +54,13 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     @Autowired
     BedRepository bedRepository;
     @Autowired
-    ServiceResourceJpaRepository serviceRJRepositoryy;
+    ConsultationResourceJpaRepository serviceRJRepositoryy;
     @Autowired
     SessionFactory sessionFactory;
 
     public AdmissionsReadServiceImpl(
             BedRepository bedRepository,
-            ServiceResourceJpaRepository serviceRJRepositoryy, final DataSource dataSource,
+            ConsultationResourceJpaRepository serviceRJRepositoryy, final DataSource dataSource,
             AdmissionRepository admissionRepository) {
         this.admissionRepository = admissionRepository;
         this.bedRepository = bedRepository;
@@ -129,7 +128,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " a.end_date as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
-                    " inner join m_service sa ON sa.id = a.sid " +
+                    " inner join m_consultations sa ON sa.id = a.sid " +
                     " inner join m_beds b on ab. bed_id = b.id " +
                     " inner join m_wards w on b.ward_id = w.id  " +
                     " ";
@@ -162,7 +161,7 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
                     " from m_beds bd " +
                     " inner join  admission_bed  adb on bd.id =  adb.bed_id " +
                     " inner join m_admissions a on adb.admission_id = a.id " +
-                    " inner join m_service s on a.sid = s.id " +
+                    " inner join m_consultations s on a.sid = s.id " +
                     " inner join m_patients p  on s.patient_id = p.id  ";
         }
 
