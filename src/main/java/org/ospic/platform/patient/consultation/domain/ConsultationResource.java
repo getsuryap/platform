@@ -1,8 +1,7 @@
-package org.ospic.platform.patient.resource.domain;
+package org.ospic.platform.patient.consultation.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,7 +20,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /**
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.resource.domain
+ * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.domain
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -43,12 +42,12 @@ import java.util.*;
  */
 @Data
 @NoArgsConstructor
-@Entity(name = DatabaseConstants.SERVICE_RESOURCES_TABLE)
-@Table(name = DatabaseConstants.SERVICE_RESOURCES_TABLE)
+@Entity(name = DatabaseConstants.TABLE_CONSULTATIONS)
+@Table(name = DatabaseConstants.TABLE_CONSULTATIONS)
 @ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
-public class ServiceResource implements Serializable {
+public class ConsultationResource implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,7 +82,7 @@ public class ServiceResource implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "sid")
+    @JoinColumn(name = "cid")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -93,13 +92,13 @@ public class ServiceResource implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "sid")
+    @JoinColumn(name = "cid")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
 
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Admission> admissions = new ArrayList<>();
 
-    public ServiceResource(Long id, LocalDate fromdate, LocalDate todate, Boolean isActive, Patient patient, Staff staff) {
+    public ConsultationResource(Long id, LocalDate fromdate, LocalDate todate, Boolean isActive, Patient patient, Staff staff) {
         this.id = id;
         this.fromdate = fromdate;
         this.todate = todate;
@@ -111,8 +110,8 @@ public class ServiceResource implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServiceResource)) return false;
-        return id != null && id.equals(((ServiceResource) o).id);
+        if (!(o instanceof ConsultationResource)) return false;
+        return id != null && id.equals(((ConsultationResource) o).id);
     }
 
     @Override

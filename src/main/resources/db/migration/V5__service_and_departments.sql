@@ -1,4 +1,4 @@
-ALTER TABLE `m_service` add `is_admitted` boolean  default false  after `is_active`;
+ALTER TABLE `m_consultations` add `is_admitted` boolean  default false  after `is_active`;
 
 DROP TABLE IF EXISTS `m_department`;
 CREATE TABLE `m_department` (

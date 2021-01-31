@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;

@@ -1,25 +1,19 @@
 package org.ospic.platform.inventory.admission.domains;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.platform.inventory.beds.domains.Bed;
-import org.ospic.platform.inventory.wards.domain.Ward;
-import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -63,9 +57,9 @@ public class Admission implements Serializable {
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "sid")
+    @JoinColumn(name = "cid")
     @JsonIgnore
-    private ServiceResource service;
+    private ConsultationResource service;
 
 
     @ManyToMany(cascade = {

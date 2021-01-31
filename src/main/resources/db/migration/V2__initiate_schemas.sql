@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `m_admissions`(
   is_active BOOLEAN NOT NULL DEFAULT true ,
   start_date TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   end_date TIMESTAMP,
-  `sid` BIGINT REFERENCES `m_service`(`id`),
+  `cid` BIGINT REFERENCES `m_consultations`(`id`),
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
@@ -126,15 +126,15 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `m_service` ;
-CREATE TABLE IF NOT EXISTS `m_service`(
+DROP TABLE IF EXISTS `m_consultations` ;
+CREATE TABLE IF NOT EXISTS `m_consultations`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   fromdate TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   todate TIMESTAMP,
   is_active BOOLEAN NOT NULL DEFAULT true ,
   staff_id BIGINT references `m_staff`(`id`),
   patient_id BIGINT  references `m_patients`(`id`),
-  constraint service_pk primary key  (`id`)
+  constraint consultations_pk primary key  (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `m_diagnoses`(
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `symptoms` VARCHAR (500) NOT NULL ,
-  `sid` BIGINT REFERENCES `m_service`(`id`),
+  `cid` BIGINT REFERENCES `m_consultations`(`id`),
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
@@ -210,13 +210,13 @@ CREATE TABLE IF NOT EXISTS `role_privileges`(
 ALTER TABLE `m_visits` ADD CONSTRAINT FK_admission_visits FOREIGN KEY(`admission_id`) REFERENCES `m_admissions`(`id`);
 ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_categories FOREIGN KEY(`category_id`) REFERENCES `m_mdc_categories`(`id`);
 ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_groups FOREIGN KEY(`group_id`) REFERENCES `m_mdc_groups`(`id`);
-ALTER TABLE `m_diagnoses` ADD CONSTRAINT FK_service_diagnoes FOREIGN KEY(`sid`) REFERENCES `m_service`(`id`);
+ALTER TABLE `m_diagnoses` ADD CONSTRAINT FK_consultations_diagnoes FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`);
 ALTER TABLE `m_beds` ADD CONSTRAINT FK_bed_ward FOREIGN KEY(`ward_id`) REFERENCES `m_wards`(`id`);
-ALTER TABLE `m_admissions` ADD CONSTRAINT FK_service_admissions FOREIGN KEY(`sid`) REFERENCES `m_service`(`id`);
+ALTER TABLE `m_admissions` ADD CONSTRAINT FK_consultations_admissions FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`);
 
--- ALTER TABLE m_service
-     --   ADD constraint  fk_patient_service_resource foreign key (`patient_id`) references `m_patients`(`id`),
-   --     ADD constraint  fk_staff_service_resource foreign key(`staff_id`) references `m_staff`(`id`);
+-- ALTER TABLE m_consultations
+     --   ADD constraint  fk_patient_consultations_resource foreign key (`patient_id`) references `m_patients`(`id`),
+   --     ADD constraint  fk_staff_consultations_resource foreign key(`staff_id`) references `m_staff`(`id`);
 
--- ALTER TABLE `m_service` ADD CONSTRAINT FK_patient_service_resource FOREIGN KEY(`patient_id`) REFERENCES `m_patients`(`id`) ON UPDATE CASCADE;
--- ALTER TABLE `m_service` ADD CONSTRAINT FK_staff_patient_service_resource FOREIGN KEY(`staff_id`) REFERENCES `m_staff`(`id`) ON UPDATE CASCADE;
+-- ALTER TABLE `m_consultations` ADD CONSTRAINT FK_patient_consultations_resource FOREIGN KEY(`patient_id`) REFERENCES `m_patients`(`id`) ON UPDATE CASCADE;
+-- ALTER TABLE `m_consultations` ADD CONSTRAINT FK_staff_patient_consultations_resource FOREIGN KEY(`staff_id`) REFERENCES `m_staff`(`id`) ON UPDATE CASCADE;

@@ -36,7 +36,9 @@ public class DatabaseConstants {
     public static final String TABLE_MEDICINE_GROUPS_ = TI+"mdc_groups";
     public static final String TABLE_MEDICINE_CATEGORY_ = TI+"mdc_categories";
     public static final String TABLE_BLOOD_GROUP =TI+"blood_bank";
-    public static final String SERVICE_RESOURCES_TABLE = TI+"service";
+    public static final String TABLE_CONSULTATIONS = TI+"consultations";
     public static final String DEPARTMENT_TABLE = TI+"department";
     public static final String UNITS_OF_MEASUREMENT_TABLE = TI+"units";
+    public static final String TABLE_TRANSACTIONS = TI+"transactions";
+    public static final String TABLE_SERVICES = TI+"services";
 }

@@ -9,8 +9,8 @@ import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.exception.BedNotFoundException;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
-import org.ospic.platform.patient.resource.exception.ServiceNotFoundException;
-import org.ospic.platform.patient.resource.repository.ServiceResourceJpaRepository;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.platform.inventory.admission.service
@@ -57,15 +55,15 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     @Autowired
     BedRepository bedRepository;
     @Autowired
-    ServiceResourceJpaRepository serviceResourceJpaRepository;
+    ConsultationResourceJpaRepository consultationResourceJpaRepository;
 
     public AdmissionsWriteServiceImpl(
             AdmissionRepository admissionRepository,
             BedRepository bedRepository,
-            ServiceResourceJpaRepository serviceResourceJpaRepository) {
+            ConsultationResourceJpaRepository consultationResourceJpaRepository) {
         this.admissionRepository = admissionRepository;
         this.bedRepository = bedRepository;
-        this.serviceResourceJpaRepository = serviceResourceJpaRepository;
+        this.consultationResourceJpaRepository = consultationResourceJpaRepository;
     }
 
     @Transactional
@@ -74,7 +72,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         final LocalDateTime startLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getStartDateTime());
         final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getEndDateTime());
 
-        return serviceResourceJpaRepository.findById(admissionRequest.getServiceId()).map(service -> {
+        return consultationResourceJpaRepository.findById(admissionRequest.getServiceId()).map(service -> {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
             if (endLocalDateTime.isBefore(startLocalDateTime)){
@@ -111,7 +109,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
              * Update patient set as admitted to prevent re-admission**/
             service.setIsAdmitted(true);
             service.getPatient().setIsAdmitted(true);
-            serviceResourceJpaRepository.save(service);
+            consultationResourceJpaRepository.save(service);
 
 
             /**Return Message **/
@@ -126,7 +124,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
         final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(request.getEndDateTime());
-        return serviceResourceJpaRepository.findById(request.getServiceId()).map(service -> {
+        return consultationResourceJpaRepository.findById(request.getServiceId()).map(service -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
               return bedRepository.findById(request.getBedId()).map(bed ->{
                   if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
@@ -144,7 +142,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                    * Update patient under this service set as no longer admitted **/
                   service.setIsAdmitted(false);
                   service.getPatient().setIsAdmitted(false);
-                  serviceResourceJpaRepository.save(service);
+                  consultationResourceJpaRepository.save(service);
 
                   /** Update Admission set as no longer active **/
                   admission.setIsActive(false);
@@ -160,7 +158,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                   return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
               }).orElseThrow(()-> new BedNotFoundException(request.getBedId()));
             }).orElseThrow(() -> new AdmissionNotFoundException(request.getAdmissionId()));
-        }).orElseThrow(() -> new ServiceNotFoundException(request.getServiceId()));
+        }).orElseThrow(() -> new ConsultationNotFoundException(request.getServiceId()));
 
     }
 

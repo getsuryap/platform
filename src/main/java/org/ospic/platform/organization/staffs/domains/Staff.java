@@ -5,21 +5,15 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
-import org.ospic.platform.patient.contacts.domain.ContactsInformation;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.security.authentication.users.domain.User;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -74,7 +68,7 @@ public class Staff extends AbstractPersistableCustom implements Serializable {
     )
     @JoinColumn(name = "staff_id")
     @JsonIgnore
-    private Set<ServiceResource> services = new HashSet<>();
+    private Set<ConsultationResource> services = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -95,12 +89,12 @@ public class Staff extends AbstractPersistableCustom implements Serializable {
         this.username = username;
     }
 
-    public void addService(ServiceResource service){
+    public void addService(ConsultationResource service){
         services.add(service);
         service.setStaff(this);
     }
 
-    public void deleteService(ServiceResource service){
+    public void deleteService(ConsultationResource service){
         services.remove(service);
         service.setStaff(null);
     }

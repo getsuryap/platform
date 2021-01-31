@@ -101,7 +101,7 @@ public class ReadPrincipleServiceImpl implements ReadPrincipleService {
                 "  SUM(case WHEN staff_id IS NULL then 1 else 0 end)'totalUnAssigned', "+
                 "  COUNT(IF(is_admitted,1,NULL))'totalIpd', " +
                 "  COUNT(IF(is_admitted = 0,1,NULL))'totalOpd'  " +
-                "  FROM m_service; ";
+                "  FROM m_consultations; ";
         Session session = this.sessionFactory.openSession();
         List<ServiceStatistics> serviceStatistics = jdbcTemplate.query(queryString, new ServiceStatistics.ServiceStatisticsRowMapper());
         session.close();
@@ -127,7 +127,7 @@ public class ReadPrincipleServiceImpl implements ReadPrincipleService {
                 "  COUNT(IF(is_active = 0, 1, NULL))'inactive'," +
                 "  COUNT(IF(is_admitted, 1, NULL))'admitted'," +
                 "  COUNT(IF(is_admitted = 0, 1, NULL))'unadmitted'" +
-                "  FROM m_service group by date(fromdate)";
+                "  FROM m_consultations group by date(fromdate)";
         Session session = this.sessionFactory.openSession();
         List<ServiceTrendStatistics> serviceTrendStatistics = jdbcTemplate.query(queryString, new ServiceTrendStatistics.ServiceTrendStatisticsRowMapper());
         session.close();

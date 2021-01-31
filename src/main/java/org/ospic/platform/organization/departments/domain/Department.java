@@ -6,16 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.apache.http.client.utils.DateUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.staffs.domains.Staff;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
 import org.ospic.platform.util.DateUtil;
 import org.ospic.platform.util.constants.DatabaseConstants;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;

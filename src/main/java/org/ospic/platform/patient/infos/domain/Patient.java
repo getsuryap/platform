@@ -10,8 +10,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
-import org.ospic.platform.patient.resource.domain.ServiceResource;
-import org.ospic.platform.security.authentication.users.domain.User;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -125,7 +124,7 @@ public class Patient extends Auditable implements Serializable {
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<ServiceResource> serviceResources = new ArrayList<>();
+    private List<ConsultationResource> consultationResources = new ArrayList<>();
 
 
     public Patient(
