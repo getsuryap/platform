@@ -77,3 +77,6 @@ defaultTasks 'clean', 'compile'
 test {
     useJUnitPlatform()
 }
+bootJar {
+    archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
+}
