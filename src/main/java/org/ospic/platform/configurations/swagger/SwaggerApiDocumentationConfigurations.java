@@ -56,7 +56,7 @@ public class SwaggerApiDocumentationConfigurations {
                 .title("(Ospic) Hospital Management System")
                 .description("Ospic Spring platform is a spring boot API based for hospital management system")
                 .license("Apache License 2.0").licenseUrl("https://github.com/ospic/spring_platform/blob/master/LICENSE")
-                .contact(new Contact("Elirehem Paul", "http://ospic.github.io/webapp/", "elirehemapaulo@gmail.com"))
+                .contact(new Contact("Elirehem Paul", "https://app.ospicx.com/", "elirehemapaulo@gmail.com"))
                 .version("1.0")
                 .build();
     }
