@@ -4,14 +4,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.hibernate.Transaction;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.accounting.transactions.domain
@@ -40,7 +43,6 @@ import java.time.LocalDateTime;
 @Entity(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @Table(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode(callSuper = false)
 public class Transactions  extends AbstractPersistableCustom implements Serializable {
 
     @Column(length = 140, name = "currency_code", nullable = false)
@@ -61,4 +63,31 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "consultation_id", nullable = false)
+    private ConsultationResource consultation;
+
+    public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
+        return new Transactions(currencyCode, price, transactionDate);
+    }
+
+    private Transactions(String currencyCode, Double price, LocalDateTime transactionDate) {
+        this.currencyCode = currencyCode;
+        this.price = price;
+        this.transactionDate = transactionDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transactions)) return false;
+        Transactions that = (Transactions) o;
+        return getCurrencyCode().equals(that.getCurrencyCode()) && getPrice().equals(that.getPrice()) && getTransactionDate().equals(that.getTransactionDate()) && getMedicalService().equals(that.getMedicalService()) && getDepartment().equals(that.getDepartment()) && getConsultation().equals(that.getConsultation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMedicalService(), getDepartment(), getConsultation());
+    }
 }
