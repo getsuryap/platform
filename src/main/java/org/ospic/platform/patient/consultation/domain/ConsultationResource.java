@@ -2,12 +2,14 @@ package org.ospic.platform.patient.consultation.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
@@ -78,25 +80,24 @@ public class ConsultationResource implements Serializable {
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     private Staff staff;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cid")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
 
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Diagnosis> diagnoses = new ArrayList<>();
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cid")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Admission> admissions = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "consultation_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medical consultation transactions")
+    @JsonIgnore
+    private List<Transactions> transactions = new ArrayList<>();
 
     public ConsultationResource(Long id, LocalDate fromdate, LocalDate todate, Boolean isActive, Patient patient, Staff staff) {
         this.id = id;
