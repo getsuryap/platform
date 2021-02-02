@@ -1,6 +1,9 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -25,4 +28,43 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TransactionReadPrincipleServiceImpl implements TransactionReadPrincipleService{
+    @Override
+    public ResponseEntity<?> readTransactions() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionById(Long id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionByMedicalServiceId(Long id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionByMedicalServiceIdAndDate(Long id, LocalDateTime date) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionsByDepartmentId(Long id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionByDepartmentIdAndDate(Long id, LocalDateTime date) {
+        return null;
+    }
 }
