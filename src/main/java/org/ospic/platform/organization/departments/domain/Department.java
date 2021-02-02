@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.util.DateUtil;
@@ -88,7 +89,7 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @JoinColumn(name = "department_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display department transactions")
     @JsonIgnore
-    private List<Transaction> transactions = new ArrayList<>();
+    private List<Transactions> transactions = new ArrayList<>();
 
     public static Department withParentDepartment(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId){
         return new Department(parent, name, openingDate, descriptions, extraId);
