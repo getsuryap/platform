@@ -51,6 +51,9 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
     private Double price;
 
+    @Column(name = "is_reversed", nullable = false, columnDefinition = "boolean default false")
+    private Boolean isReversed;
+
     @Column(name = "transaction_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)

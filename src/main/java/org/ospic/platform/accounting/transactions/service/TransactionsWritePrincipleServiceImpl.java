@@ -1,5 +1,7 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.data.TransactionPayload;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,4 +27,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
+    @Override
+    public ResponseEntity<?> createTransaction(TransactionPayload payload) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> updateTransaction(Long id, TransactionPayload payload) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> undoTransaction(Long id) {
+        return null;
+    }
 }
