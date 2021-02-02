@@ -2,6 +2,9 @@ package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -31,9 +34,20 @@ import org.springframework.stereotype.Repository;
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
     @Autowired
     TransactionJpaRepository repository;
+    MedicalServiceJpaRepository medicalServiceRepository;
+    ConsultationResourceJpaRepository consultationResourceRepository;
+    DepartmentJpaRepository departmentRepository;
+
     @Autowired
-    public void TransactionWritePrincipleServiceImpl(TransactionJpaRepository repository){
+    public void TransactionWritePrincipleServiceImpl(
+            TransactionJpaRepository repository,
+            MedicalServiceJpaRepository medicalServiceRepository,
+            ConsultationResourceJpaRepository consultationResourceRepository,
+            DepartmentJpaRepository departmentRepository) {
         this.repository = repository;
+        this.departmentRepository = departmentRepository;
+        this.consultationResourceRepository = consultationResourceRepository;
+        this.medicalServiceRepository = medicalServiceRepository;
     }
 
     @Override
