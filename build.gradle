@@ -8,6 +8,7 @@ allprojects {
     apply plugin: "java"
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: "war"
 }
 
 group = 'org.ospic.platform'
@@ -78,5 +79,8 @@ test {
     useJUnitPlatform()
 }
 bootJar {
+    archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
+}
+bootWar {
     archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
 }
