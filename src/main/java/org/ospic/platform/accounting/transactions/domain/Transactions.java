@@ -1,5 +1,6 @@
 package org.ospic.platform.accounting.transactions.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
@@ -9,6 +10,7 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.accounting.transactions.domain
@@ -40,7 +42,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 public class Transactions  extends AbstractPersistableCustom implements Serializable {
 
-
     @Column(length = 140, name = "currency_code", nullable = false)
     private String currencyCode;
 
@@ -50,4 +51,9 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
     private Double price;
+
+    @Column(name = "transaction_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Basic(optional = false)
+    private LocalDateTime transactionDate;
 }
