@@ -85,8 +85,8 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
                 service.setStaff(staff);
                 staff.addService(service);
                 staffsRepository.save(staff);
-                cm.setMessage("A Service assigned successfully ");
-                return ResponseEntity.ok().body("Service assigned successfully");
+                cm.setMessage("A MedicalService assigned successfully ");
+                return ResponseEntity.ok().body("MedicalService assigned successfully");
             }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
         }).orElseThrow(() -> new StaffNotFoundException(staffId));
     }
@@ -96,7 +96,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
         List<Admission> active = new ArrayList<>();
         return this.resourceJpaRepository.findById(serviceId).map(service -> {
             if (service.getPatient().getIsAdmitted()) {
-                return ResponseEntity.ok().body("Service has active admission. End admission before you close the service");
+                return ResponseEntity.ok().body("MedicalService has active admission. End admission before you close the service");
             }
             service.getPatient().setIsAdmitted(false);
             service.getPatient().setIsActive(false);
@@ -104,7 +104,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
             service.setTodate(LocalDate.now());
             patientRepository.save(service.getPatient());
             resourceJpaRepository.save(service);
-            return ResponseEntity.ok().body("Service de-activated successfully");
+            return ResponseEntity.ok().body("MedicalService de-activated successfully");
         }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
     }
 }

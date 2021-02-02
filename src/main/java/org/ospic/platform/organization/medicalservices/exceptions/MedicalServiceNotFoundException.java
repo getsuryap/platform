@@ -1,11 +1,9 @@
-
-package org.ospic.platform.patient.consultation.exception;
+package org.ospic.platform.organization.medicalservices.exceptions;
 
 import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
 
 /**
-
- * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.exception
+ * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,14 +16,19 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
  * <p>
- **/
-
-public class ConsultationNotFoundException extends AbstractResourceNotFoundException {
-    public ConsultationNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+public class MedicalServiceNotFoundException extends AbstractResourceNotFoundException {
+    public MedicalServiceNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public ConsultationNotFoundException(Long id) {
+    public MedicalServiceNotFoundException(Long id){
         super("error.message.service.not.found", String.format("MedicalService with id %2d is not found ", id), id);
     }
 }
