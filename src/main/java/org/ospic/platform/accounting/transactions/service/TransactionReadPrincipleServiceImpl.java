@@ -34,6 +34,11 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     }
 
     @Override
+    public ResponseEntity<?> readReversedTransactions() {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<?> readTransactionById(Long id) {
         return null;
     }
