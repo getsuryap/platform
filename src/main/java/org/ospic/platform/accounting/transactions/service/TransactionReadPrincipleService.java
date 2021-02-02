@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 @Service
 public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactions();
+    ResponseEntity<?> readReversedTransactions();
     ResponseEntity<?> readTransactionById(Long id);
     ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime);
     ResponseEntity<?> readTransactionsByConsultationId(Long id);
