@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.Transaction;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
@@ -82,6 +83,12 @@ public class Department extends AbstractPersistableCustom implements Serializabl
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Staff> staffs = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "department_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display department transactions")
+    @JsonIgnore
+    private List<Transaction> transactions = new ArrayList<>();
 
     public static Department withParentDepartment(final Department parent, final String name, final LocalDate openingDate, final String descriptions, final String extraId){
         return new Department(parent, name, openingDate, descriptions, extraId);
