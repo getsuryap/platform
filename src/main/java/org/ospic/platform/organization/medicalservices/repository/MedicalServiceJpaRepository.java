@@ -1,15 +1,13 @@
-package org.ospic.platform.infrastructure.app.domain;
+package org.ospic.platform.organization.medicalservices.repository;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.domain.Persistable;
+import org.ospic.platform.organization.medicalservices.domain.MedicalService;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
 
 /**
- * This file was created by eli on 09/01/2021 for org.ospic.platform.infrastructure.app.domain
+ * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,25 +27,8 @@ import java.io.Serializable;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@MappedSuperclass
-public class AbstractPersistableCustom  implements Persistable<Long>, Serializable {
+public interface MedicalServiceJpaRepository extends JpaRepository<MedicalService, Long> {
+    List<MedicalService> findByIsActiveTrue();
+    Optional<MedicalService> findByName(String name);
 
-    private static final long serialVersionUID = 9181640245194391246L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
-
-    @Override
-    public Long getId() {
-        return this.id;
-    }
-
-    @Override
-    public boolean isNew() {
-        return false;
-    }
 }
