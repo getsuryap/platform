@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Transaction;
+import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
@@ -71,6 +72,9 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @JoinColumn(name = "consultation_id", nullable = false)
     private ConsultationResource consultation;
 
+    public Transactions fromTransactionPayload(final TransactionPayload payload){
+        return new Transactions(payload.getCurrencyCode(), payload.getAmount(), payload.getTransactionDate());
+    }
     public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
         return new Transactions(currencyCode, price, transactionDate);
     }
