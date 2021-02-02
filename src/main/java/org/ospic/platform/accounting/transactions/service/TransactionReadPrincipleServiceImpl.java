@@ -1,5 +1,7 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +30,12 @@ import java.time.LocalDateTime;
  */
 @Repository
 public class TransactionReadPrincipleServiceImpl implements TransactionReadPrincipleService{
+    @Autowired
+    TransactionJpaRepository repository;
+    @Autowired
+    public TransactionReadPrincipleServiceImpl(TransactionJpaRepository repository){
+        this.repository = repository;
+    }
     @Override
     public ResponseEntity<?> readTransactions() {
         return null;

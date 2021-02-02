@@ -1,8 +1,9 @@
 package org.ospic.platform.accounting.transactions.repository;
 
-import org.hibernate.Transaction;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.repository
@@ -26,4 +27,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface TransactionJpaRepository extends JpaRepository<Transactions, Long> {
+    Collection<Transactions> findByIsReversedFalse();
+    Collection<Transactions> findByIsReversedTrue();
 }

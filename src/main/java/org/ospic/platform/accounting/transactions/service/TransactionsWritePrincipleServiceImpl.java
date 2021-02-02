@@ -1,6 +1,8 @@
 package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
+import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +29,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
+    @Autowired
+    TransactionJpaRepository repository;
+    @Autowired
+    public void TransactionWritePrincipleServiceImpl(TransactionJpaRepository repository){
+        this.repository = repository;
+    }
+
     @Override
     public ResponseEntity<?> createTransaction(TransactionPayload payload) {
         return null;
