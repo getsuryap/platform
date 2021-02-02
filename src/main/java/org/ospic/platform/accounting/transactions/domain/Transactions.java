@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
+import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -45,10 +46,6 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @Column(length = 140, name = "currency_code", nullable = false)
     private String currencyCode;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
-
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
     private Double price;
 
@@ -56,4 +53,12 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Basic(optional = false)
     private LocalDateTime transactionDate;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "medical_service_id", nullable = false)
+    private MedicalService medicalService;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }

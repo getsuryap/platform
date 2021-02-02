@@ -1,15 +1,18 @@
 package org.ospic.platform.organization.medicalservices.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,7 +42,6 @@ import java.util.Objects;
 @Entity(name = DatabaseConstants.TABLE_SERVICES)
 @Table(name = DatabaseConstants.TABLE_SERVICES)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode(callSuper = false)
 public class MedicalService extends AbstractPersistableCustom implements Serializable {
 
     @Column(length = 140, name = "name", unique = true)
@@ -50,6 +52,13 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
     private Double price;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "medical_service_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medical serviec transactions")
+    @JsonIgnore
+    private List<Transactions> transactions = new ArrayList<>();
+
 
     public MedicalService instance(String name, Boolean isActive, Double price){
         return new MedicalService(name, isActive, price);
