@@ -1,9 +1,14 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.hibernate.Transaction;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptions;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.medicalservices.exceptions.MedicalServiceNotFoundException;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +57,18 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     @Override
     public ResponseEntity<?> createTransaction(TransactionPayload payload) {
-        return null;
+        Transactions transactions = new Transactions().fromTransactionPayload(payload);
+        return departmentRepository.findById(payload.getDepartmentId()).map(department -> {
+            return medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service -> {
+                return consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
+                    transactions.setConsultation(consultation);
+                    transactions.setDepartment(department);
+                    transactions.setMedicalService(service);
+                    Transactions res = repository.save(transactions);
+                    return ResponseEntity.ok().body(res);
+                }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId()));
+            }).orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId()));
+        }).orElseThrow(() -> new DepartmentNotFoundExceptions(payload.getDepartmentId()));
     }
 
     @Override
