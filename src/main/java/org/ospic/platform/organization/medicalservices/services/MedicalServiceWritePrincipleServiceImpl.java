@@ -39,6 +39,7 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
 
     @Override
     public ResponseEntity<?> createService(MedicalService payload) {
+        payload.setIsActive(true);
         return ResponseEntity.ok().body(repository.save(payload));
     }
 
@@ -65,6 +66,17 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
                 return ResponseEntity.ok().body("Enabled");
             }
             service.setIsActive(true);
+            return ResponseEntity.ok().body(repository.save(service));
+        }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> disableService(Long id) {
+        return repository.findById(id).map(service -> {
+            if (service.getIsActive()) {
+                return ResponseEntity.ok().body("Disabled");
+            }
+            service.setIsActive(false);
             return ResponseEntity.ok().body(repository.save(service));
         }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
     }
