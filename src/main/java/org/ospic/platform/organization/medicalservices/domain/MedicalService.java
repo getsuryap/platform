@@ -56,7 +56,6 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "medical_service_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medical serviec transactions")
-    @JsonIgnore
     private List<Transactions> transactions = new ArrayList<>();
 
 

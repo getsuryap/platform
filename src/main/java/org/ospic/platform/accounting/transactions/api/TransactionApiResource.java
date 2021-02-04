@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.api
  * --
@@ -42,18 +44,24 @@ public class TransactionApiResource {
     @Autowired TransactionsWritePrincipleService writeService;
 
     @Autowired
-    TransactionApiResource(TransactionReadPrincipleService readService, TransactionsWritePrincipleService writeService) {
+    public TransactionApiResource(TransactionReadPrincipleService readService, TransactionsWritePrincipleService writeService) {
         this.readService = readService;
         this.writeService = writeService;
     }
 
 
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction")
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> createMedicalService(@RequestBody TransactionPayload payload) {
-        System.out.println(payload.toString());
+    ResponseEntity<?> createMedicalService(@Valid @RequestBody TransactionPayload payload) {
         return writeService.createTransaction(payload);
+    }
+
+    @ApiOperation(value = "LIST medical service transaction's", notes = "LIST medical service transaction's")
+    @RequestMapping(value = "/", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> listMedicalService() {
+        return readService.readTransactions();
     }
 
 }

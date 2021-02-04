@@ -2,7 +2,9 @@ package org.ospic.platform.accounting.transactions.data;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.data
@@ -25,18 +27,16 @@ import java.time.LocalDateTime;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@ToString(onlyExplicitlyIncluded = true)
+@Data
 @NoArgsConstructor
-public class TransactionPayload {
+public class TransactionPayload implements Serializable {
     private String currencyCode;
-    private LocalDateTime transactionDate;
+    private Date transactionDate;
     private Long medicalServiceId;
     private Long departmentId;
     private Long consultationId;
 
-    public TransactionPayload(String currencyCode, LocalDateTime transactionDate, Long medicalServiceId, Long departmentId, Long consultationId) {
+    public TransactionPayload(String currencyCode, Date transactionDate, Long medicalServiceId, Long departmentId, Long consultationId) {
         this.currencyCode = currencyCode;
         this.transactionDate = transactionDate;
         this.medicalServiceId = medicalServiceId;
