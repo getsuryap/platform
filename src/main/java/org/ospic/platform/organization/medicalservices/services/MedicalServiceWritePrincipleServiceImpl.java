@@ -39,7 +39,7 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
 
     @Override
     public ResponseEntity<?> createService(MedicalService payload) {
-        return ResponseEntity.ok().body(payload);
+        return ResponseEntity.ok().body(repository.save(payload));
     }
 
     @Override
