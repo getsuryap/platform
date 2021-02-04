@@ -32,8 +32,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@RequestMapping("/api/services")
-@Api(value = "/api/services", tags = "Patients service instances", description = "Patient  services instances")
+@RequestMapping("/api/consultations")
+@Api(value = "/api/consultations", tags = "Patients service instances", description = "Patient  services instances")
 public class ConsultationApiResources {
     ConsultationResourceReadPrinciplesService serviceRead;
     ConsultationResourceWritePrinciplesService serviceWrite;

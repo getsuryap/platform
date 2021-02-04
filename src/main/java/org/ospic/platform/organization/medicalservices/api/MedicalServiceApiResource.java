@@ -1,12 +1,14 @@
 package org.ospic.platform.organization.medicalservices.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 
@@ -41,10 +43,18 @@ public class MedicalServiceApiResource {
     @Autowired
     MedicalServiceWritePrincipleService writeService;
 
-    public MedicalServiceApiResource(MedicalServiceReadPrincipleService readService,
-            MedicalServiceWritePrincipleService writeService) {
-        this.readService = readService;
-        this.writeService = writeService;
-    }
+    public MedicalServiceApiResource() { }
 
+    @ApiOperation(value = "LIST medical services",notes = "LIST medical services")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveMedicalService(@RequestBody MedicalService payload) {
+        return  readService.readServices();
+    }
+    @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service")
+    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> createMedicalService(@RequestBody MedicalService payload) {
+        return writeService.createService(payload);
+    }
 }
