@@ -29,4 +29,5 @@ import java.util.Collection;
 public interface TransactionJpaRepository extends JpaRepository<Transactions, Long> {
     Collection<Transactions> findByIsReversedFalse();
     Collection<Transactions> findByIsReversedTrue();
+    Collection<Transactions> findByConsultationId(Long id);
 }

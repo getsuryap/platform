@@ -68,7 +68,8 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
     @Override
     public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
-        return null;
+        Collection<Transactions> transactions = repository.findByConsultationId(id);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Override

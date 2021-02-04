@@ -64,4 +64,12 @@ public class TransactionApiResource {
         return readService.readTransactions();
     }
 
+
+    @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions")
+    @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId) {
+        return readService.readTransactionsByConsultationId(trxId);
+    }
+
 }
