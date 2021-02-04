@@ -36,4 +36,12 @@ public class TransactionResponse implements Serializable {
     private Double totalAmount;
     private List<Transactions> transactions;
 
+    public TransactionResponse transactionResponse(List<Transactions> transactions) {
+        Double transactionsTotal = 0.0;
+        for (Transactions transaction : transactions) {
+            transactionsTotal += transaction.getAmount();
+        }
+
+        return new TransactionResponse(transactionsTotal, transactions);
+    }
 }

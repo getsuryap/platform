@@ -71,14 +71,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     @Override
     public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
         List<Transactions> transactions = (List) repository.findByConsultationId(id);
-        Double total = 0.0;
-        for (Transactions transaction : transactions) {
-            total += transaction.getAmount();
-        }
-        TransactionResponse trxResponse = new TransactionResponse();
-        trxResponse.setTotalAmount(total);
-        trxResponse.setTransactions(transactions);
-        return ResponseEntity.ok().body(trxResponse);
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
     @Override
