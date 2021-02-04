@@ -1,6 +1,5 @@
 package org.ospic.platform.accounting.transactions.service;
 
-import org.hibernate.Transaction;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
@@ -13,6 +12,7 @@ import org.ospic.platform.patient.consultation.repository.ConsultationResourceJp
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -39,8 +39,11 @@ import org.springframework.stereotype.Repository;
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
     @Autowired
     TransactionJpaRepository repository;
+    @Autowired
     MedicalServiceJpaRepository medicalServiceRepository;
+    @Autowired
     ConsultationResourceJpaRepository consultationResourceRepository;
+    @Autowired
     DepartmentJpaRepository departmentRepository;
 
     @Autowired
@@ -55,20 +58,25 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
         this.medicalServiceRepository = medicalServiceRepository;
     }
 
+    @Transactional
     @Override
     public ResponseEntity<?> createTransaction(TransactionPayload payload) {
-        Transactions transactions = new Transactions().fromTransactionPayload(payload);
-        return departmentRepository.findById(payload.getDepartmentId()).map(department -> {
-            return medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service -> {
-                return consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
-                    transactions.setConsultation(consultation);
-                    transactions.setDepartment(department);
-                    transactions.setMedicalService(service);
-                    Transactions res = repository.save(transactions);
-                    return ResponseEntity.ok().body(res);
-                }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId()));
-            }).orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId()));
-        }).orElseThrow(() -> new DepartmentNotFoundExceptions(payload.getDepartmentId()));
+        System.out.println(payload);
+        return departmentRepository.findById(payload.getDepartmentId()).map(department ->
+                medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service ->
+                        consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
+                            Transactions transactions = new Transactions().fromTransactionPayload(payload, service);
+                            transactions.setConsultation(consultation);
+                            transactions.setDepartment(department);
+                            transactions.setIsReversed(false);
+                            transactions.setMedicalService(service);
+                            transactions.setAmount(service.getPrice());
+                            repository.save(transactions);
+                            return ResponseEntity.ok().body("Saved");
+                        }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId())))
+                        .orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId())))
+                .orElseThrow(() -> new DepartmentNotFoundExceptions(payload.getDepartmentId()));
+
     }
 
     @Override

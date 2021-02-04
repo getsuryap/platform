@@ -72,8 +72,8 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @JoinColumn(name = "consultation_id", nullable = false)
     private ConsultationResource consultation;
 
-    public Transactions fromTransactionPayload(final TransactionPayload payload){
-        return new Transactions(payload.getCurrencyCode(), payload.getAmount(), payload.getTransactionDate());
+    public Transactions fromTransactionPayload(final TransactionPayload payload, final MedicalService service){
+        return new Transactions(payload.getCurrencyCode(), service.getPrice(), payload.getTransactionDate());
     }
     public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
         return new Transactions(currencyCode, price, transactionDate);

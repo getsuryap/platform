@@ -1,6 +1,6 @@
 package org.ospic.platform.accounting.transactions.data;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -25,18 +25,19 @@ import java.time.LocalDateTime;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@ToString(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class TransactionPayload {
     private String currencyCode;
-    private Double amount;
     private LocalDateTime transactionDate;
     private Long medicalServiceId;
     private Long departmentId;
     private Long consultationId;
 
-    public TransactionPayload(String currencyCode, Double amount, LocalDateTime transactionDate, Long medicalServiceId, Long departmentId, Long consultationId) {
+    public TransactionPayload(String currencyCode, LocalDateTime transactionDate, Long medicalServiceId, Long departmentId, Long consultationId) {
         this.currencyCode = currencyCode;
-        this.amount = amount;
         this.transactionDate = transactionDate;
         this.medicalServiceId = medicalServiceId;
         this.departmentId = departmentId;
