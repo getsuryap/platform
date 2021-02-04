@@ -66,18 +66,20 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
                 return ResponseEntity.ok().body("Enabled");
             }
             service.setIsActive(true);
-            return ResponseEntity.ok().body(repository.save(service));
+            repository.save(service);
+            return ResponseEntity.ok().body("Enabled");
         }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
     }
 
     @Override
     public ResponseEntity<?> disableService(Long id) {
         return repository.findById(id).map(service -> {
-            if (service.getIsActive()) {
-                return ResponseEntity.ok().body("Disabled");
+            if (!service.getIsActive()) {
+                return ResponseEntity.ok().body("Disabled successfully");
             }
             service.setIsActive(false);
-            return ResponseEntity.ok().body(repository.save(service));
+            repository.save(service);
+            return ResponseEntity.ok().body("Disabled successfully");
         }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
     }
 }
