@@ -1,5 +1,6 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -68,8 +70,15 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
     @Override
     public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
-        Collection<Transactions> transactions = repository.findByConsultationId(id);
-        return ResponseEntity.ok().body(transactions);
+        List<Transactions> transactions = (List) repository.findByConsultationId(id);
+        Double total = 0.0;
+        for (int i = 0; i < transactions.size(); i++){
+            total += transactions.get(i).getAmount();
+        };
+        TransactionResponse trxResponse = new TransactionResponse();
+        trxResponse.setTotalAmount(total);
+        trxResponse.setTransactions(transactions);
+        return ResponseEntity.ok().body(trxResponse);
     }
 
     @Override
