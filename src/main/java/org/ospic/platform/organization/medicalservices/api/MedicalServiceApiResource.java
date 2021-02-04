@@ -81,4 +81,18 @@ public class MedicalServiceApiResource {
     }
 
 
+    @ApiOperation(value = "Enable medical service",notes = "Enable medical service")
+    @RequestMapping(value = "/enable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<?> enableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
+        return  writeService.enableService(serviceId);
+    }
+
+    @ApiOperation(value = "Disable medical service",notes = "Disable medical service")
+    @RequestMapping(value = "/disable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<?> disableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
+        return  writeService.disableService(serviceId);
+    }
+
 }
