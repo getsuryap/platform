@@ -2,6 +2,7 @@ package org.ospic.platform.accounting.transactions.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.Transaction;
@@ -38,12 +39,12 @@ import java.util.Objects;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
+@Data
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @Table(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@EqualsAndHashCode(callSuper = false)
 public class Transactions  extends AbstractPersistableCustom implements Serializable {
 
     @Column(length = 140, name = "currency_code", nullable = false)
@@ -62,29 +63,33 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "medical_service_id", nullable = false)
+    @JsonIgnore
     private MedicalService medicalService;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "department_id", nullable = false)
+    @JsonIgnore
     private Department department;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "consultation_id", nullable = false)
+    @JsonIgnore
     private ConsultationResource consultation;
 
-    public Transactions fromTransactionPayload(final TransactionPayload payload, final MedicalService service){
-        return new Transactions(payload.getCurrencyCode(), service.getPrice(), payload.getTransactionDate());
+    public Transactions fromTransactionPayload(TransactionPayload payload, MedicalService service){
+        return new Transactions(payload.getCurrencyCode(), service.getPrice(), null);
     }
     public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
         return new Transactions(currencyCode, price, transactionDate);
     }
 
-    private Transactions(String currencyCode, Double amount, LocalDateTime transactionDate) {
+   public Transactions(String currencyCode,  Double amount, LocalDateTime transactionDate) {
         this.currencyCode = currencyCode;
         this.amount = amount;
         this.transactionDate = transactionDate;
     }
 
+    /**
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,4 +102,5 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     public int hashCode() {
         return Objects.hash(getMedicalService(), getDepartment(), getConsultation());
     }
+    **/
 }

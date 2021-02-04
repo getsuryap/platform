@@ -48,8 +48,6 @@ import java.time.LocalDateTime;
 @Repository
 public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     private static final Logger logger = LoggerFactory.getLogger(AdmissionsWriteServiceImpl.class);
-
-
     @Autowired
     AdmissionRepository admissionRepository;
     @Autowired

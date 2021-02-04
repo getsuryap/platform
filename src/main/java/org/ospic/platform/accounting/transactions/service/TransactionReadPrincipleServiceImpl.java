@@ -1,5 +1,6 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -32,27 +34,21 @@ import java.time.LocalDateTime;
  * under the License.
  */
 @Repository
-public class TransactionReadPrincipleServiceImpl implements TransactionReadPrincipleService{
+public class TransactionReadPrincipleServiceImpl implements TransactionReadPrincipleService {
     @Autowired
     TransactionJpaRepository repository;
-    MedicalServiceJpaRepository medicalServiceRepository;
-    ConsultationResourceJpaRepository consultationResourceRepository;
-    DepartmentJpaRepository departmentRepository;
+
 
     @Autowired
-    public void TransactionReadPrincipleServiceImpl(
-            TransactionJpaRepository repository,
-            MedicalServiceJpaRepository medicalServiceRepository,
-            ConsultationResourceJpaRepository consultationResourceRepository,
-            DepartmentJpaRepository departmentRepository){
+    public TransactionReadPrincipleServiceImpl(
+            TransactionJpaRepository repository) {
         this.repository = repository;
-        this.departmentRepository = departmentRepository;
-        this.consultationResourceRepository = consultationResourceRepository;
-        this.medicalServiceRepository = medicalServiceRepository;
     }
+
     @Override
     public ResponseEntity<?> readTransactions() {
-        return null;
+        Collection<Transactions> transactions = repository.findAll();
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Override

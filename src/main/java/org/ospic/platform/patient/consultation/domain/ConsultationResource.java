@@ -42,7 +42,8 @@ import java.util.*;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.TABLE_CONSULTATIONS)
 @Table(name = DatabaseConstants.TABLE_CONSULTATIONS)
