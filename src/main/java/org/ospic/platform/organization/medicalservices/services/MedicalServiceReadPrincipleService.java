@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MedicalServiceReadPrincipleService {
     ResponseEntity<?> readServices();
-    ResponseEntity<?> reactActiveServices();
+    ResponseEntity<?> readActiveServices();
     ResponseEntity<?> readServiceById(Long id);
     ResponseEntity<?> readServiceByName(String name);
 }

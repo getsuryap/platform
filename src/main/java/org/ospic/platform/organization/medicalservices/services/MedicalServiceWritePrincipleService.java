@@ -33,4 +33,5 @@ public interface MedicalServiceWritePrincipleService {
     ResponseEntity<?> updateService(Long id, MedicalService payload);
     ResponseEntity<?> deleteService(Long id);
     ResponseEntity<?> enableService(Long id);
+    ResponseEntity<?> disableService(Long id);
 }

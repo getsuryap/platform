@@ -49,8 +49,8 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @Column(length = 140, name = "currency_code", nullable = false)
     private String currencyCode;
 
-    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
-    private Double price;
+    @Column(name = "amount", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
+    private Double amount;
 
     @Column(name = "is_reversed", nullable = false, columnDefinition = "boolean default false")
     private Boolean isReversed;
@@ -79,9 +79,9 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
         return new Transactions(currencyCode, price, transactionDate);
     }
 
-    private Transactions(String currencyCode, Double price, LocalDateTime transactionDate) {
+    private Transactions(String currencyCode, Double amount, LocalDateTime transactionDate) {
         this.currencyCode = currencyCode;
-        this.price = price;
+        this.amount = amount;
         this.transactionDate = transactionDate;
     }
 
@@ -90,7 +90,7 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
         if (this == o) return true;
         if (!(o instanceof Transactions)) return false;
         Transactions that = (Transactions) o;
-        return getCurrencyCode().equals(that.getCurrencyCode()) && getPrice().equals(that.getPrice()) && getTransactionDate().equals(that.getTransactionDate()) && getMedicalService().equals(that.getMedicalService()) && getDepartment().equals(that.getDepartment()) && getConsultation().equals(that.getConsultation());
+        return getCurrencyCode().equals(that.getCurrencyCode()) && getAmount().equals(that.getAmount()) && getTransactionDate().equals(that.getTransactionDate()) && getMedicalService().equals(that.getMedicalService()) && getDepartment().equals(that.getDepartment()) && getConsultation().equals(that.getConsultation());
     }
 
     @Override

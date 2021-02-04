@@ -48,13 +48,37 @@ public class MedicalServiceApiResource {
     @ApiOperation(value = "LIST medical services",notes = "LIST medical services")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveMedicalService(@RequestBody MedicalService payload) {
+    ResponseEntity<?> retrieveMedicalService() {
         return  readService.readServices();
     }
+
+    @ApiOperation(value = "LIST active medical services",notes = "LIST active medical services")
+    @RequestMapping(value = "/active", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveActiveMedicalService() {
+        return  readService.readActiveServices();
+    }
+
+    @ApiOperation(value = "RETURN medical services by ID",notes = "RETURN medical services by ID")
+    @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
+        return  readService.readServiceById(serviceId);
+    }
+
+    @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name")
+    @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveMedicalServiceByName(@PathVariable(name = "name") String name) {
+        return  readService.readServiceByName(name);
+    }
+
     @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service")
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> createMedicalService(@RequestBody MedicalService payload) {
         return writeService.createService(payload);
     }
+
+
 }

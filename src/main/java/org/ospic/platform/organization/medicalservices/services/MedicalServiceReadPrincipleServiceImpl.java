@@ -41,11 +41,11 @@ public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceRea
     @Override
     public ResponseEntity<?> readServices() {
         Collection<MedicalService> services = repository.findAll();
-        return ResponseEntity.ok(services);
+        return ResponseEntity.ok().body(services);
     }
 
     @Override
-    public ResponseEntity<?> reactActiveServices() {
+    public ResponseEntity<?> readActiveServices() {
         Collection<MedicalService> services = repository.findByIsActiveTrue();
         return ResponseEntity.ok(services);
     }
