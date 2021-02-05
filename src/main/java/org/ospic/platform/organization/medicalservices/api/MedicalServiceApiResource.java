@@ -66,6 +66,7 @@ public class MedicalServiceApiResource {
         return  readService.readServiceById(serviceId);
     }
 
+
     @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name")
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -78,6 +79,13 @@ public class MedicalServiceApiResource {
     @ResponseBody
     ResponseEntity<?> createMedicalService(@RequestBody MedicalService payload) {
         return writeService.createService(payload);
+    }
+
+    @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID")
+    @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalService payload) {
+        return  writeService.updateService(serviceId,payload);
     }
 
 
