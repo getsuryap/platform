@@ -2,6 +2,7 @@ package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
+import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundException;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptions;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
@@ -91,6 +92,10 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     @Override
     public ResponseEntity<?> undoTransaction(Long id) {
-        return null;
+        return repository.findById(id).map(trx->{
+            trx.setIsReversed(true);
+            repository.save(trx);
+            return ResponseEntity.ok().body("Transaction reversed");
+        }).orElseThrow(()->new TransactionNotFoundException(id));
     }
 }
