@@ -5,6 +5,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.data
@@ -30,15 +31,11 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class TransactionPayload implements Serializable {
-    private String currencyCode;
-    private Date transactionDate;
-    private Long medicalServiceId;
+    private List<Long> medicalServices;
     private Long consultationId;
 
-    public TransactionPayload(String currencyCode, Date transactionDate, Long medicalServiceId, Long consultationId) {
-        this.currencyCode = currencyCode;
-        this.transactionDate = transactionDate;
-        this.medicalServiceId = medicalServiceId;
+    public TransactionPayload( List<Long> medicalServices, Long consultationId) {
+        this.medicalServices = medicalServices;
         this.consultationId = consultationId;
     }
 }

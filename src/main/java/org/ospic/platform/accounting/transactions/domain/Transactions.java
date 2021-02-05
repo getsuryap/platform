@@ -77,7 +77,7 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     private ConsultationResource consultation;
 
     public Transactions fromTransactionPayload(TransactionPayload payload, MedicalService service){
-        return new Transactions(payload.getCurrencyCode(), service.getPrice(), null);
+        return new Transactions(null, service.getPrice(), null);
     }
     public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
         return new Transactions(currencyCode, price, transactionDate);

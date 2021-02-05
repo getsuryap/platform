@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -72,27 +73,29 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     @Transactional
     @Override
     public ResponseEntity<?> createTransaction(TransactionPayload payload) {
-        final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(payload.getTransactionDate());
+        final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
+        payload.getMedicalServices().forEach(serviceId->{
+            medicalServiceRepository.findById(serviceId).map(service ->
+                    consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
 
-        return medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service ->
-                consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
+                        Transactions trx = new Transactions().fromTransactionPayload(payload, service);
+                        optional.ifPresent(user -> {
+                            trx.setDepartment(user.getStaff().getDepartment());
+                        });
+                        trx.setTransactionDate(transactionDate);
+                        trx.setConsultation(consultation);
+                        trx.setIsReversed(false);
+                        trx.setCurrencyCode("USD");
+                        trx.setMedicalService(service);
+                        trx.setAmount(service.getPrice());
 
-                    Transactions trx = new Transactions().fromTransactionPayload(payload, service);
-                    optional.ifPresent(user -> {
-                        trx.setDepartment(user.getStaff().getDepartment());
-                    });
-                    trx.setTransactionDate(transactionDate);
-                    trx.setConsultation(consultation);
-                    trx.setIsReversed(false);
-                    trx.setMedicalService(service);
-                    trx.setAmount(service.getPrice());
-
-                    return ResponseEntity.ok().body(repository.save(trx));
-                }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId())))
-                .orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId()));
-
+                        return ResponseEntity.ok().body(repository.save(trx));
+                    }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId())))
+                    .orElseThrow(() -> new MedicalServiceNotFoundException(serviceId));
+        });
+        return ResponseEntity.ok().body("Service added");
     }
 
     @Override
