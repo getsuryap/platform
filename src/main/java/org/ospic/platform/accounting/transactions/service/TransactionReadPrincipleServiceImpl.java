@@ -133,7 +133,8 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         public String schema() {
             return " tr.id as id, tr.amount as amount, " +
                     " tr.currency_code as currencyCode, tr.is_reversed as isReversed, " +
-                    " tr.transaction_date as transactionDate, co.id as consultationId, " +
+                    " DATE_FORMAT(tr.transaction_date, \"%W %M %e %Y %r\") AS  transactionDate, " +
+                    " co.id as consultationId, " +
                     " d.id as departmentId, d.name as departmentName, " +
                     " s.id as medicalServiceId, s.name as medicalServiceName " +
                     " FROM m_transactions tr " +
@@ -149,7 +150,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
             final String currencyCode = rs.getString("currencyCode");
             final BigDecimal amount = rs.getBigDecimal("amount");
             final Boolean isReversed = rs.getBoolean("isReversed");
-            final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaMiliSeconds(rs.getDate("transactionDate"));
+            final String transactionDate = rs.getString("transactionDate");
             final Long consultationId = rs.getLong("consultationId");
             final Long departmentId = rs.getLong("departmentId");
             final String departmentName = rs.getString("departmentName");

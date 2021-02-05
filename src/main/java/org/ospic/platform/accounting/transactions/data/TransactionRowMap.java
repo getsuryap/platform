@@ -38,7 +38,7 @@ public class TransactionRowMap implements Serializable {
     private BigDecimal amount;
     private String currencyCode;
     private Boolean isReversed;
-    private LocalDateTime transactionDate;
+    private String transactionDate;
     private Long consultationId;
     private Long departmentId;
     private String departmentName;
