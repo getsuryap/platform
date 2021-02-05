@@ -33,14 +33,12 @@ public class TransactionPayload implements Serializable {
     private String currencyCode;
     private Date transactionDate;
     private Long medicalServiceId;
-    private Long departmentId;
     private Long consultationId;
 
-    public TransactionPayload(String currencyCode, Date transactionDate, Long medicalServiceId, Long departmentId, Long consultationId) {
+    public TransactionPayload(String currencyCode, Date transactionDate, Long medicalServiceId, Long consultationId) {
         this.currencyCode = currencyCode;
         this.transactionDate = transactionDate;
         this.medicalServiceId = medicalServiceId;
-        this.departmentId = departmentId;
         this.consultationId = consultationId;
     }
 }
