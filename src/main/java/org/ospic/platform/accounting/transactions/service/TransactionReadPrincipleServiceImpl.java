@@ -86,19 +86,25 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
     @Override
     public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
-        List<Transactions> transactions = (List) repository.findByConsultationId(id);
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where co.id = ?  order by tr.id DESC ";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, id);
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
     @Override
     public ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id) {
-        List<Transactions> transactions = (List) repository.findByConsultationIdAndIsReversedTrue(id);
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where co.id = ? and tr.is_reversed = true order by tr.id DESC ";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
     @Override
     public ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id) {
-        List<Transactions> transactions = (List) repository.findByConsultationIdAndIsReversedFalse(id);
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where co.id = ? and tr.is_reversed = false  order by tr.id DESC ";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 

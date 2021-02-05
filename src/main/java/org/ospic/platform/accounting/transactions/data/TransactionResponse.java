@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -33,15 +35,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionResponse implements Serializable {
-    private Double totalAmount;
-    private List<Transactions> transactions;
+    private BigDecimal totalAmount;
+    private List<TransactionRowMap> transactions;
 
-    public TransactionResponse transactionResponse(List<Transactions> transactions) {
-        Double transactionsTotal = 0.0;
-        for (Transactions transaction : transactions) {
-            transactionsTotal += transaction.getAmount();
+    public TransactionResponse transactionResponse(List<TransactionRowMap> transactions) {
+        BigDecimal sum = new BigDecimal(0);
+        for (TransactionRowMap transaction : transactions) {
+            sum = sum.add(transaction.getAmount());
         }
-        return new TransactionResponse(transactionsTotal, transactions);
+        return new TransactionResponse(sum, transactions);
     }
 
 }
