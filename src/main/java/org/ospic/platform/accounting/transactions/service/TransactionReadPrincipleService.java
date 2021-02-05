@@ -35,6 +35,8 @@ public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactionById(Long id);
     ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime);
     ResponseEntity<?> readTransactionsByConsultationId(Long id);
+    ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id);
+    ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id);
     ResponseEntity<?> readTransactionByMedicalServiceId(Long id);
     ResponseEntity<?> readTransactionByMedicalServiceIdAndDate(Long id, LocalDateTime date);
     ResponseEntity<?> readTransactionsByDepartmentId(Long id);

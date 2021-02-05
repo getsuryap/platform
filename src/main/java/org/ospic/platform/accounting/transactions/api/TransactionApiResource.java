@@ -40,8 +40,10 @@ import javax.validation.Valid;
 @RequestMapping("/api/transactions")
 @Api(value = "/api/transactions", tags = "List of other medical service transaction's")
 public class TransactionApiResource {
-    @Autowired TransactionReadPrincipleService readService;
-    @Autowired TransactionsWritePrincipleService writeService;
+    @Autowired
+    TransactionReadPrincipleService readService;
+    @Autowired
+    TransactionsWritePrincipleService writeService;
 
     @Autowired
     public TransactionApiResource(TransactionReadPrincipleService readService, TransactionsWritePrincipleService writeService) {
@@ -58,7 +60,7 @@ public class TransactionApiResource {
     }
 
     @ApiOperation(value = "LIST medical service transaction's", notes = "LIST medical service transaction's")
-    @RequestMapping(value = "/", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> listMedicalService() {
         return readService.readTransactions();
@@ -66,10 +68,15 @@ public class TransactionApiResource {
 
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions")
-    @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId) {
-        return readService.readTransactionsByConsultationId(trxId);
+    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId, @RequestParam(value = "reversed", required = false) boolean reversed) {
+        int isReversed = reversed ? 1 : 0;
+        switch (isReversed) {
+            case 1: return readService.readTransactionsByConsultationIdAndReversed(trxId);
+            case 0: return readService.readTransactionsByConsultationIdAndNotReversed(trxId);
+            default: return readService.readTransactionsByConsultationId(trxId);
+        }
     }
 
 }

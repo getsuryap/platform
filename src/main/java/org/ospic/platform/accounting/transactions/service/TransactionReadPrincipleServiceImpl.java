@@ -75,6 +75,18 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     }
 
     @Override
+    public ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id) {
+        List<Transactions> transactions = (List) repository.findByConsultationIdAndIsReversedTrue(id);
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id) {
+        List<Transactions> transactions = (List) repository.findByConsultationIdAndIsReversedFalse(id);
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+    }
+
+    @Override
     public ResponseEntity<?> readTransactionByMedicalServiceId(Long id) {
         return null;
     }
