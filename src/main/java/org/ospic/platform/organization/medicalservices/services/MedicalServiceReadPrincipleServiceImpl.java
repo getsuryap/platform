@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.services
@@ -40,8 +41,9 @@ public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceRea
 
     @Override
     public ResponseEntity<?> readServices() {
-        Collection<MedicalService> services = repository.findAll();
-        return ResponseEntity.ok().body(services);
+
+        List<MedicalService> services = repository.findAll();
+        return ResponseEntity.ok().body(repository.findAll());
     }
 
     @Override
