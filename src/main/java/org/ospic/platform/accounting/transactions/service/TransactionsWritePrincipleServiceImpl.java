@@ -10,13 +10,18 @@ import org.ospic.platform.organization.medicalservices.exceptions.MedicalService
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
+import org.ospic.platform.security.authentication.users.domain.User;
+import org.ospic.platform.security.authentication.users.repository.UserRepository;
+import org.ospic.platform.security.services.UserDetailsImpl;
 import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -49,6 +54,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     ConsultationResourceJpaRepository consultationResourceRepository;
     @Autowired
     DepartmentJpaRepository departmentRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     public TransactionsWritePrincipleServiceImpl(
@@ -66,22 +73,25 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     @Override
     public ResponseEntity<?> createTransaction(TransactionPayload payload) {
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(payload.getTransactionDate());
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> optional = userRepository.findById(ud.getId());
 
-        return departmentRepository.findById(payload.getDepartmentId()).map(department ->
-                medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service ->
-                        consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
-                            Transactions trx = new Transactions().fromTransactionPayload(payload, service);
-                            trx.setTransactionDate(transactionDate);
-                            trx.setConsultation(consultation);
-                            trx.setDepartment(department);
-                            trx.setIsReversed(false);
-                            trx.setMedicalService(service);
-                            trx.setAmount(service.getPrice());
+        return medicalServiceRepository.findById(payload.getMedicalServiceId()).map(service ->
+                consultationResourceRepository.findById(payload.getConsultationId()).map(consultation -> {
 
-                            return ResponseEntity.ok().body( repository.save(trx));
-                        }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId())))
-                        .orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId())))
-                .orElseThrow(() -> new DepartmentNotFoundExceptions(payload.getDepartmentId()));
+                    Transactions trx = new Transactions().fromTransactionPayload(payload, service);
+                    optional.ifPresent(user -> {
+                        trx.setDepartment(user.getStaff().getDepartment());
+                    });
+                    trx.setTransactionDate(transactionDate);
+                    trx.setConsultation(consultation);
+                    trx.setIsReversed(false);
+                    trx.setMedicalService(service);
+                    trx.setAmount(service.getPrice());
+
+                    return ResponseEntity.ok().body(repository.save(trx));
+                }).orElseThrow(() -> new ConsultationNotFoundException(payload.getConsultationId())))
+                .orElseThrow(() -> new MedicalServiceNotFoundException(payload.getMedicalServiceId()));
 
     }
 
@@ -92,10 +102,10 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     @Override
     public ResponseEntity<?> undoTransaction(Long id) {
-        return repository.findById(id).map(trx->{
+        return repository.findById(id).map(trx -> {
             trx.setIsReversed(true);
             repository.save(trx);
             return ResponseEntity.ok().body("Transaction reversed");
-        }).orElseThrow(()->new TransactionNotFoundException(id));
+        }).orElseThrow(() -> new TransactionNotFoundException(id));
     }
 }
