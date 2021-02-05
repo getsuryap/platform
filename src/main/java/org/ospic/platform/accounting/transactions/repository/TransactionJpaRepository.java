@@ -30,4 +30,6 @@ public interface TransactionJpaRepository extends JpaRepository<Transactions, Lo
     Collection<Transactions> findByIsReversedFalse();
     Collection<Transactions> findByIsReversedTrue();
     Collection<Transactions> findByConsultationId(Long id);
+    Collection<Transactions> findByConsultationIdAndIsReversedFalse(Long id);
+    Collection<Transactions> findByConsultationIdAndIsReversedTrue(Long id);
 }
