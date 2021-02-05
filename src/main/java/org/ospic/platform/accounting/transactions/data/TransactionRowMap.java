@@ -3,10 +3,11 @@ package org.ospic.platform.accounting.transactions.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
+import org.apache.poi.hpsf.Decimal;
 
 import java.io.Serializable;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * This file was created by eli on 05/02/2021 for org.ospic.platform.accounting.transactions.data
@@ -32,16 +33,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionResponse implements Serializable {
-    private Double totalAmount;
-    private List<Transactions> transactions;
-
-    public TransactionResponse transactionResponse(List<Transactions> transactions) {
-        Double transactionsTotal = 0.0;
-        for (Transactions transaction : transactions) {
-            transactionsTotal += transaction.getAmount();
-        }
-        return new TransactionResponse(transactionsTotal, transactions);
-    }
+public class TransactionRowMap implements Serializable {
+    private Long id;
+    private BigDecimal amount;
+    private String currencyCode;
+    private Boolean isReversed;
+    private LocalDateTime transactionDate;
+    private Long consultationId;
+    private Long departmentId;
+    private String departmentName;
+    private Long medicalServiceId;
+    private String medicalServiceName;
 
 }
