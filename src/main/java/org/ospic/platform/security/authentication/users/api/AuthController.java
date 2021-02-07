@@ -228,7 +228,7 @@ public class AuthController {
 
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('MODERATOR')")
+    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN')")
     @ResponseBody
     ResponseEntity<?> retrieveAllRoles() {
         return roleReadPrincipleServices.retrieveAllRoles();
