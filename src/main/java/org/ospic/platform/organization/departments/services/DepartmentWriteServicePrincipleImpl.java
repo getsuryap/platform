@@ -2,9 +2,7 @@ package org.ospic.platform.organization.departments.services;
 
 import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
 import org.ospic.platform.organization.departments.domain.Department;
-import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptions;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
-import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;

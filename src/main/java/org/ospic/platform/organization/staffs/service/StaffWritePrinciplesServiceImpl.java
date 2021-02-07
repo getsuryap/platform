@@ -1,19 +1,17 @@
 package org.ospic.platform.organization.staffs.service;
 
-import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptions;
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
 import org.ospic.platform.organization.staffs.domains.Staff;
-import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundException;
+import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
-import org.ospic.platform.security.authentication.users.domain.User;
 import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.security.authentication.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -83,7 +81,7 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
             stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
             return ResponseEntity.ok(staffsRepository.save(stff));
         })
-                .orElseThrow(() -> new StaffNotFoundException(id));
+                .orElseThrow(() -> new StaffNotFoundExceptionPlatform(id));
     }
 
     @Override
@@ -93,7 +91,7 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
                 staff.setDepartment(department);
                 staffsRepository.save(staff);
                 return ResponseEntity.ok().body(staff);
-            }).orElseThrow(() -> new StaffNotFoundException(request.getStaffId()));
-        }).orElseThrow(() -> new DepartmentNotFoundExceptions(request.getDepartmentId()));
+            }).orElseThrow(() -> new StaffNotFoundExceptionPlatform(request.getStaffId()));
+        }).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(request.getDepartmentId()));
     }
 }

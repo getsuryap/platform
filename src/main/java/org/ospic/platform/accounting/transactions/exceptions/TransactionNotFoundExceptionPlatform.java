@@ -1,9 +1,9 @@
-package org.ospic.platform.patient.infos.exceptions;
+package org.ospic.platform.accounting.transactions.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.patient.infos
+ * This file was created by eli on 05/02/2021 for org.ospic.platform.accounting.transactions.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +23,12 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class PatientNotFoundException extends AbstractResourceNotFoundException {
-    public PatientNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class TransactionNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public TransactionNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-    public PatientNotFoundException(Long id){
-        super("error.message.patient.not.found", String.format("Patient with id %2d is not found ", id), id);
+
+    public TransactionNotFoundExceptionPlatform(Long id){
+        super("error.message.transaction.not.found", String.format("Transaction with id %2d is not found ", id), id);
     }
 }

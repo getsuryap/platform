@@ -1,9 +1,9 @@
-package org.ospic.platform.inventory.beds.exception;
+package org.ospic.platform.organization.medicalservices.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.inventory.beds.exception
+ * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,12 +23,12 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class BedNotFoundException extends AbstractResourceNotFoundException {
-    public BedNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class MedicalServiceNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public MedicalServiceNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public BedNotFoundException(Long id){
-        super("error.message.not.found.bed",String.format("Bed with an ID %2d is not found", id));
+    public MedicalServiceNotFoundExceptionPlatform(Long id){
+        super("error.message.service.not.found", String.format("MedicalService with id %2d is not found ", id), id);
     }
 }

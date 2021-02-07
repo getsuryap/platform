@@ -2,12 +2,12 @@ package org.ospic.platform.patient.consultation.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.domains.Admission;
-import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundException;
+import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
-import org.ospic.platform.patient.infos.exceptions.PatientNotFoundException;
+import org.ospic.platform.patient.infos.exceptions.PatientNotFoundExceptionPlatform;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
-import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -72,7 +72,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
             patient.setIsActive(true);
             patientRepository.save(patient);
             return ResponseEntity.ok().body(resourceJpaRepository.save(sr).getId());
-        }).orElseThrow(()-> new PatientNotFoundException(patientId));
+        }).orElseThrow(()-> new PatientNotFoundExceptionPlatform(patientId));
 
     }
 
@@ -87,8 +87,8 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
                 staffsRepository.save(staff);
                 cm.setMessage("A MedicalService assigned successfully ");
                 return ResponseEntity.ok().body("MedicalService assigned successfully");
-            }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
-        }).orElseThrow(() -> new StaffNotFoundException(staffId));
+            }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
+        }).orElseThrow(() -> new StaffNotFoundExceptionPlatform(staffId));
     }
 
     @Override
@@ -105,6 +105,6 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
             patientRepository.save(service.getPatient());
             resourceJpaRepository.save(service);
             return ResponseEntity.ok().body("MedicalService de-activated successfully");
-        }).orElseThrow(() -> new ConsultationNotFoundException(serviceId));
+        }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
     }
 }

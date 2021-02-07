@@ -1,9 +1,9 @@
-package org.ospic.platform.inventory.admission.exception;
+package org.ospic.platform.patient.infos.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.inventory.admission.exception
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.patient.infos
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +23,11 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class AdmissionNotFoundException extends AbstractResourceNotFoundException {
-    public AdmissionNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class PatientNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public PatientNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-    public AdmissionNotFoundException(Long admissionId){
-        super("error.admission.not.found", String.format("Admission with an id %2d not found", admissionId), admissionId);
+    public PatientNotFoundExceptionPlatform(Long id){
+        super("error.message.patient.not.found", String.format("Patient with id %2d is not found ", id), id);
     }
 }

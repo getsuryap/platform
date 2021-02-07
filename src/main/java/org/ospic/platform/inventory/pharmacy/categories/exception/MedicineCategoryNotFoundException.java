@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * This file was created by eli on 23/01/2021 for org.ospic.platform.inventory.pharmacy.groups.exception
+ * This file was created by eli on 23/01/2021 for org.ospic.platform.inventory.pharmacy.groups.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

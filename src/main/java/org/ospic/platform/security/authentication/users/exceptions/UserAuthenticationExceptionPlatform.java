@@ -1,9 +1,9 @@
-package org.ospic.platform.organization.medicalservices.exceptions;
+package org.ospic.platform.security.authentication.users.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.exceptions
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.security.authentication.users.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,12 +23,13 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class MedicalServiceNotFoundException extends AbstractResourceNotFoundException {
-    public MedicalServiceNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class UserAuthenticationExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+
+    public UserAuthenticationExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public MedicalServiceNotFoundException(Long id){
-        super("error.message.service.not.found", String.format("MedicalService with id %2d is not found ", id), id);
+    public UserAuthenticationExceptionPlatform(Long id){
+        super("error.message.authentication.usernotfound","User with id "+ id+" does not exist", id);
     }
 }

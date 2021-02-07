@@ -1,9 +1,9 @@
-package org.ospic.platform.security.authentication.users.exceptions;
+package org.ospic.platform.inventory.pharmacy.measurements.exception;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.security.authentication.users.exceptions
+ * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,13 +23,11 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class UserAuthenticationException extends AbstractResourceNotFoundException {
-
-    public UserAuthenticationException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class MeasurementUnitNotFoundExceptionsPlatform extends AbstractPlatformResourceNotFoundException {
+    public MeasurementUnitNotFoundExceptionsPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-
-    public UserAuthenticationException(Long id){
-        super("error.message.authentication.usernotfound","User with id "+ id+" does not exist", id);
+    public MeasurementUnitNotFoundExceptionsPlatform(Long id){
+        super("error.message.not.unit.with.given.id.not.found",String.format("Measurement unit with an ID %2d is not found", id));
     }
 }

@@ -1,9 +1,9 @@
-package org.ospic.platform.accounting.transactions.exceptions;
+package org.ospic.platform.inventory.admission.exception;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 05/02/2021 for org.ospic.platform.accounting.transactions.exceptions
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.inventory.admission.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,12 +23,11 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class TransactionNotFoundException extends AbstractResourceNotFoundException {
-    public TransactionNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class AdmissionNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public AdmissionNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-
-    public TransactionNotFoundException(Long id){
-        super("error.message.transaction.not.found", String.format("Transaction with id %2d is not found ", id), id);
+    public AdmissionNotFoundExceptionPlatform(Long admissionId){
+        super("error.admission.not.found", String.format("Admission with an id %2d not found", admissionId), admissionId);
     }
 }

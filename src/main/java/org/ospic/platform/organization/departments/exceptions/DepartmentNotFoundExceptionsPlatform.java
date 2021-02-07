@@ -1,6 +1,6 @@
 package org.ospic.platform.organization.departments.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.exceptions
@@ -23,12 +23,16 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class DepartmentNotFoundExceptions extends AbstractResourceNotFoundException{
-    public DepartmentNotFoundExceptions(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class DepartmentNotFoundExceptionsPlatform extends AbstractPlatformResourceNotFoundException {
+    public DepartmentNotFoundExceptionsPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public DepartmentNotFoundExceptions(Long id){
+    public DepartmentNotFoundExceptionsPlatform(Long id){
         super("error.message.department.not.found", String.format("Department with id %2d is not found ", id), id);
+    }
+
+    public DepartmentNotFoundExceptionsPlatform(Long id, String message){
+        super("error.message.user.is.not.department.member", String.format("User with id id %2d is not under any department found ", id), id);
     }
 }

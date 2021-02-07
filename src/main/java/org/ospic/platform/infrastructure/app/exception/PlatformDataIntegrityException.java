@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * This file was created by eli on 19/01/2021 for org.ospic.platform.infrastructure.app.exception
+ * This file was created by eli on 19/01/2021 for org.ospic.platform.infrastructure.app.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

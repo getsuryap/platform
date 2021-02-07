@@ -1,10 +1,9 @@
 package org.ospic.platform.infrastructure.app.exception;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.infrastructure.app.exception
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.infrastructure.app.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -24,17 +23,10 @@ import lombok.EqualsAndHashCode;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public abstract  class AbstractResourceNotFoundException extends RuntimeException {
-    private final String globalisationMessageCode;
-    private final String defaultUserMessage;
-    private final Object[] defaultUserMessageArgs;
+public abstract  class AbstractPlatformResourceNotFoundException extends AbstractPlatformException {
 
-    public AbstractResourceNotFoundException(final String globalisationMessageCode, final String defaultUserMessage,
-                                                     final Object... defaultUserMessageArgs) {
-        this.globalisationMessageCode = globalisationMessageCode;
-        this.defaultUserMessage = defaultUserMessage;
-        this.defaultUserMessageArgs = defaultUserMessageArgs;
+    protected AbstractPlatformResourceNotFoundException(final String globalisationMessageCode, final String defaultUserMessage,
+                                                        final Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 }

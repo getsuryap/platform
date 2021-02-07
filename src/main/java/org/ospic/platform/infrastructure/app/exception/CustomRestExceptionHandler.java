@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This file was created by eli on 23/01/2021 for org.ospic.platform.infrastructure.app.exception
+ * This file was created by eli on 23/01/2021 for org.ospic.platform.infrastructure.app.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
