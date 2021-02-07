@@ -49,14 +49,14 @@ import java.util.Optional;
 @RequestMapping("/api/wards")
 @Api(value = "/api/wards", tags = "Wards", description = "Wards API resources")
 public class WardApiResources {
-    final WardReadService wardReadService;
-    final WardWriteService wardWriteService;
-    final WardRepository wardRepository;
+    private final WardReadService wardReadService;
+    private final WardWriteService wardWriteService;
+    private final WardRepository wardRepository;
     final BedRepository bedRepository;
 
     @Autowired
-    public WardApiResources(WardReadService wardReadService, WardWriteService wardWriteService,
-            WardRepository wardRepository, BedRepository bedRepository) {
+    public WardApiResources(final WardReadService wardReadService, final WardWriteService wardWriteService,
+           final WardRepository wardRepository, BedRepository bedRepository) {
         this.wardReadService = wardReadService;
         this.wardWriteService = wardWriteService;
         this.wardRepository = wardRepository;
