@@ -6,7 +6,7 @@ import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.platform.patient.contacts.services.ContactsInformationService;
 import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.infos.exceptions.PatientNotFoundException;
+import org.ospic.platform.patient.infos.exceptions.PatientNotFoundExceptionPlatform;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
 import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
@@ -20,7 +20,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -136,7 +135,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
                     patient.setSymptoms(update.getSymptoms() == null ? patient.getSymptoms() : update.getSymptoms());
                     return ResponseEntity.ok(patientRepository.save(patient));
 
-                }).orElseThrow(() -> new PatientNotFoundException(id));
+                }).orElseThrow(() -> new PatientNotFoundExceptionPlatform(id));
     }
 
     @Override

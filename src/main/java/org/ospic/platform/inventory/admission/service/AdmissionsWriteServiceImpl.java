@@ -4,12 +4,12 @@ import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.data.EndAdmissionRequest;
 import org.ospic.platform.inventory.admission.domains.Admission;
-import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundException;
+import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.domains.Bed;
-import org.ospic.platform.inventory.beds.exception.BedNotFoundException;
+import org.ospic.platform.inventory.beds.exception.BedNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
-import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundException;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.DateUtil;
 import org.slf4j.Logger;
@@ -154,9 +154,9 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                   /**Return Message status back to user**/
                   cm.setMessage(String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime()));
                   return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
-              }).orElseThrow(()-> new BedNotFoundException(request.getBedId()));
-            }).orElseThrow(() -> new AdmissionNotFoundException(request.getAdmissionId()));
-        }).orElseThrow(() -> new ConsultationNotFoundException(request.getServiceId()));
+              }).orElseThrow(()-> new BedNotFoundExceptionPlatform(request.getBedId()));
+            }).orElseThrow(() -> new AdmissionNotFoundExceptionPlatform(request.getAdmissionId()));
+        }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(request.getServiceId()));
 
     }
 

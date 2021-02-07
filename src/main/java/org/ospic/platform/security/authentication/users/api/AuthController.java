@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 
 import io.jsonwebtoken.impl.DefaultClaims;
@@ -23,7 +21,7 @@ import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesServi
 import org.ospic.platform.security.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.security.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.security.authentication.users.data.RefreshTokenResponse;
-import org.ospic.platform.security.authentication.users.exceptions.UserAuthenticationException;
+import org.ospic.platform.security.authentication.users.exceptions.UserAuthenticationExceptionPlatform;
 import org.ospic.platform.security.authentication.users.payload.request.UserRequestData;
 import org.ospic.platform.security.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.platform.security.authentication.users.domain.User;
@@ -114,6 +112,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -224,11 +223,12 @@ public class AuthController {
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
 
 
-        }).orElseThrow(() -> new UserAuthenticationException(ud.getId()));
+        }).orElseThrow(() -> new UserAuthenticationExceptionPlatform(ud.getId()));
     }
 
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('MODERATOR')")
     @ResponseBody
     ResponseEntity<?> retrieveAllRoles() {
         return roleReadPrincipleServices.retrieveAllRoles();

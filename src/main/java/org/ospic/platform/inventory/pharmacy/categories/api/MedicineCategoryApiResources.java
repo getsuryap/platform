@@ -24,30 +24,24 @@ package org.ospic.platform.inventory.pharmacy.categories.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.inventory.admission.service.AdmissionsReadServiceImpl;
 import org.ospic.platform.inventory.pharmacy.categories.data.MedicineCategoryRequest;
 import org.ospic.platform.inventory.pharmacy.categories.data.MedicineCategoryRowMapper;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
-import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
-import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundException;
-import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
-import org.ospic.platform.inventory.pharmacy.measurements.exception.MeasurementUnitNotFoundExceptions;
+import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundExceptionPlatform;
+import org.ospic.platform.inventory.pharmacy.measurements.exception.MeasurementUnitNotFoundExceptionsPlatform;
 import org.ospic.platform.inventory.pharmacy.measurements.repository.MeasurementUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.sql.DataSource;
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -97,8 +91,8 @@ public class MedicineCategoryApiResources {
                 md.setName(request.getName());
                 md.setDescriptions(request.getDescriptions());
                 return ResponseEntity.ok().body(medicineCategoryRepository.save(md));
-            }).orElseThrow(() -> new MeasurementUnitNotFoundExceptions(request.getMeasurementId()));
-        }).orElseThrow(() -> new MedicineGroupNotFoundException(medicineCategoryId));
+            }).orElseThrow(() -> new MeasurementUnitNotFoundExceptionsPlatform(request.getMeasurementId()));
+        }).orElseThrow(() -> new MedicineGroupNotFoundExceptionPlatform(medicineCategoryId));
     }
 
     @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
@@ -113,7 +107,7 @@ public class MedicineCategoryApiResources {
             });
 
         } catch (EntityNotFoundException e) {
-            throw new MeasurementUnitNotFoundExceptions(payload.getMeasurementId());
+            throw new MeasurementUnitNotFoundExceptionsPlatform(payload.getMeasurementId());
         }
         return ResponseEntity.ok("Medicine category saved successfully...");
     }

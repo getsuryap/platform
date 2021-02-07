@@ -1,20 +1,11 @@
 package org.ospic.platform.security.authentication.roles.services;
 
-import org.ospic.platform.security.authentication.roles.data.RolePayload;
-import org.ospic.platform.security.authentication.roles.domain.Role;
+import org.ospic.platform.security.authentication.roles.exceptions.RoleNotFoundExceptionPlatform;
 import org.ospic.platform.security.authentication.roles.privileges.repository.PrivilegesRepository;
 import org.ospic.platform.security.authentication.roles.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Locale;
-import java.util.Optional;
 
 /**
  * This file was created by eli on 16/12/2020 for org.ospic.platform.security.authentication.roles.services
@@ -39,11 +30,11 @@ import java.util.Optional;
  */
 @Repository
 public class RoleReadPrincipleServicesImpl implements RoleReadPrincipleServices {
-    private RoleRepository roleRepository;
-    private PrivilegesRepository privilegeRepository;
+    private final RoleRepository roleRepository;
+    private final PrivilegesRepository privilegeRepository;
 
     @Autowired
-    RoleReadPrincipleServicesImpl( RoleRepository roleRepository,PrivilegesRepository privilegeRepository) {
+    RoleReadPrincipleServicesImpl( final RoleRepository roleRepository,final PrivilegesRepository privilegeRepository) {
         this.roleRepository = roleRepository;
         this.privilegeRepository = privilegeRepository;
     }
@@ -54,9 +45,10 @@ public class RoleReadPrincipleServicesImpl implements RoleReadPrincipleServices 
     }
 
     @Override
-    public ResponseEntity<?> fetchRoleById(Long roleId) {
-        Optional<Role> role = this.roleRepository.findById(roleId);
-        return ResponseEntity.ok().body(role.isPresent() ? role.get() : "No role with ID "+roleId);
+    public ResponseEntity<?> fetchRoleById(Long roleId)  {
+       return this.roleRepository.findById(roleId).map(role -> {
+           return ResponseEntity.ok().body(role);
+       }).orElseThrow(()-> new RoleNotFoundExceptionPlatform(roleId));
     }
 
     @Override

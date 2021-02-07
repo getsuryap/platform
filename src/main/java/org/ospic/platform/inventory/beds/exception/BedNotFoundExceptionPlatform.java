@@ -1,9 +1,9 @@
-package org.ospic.platform.inventory.pharmacy.measurements.exception;
+package org.ospic.platform.inventory.beds.exception;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 26/01/2021 for org.ospic.platform.inventory.pharmacy.measurements.exception
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.inventory.beds.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +23,12 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class MeasurementUnitNotFoundExceptions extends AbstractResourceNotFoundException {
-    public MeasurementUnitNotFoundExceptions(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class BedNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public BedNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-    public MeasurementUnitNotFoundExceptions(Long id){
-        super("error.message.not.unit.with.given.id.not.found",String.format("Measurement unit with an ID %2d is not found", id));
+
+    public BedNotFoundExceptionPlatform(Long id){
+        super("error.message.not.found.bed",String.format("Bed with an ID %2d is not found", id));
     }
 }

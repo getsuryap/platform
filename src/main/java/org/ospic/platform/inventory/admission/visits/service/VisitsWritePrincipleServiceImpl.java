@@ -1,7 +1,7 @@
 package org.ospic.platform.inventory.admission.visits.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
-import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundException;
+import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.admission.visits.data.VisitPayload;
 import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
@@ -72,7 +72,7 @@ public class VisitsWritePrincipleServiceImpl implements VisitsWritePrincipleServ
             visit.setDateTime(visitLocalDateTime);
             admissionVisitRepository.save(visit);
             return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(), "Admission saved successfully"));
-        }).orElseThrow(()->new AdmissionNotFoundException(payload.getAdmissionId()));
+        }).orElseThrow(()->new AdmissionNotFoundExceptionPlatform(payload.getAdmissionId()));
 
     }
 

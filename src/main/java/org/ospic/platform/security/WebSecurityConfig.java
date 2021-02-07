@@ -1,5 +1,6 @@
 package org.ospic.platform.security;
 
+import org.ospic.platform.infrastructure.app.handlers.PlatformAccessDeniedHandlers;
 import org.ospic.platform.security.jwt.CustomJwtAuthenticationFilter;
 import org.ospic.platform.security.jwt.JwtAuthenticationEntryPointJwt;
 import org.ospic.platform.security.jwt.JwtAuthenticationTokenFilter;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -52,13 +54,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/patients/**/documents/**",
             "/api/patients/**/images/**",
             "/api/test/**",
-            "/webapp/**"
+            "/webapp/**",
             // other public endpoints of your API may be appended to this array
     };
 
     @Bean
     public JwtAuthenticationTokenFilter authenticationJwtTokenFilter() {
         return new JwtAuthenticationTokenFilter();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new PlatformAccessDeniedHandlers();
     }
 
     @Override
@@ -92,12 +99,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                .formLogin().permitAll()
                 .and()
                 .httpBasic()
                 .and()
-                .logout()
+                .logout().permitAll()
                 .and().exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

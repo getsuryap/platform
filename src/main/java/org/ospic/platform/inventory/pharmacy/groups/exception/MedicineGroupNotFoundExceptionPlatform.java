@@ -1,9 +1,11 @@
-package org.ospic.platform.organization.staffs.exceptions;
+package org.ospic.platform.inventory.pharmacy.groups.exception;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * This file was created by eli on 16/12/2020 for org.ospic.platform.organization.staffs.exceptions
+ * This file was created by eli on 23/01/2021 for org.ospic.platform.inventory.pharmacy.groups.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +25,15 @@ import org.ospic.platform.infrastructure.app.exception.AbstractResourceNotFoundE
  * specific language governing permissions and limitations
  * under the License.
  */
-public class StaffNotFoundException extends AbstractResourceNotFoundException {
-    public StaffNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class MedicineGroupNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public static final long serialVersionUID = 1L;
+
+    public MedicineGroupNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
-    public StaffNotFoundException(Long id){
-        super("error.message.staff.not.found", String.format("Staff with id %2d is not found ", id), id);
+
+    public MedicineGroupNotFoundExceptionPlatform(Long id){
+        super("msg.exceptions.medicine.not.found", "Medicine with given id is not found");
     }
 }

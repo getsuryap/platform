@@ -1,7 +1,7 @@
 package org.ospic.platform.organization.medicalservices.services;
 
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
-import org.ospic.platform.organization.medicalservices.exceptions.MedicalServiceNotFoundException;
+import org.ospic.platform.organization.medicalservices.exceptions.MedicalServiceNotFoundExceptionPlatform;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
         return repository.findById(id).map(medicalService -> {
             payload.setId(medicalService.getId());
             return ResponseEntity.ok().body(repository.save(payload));
-        }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
+        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
         return repository.findById(id).map(medicalService -> {
             repository.deleteById(id);
             return ResponseEntity.ok().body("Deleted successfully...");
-        }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
+        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
             service.setIsActive(true);
             repository.save(service);
             return ResponseEntity.ok().body("Enabled");
-        }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
+        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }
 
     @Override
@@ -80,6 +80,6 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
             service.setIsActive(false);
             repository.save(service);
             return ResponseEntity.ok().body("Disabled successfully");
-        }).orElseThrow(() -> new MedicalServiceNotFoundException(id));
+        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }
 }
