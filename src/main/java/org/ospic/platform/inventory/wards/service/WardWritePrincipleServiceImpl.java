@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.domain.Ward;
+import org.ospic.platform.inventory.wards.exceptions.WardNotFoundExceptions;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,11 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<Ward> editWard(Ward ward) {
-        return null;
+    public ResponseEntity<Ward> updateWard(Long id, Ward payload) {
+        return this.wardRepository.findById(id).map(ward->{
+            payload.setId(id);
+            return ResponseEntity.ok().body(this.wardRepository.save(payload));
+        }).orElseThrow(()->new WardNotFoundExceptions(id));
     }
 
     @Override
