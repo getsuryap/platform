@@ -37,14 +37,16 @@ import java.util.List;
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.WARDS_TABLE)
-@Table(name = DatabaseConstants.WARDS_TABLE)
+@Table(name = DatabaseConstants.WARDS_TABLE, uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"}),
+})
 @ApiModel(value = "Wards", description = "A Wards ")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ward extends AbstractPersistableCustom implements Serializable {
 
     @NotNull
-    @Column(name = "name",unique = true, length = 15, nullable = false)
-    private  String name;
+    @Column(name = "name", unique = true, length = 15, nullable = false)
+    private String name;
 
     @OneToMany(
             fetch = FetchType.EAGER,
@@ -54,19 +56,20 @@ public class Ward extends AbstractPersistableCustom implements Serializable {
     @JoinColumn(name = "ward_id")
     private List<Bed> beds = new ArrayList<>();
 
-    public Ward(String name){
+    public Ward(String name) {
         this.name = name;
     }
 
-    public void addBed(Bed bed){
-       beds.add(bed);
-       bed.setWard(this);
+    public void addBed(Bed bed) {
+        beds.add(bed);
+        bed.setWard(this);
     }
 
-    public void deletePatient(Bed bed){
+    public void deletePatient(Bed bed) {
         beds.remove(bed);
         bed.setWard(null);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

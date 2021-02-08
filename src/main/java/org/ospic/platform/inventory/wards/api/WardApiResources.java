@@ -78,7 +78,7 @@ public class WardApiResources {
     @ApiOperation(value = "RETRIEVE ward by ID", notes = "RETRIEVE ward by ID")
     @RequestMapping(value = "/{wardId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId){
+    ResponseEntity<?> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId) {
         return wardReadPrincipleService.findById(wardId);
     }
 
@@ -88,6 +88,13 @@ public class WardApiResources {
     @ResponseBody
     ResponseEntity<String> createNewWard(@Valid @RequestBody Ward ward) {
         return wardWritePrincipleService.createNewWard(ward);
+    }
+
+    @ApiOperation(value = "UPDATE Ward", notes = "UPDATE Ward")
+    @RequestMapping(value = "/{wardId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> createNewWard(@PathVariable(value = "wardId", required = true) Long wardId, @Valid @RequestBody Ward ward) {
+        return wardWritePrincipleService.updateWard(wardId, ward);
     }
 
     @ApiOperation(value = "CREATE Wards by list array", notes = "CREATE Wards by array")
