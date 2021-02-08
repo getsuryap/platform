@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,11 +65,9 @@ public class TestController {
 		return model;
 	}
 
-	// Method to create the pdf report via jasper framework.
-
 	@GetMapping("/view")
 	@ResponseBody
-	public void viewReport(HttpServletResponse response) throws IOException, JRException, SQLException {
+	public void viewReport(HttpServletResponse response) throws IOException, JRException,ServletException, SQLException {
 		OutputStream out = response.getOutputStream();
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "inline; filename=" + "example.pdf");
@@ -76,27 +75,31 @@ public class TestController {
 	}
 
 	// Method to create the pdf file using the employee list datasource.
-	private void  exportPdfReport(final List<Patient> employees, OutputStream outputStream) throws JRException, IOException {
+	private void  exportPdfReport(final List<Patient> employees, OutputStream outputStream) throws ServletException, JRException, IOException {
 
-		// Fetching the .jrxml file from the resources folder.
-		Resource resource = context.getResource("classpath:jasperreports/patient_list.jrxml");
-		final InputStream stream = resource.getInputStream();
+		try {
+			// Fetching the .jrxml file from the resources folder.
+			Resource resource = context.getResource("classpath:jasperreports/patient_list.jrxml");
+			final InputStream stream = resource.getInputStream();
 
-		// Compile the Jasper report from .jrxml to .japser
-		final JasperReport report = JasperCompileManager.compileReport(stream);
+			// Compile the Jasper report from .jrxml to .japser
+			final JasperReport report = JasperCompileManager.compileReport(stream);
 
-		// Fetching the employees from the data source.
-		final JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(employees);
+			// Fetching the employees from the data source.
+			final JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(employees);
 
 
-		// Adding the additional parameters to the pdf.
-		final Map<String, Object> parameters = new HashMap<>();
-		parameters.put("createdBy", "javacodegeek.com");
+			// Adding the additional parameters to the pdf.
+			final Map<String, Object> parameters = new HashMap<>();
+			parameters.put("createdBy", "javacodegeek.com");
 
-		// Filling the report with the employee data and additional parameters information.
-		final JasperPrint print = JasperFillManager.fillReport(report, parameters, source);
-		final String filePath = "\\";
-		// Export the report to a PDF file.
-		 JasperExportManager.exportReportToPdfStream(print, outputStream);
+			// Filling the report with the employee data and additional parameters information.
+			final JasperPrint print = JasperFillManager.fillReport(report, parameters, source);
+			final String filePath = "\\";
+			// Export the report to a PDF file.
+			JasperExportManager.exportReportToPdfStream(print, outputStream);
+		} catch (JRException ex) {
+			throw new ServletException(ex);
+		}
 	}
 }
