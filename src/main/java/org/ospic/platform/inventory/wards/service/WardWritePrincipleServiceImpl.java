@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.domain.Ward;
+import org.ospic.platform.inventory.wards.exceptions.DuplicateWardFoundExceptions;
 import org.ospic.platform.inventory.wards.exceptions.WardNotFoundExceptions;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
@@ -65,10 +66,13 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
 
     @Override
     public ResponseEntity<Ward> updateWard(Long id, Ward payload) {
-        return this.wardRepository.findById(id).map(ward->{
-            payload.setId(id);
-            return ResponseEntity.ok().body(this.wardRepository.save(payload));
-        }).orElseThrow(()->new WardNotFoundExceptions(id));
+        return this.wardRepository.findById(id).map(ward -> {
+            if (wardRepository.existsByName(payload.getName())) {
+                throw new DuplicateWardFoundExceptions(payload.getName());
+            }
+            ward.setName(payload.getName());
+            return ResponseEntity.ok().body(this.wardRepository.save(ward));
+        }).orElseThrow(() -> new WardNotFoundExceptions(id));
     }
 
     @Override
