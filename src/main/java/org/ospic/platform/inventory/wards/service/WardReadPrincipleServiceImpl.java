@@ -44,7 +44,7 @@ import java.util.Optional;
  * under the License.
  */
 @Repository
-public class WardReadServiceImpl implements WardReadService {
+public class WardReadPrincipleServiceImpl implements WardReadPrincipleService {
     @Autowired
     WardRepository wardRepository;
     @Autowired
@@ -53,7 +53,7 @@ public class WardReadServiceImpl implements WardReadService {
     SessionFactory sessionFactory;
     JdbcTemplate jdbcTemplate;
 
-    public WardReadServiceImpl(DataSource dataSource, WardRepository wardRepository, BedRepository bedRepository) {
+    public WardReadPrincipleServiceImpl(DataSource dataSource, WardRepository wardRepository, BedRepository bedRepository) {
         this.wardRepository = wardRepository;
         this.bedRepository = bedRepository;
 

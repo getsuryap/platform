@@ -35,7 +35,7 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class WardWriteServiceImpl implements WardWriteService {
+public class WardWritePrincipleServiceImpl implements WardWritePrincipleService {
 
     @Autowired
     SessionFactory sessionFactory;
@@ -44,7 +44,7 @@ public class WardWriteServiceImpl implements WardWriteService {
     @Autowired
     BedRepository bedRepository;
 
-    public WardWriteServiceImpl(WardRepository wardRepository, BedRepository bedRepository) {
+    public WardWritePrincipleServiceImpl(WardRepository wardRepository, BedRepository bedRepository) {
         this.wardRepository = wardRepository;
         this.bedRepository = bedRepository;
     }
