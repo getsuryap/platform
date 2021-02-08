@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +40,7 @@ import java.util.List;
 @Table(name = DatabaseConstants.WARDS_TABLE)
 @ApiModel(value = "Wards", description = "A Wards ")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Ward {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private @Setter(AccessLevel.PROTECTED) Long id;
+public class Ward extends AbstractPersistableCustom implements Serializable {
 
     @NotNull
     @Column(name = "name",unique = true, length = 15, nullable = false)
@@ -73,7 +71,7 @@ public class Ward {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Ward)) return false;
-        return id != null && id.equals(((Ward) o).id);
+        return name != null && name.equals(((Ward) o).name);
     }
 
     @Override

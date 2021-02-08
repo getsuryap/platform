@@ -1,14 +1,9 @@
-package org.ospic.platform.inventory.wards.service;
+package org.ospic.platform.inventory.wards.exceptions;
 
-import org.ospic.platform.inventory.beds.domains.Bed;
-import org.ospic.platform.inventory.wards.domain.Ward;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 07/11/2020 for org.ospic.platform.inventory.wards.service
+ * This file was created by eli on 08/02/2021 for org.ospic.platform.inventory.wards.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,10 +23,12 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface WardWritePrincipleService {
-    public ResponseEntity<String> createNewWard(Ward ward);
-    public ResponseEntity<Ward> updateWard(Long id, Ward ward);
-    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
+public class WardNotFoundExceptions extends AbstractPlatformResourceNotFoundException {
+    protected WardNotFoundExceptions(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
 
+    public WardNotFoundExceptions(Long id){
+        super("error.msg.ward.not.found", "Ward with ID " +id+" is not found");
+    }
 }
