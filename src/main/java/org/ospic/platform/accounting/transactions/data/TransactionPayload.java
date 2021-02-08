@@ -28,13 +28,14 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class TransactionPayload implements Serializable {
     private List<Long> medicalServices;
     private Long consultationId;
 
-    public TransactionPayload( List<Long> medicalServices, Long consultationId) {
+    public TransactionPayload(List<Long> medicalServices, Long consultationId) {
         this.medicalServices = medicalServices;
         this.consultationId = consultationId;
     }

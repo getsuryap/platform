@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.api
  * --
@@ -51,10 +53,10 @@ public class TransactionApiResource {
 
 
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction")
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/{serviceId}", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity<?> createMedicalService(@RequestBody TransactionPayload payload) {
-        return writeService.createTransaction(payload);
+    ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @RequestBody List<Long> services) {
+        return writeService.createTransaction(serviceId, services);
     }
 
 
