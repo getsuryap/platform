@@ -26,6 +26,6 @@ public class ConsultationNotFoundExceptionPlatform extends AbstractPlatformResou
     }
 
     public ConsultationNotFoundExceptionPlatform(Long id) {
-        super("error.message.service.not.found", String.format("MedicalService with id %2d is not found ", id), id);
+        super("error.message.service.not.found", String.format("Consultation with id %2d is not found ", id), id);
     }
 }

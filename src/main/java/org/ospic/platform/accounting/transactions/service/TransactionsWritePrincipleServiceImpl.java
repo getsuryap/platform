@@ -15,6 +15,7 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.security.authentication.users.domain.User;
+import org.ospic.platform.security.authentication.users.exceptions.InsufficientRoleException;
 import org.ospic.platform.security.authentication.users.repository.UserRepository;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.ospic.platform.util.DateUtil;
@@ -81,37 +82,40 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     public ResponseEntity<?> createTransaction(Long id, List<Long> services) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
-
-
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
 
-        Department department = (Department) user.getStaff().getDepartment();
-        if (department == null) {
-            throw new DepartmentNotFoundExceptionsPlatform(user.getId(), null);
-        }
         List<Transactions> trxns = new ArrayList<>();
-        services.forEach(servicesId -> {
-            Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
-            if (serviceOptional.isPresent()) {
-                MedicalService service = serviceOptional.get();
-                Transactions trx = new Transactions();
-                trx.setDepartment(department);
-                trx.setTransactionDate(transactionDate);
-                trx.setConsultation(consultation);
-                trx.setIsReversed(false);
-                trx.setAmount(service.getPrice());
-                trx.setCurrencyCode("USD");
-                trx.setMedicalService(service);
-                trx.setAmount(service.getPrice());
-                repository.save(trx);
-                trxns.add(trx);
-            }
-        });
-        return ResponseEntity.ok().body(new Object[]{id, trxns});
+        if (!user.getIsStaff()) {
+            String message = "Insufficient role to perform this operation";
+            throw new InsufficientRoleException(user.getId(), message);
+        } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
+            Department department = (Department) user.getStaff().getDepartment();
+
+            services.forEach(servicesId -> {
+                Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
+                if (serviceOptional.isPresent()) {
+                    MedicalService service = serviceOptional.get();
+                    Transactions trx = new Transactions();
+                    trx.setDepartment(department);
+                    trx.setTransactionDate(transactionDate);
+                    trx.setConsultation(consultation);
+                    trx.setIsReversed(false);
+                    trx.setAmount(service.getPrice());
+                    trx.setCurrencyCode("USD");
+                    trx.setMedicalService(service);
+                    trx.setAmount(service.getPrice());
+                    repository.save(trx);
+                    trxns.add(trx);
+                }
+
+            });
+        }else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
+
+        return ResponseEntity.ok().body(new Object[]{trxns});
     }
 
     @Override
