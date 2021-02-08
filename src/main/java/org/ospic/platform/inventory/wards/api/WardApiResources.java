@@ -97,6 +97,13 @@ public class WardApiResources {
         return wardWritePrincipleService.updateWard(wardId, ward);
     }
 
+    @ApiOperation(value = "DELETE Ward", notes = "DELETE Ward")
+    @RequestMapping(value = "/{wardId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> deleteWard(@PathVariable(value = "wardId", required = true) Long wardId) {
+        return wardWritePrincipleService.deleteWard(wardId);
+    }
+
     @ApiOperation(value = "CREATE Wards by list array", notes = "CREATE Wards by array")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -122,5 +129,6 @@ public class WardApiResources {
     ResponseEntity<String> addNewListOfBedsInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid List<Bed> beds) throws ResourceNotFoundException {
         return wardWritePrincipleService.addListOfBedsInWard(wardId, beds);
     }
+
 
 }

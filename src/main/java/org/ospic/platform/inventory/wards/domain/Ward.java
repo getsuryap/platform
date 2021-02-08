@@ -48,7 +48,7 @@ public class Ward extends AbstractPersistableCustom implements Serializable {
     @Column(name = "name", unique = true, length = 15, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "ward_id")
     private List<Bed> beds = new ArrayList<>();
 

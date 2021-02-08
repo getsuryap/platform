@@ -132,7 +132,7 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()), signUpRequest.getIsStaff());
 
         Set<Long> strRoles = signUpRequest.getRoles();
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName("USER")
@@ -175,7 +175,6 @@ public class AuthController {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userRepository.findById(ud.getId());
         return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found")));
-
     }
 
     @ApiOperation(value = "RETRIEVE User by ID", notes = "RETRIEVE User by ID")

@@ -72,8 +72,8 @@ public class Bed implements Serializable {
     )
     private Boolean isOccupied;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "ward_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ward_id",referencedColumnName = "id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to ward")
     @JsonIgnore
     private Ward ward;

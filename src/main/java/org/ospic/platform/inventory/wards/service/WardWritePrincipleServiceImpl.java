@@ -9,6 +9,7 @@ import org.ospic.platform.inventory.wards.exceptions.WardNotFoundExceptions;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -99,5 +100,13 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
             wardRepository.save(ward);
             return ResponseEntity.ok().body("Bed added successfully...");
         }).orElseThrow(() -> new ResourceNotFoundException("Ward with such an ID os not found"));
+    }
+
+    @Override
+    public ResponseEntity<String> deleteWard(Long id) {
+        return this.wardRepository.findById(id).map(ward->{
+            wardRepository.delete(ward);
+            return ResponseEntity.ok().body("Deleted ");
+        }).orElseThrow(()->new WardNotFoundExceptions(id));
     }
 }
