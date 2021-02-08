@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
  * --
@@ -30,7 +32,7 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface TransactionsWritePrincipleService {
-    ResponseEntity<?> createTransaction(TransactionPayload payload);
+    ResponseEntity<?> createTransaction(Long id, List<Long> services);
     ResponseEntity<?> updateTransaction(Long id, TransactionPayload payload);
     ResponseEntity<?> undoTransaction(Long id);
 }

@@ -7,8 +7,10 @@ import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepos
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.exceptions.MedicalServiceNotFoundExceptionPlatform;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
+import org.ospic.platform.organization.medicalservices.services.MedicalServiceWritePrincipleService;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
@@ -24,7 +26,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -72,25 +77,27 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
         this.medicalServiceRepository = medicalServiceRepository;
     }
 
-    @Transactional
     @Override
-    public ResponseEntity<?> createTransaction(TransactionPayload payload) {
+    public ResponseEntity<?> createTransaction(Long id, List<Long> services) {
+        ConsultationResource consultation = consultationResourceRepository.findById(id)
+                .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
+
+
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
-        ConsultationResource consultation = consultationResourceRepository.findById(payload.getConsultationId())
-                .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(payload.getConsultationId()));
 
-        Department department = user.getStaff().getDepartment();
-        if (department==null){
+        Department department = (Department) user.getStaff().getDepartment();
+        if (department == null) {
             throw new DepartmentNotFoundExceptionsPlatform(user.getId(), null);
         }
-
-        payload.getMedicalServices().forEach(serviceId -> {
-            medicalServiceRepository.findById(serviceId).map(service -> {
-
+        List<Transactions> trxns = new ArrayList<>();
+        services.forEach(servicesId -> {
+            Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
+            if (serviceOptional.isPresent()) {
+                MedicalService service = serviceOptional.get();
                 Transactions trx = new Transactions();
                 trx.setDepartment(department);
                 trx.setTransactionDate(transactionDate);
@@ -100,11 +107,11 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 trx.setCurrencyCode("USD");
                 trx.setMedicalService(service);
                 trx.setAmount(service.getPrice());
-
-                return ResponseEntity.ok().body(repository.save(trx));
-            }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(serviceId));
+                repository.save(trx);
+                trxns.add(trx);
+            }
         });
-        return ResponseEntity.ok().body("Service added");
+        return ResponseEntity.ok().body(new Object[]{id, trxns});
     }
 
     @Override
