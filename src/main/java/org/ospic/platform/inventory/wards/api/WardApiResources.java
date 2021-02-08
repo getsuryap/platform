@@ -7,20 +7,17 @@ import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.data.WardResponseData;
 import org.ospic.platform.inventory.wards.domain.Ward;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
-import org.ospic.platform.inventory.wards.service.WardReadService;
-import org.ospic.platform.inventory.wards.service.WardWriteService;
+import org.ospic.platform.inventory.wards.service.WardReadPrincipleService;
+import org.ospic.platform.inventory.wards.service.WardWritePrincipleService;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.platform.inventory.wards.api
@@ -49,16 +46,16 @@ import java.util.Optional;
 @RequestMapping("/api/wards")
 @Api(value = "/api/wards", tags = "Wards", description = "Wards API resources")
 public class WardApiResources {
-    private final WardReadService wardReadService;
-    private final WardWriteService wardWriteService;
+    private final WardReadPrincipleService wardReadPrincipleService;
+    private final WardWritePrincipleService wardWritePrincipleService;
     private final WardRepository wardRepository;
     final BedRepository bedRepository;
 
     @Autowired
-    public WardApiResources(final WardReadService wardReadService, final WardWriteService wardWriteService,
-           final WardRepository wardRepository, BedRepository bedRepository) {
-        this.wardReadService = wardReadService;
-        this.wardWriteService = wardWriteService;
+    public WardApiResources(final WardReadPrincipleService wardReadPrincipleService, final WardWritePrincipleService wardWritePrincipleService,
+                            final WardRepository wardRepository, BedRepository bedRepository) {
+        this.wardReadPrincipleService = wardReadPrincipleService;
+        this.wardWritePrincipleService = wardWritePrincipleService;
         this.wardRepository = wardRepository;
         this.bedRepository = bedRepository;
     }
@@ -67,14 +64,14 @@ public class WardApiResources {
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<Ward>> retrieveAllWards() {
-        return wardReadService.retrieveListOfWards();
+        return wardReadPrincipleService.retrieveListOfWards();
     }
 
     @ApiOperation(value = "RETRIEVE Wards with beds count", notes = "RETRIEVE Wards with beds count")
     @RequestMapping(value = "/beds", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
-        return wardReadService.retrieveAllWardsWithBedsCounts();
+        return wardReadPrincipleService.retrieveAllWardsWithBedsCounts();
     }
 
 
@@ -82,7 +79,7 @@ public class WardApiResources {
     @RequestMapping(value = "/{wardId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveWardById(@PathVariable(value = "wardId", required = true) Long wardId){
-        return wardReadService.findById(wardId);
+        return wardReadPrincipleService.findById(wardId);
     }
 
 
@@ -90,7 +87,7 @@ public class WardApiResources {
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<String> createNewWard(@Valid @RequestBody Ward ward) {
-        return wardWriteService.createNewWard(ward);
+        return wardWritePrincipleService.createNewWard(ward);
     }
 
     @ApiOperation(value = "CREATE Wards by list array", notes = "CREATE Wards by array")
@@ -99,7 +96,7 @@ public class WardApiResources {
     ResponseEntity<String> createWardsByList(@Valid @RequestBody List<Ward> wards) {
         wards.forEach(ward -> {
             if (!wardRepository.existsByName(ward.getName())) {
-                wardWriteService.createNewWard(ward);
+                wardWritePrincipleService.createNewWard(ward);
             }
         });
         return ResponseEntity.ok().body("All wards created successfully if it was not present");
@@ -109,14 +106,14 @@ public class WardApiResources {
     @RequestMapping(value = "/{wardId}/bed", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewBedInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid Bed bed) throws ResourceNotFoundException {
-        return wardWriteService.addBedInWard(wardId, bed);
+        return wardWritePrincipleService.addBedInWard(wardId, bed);
     }
 
     @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
     @RequestMapping(value = "/{wardId}/beds", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<String> addNewListOfBedsInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid List<Bed> beds) throws ResourceNotFoundException {
-        return wardWriteService.addListOfBedsInWard(wardId, beds);
+        return wardWritePrincipleService.addListOfBedsInWard(wardId, beds);
     }
 
 }

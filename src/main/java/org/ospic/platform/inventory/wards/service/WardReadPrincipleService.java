@@ -1,8 +1,7 @@
 package org.ospic.platform.inventory.wards.service;
 
-import org.ospic.platform.inventory.beds.domains.Bed;
+import org.ospic.platform.inventory.wards.data.WardResponseData;
 import org.ospic.platform.inventory.wards.domain.Ward;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -28,10 +27,8 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface WardWriteService {
-    public ResponseEntity<String> createNewWard(Ward ward);
-    public ResponseEntity<Ward> editWard(Ward ward);
-    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
-
+public interface WardReadPrincipleService {
+    public ResponseEntity<List<Ward>> retrieveListOfWards();
+    public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts();
+    public ResponseEntity<?> findById(Long id);
 }
