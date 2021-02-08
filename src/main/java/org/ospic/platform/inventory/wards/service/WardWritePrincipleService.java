@@ -29,9 +29,14 @@ import java.util.List;
  * under the License.
  */
 public interface WardWritePrincipleService {
-    public ResponseEntity<String> createNewWard(Ward ward);
-    public ResponseEntity<Ward> updateWard(Long id, Ward ward);
-    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
+    ResponseEntity<String> createNewWard(Ward ward);
+
+    ResponseEntity<Ward> updateWard(Long id, Ward ward);
+
+    ResponseEntity<String> deleteWard(Long id);
+
+    ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
+
+    ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
 
 }
