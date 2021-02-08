@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS  `users`;
 CREATE TABLE IF NOT EXISTS  `users` (
   id BIGINT(20) NOT NULL PRIMARY KEY  AUTO_INCREMENT, username VARCHAR (200) NOT NULL,
-  email VARCHAR(30) NOT NULL, password VARCHAR (250) NOT NULL, isStaff BOOLEAN NOT NULL DEFAULT 0 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+  email VARCHAR(30) NOT NULL, password VARCHAR (250) NOT NULL, isStaff BOOLEAN NOT NULL DEFAULT 0 ) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 -- Create ROLES tables
 DROP TABLE IF EXISTS  `m_roles`;
@@ -11,14 +11,14 @@ CREATE TABLE IF NOT EXISTS  `m_roles` (
   name VARCHAR (20) NOT NULL,
   constraint  uc_role_name unique(`name`),
   constraint roles_pk primary key (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 
 DROP TABLE IF EXISTS  `m_privilege`;
 CREATE TABLE IF NOT EXISTS  `m_privilege` (
   id BIGINT  NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR (250) NOT NULL
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `m_blood_bank`;
 CREATE TABLE IF NOT EXISTS `m_blood_bank`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   blood_group VARCHAR (20) NOT NULL,
-  bags_count BIGINT DEFAULT 0,PRIMARY KEY (`id`) ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+  bags_count BIGINT DEFAULT 0,PRIMARY KEY (`id`) ) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_mdc_groups`;
 CREATE TABLE IF NOT EXISTS `m_mdc_groups`(
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `m_mdc_groups`(
   descriptions VARCHAR (250) NOT NULL,
   CONSTRAINT  uc_medicine_group_name UNIQUE(`name`),
   PRIMARY KEY (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `m_mdc_categories`;
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `m_mdc_categories`(
   descriptions VARCHAR (350) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT uc_medicine_category_name UNIQUE(`name`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_medicines`;
 CREATE TABLE IF NOT EXISTS `m_medicines`(
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `m_medicines`(
   category_id BIGINT REFERENCES `m_mdc_categories`(`id`),
   CONSTRAINT uc_name_company_group_category UNIQUE(`name`,`company`, `group_id`, `category_id`),
   PRIMARY KEY (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `m_admissions`(
   end_date TIMESTAMP,
   PRIMARY KEY (`id`),
  `cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_visits`;
 CREATE TABLE IF NOT EXISTS `m_visits`(
@@ -79,14 +79,14 @@ CREATE TABLE IF NOT EXISTS `m_visits`(
   `date_time` TIMESTAMP,
   PRIMARY KEY (`id`),
   admission_id BIGINT REFERENCES `m_admissions`(`id`) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_wards`;
 CREATE TABLE IF NOT EXISTS `m_wards`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR (20) NOT NULL,
   PRIMARY KEY (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `m_beds`;
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `m_beds`(
   ward_id  bigint not null,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`ward_id`) references `m_wards`(`id`) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `m_patients` ;
@@ -125,18 +125,18 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
   last_modified_date TIMESTAMP,
   last_modified_by VARCHAR (200),
   PRIMARY KEY (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_consultations` ;
 CREATE TABLE IF NOT EXISTS `m_consultations`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  fromdate TIMESTAMP,
-  todate TIMESTAMP,
+  fromdate TIMESTAMP NOT NULL ,
+  todate TIMESTAMP ,
   is_active BOOLEAN NOT NULL DEFAULT true ,
   constraint consultations_pk primary key  (`id`),
   staff_id BIGINT references `m_staff`(`id`) ,
   patient_id BIGINT  references `m_patients`(`id`)  ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `m_contacts` ;
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `m_contacts`(
   constraint patient_contact_fk  foreign key (`patient_id`) references `m_patients`(`id`) ON DELETE CASCADE,
   constraint contact_unique_key unique (`id`,`patient_id`),
   constraint patient_contact_unique_key unique(`patient_id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_staff` ;
 CREATE TABLE IF NOT EXISTS `m_staff`(
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `m_staff`(
   constraint staff_user_fk foreign key (`user_id`) references `users`(`id`) ON DELETE CASCADE,
   constraint staff_unique_key unique(`id`,`user_id`),
   constraint user_staff_unique_key unique(`user_id`)
-  ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+  ) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_diagnoses`;
 CREATE TABLE IF NOT EXISTS `m_diagnoses`(
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `m_diagnoses`(
   PRIMARY KEY (`id`),
   `cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
 
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS  `admission_bed`;
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS  `admission_bed`(
   admission_id BIGINT  NOT NULL, bed_id BIGINT  NOT NULL,
   CONSTRAINT `FK_admissions_admission_id` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE,
   CONSTRAINT `FK_admissions_bed_id` FOREIGN KEY (bed_id) REFERENCES `m_beds`(id) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS  `user_roles`;
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS  `user_roles`(
   user_id BIGINT  NOT NULL, role_id BIGINT  NOT NULL,
   CONSTRAINT `FK_user_roles` FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,
   CONSTRAINT `FK_role_roles` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `role_privileges`;
@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `role_privileges`(
   role_id BIGINT NOT NULL , privilege_id BIGINT ,
   CONSTRAINT `FK_role_privileges` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE,
   CONSTRAINT `FK_privilege_roles` FOREIGN KEY (privilege_id) REFERENCES `m_privilege`(id) ON DELETE CASCADE
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 -- Create relational constraints between tables
