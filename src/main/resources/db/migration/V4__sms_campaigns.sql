@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `m_sms`(
 
   `status` varchar (50),
 PRIMARY KEY (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `m_sms_configuration`;
@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS `m_sms_configuration`(
   constraint  uc_sms_configuration_sid unique( `sid`),
   constraint  uc_sms_configuration_token unique(`token`),
   constraint pk_sms_configiration primary key (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;

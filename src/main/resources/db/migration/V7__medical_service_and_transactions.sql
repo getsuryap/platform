@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `m_services`(
   enabled boolean NOT NULL default true COMMENT 'check if this service is still provided',
   primary key (`id`),
   unique key(`name`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_transactions`;
 CREATE TABLE IF NOT EXISTS `m_transactions`(
@@ -30,4 +30,4 @@ CREATE TABLE IF NOT EXISTS `m_transactions`(
   CONSTRAINT FK_consultation_transactions FOREIGN KEY(`consultation_id`) REFERENCES `m_consultations`(`id`),
   CONSTRAINT FK_medical_service_transactions FOREIGN KEY(`medical_service_id`) REFERENCES `m_services`(`id`),
   constraint transactions_primary_key primary key  (`id`)
-) COLLATE='utf8_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
