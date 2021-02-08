@@ -66,19 +66,19 @@ DROP TABLE IF EXISTS `m_admissions`;
 CREATE TABLE IF NOT EXISTS `m_admissions`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   is_active BOOLEAN NOT NULL DEFAULT true ,
-  start_date TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  start_date TIMESTAMP,
   end_date TIMESTAMP,
-  `cid` BIGINT REFERENCES `m_consultations`(`id`),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+ `cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_visits`;
 CREATE TABLE IF NOT EXISTS `m_visits`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   symptoms VARCHAR (550) NOT NULL ,
-  `date_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   admission_id BIGINT REFERENCES `m_admissions`(`id`),
-  PRIMARY KEY (`id`)
+  `date_time` TIMESTAMP,
+  PRIMARY KEY (`id`),
+  admission_id BIGINT REFERENCES `m_admissions`(`id`) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `m_wards`;
@@ -94,8 +94,9 @@ CREATE TABLE IF NOT EXISTS `m_beds`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   identifier varchar  (20) ,
   is_occupied BOOLEAN NOT NULL DEFAULT false ,
-  ward_id  bigint not null references `m_wards`(`id`),
-  PRIMARY KEY (`id`)
+  ward_id  bigint not null,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`ward_id`) references `m_wards`(`id`) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
@@ -119,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
   isAdmitted BOOLEAN NOT NULL DEFAULT false,
   is_active BOOLEAN NOT NULL DEFAULT false,
   thumbnail VARCHAR (20) ,
-  created_date TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  created_date TIMESTAMP,
   created_by VARCHAR (200),
   last_modified_date TIMESTAMP,
   last_modified_by VARCHAR (200),
@@ -129,12 +130,12 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
 DROP TABLE IF EXISTS `m_consultations` ;
 CREATE TABLE IF NOT EXISTS `m_consultations`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  fromdate TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  fromdate TIMESTAMP,
   todate TIMESTAMP,
   is_active BOOLEAN NOT NULL DEFAULT true ,
-  staff_id BIGINT references `m_staff`(`id`),
-  patient_id BIGINT  references `m_patients`(`id`),
-  constraint consultations_pk primary key  (`id`)
+  constraint consultations_pk primary key  (`id`),
+  staff_id BIGINT references `m_staff`(`id`) ,
+  patient_id BIGINT  references `m_patients`(`id`)  ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
@@ -151,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `m_contacts`(
   work_phone VARCHAR (20),
   patient_id BIGINT,
   CONSTRAINT contact_pk primary key (`id`),
-  constraint patient_contact_fk  foreign key (`patient_id`) references `m_patients`(`id`),
+  constraint patient_contact_fk  foreign key (`patient_id`) references `m_patients`(`id`) ON DELETE CASCADE,
   constraint contact_unique_key unique (`id`,`patient_id`),
   constraint patient_contact_unique_key unique(`patient_id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
@@ -167,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `m_staff`(
   email VARCHAR (30) NOT NULL ,
   user_id BIGINT NOT NULL ,
   constraint staff_pk primary key  (`id`),
-  constraint staff_user_fk foreign key (`user_id`) references `users`(`id`),
+  constraint staff_user_fk foreign key (`user_id`) references `users`(`id`) ON DELETE CASCADE,
   constraint staff_unique_key unique(`id`,`user_id`),
   constraint user_staff_unique_key unique(`user_id`)
   ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
@@ -175,44 +176,45 @@ CREATE TABLE IF NOT EXISTS `m_staff`(
 DROP TABLE IF EXISTS `m_diagnoses`;
 CREATE TABLE IF NOT EXISTS `m_diagnoses`(
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `symptoms` VARCHAR (500) NOT NULL ,
-  `cid` BIGINT REFERENCES `m_consultations`(`id`),
-  PRIMARY KEY (`id`)
+  `date`  TIMESTAMP ,
+  `symptoms` VARCHAR (500) NOT NULL,
+  PRIMARY KEY (`id`),
+  `cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
+
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS  `admission_bed`;
 CREATE TABLE IF NOT EXISTS  `admission_bed`(
   admission_id BIGINT  NOT NULL, bed_id BIGINT  NOT NULL,
-  CONSTRAINT `FK_admissions_admission_id` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE ON UPDATE CASCADE ,
-  CONSTRAINT `FK_admissions_bed_id` FOREIGN KEY (bed_id) REFERENCES `m_beds`(id) ON DELETE CASCADE ON UPDATE CASCADE 
+  CONSTRAINT `FK_admissions_admission_id` FOREIGN KEY (admission_id) REFERENCES `m_admissions`(id) ON DELETE CASCADE,
+  CONSTRAINT `FK_admissions_bed_id` FOREIGN KEY (bed_id) REFERENCES `m_beds`(id) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS  `user_roles`;
 CREATE TABLE IF NOT EXISTS  `user_roles`(
   user_id BIGINT  NOT NULL, role_id BIGINT  NOT NULL,
-  CONSTRAINT `FK_user_roles` FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `FK_role_roles` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT `FK_user_roles` FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE,
+  CONSTRAINT `FK_role_roles` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
 DROP TABLE IF EXISTS `role_privileges`;
 CREATE TABLE IF NOT EXISTS `role_privileges`(
   role_id BIGINT NOT NULL , privilege_id BIGINT ,
-  CONSTRAINT `FK_role_privileges` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE ON UPDATE RESTRICT,
-  CONSTRAINT `FK_privilege_roles` FOREIGN KEY (privilege_id) REFERENCES `m_privilege`(id) ON DELETE CASCADE ON UPDATE RESTRICT
+  CONSTRAINT `FK_role_privileges` FOREIGN KEY (role_id) REFERENCES `m_roles`(id) ON DELETE CASCADE,
+  CONSTRAINT `FK_privilege_roles` FOREIGN KEY (privilege_id) REFERENCES `m_privilege`(id) ON DELETE CASCADE
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 
 -- Create relational constraints between tables
-ALTER TABLE `m_visits` ADD CONSTRAINT FK_admission_visits FOREIGN KEY(`admission_id`) REFERENCES `m_admissions`(`id`);
+ALTER TABLE `m_visits` ADD CONSTRAINT FK_admission_visits FOREIGN KEY(`admission_id`) REFERENCES `m_admissions`(`id`) ON DELETE CASCADE;
 ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_categories FOREIGN KEY(`category_id`) REFERENCES `m_mdc_categories`(`id`);
 ALTER TABLE `m_medicines` ADD CONSTRAINT FK_medicine_groups FOREIGN KEY(`group_id`) REFERENCES `m_mdc_groups`(`id`);
-ALTER TABLE `m_diagnoses` ADD CONSTRAINT FK_consultations_diagnoes FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`);
-ALTER TABLE `m_beds` ADD CONSTRAINT FK_bed_ward FOREIGN KEY(`ward_id`) REFERENCES `m_wards`(`id`);
-ALTER TABLE `m_admissions` ADD CONSTRAINT FK_consultations_admissions FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`);
+ALTER TABLE `m_diagnoses` ADD CONSTRAINT FK_consultations_diagnoes FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`) ON DELETE CASCADE;
+ALTER TABLE `m_beds` ADD CONSTRAINT FK_bed_ward FOREIGN KEY(`ward_id`) REFERENCES `m_wards`(`id`) ON DELETE CASCADE;
+ALTER TABLE `m_admissions` ADD CONSTRAINT FK_consultations_admissions FOREIGN KEY(`cid`) REFERENCES `m_consultations`(`id`) ON DELETE CASCADE;
 
 -- ALTER TABLE m_consultations
      --   ADD constraint  fk_patient_consultations_resource foreign key (`patient_id`) references `m_patients`(`id`),
