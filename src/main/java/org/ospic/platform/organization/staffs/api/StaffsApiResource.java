@@ -52,46 +52,45 @@ public class StaffsApiResource {
         this.patientReadServices = patientReadServices;
     }
 
+    @ApiOperation(value = "LIST staffs", notes = "LIST staffs ")
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @ResponseBody
     List<Staff> all() {
         return readServices.retrieveAllStaffs();
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @ResponseBody
+    @ApiOperation(value = "CREATE staffs by array", notes = "CREATE staffs by array")
     ResponseEntity<?> createWithIteration(@Valid @RequestBody List<Staff> staffs) {
         return writeServices.createByStaffListIterate(staffs);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
+    @ApiOperation(value = "RETRIEVE staff by ID", notes = "RETRIEVE staff by ID")
     ResponseEntity<?> getOne(@PathVariable Long id) {
         return readServices.getStaffById(id);
     }
+
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    @ResponseBody
+    @ApiOperation(value = "UPDATE staff", notes = "UPDATE staff")
     ResponseEntity<?> update(@PathVariable Long id, @RequestBody Staff staff){
         return  writeServices.updateStaff(id, staff);
     }
 
     @ApiOperation(value = "GET patients assigned to this staff",notes = "GET patients assigned to this staff")
     @RequestMapping(value = "/{staffId}/patients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getPatientAssignedToThisStaff(@PathVariable Long staffId) {
         return ResponseEntity.ok().body(patientReadServices.retrievePatientAssignedToThisStaff(staffId));
     }
 
     @ApiOperation(value = "ASSIGN staff to department", notes = "ASSIGN staff to department")
     @RequestMapping(value = "/assign", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> assignStaffToDepartment(@Valid @RequestBody StaffToDepartmentRequest request){
         return writeServices.assignStaffToDepartment(request);
     }
 
     @ApiOperation(value = "RETRIEVE staff in department", notes =  "RETRIEVE staff in department")
     @RequestMapping(value = "/dep/{departmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getStaffOfThisDepartment(@PathVariable(name = "departmentId") Long departmentId){
         return readServices.getStaffInDepartment(departmentId);
     }
