@@ -1,6 +1,7 @@
 package org.ospic.platform.organization.staffs.service;
 
 import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +43,12 @@ public class StaffsReadPrinciplesServiceImpl implements StaffsReadPrinciplesServ
         return staffsRepository.findAll();
     }
     @Override
-    public Optional<Staff> retrieveStaffById(Long id) {
-        return staffsRepository.findById(id);
+    public Staff retrieveStaffById(Long id) {
+        return staffsRepository.findById(id).orElseThrow(()->new StaffNotFoundExceptionPlatform(id));
     }
     @Override
     public ResponseEntity<?> getStaffById(Long id) {
-        return ResponseEntity.ok(staffsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException()));
+        return ResponseEntity.ok(staffsRepository.findById(id).orElseThrow(() -> new StaffNotFoundExceptionPlatform(id)));
     }
 
     @Override
