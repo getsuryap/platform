@@ -2,6 +2,8 @@ package org.ospic.platform.patient.infos.service;
 
 import org.hibernate.SessionFactory;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
+import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.platform.patient.contacts.services.ContactsInformationService;
@@ -71,7 +73,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     SessionFactory sessionFactory;
     FilesStorageService filesStorageService;
 
-    StaffsReadPrinciplesService staffsReadPrinciplesService;
+    StaffsRepository staffsRepository;
     JdbcTemplate jdbcTemplate;
 
     Logger logger = LoggerFactory.getLogger(PatientInformationWriteServiceImpl.class);
@@ -79,9 +81,9 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Autowired
     public PatientInformationWriteServiceImpl(
             DataSource dataSource,
-            StaffsReadPrinciplesService staffsReadPrinciplesService,
+            StaffsRepository staffsRepository,
             FilesStorageService filesStorageService) {
-        this.staffsReadPrinciplesService = staffsReadPrinciplesService;
+        this.staffsRepository = staffsRepository;
         this.filesStorageService = filesStorageService;
 
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -161,14 +163,10 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
         return patientRepository.findById(patientId).map(patient -> {
-            staffsReadPrinciplesService.retrieveStaffById(physicianId).ifPresent(physician -> {
-
-                // patient.setStaff(physician);
+           return staffsRepository.findById(physicianId).map(physician->{
                 patientRepository.save(patient);
-
-            });
-
-            return ResponseEntity.ok(staffsReadPrinciplesService.getStaffById(physicianId));
+                return ResponseEntity.ok(physician);
+            }).orElseThrow(()->new StaffNotFoundExceptionPlatform(physicianId));
         }).orElseThrow(() -> new ResourceNotFoundException("Staff not set"));
 
     }

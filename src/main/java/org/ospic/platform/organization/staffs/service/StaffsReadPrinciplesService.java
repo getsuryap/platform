@@ -31,7 +31,7 @@ import java.util.Optional;
 @Service
 public interface StaffsReadPrinciplesService {
     public List<Staff> retrieveAllStaffs();
-    public Optional<Staff> retrieveStaffById(Long id);
+    public Staff retrieveStaffById(Long id);
     public ResponseEntity<?> getStaffById(Long Id);
     public ResponseEntity<?> getStaffInDepartment(Long departmentId);
 }

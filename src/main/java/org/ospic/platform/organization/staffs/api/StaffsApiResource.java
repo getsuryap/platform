@@ -94,6 +94,4 @@ public class StaffsApiResource {
     ResponseEntity<?> getStaffOfThisDepartment(@PathVariable(name = "departmentId") Long departmentId){
         return readServices.getStaffInDepartment(departmentId);
     }
-
-
 }
