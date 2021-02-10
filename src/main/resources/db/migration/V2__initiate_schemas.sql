@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
 DROP TABLE IF EXISTS `m_consultations` ;
 CREATE TABLE IF NOT EXISTS `m_consultations`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  fromdate TIMESTAMP NOT NULL ,
+  fromdate TIMESTAMP  NULL DEFAULT 0,
   todate TIMESTAMP ,
   is_active BOOLEAN NOT NULL DEFAULT true ,
   constraint consultations_pk primary key  (`id`),

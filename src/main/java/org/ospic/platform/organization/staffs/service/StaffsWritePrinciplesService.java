@@ -33,7 +33,7 @@ import java.util.List;
 @Component
 @Service
 public interface StaffsWritePrinciplesService {
-    public ResponseEntity<?> createNewStaff(Long id);
+    public ResponseEntity<?> createNewStaff(Long id, Long departmentId);
     public ResponseEntity<?> createByStaffListIterate(List<Staff> staffInformationList);
     public ResponseEntity<?> updateStaff(Long id, Staff staff);
     public ResponseEntity<?> assignStaffToDepartment(StaffToDepartmentRequest request);

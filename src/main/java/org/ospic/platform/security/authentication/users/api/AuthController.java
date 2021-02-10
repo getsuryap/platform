@@ -17,6 +17,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.organization.departments.domain.Department;
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.security.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.security.authentication.roles.services.RoleWritePrincipleService;
@@ -75,6 +78,8 @@ public class AuthController {
     RoleReadPrincipleServices roleReadPrincipleServices;
     @Autowired
     RoleWritePrincipleService roleWriteService;
+    @Autowired
+    DepartmentJpaRepository departmentJpaRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -126,6 +131,7 @@ public class AuthController {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
+
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
@@ -133,6 +139,8 @@ public class AuthController {
 
         Set<Long> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
+
+
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName("USER")
@@ -151,7 +159,7 @@ public class AuthController {
         user.setRoles(roles);
         User _user = userRepository.save(user);
         if (_user.getIsStaff()) {
-            staffsWritePrinciplesService.createNewStaff(_user.getId());
+            staffsWritePrinciplesService.createNewStaff(_user.getId(), signUpRequest.getDepartmentId());
         }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
