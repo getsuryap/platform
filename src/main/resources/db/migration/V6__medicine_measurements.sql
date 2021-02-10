@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `m_units`(
   `symbol` varchar  (20),
   quantity varchar  (80),
   PRIMARY KEY (`id`)
-) COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;
+) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
 ALTER TABLE `m_mdc_categories` add `unit_id` bigint after `descriptions`;
 ALTER TABLE `m_mdc_categories` ADD  constraint  fk_medicine_categories_meassure FOREIGN KEY(`unit_id`) REFERENCES `m_units`(`id`) ON DELETE CASCADE;

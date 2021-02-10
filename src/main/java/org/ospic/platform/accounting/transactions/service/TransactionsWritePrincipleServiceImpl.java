@@ -4,6 +4,8 @@ import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
@@ -63,6 +65,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     ConsultationResourceJpaRepository consultationResourceRepository;
     @Autowired
     DepartmentJpaRepository departmentRepository;
+    private MedicineRepository medicineRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -71,15 +74,17 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             TransactionJpaRepository repository,
             MedicalServiceJpaRepository medicalServiceRepository,
             ConsultationResourceJpaRepository consultationResourceRepository,
-            DepartmentJpaRepository departmentRepository) {
+            DepartmentJpaRepository departmentRepository,
+            MedicineRepository medicineRepository) {
         this.repository = repository;
         this.departmentRepository = departmentRepository;
         this.consultationResourceRepository = consultationResourceRepository;
         this.medicalServiceRepository = medicalServiceRepository;
+        this.medicineRepository = medicineRepository;
     }
 
     @Override
-    public ResponseEntity<?> createTransaction(Long id, List<Long> services) {
+    public ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
@@ -108,6 +113,46 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(service);
                     trx.setAmount(service.getPrice());
+                    repository.save(trx);
+                    trxns.add(trx);
+                }
+
+            });
+        }else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
+
+        return ResponseEntity.ok().body(new Object[]{trxns});
+    }
+
+    @Override
+    public ResponseEntity<?> createMedicineServiceTransaction(Long id, List<Long> medics) {
+        ConsultationResource consultation = consultationResourceRepository.findById(id)
+                .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
+        final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(ud.getId())
+                .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
+
+
+        List<Transactions> trxns = new ArrayList<>();
+        if (!user.getIsStaff()) {
+            String message = "Insufficient role to perform this operation";
+            throw new InsufficientRoleException(user.getId(), message);
+        } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
+            Department department = (Department) user.getStaff().getDepartment();
+
+            medics.forEach(medicationId -> {
+                Optional<Medicine> medicsOptional = medicineRepository.findById(medicationId);
+                if (medicsOptional.isPresent()) {
+                    Medicine medicine = medicsOptional.get();
+                    Transactions trx = new Transactions();
+                    trx.setDepartment(department);
+                    trx.setTransactionDate(transactionDate);
+                    trx.setConsultation(consultation);
+                    trx.setIsReversed(false);
+                    trx.setAmount(medicine.getPrice());
+                    trx.setCurrencyCode("USD");
+                    trx.setMedicalService(null);
+                    trx.setMedicine(medicine);
                     repository.save(trx);
                     trxns.add(trx);
                 }

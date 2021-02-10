@@ -93,20 +93,8 @@ public class MedicineApiResource {
         return ResponseEntity.ok().body(medicineWriteService.updateMedicineProduct(medicinalId, medicine));
     }
 
-
-
-
-    @ApiOperation(
-            value = "ADD new Medicine",
-            notes = "ADD new Medicine",
-            response = Medicine.class)
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
+    @ApiOperation(value = "ADD new Medicine", notes = "ADD new Medicine", response = Medicine.class)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> addNewMedicineProduct(@Valid @RequestBody MedicineRequest medicine) {
         return medicineWriteService.createNewMedicineProduct(medicine);
     }

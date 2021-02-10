@@ -136,12 +136,13 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
                     " DATE_FORMAT(tr.transaction_date, \"%W %M %e %Y %r\") AS  transactionDate, " +
                     " co.id as consultationId, " +
                     " d.id as departmentId, d.name as departmentName, " +
-                    " s.id as medicalServiceId, s.name as medicalServiceName " +
+                    " s.id as medicalServiceId, s.name as medicalServiceName, " +
+                    " md.name as medicineName, md.id as medicineId " +
                     " FROM m_transactions tr " +
                     " JOIN m_consultations co on co.id = tr.consultation_id " +
                     " JOIN m_department d on d.id = tr.department_id " +
-                    " JOIN m_services s on s.id = tr.medical_service_id " +
-                    " ";
+                    " LEFT JOIN m_services s on s.id = tr.medical_service_id " +
+                    " LEFT JOIN m_medicines md on md.id = tr.medicine_id ";
         }
 
         @Override
@@ -156,8 +157,10 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
             final String departmentName = rs.getString("departmentName");
             final Long medicalServiceId = rs.getLong("medicalServiceId");
             final String medicalServiceName = rs.getString("medicalServiceName");
+            final String medicineName = rs.getString("medicineName");
+            final Long medicineId = rs.getLong("medicineId");
 
-            return new TransactionRowMap(id, amount, currencyCode, isReversed, transactionDate, consultationId, departmentId, departmentName, medicalServiceId, medicalServiceName);
+            return new TransactionRowMap(id, amount, currencyCode, isReversed, transactionDate, consultationId, departmentId, departmentName, medicalServiceId, medicalServiceName, medicineId, medicineName);
         }
     }
 }

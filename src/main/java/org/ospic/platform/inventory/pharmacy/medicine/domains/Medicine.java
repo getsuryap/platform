@@ -1,9 +1,12 @@
 package org.ospic.platform.inventory.pharmacy.medicine.domains;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.ospic.platform.util.constants.DatabaseConstants;
@@ -12,6 +15,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.domains
@@ -70,6 +75,9 @@ public class Medicine implements Serializable {
     @Column(name = "units", length = 5)
     private int units;
 
+    @Column(name = "price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
+    private Double price;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     private MedicineGroup group;
@@ -77,6 +85,11 @@ public class Medicine implements Serializable {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private MedicineCategory category;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "medicine_id")
+    @JsonIgnore
+    private List<Transactions> transactions = new ArrayList<>();
 
     public Medicine(
             String name, String company, String compositions, int units) {
