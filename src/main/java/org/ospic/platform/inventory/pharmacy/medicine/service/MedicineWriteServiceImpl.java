@@ -72,6 +72,7 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
         Medicine medicine = new Medicine(medicineRequest.getName(), medicineRequest.getCompany(),
                 medicineRequest.getCompositions(), medicineRequest.getUnits());
         medicine.setCategory(category);
+        medicine.setPrice(medicineRequest.getPrice());
         medicine.setGroup(group);
         group.getMedicines().add(medicine);
         medicineRepository.save(medicine);

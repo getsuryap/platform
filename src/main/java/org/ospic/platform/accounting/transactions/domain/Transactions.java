@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.Transaction;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
+import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
@@ -66,8 +67,8 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @JsonIgnore
     private MedicalService medicalService;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "department_id")
     @JsonIgnore
     private Department department;
 
@@ -75,6 +76,11 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @JoinColumn(name = "consultation_id", nullable = false)
     @JsonIgnore
     private ConsultationResource consultation;
+
+    @ManyToOne
+    @JoinColumn(name = "medicine_id")
+    @JsonIgnore
+    private Medicine medicine;
 
     public Transactions fromTransactionPayload(TransactionPayload payload, MedicalService service){
         return new Transactions(null, service.getPrice(), null);
@@ -87,6 +93,11 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
         this.currencyCode = currencyCode;
         this.amount = amount;
         this.transactionDate = transactionDate;
+    }
+
+    public void addMedicalService(MedicalService medicalService) {
+        this.medicalService = medicalService;
+        medicalService.getTransactions().add(this);
     }
 
     /**

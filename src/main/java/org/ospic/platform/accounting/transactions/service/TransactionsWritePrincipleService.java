@@ -32,7 +32,8 @@ import java.util.List;
 @Component
 @Service
 public interface TransactionsWritePrincipleService {
-    ResponseEntity<?> createTransaction(Long id, List<Long> services);
+    ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services);
+    ResponseEntity<?> createMedicineServiceTransaction(Long id, List<Long> medics);
     ResponseEntity<?> updateTransaction(Long id, TransactionPayload payload);
     ResponseEntity<?> undoTransaction(Long id);
 }

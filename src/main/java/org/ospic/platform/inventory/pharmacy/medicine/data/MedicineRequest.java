@@ -37,13 +37,15 @@ public class MedicineRequest {
     private int units;
     private Long group;
     private Long category;
+    private Double price;
 
-    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category) {
+    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category, Double price) {
         this.name = name;
         this.company = company;
         this.compositions = compositions;
         this.units = units;
         this.group = group;
         this.category = category;
+        this.price = price;
     }
 }

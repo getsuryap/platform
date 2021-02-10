@@ -44,5 +44,6 @@ public class TransactionRowMap implements Serializable {
     private String departmentName;
     private Long medicalServiceId;
     private String medicalServiceName;
-
+    private Long medicineId;
+    private String medicineName;
 }
