@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.staffs.service;
 
+import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
@@ -50,11 +51,15 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
     }
 
     @Override
-    public ResponseEntity<?> createNewStaff(Long id) {
+    public ResponseEntity<?> createNewStaff(Long id, Long departmentId) {
         return userRepository.findById(id).map(user -> {
-            Staff staff = new Staff(user.getUsername(), null, null, null, null, user.getEmail());
-            user.setStaff(staff);
-            staff.setUser(user);
+            if (departmentId != null) {
+                Department dp = departmentJpaRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(departmentId));
+                Staff staff = new Staff(user.getUsername(), null, null, null, null, user.getEmail());
+                staff.setDepartment(dp);
+                user.setStaff(staff);
+                staff.setUser(user);
+            }
             return ResponseEntity.ok().body(userRepository.save(user));
         }).orElseGet(() -> {
             return null;
