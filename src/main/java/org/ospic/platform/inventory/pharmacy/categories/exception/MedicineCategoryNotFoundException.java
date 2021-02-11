@@ -34,6 +34,6 @@ public class MedicineCategoryNotFoundException extends AbstractPlatformResourceN
     }
 
     public MedicineCategoryNotFoundException(Long id){
-        super("error.msg.medicine.category.not.found", "Medicine category with id "+id+" is not found.", null);
+        super("error.msg.medicine.category.not.found", "Medicine category with id "+id+" is not found.");
     }
 }

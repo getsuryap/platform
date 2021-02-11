@@ -8,7 +8,7 @@ allprojects {
     apply plugin: "java"
     apply plugin: "eclipse"
     apply plugin: "idea"
-    //apply plugin: "war"
+    apply plugin: "war"
 }
 
 group = 'org.ospic.platform'
@@ -81,8 +81,8 @@ test {
 bootJar {
     archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
 }
-/**
+
 bootWar {
     archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
 }
-**/
+
