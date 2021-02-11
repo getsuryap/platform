@@ -99,50 +99,7 @@ public class AuthController {
     @PostMapping("/signup")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-
-        // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()), signUpRequest.getIsStaff());
-
-        Set<Long> strRoles = signUpRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
-
-
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName("USER")
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                Optional<Role> optionalRole = roleRepository.findById(role);
-                if (optionalRole.isPresent()) {
-                    Role userRole = optionalRole.get();
-                    roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
-        User _user = userRepository.save(user);
-        if (_user.getIsStaff()) {
-            staffsWritePrinciplesService.createNewStaff(_user.getId(), signUpRequest.getDepartmentId());
-        }
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return this.usersWritePrincipleService.registerUser(signUpRequest);
     }
 
     @ApiOperation(value = "RETRIEVE List of all Application Users", notes = "RETRIEVE List of all Application Users")
