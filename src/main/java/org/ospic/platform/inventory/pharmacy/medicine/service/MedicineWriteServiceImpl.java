@@ -94,6 +94,7 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
         medicine.setName(req.getName());
         medicine.setCompany(req.getCompany());
         medicine.setUnits(req.getUnits());
+        medicine.setPrice(req.getPrice());
         medicine.setCompositions(req.getCompositions());
 
         MedicineCategory category = medicineCategoryRepository.findById(req.getCategory()).get();
