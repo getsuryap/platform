@@ -24,18 +24,16 @@ package org.ospic.platform.inventory.pharmacy.groups.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.inventory.pharmacy.categories.exception.MedicineCategoryNotFoundException;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -76,7 +74,7 @@ public class MedicineGroupApiResources {
     ResponseEntity<?> retrieveMedicineGroupById(@PathVariable Long medicineGroupId) {
         return medicineGroupRepository.findById(medicineGroupId).map(md ->{
             return ResponseEntity.ok().body(md);
-        }).orElseThrow(()->new MedicineCategoryNotFoundException("Medicine group with id " + medicineGroupId + " is not found ...!"));
+        }).orElseThrow(()->new MedicineGroupNotFoundExceptionPlatform(medicineGroupId));
 
     }
 
@@ -89,7 +87,7 @@ public class MedicineGroupApiResources {
             mg.setName(request.getName());
             mg.setDescriptions(request.getDescriptions());
             return ResponseEntity.ok().body(medicineGroupRepository.save(mg));
-        }).orElseThrow(()-> new MedicineCategoryNotFoundException("Medicine group with id " + medicineGroupId + " is not found ...!"));
+        }).orElseThrow(()-> new MedicineGroupNotFoundExceptionPlatform(medicineGroupId));
 
     }
 
