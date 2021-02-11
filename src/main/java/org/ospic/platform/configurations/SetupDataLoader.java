@@ -4,7 +4,7 @@ import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.authentication.roles.privileges.domains.Privilege;
 import org.ospic.platform.organization.authentication.roles.privileges.repository.PrivilegesRepository;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
-import org.ospic.platform.organization.authentication.users.repository.UserRepository;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -40,7 +40,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     boolean alreadySetup = false;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
     @Autowired
     private RoleRepository roleRepository;

@@ -8,7 +8,7 @@ import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
-import org.ospic.platform.organization.authentication.users.repository.UserRepository;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -39,20 +39,20 @@ import java.util.List;
 @Repository
 public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesService {
     StaffsRepository staffsRepository;
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
     DepartmentJpaRepository departmentJpaRepository;
 
     @Autowired
-    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository, UserRepository userRepository,
+    public StaffWritePrinciplesServiceImpl(StaffsRepository staffsRepository, UserJpaRepository userJpaRepository,
                                            DepartmentJpaRepository departmentJpaRepository) {
         this.staffsRepository = staffsRepository;
-        this.userRepository = userRepository;
+        this.userJpaRepository = userJpaRepository;
         this.departmentJpaRepository = departmentJpaRepository;
     }
 
     @Override
     public ResponseEntity<?> createNewStaff(Long id, Long departmentId) {
-        return userRepository.findById(id).map(user -> {
+        return userJpaRepository.findById(id).map(user -> {
             if (departmentId != null) {
                 Department dp = departmentJpaRepository.findById(departmentId).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(departmentId));
                 Staff staff = new Staff(user.getUsername(), null, null, null, null, user.getEmail());
@@ -60,7 +60,7 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
                 user.setStaff(staff);
                 staff.setUser(user);
             }
-            return ResponseEntity.ok().body(userRepository.save(user));
+            return ResponseEntity.ok().body(userJpaRepository.save(user));
         }).orElseGet(() -> {
             return null;
         });

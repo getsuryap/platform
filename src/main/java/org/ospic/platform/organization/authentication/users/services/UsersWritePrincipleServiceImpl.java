@@ -4,16 +4,13 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
-import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
-import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserAuthenticationExceptionPlatform;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
 import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
-import org.ospic.platform.organization.authentication.users.repository.UserRepository;
-import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.security.jwt.JwtUtils;
 import org.ospic.platform.security.services.UserDetailsImpl;
@@ -21,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -52,22 +51,12 @@ import java.util.*;
  */
 @Repository
 public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleService{
-
     @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
     @Autowired
     StaffsWritePrinciplesService staffsWritePrinciplesService;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    RoleReadPrincipleServices roleReadPrincipleServices;
-    @Autowired
-    RoleWritePrincipleService roleWriteService;
-    @Autowired
-    DepartmentJpaRepository departmentJpaRepository;
-
     @Autowired
     PasswordEncoder encoder;
 
@@ -77,13 +66,13 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
 
     @Override
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userJpaRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userJpaRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -115,7 +104,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         }
 
         user.setRoles(roles);
-        User _user = userRepository.save(user);
+        User _user = userJpaRepository.save(user);
         if (_user.getIsStaff()) {
             staffsWritePrinciplesService.createNewStaff(_user.getId(), signUpRequest.getDepartmentId());
         }
@@ -128,7 +117,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findById(ud.getId()).map(user -> {
+        return userJpaRepository.findById(ud.getId()).map(user -> {
             String userPassword = user.getPassword();
             if (!(encoder.matches(payload.getOldPassword(), userPassword))) {
                 cm.setMessage("Invalid old Password");
@@ -136,7 +125,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
             }
             user.setPassword(encoder.encode(payload.getNewPassword()));
-            userRepository.save(user);
+            userJpaRepository.save(user);
             cm.setMessage("Password Updated Successfully ...");
             cm.setHttpStatus(HttpStatus.OK.value());
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
@@ -145,10 +134,6 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         }).orElseThrow(() -> new UserAuthenticationExceptionPlatform(ud.getId()));
     }
 
-    @Override
-    public ResponseEntity<?> updateRoleById(Long roleId, List<Long> payloads) {
-        return null;
-    }
 
     @Override
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
@@ -166,5 +151,17 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             expectedMap.put(entry.getKey(), entry.getValue());
         }
         return expectedMap;
+    }
+
+    @Override
+    public ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+            logoutHandler.setInvalidateHttpSession(true);
+            logoutHandler.logout(httpServletRequest, httpServletResponse, authentication);
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return ResponseEntity.ok().body("Logged out !!!");
     }
 }
