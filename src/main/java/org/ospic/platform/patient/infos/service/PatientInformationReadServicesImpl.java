@@ -8,7 +8,7 @@ import org.ospic.platform.patient.infos.data.PatientData;
 import org.ospic.platform.organization.statistics.data.PatientStatistics;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.security.authentication.users.payload.response.MessageResponse;
+import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;

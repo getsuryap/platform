@@ -6,7 +6,7 @@ import lombok.*;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
-import org.ospic.platform.security.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
