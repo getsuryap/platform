@@ -42,7 +42,10 @@ public interface UsersReadPrincipleService {
     ResponseEntity<?> retrieveLoggerInUser();
 
     ResponseEntity<?> retrieveUserById(Long userId);
+
     ResponseEntity<?> retrieveAllRoles();
+
     ResponseEntity<?> retrieveRoleById(Long roleId);
+
     ResponseEntity<?> fetchAllAvailableAuthorities();
 }
