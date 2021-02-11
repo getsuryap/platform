@@ -35,7 +35,7 @@ import java.util.List;
 @Component
 @Service
 public interface UsersReadPrincipleService {
-    ResponseEntity<?> authenticateUser(LoginRequest payload);
+    ResponseEntity<?> authenticateUser(LoginRequest payload) throws Exception;
 
     ResponseEntity<?> retrieveAllApplicationUsersResponse();
 
