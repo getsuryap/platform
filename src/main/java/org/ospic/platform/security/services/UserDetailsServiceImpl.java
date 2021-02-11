@@ -1,7 +1,7 @@
 package org.ospic.platform.security.services;
 
-import org.ospic.platform.security.authentication.users.domain.User;
-import org.ospic.platform.security.authentication.users.repository.UserRepository;
+import org.ospic.platform.organization.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

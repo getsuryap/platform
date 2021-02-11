@@ -1,7 +1,5 @@
-package org.ospic.platform.organization.staffs.service;
+package org.ospic.platform.organization.authentication.roles.services;
 
-import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
-import org.ospic.platform.organization.staffs.domains.Staff;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -9,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * This file was created by eli on 15/12/2020 for org.ospic.platform.physicians.service
+ * This file was created by eli on 28/12/2020 for org.ospic.platform.organization.authentication.roles.services
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,11 +27,8 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
 @Service
-public interface StaffsWritePrinciplesService {
-    public ResponseEntity<?> createNewStaff(Long id, Long departmentId);
-    public ResponseEntity<?> createByStaffListIterate(List<Staff> staffInformationList);
-    public ResponseEntity<?> updateStaff(Long id, Staff staff);
-    public ResponseEntity<?> assignStaffToDepartment(StaffToDepartmentRequest request);
+@Component
+public interface RoleWritePrincipleService {
+    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges);
 }

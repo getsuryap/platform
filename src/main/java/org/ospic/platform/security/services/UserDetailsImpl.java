@@ -3,15 +3,14 @@ package org.ospic.platform.security.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
-import org.ospic.platform.security.authentication.roles.domain.Role;
-import org.ospic.platform.security.authentication.roles.privileges.domains.Privilege;
-import org.ospic.platform.security.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.roles.domain.Role;
+import org.ospic.platform.organization.authentication.roles.privileges.domains.Privilege;
+import org.ospic.platform.organization.authentication.users.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
