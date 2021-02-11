@@ -5,13 +5,9 @@ import org.ospic.platform.organization.authentication.users.payload.request.User
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * This file was created by eli on 11/02/2021 for org.ospic.platform.organization.authentication.users.services
