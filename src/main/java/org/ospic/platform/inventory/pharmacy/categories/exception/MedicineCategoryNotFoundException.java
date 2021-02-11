@@ -1,5 +1,6 @@
 package org.ospic.platform.inventory.pharmacy.categories.exception;
 
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -25,9 +26,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * under the License.
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class MedicineCategoryNotFoundException extends RuntimeException {
+public class MedicineCategoryNotFoundException extends AbstractPlatformResourceNotFoundException {
     public static final long serialVersionUID = 1L;
-    public MedicineCategoryNotFoundException(String message){
-        super(message);
+
+    protected MedicineCategoryNotFoundException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
+    }
+
+    public MedicineCategoryNotFoundException(Long id){
+        super("error.msg.medicine.category.not.found", "Medicine category with id "+id+" is not found.", null);
     }
 }

@@ -4,18 +4,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
+import org.ospic.platform.inventory.pharmacy.categories.exception.MedicineCategoryNotFoundException;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
 import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.service
@@ -97,8 +96,8 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
         medicine.setPrice(req.getPrice());
         medicine.setCompositions(req.getCompositions());
 
-        MedicineCategory category = medicineCategoryRepository.findById(req.getCategory()).get();
-        MedicineGroup group = medicineGroupRepository.findById(req.getGroup()).get();
+        MedicineCategory category = medicineCategoryRepository.findById(req.getCategory()).orElseThrow(()->new MedicineCategoryNotFoundException(req.getCategory()));
+        MedicineGroup group = medicineGroupRepository.findById(req.getGroup()).orElseThrow(()->new MedicineGroupNotFoundExceptionPlatform(req.getGroup()));
         medicine.setCategory(category);
         medicine.setGroup(group);
         session.persist(medicine);
