@@ -1,7 +1,15 @@
 package org.ospic.platform.organization.authentication.users.services;
 
+import org.ospic.platform.organization.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * This file was created by eli on 11/02/2021 for org.ospic.platform.organization.authentication.users
@@ -27,4 +35,14 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface UsersReadPrincipleService {
+    ResponseEntity<?> authenticateUser(LoginRequest payload);
+
+    ResponseEntity<?> retrieveAllApplicationUsersResponse();
+
+    ResponseEntity<?> retrieveLoggerInUser();
+
+    ResponseEntity<?> retrieveUserById(Long userId);
+    ResponseEntity<?> retrieveAllRoles();
+    ResponseEntity<?> retrieveRoleById(Long roleId);
+    ResponseEntity<?> fetchAllAvailableAuthorities();
 }

@@ -1,7 +1,16 @@
 package org.ospic.platform.organization.authentication.users.services;
 
+import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
+import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * This file was created by eli on 11/02/2021 for org.ospic.platform.organization.authentication.users.services
@@ -27,4 +36,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Component
 public interface UsersWritePrincipleService {
+    ResponseEntity<?> registerUser(SignupRequest payload);
+    ResponseEntity<?> updateUserPassword(UserRequestData payload);
+    ResponseEntity<?> updateRoleById( Long roleId, List<Long> payloads);
+    ResponseEntity<?> refreshToken(HttpServletRequest request);
 }
