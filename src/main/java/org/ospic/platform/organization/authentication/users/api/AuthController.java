@@ -17,6 +17,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
+import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
@@ -65,6 +67,10 @@ public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    UsersReadPrincipleService usersReadPrincipleService;
+    @Autowired
+    UsersWritePrincipleService usersWritePrincipleService;
 
     @Autowired
     UserRepository userRepository;
@@ -87,31 +93,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
-        Authentication authentication = null;
-        JwtResponse rs = new JwtResponse();
-        try {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        List<String> permissions = userDetails.getRoles().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        logger.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
-
-
-        return ResponseEntity.ok(rs.loginResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), roles, permissions));
+        return this.usersReadPrincipleService.authenticateUser(loginRequest);
     }
 
     @PostMapping("/signup")
