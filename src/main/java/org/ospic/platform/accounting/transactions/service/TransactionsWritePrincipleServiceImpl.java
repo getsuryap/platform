@@ -15,7 +15,7 @@ import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExc
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
-import org.ospic.platform.organization.authentication.users.repository.UserRepository;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     DepartmentJpaRepository departmentRepository;
     private MedicineRepository medicineRepository;
     @Autowired
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
 
     @Autowired
     public TransactionsWritePrincipleServiceImpl(
@@ -85,7 +85,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findById(ud.getId())
+        User user = userJpaRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
 
@@ -125,7 +125,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findById(ud.getId())
+        User user = userJpaRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
 

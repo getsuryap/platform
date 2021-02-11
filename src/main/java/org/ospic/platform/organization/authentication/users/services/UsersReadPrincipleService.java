@@ -43,9 +43,4 @@ public interface UsersReadPrincipleService {
 
     ResponseEntity<?> retrieveUserById(Long userId);
 
-    ResponseEntity<?> retrieveAllRoles();
-
-    ResponseEntity<?> retrieveRoleById(Long roleId);
-
-    ResponseEntity<?> fetchAllAvailableAuthorities();
 }

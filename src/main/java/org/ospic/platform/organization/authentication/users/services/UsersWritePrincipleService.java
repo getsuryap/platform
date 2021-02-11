@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -38,6 +39,6 @@ import java.util.List;
 public interface UsersWritePrincipleService {
     ResponseEntity<?> registerUser(SignupRequest payload);
     ResponseEntity<?> updateUserPassword(UserRequestData payload);
-    ResponseEntity<?> updateRoleById( Long roleId, List<Long> payloads);
     ResponseEntity<?> refreshToken(HttpServletRequest request);
+    public ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 }

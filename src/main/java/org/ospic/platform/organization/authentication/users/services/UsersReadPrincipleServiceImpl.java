@@ -1,15 +1,10 @@
 package org.ospic.platform.organization.authentication.users.services;
 
 import org.ospic.platform.domain.CustomReponseMessage;
-import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
-import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
-import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
-import org.ospic.platform.organization.authentication.users.repository.UserRepository;
-import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
-import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.security.jwt.JwtUtils;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,7 +49,7 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
     @Autowired
     JwtUtils jwtUtils;
 
@@ -88,7 +82,7 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
 
     @Override
     public ResponseEntity<?> retrieveAllApplicationUsersResponse() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userJpaRepository.findAll();
         users.forEach(user -> {
             user.setPassword(null);
         });
@@ -98,30 +92,16 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
     @Override
     public ResponseEntity<?> retrieveLoggerInUser() {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> optional = userRepository.findById(ud.getId());
+        Optional<User> optional = userJpaRepository.findById(ud.getId());
         return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found")));
 
     }
 
     @Override
     public ResponseEntity<?> retrieveUserById(Long userId) {
-        Optional<User> optional = userRepository.findById(userId);
+        Optional<User> optional = userJpaRepository.findById(userId);
         return ResponseEntity.ok().body(optional.isPresent() ? optional.get() : new CustomReponseMessage(HttpStatus.NOT_FOUND.value(), String.format("User with ID %2d is not found", userId)));
 
     }
 
-    @Override
-    public ResponseEntity<?> retrieveAllRoles() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> retrieveRoleById(Long roleId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> fetchAllAvailableAuthorities() {
-        return null;
-    }
 }
