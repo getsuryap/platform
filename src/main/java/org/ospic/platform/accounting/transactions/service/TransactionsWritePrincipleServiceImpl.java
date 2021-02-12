@@ -12,6 +12,7 @@ import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
+import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsultationsException;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
@@ -83,6 +84,10 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     public ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
+        if(!consultation.getIsActive()){
+            throw new InactiveMedicalConsultationsException(consultation.getId());
+        }
+
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userJpaRepository.findById(ud.getId())
@@ -128,6 +133,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
         User user = userJpaRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
+        if(!consultation.getIsActive()){
+            throw new InactiveMedicalConsultationsException(consultation.getId());
+        }
 
         List<Transactions> trxns = new ArrayList<>();
         if (!user.getIsStaff()) {
