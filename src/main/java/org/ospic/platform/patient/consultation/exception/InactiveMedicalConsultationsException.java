@@ -1,4 +1,4 @@
-package org.ospic.platform.organization.medicalservices.exceptions;
+package org.ospic.platform.patient.consultation.exception;
 
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
@@ -23,13 +23,13 @@ import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceN
  * specific language governing permissions and limitations
  * under the License.
  */
-public class MedicalServiceIsNotActiveException extends AbstractPlatformResourceNotFoundException {
+public class InactiveMedicalConsultationsException extends AbstractPlatformResourceNotFoundException {
 
-    protected MedicalServiceIsNotActiveException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+    protected InactiveMedicalConsultationsException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public MedicalServiceIsNotActiveException(Long id){
+    public InactiveMedicalConsultationsException(Long id){
         super("error.msg.inactive.service", String.format("Medical service %2d is inactive", id));
     }
 }
