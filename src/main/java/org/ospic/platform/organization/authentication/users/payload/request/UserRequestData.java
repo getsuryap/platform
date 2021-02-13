@@ -32,16 +32,16 @@ import lombok.Setter;
 public class UserRequestData {
     private String oldPassword;
     private String newPassword;
-    private String username;
+
 
     public static UserRequestData updatePasswordInstance(String oldPassword, String newPassword) {
-        return new UserRequestData(oldPassword, newPassword, null);
+        return new UserRequestData(oldPassword, newPassword);
     }
 
 
-    public UserRequestData(String oldPassword, String newPassword, String username) {
+    public UserRequestData(String oldPassword, String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
-        this.username = username;
+
     }
 }
