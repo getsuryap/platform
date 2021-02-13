@@ -1,19 +1,19 @@
 package org.ospic.platform.patient.infos.service;
 
-import org.ospic.platform.domain.PageableResponse;
-import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
-import org.ospic.platform.patient.contacts.services.ContactsInformationService;
-import org.ospic.platform.fileuploads.service.FilesStorageService;
-import org.ospic.platform.patient.infos.data.PatientData;
-import org.ospic.platform.organization.statistics.data.PatientStatistics;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
-import org.ospic.platform.organization.staffs.domains.Staff;
-import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.ospic.platform.domain.PageableResponse;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
+import org.ospic.platform.organization.statistics.data.PatientStatistics;
+import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
+import org.ospic.platform.patient.contacts.services.ContactsInformationService;
+import org.ospic.platform.patient.infos.data.PatientData;
+import org.ospic.platform.patient.infos.domain.Patient;
+import org.ospic.platform.patient.infos.exceptions.PatientNotFoundExceptionPlatform;
+import org.ospic.platform.patient.infos.repository.PatientRepository;
+import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -104,16 +104,9 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
 
     @Override
     public ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException {
-        if (patientRepository.existsById(id)) {
-            Patient patient = patientRepository.findById(id).get();
-            if (
-                    patient.getConsultationResources() != null) {
-                //patient.getStaff().getPatients().clear();
-               // patient.getStaff().setUser(null);
-            }
+        return patientRepository.findById(id).map(patient -> {
             return ResponseEntity.ok().body(patient);
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new MessageResponse(String.format("Patient with given Id:  %s is not found", id)));
+        }).orElseThrow(()->new PatientNotFoundExceptionPlatform(id));
     }
 
     @Override
