@@ -6,6 +6,7 @@ import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.admission.visits.data.VisitPayload;
 import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.platform.inventory.admission.visits.repository.AdmissionVisitRepository;
+import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsultationsException;
 import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -56,14 +57,12 @@ public class VisitsWritePrincipleServiceImpl implements VisitsWritePrincipleServ
 
         return admissionRepository.findById(payload.getAdmissionId()).map(admission -> {
             if (!admission.getIsActive()){
-                cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
-                cm.setMessage("An admission with ID: "+admission.getId() + " is inactive ");
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
+                throw new InactiveMedicalConsultationsException(admission.getId());
             }
             if (visitLocalDateTime.isBefore(admission.getFromDateTime())){
-                cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
-                cm.setMessage("Admission visit can not be before admission date");
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
+                String code = "error.msg.admission.is.before.start.date";
+                String message = "Admission visit can not be before admission date";
+                throw new InactiveMedicalConsultationsException(code, message);
             }
 
             AdmissionVisit visit = new AdmissionVisit();
