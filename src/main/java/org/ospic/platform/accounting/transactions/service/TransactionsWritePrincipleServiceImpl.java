@@ -54,17 +54,12 @@ import java.util.Optional;
  */
 @Repository
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
-    @Autowired
-    TransactionJpaRepository repository;
-    @Autowired
-    MedicalServiceJpaRepository medicalServiceRepository;
-    @Autowired
-    ConsultationResourceJpaRepository consultationResourceRepository;
-    @Autowired
-    DepartmentJpaRepository departmentRepository;
-    private MedicineRepository medicineRepository;
-    @Autowired
-    UserJpaRepository userJpaRepository;
+    private final TransactionJpaRepository repository;
+    private final MedicalServiceJpaRepository medicalServiceRepository;
+    private final ConsultationResourceJpaRepository consultationResourceRepository;
+    private final DepartmentJpaRepository departmentRepository;
+    private final MedicineRepository medicineRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Autowired
     public TransactionsWritePrincipleServiceImpl(
@@ -72,19 +67,20 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             MedicalServiceJpaRepository medicalServiceRepository,
             ConsultationResourceJpaRepository consultationResourceRepository,
             DepartmentJpaRepository departmentRepository,
-            MedicineRepository medicineRepository) {
+            MedicineRepository medicineRepository, UserJpaRepository userJpaRepository) {
         this.repository = repository;
         this.departmentRepository = departmentRepository;
         this.consultationResourceRepository = consultationResourceRepository;
         this.medicalServiceRepository = medicalServiceRepository;
         this.medicineRepository = medicineRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
     public ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
-        if(!consultation.getIsActive()){
+        if (!consultation.getIsActive()) {
             throw new InactiveMedicalConsultationsException(consultation.getId());
         }
 
@@ -119,7 +115,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 }
 
             });
-        }else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
+        } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
         return ResponseEntity.ok().body(new Object[]{trxns});
     }
@@ -133,7 +129,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
         User user = userJpaRepository.findById(ud.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
 
-        if(!consultation.getIsActive()){
+        if (!consultation.getIsActive()) {
             throw new InactiveMedicalConsultationsException(consultation.getId());
         }
 
@@ -162,7 +158,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 }
 
             });
-        }else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
+        } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
         return ResponseEntity.ok().body(new Object[]{trxns});
     }
