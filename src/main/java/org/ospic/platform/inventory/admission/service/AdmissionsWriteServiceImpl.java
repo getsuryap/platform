@@ -81,33 +81,41 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                  throw new InactiveMedicalConsultationsException(consultation.getId());
             }
             if (consultation.getPatient().getIsAdmitted()) {
-                cm.setMessage("Cannot re-admit an admitted patient");
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
+                String message = "Consultation already has active admission";
+                String code ="error.msg.consultation.have.active.admission";
+                throw new InactiveMedicalConsultationsException(code, message);
             }
         
             Bed bed = bedRepository.findById(admissionRequest.getBedId()).orElseThrow(()->new BedNotFoundExceptionPlatform(admissionRequest.getBedId()));
             if (bed.getIsOccupied()){
                throw new OccupiedBedPlatformException(bed.getId());
             }
-            /**Create new admission **/
+            /*
+             * Create new admission
+             * **/
             Admission admission = new Admission(admissionRequest.getIsActive(), startLocalDateTime, endLocalDateTime);
             admission.setService(consultation);
             admission.setIsActive(true);
             admission.addBed(bed);
             admissionRepository.save(admission);
 
-            /** Update Bed set it as active. Not open for new admission **/
+            /*
+             * Update Bed set it as active. Not open for new admission
+             *  **/
             bed.setIsOccupied(true);
             bedRepository.save(bed);
 
-            /**
-             * Update patient set as admitted to prevent re-admission**/
+            /*
+             * Update patient set as admitted to prevent re-admission
+             * **/
             consultation.setIsAdmitted(true);
              consultation.getPatient().setIsAdmitted(true);
             consultationResourceJpaRepository.save(consultation);
 
 
-            /**Return Message **/
+            /*
+             * Return Message
+             * **/
 
             return ResponseEntity.ok().body(admissionRequest.getServiceId());
         }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(admissionRequest.getServiceId()));
