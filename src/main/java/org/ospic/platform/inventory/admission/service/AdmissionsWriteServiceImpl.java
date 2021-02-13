@@ -10,6 +10,7 @@ import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.exception.BedNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
+import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsultationsException;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.DateUtil;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
@@ -70,16 +70,16 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         final LocalDateTime startLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getStartDateTime());
         final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(admissionRequest.getEndDateTime());
 
-        return consultationResourceJpaRepository.findById(admissionRequest.getServiceId()).map(service -> {
+        return consultationResourceJpaRepository.findById(admissionRequest.getServiceId()).map(consultation -> {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
             if (endLocalDateTime.isBefore(startLocalDateTime)){
                 return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.BAD_REQUEST.value(), "Admission and date can not be day before it's start date"));
             }
-            if (!service.getIsActive()){
-                return ResponseEntity.ok().body("Cannot admit patient in inactive service");
+            if (!consultation.getIsActive()){
+                 throw new InactiveMedicalConsultationsException(consultation.getId());
             }
-            if (service.getPatient().getIsAdmitted()) {
+            if (consultation.getPatient().getIsAdmitted()) {
                 cm.setMessage("Cannot re-admit an admitted patient");
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
             }
@@ -94,7 +94,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
             }
             /**Create new admission **/
             Admission admission = new Admission(admissionRequest.getIsActive(), startLocalDateTime, endLocalDateTime);
-            admission.setService(service);
+            admission.setService(consultation);
             admission.setIsActive(true);
             admission.addBed(bed);
             admissionRepository.save(admission);
@@ -105,15 +105,15 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
 
             /**
              * Update patient set as admitted to prevent re-admission**/
-            service.setIsAdmitted(true);
-            service.getPatient().setIsAdmitted(true);
-            consultationResourceJpaRepository.save(service);
+            consultation.setIsAdmitted(true);
+             consultation.getPatient().setIsAdmitted(true);
+            consultationResourceJpaRepository.save(consultation);
 
 
             /**Return Message **/
 
             return ResponseEntity.ok().body(admissionRequest.getServiceId());
-        }).orElseThrow(() -> new EntityNotFoundException());
+        }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(admissionRequest.getServiceId()));
     }
 
     @Transactional
