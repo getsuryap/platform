@@ -1,7 +1,9 @@
-package org.ospic.platform.configurations.smsconfigs.sms;
+package org.ospic.platform.configurations.smsconfigs.sms.data;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * This file was created by eli on 02/01/2021 for org.ospic.platform.configurations.smsconfigs
@@ -24,7 +26,8 @@ import lombok.NoArgsConstructor;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class SMS {
     private String to;
