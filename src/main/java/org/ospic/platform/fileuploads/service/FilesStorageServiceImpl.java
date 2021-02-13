@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -57,7 +58,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public void save(MultipartFile file) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         try {
             // Check if the file's name contains invalid characters
@@ -139,7 +140,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public String uploadPatientImage(@NonNull Long patientId, @NonNull String documentLocation, MultipartFile file) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         try {
             // Check if the file's name contains invalid characters
