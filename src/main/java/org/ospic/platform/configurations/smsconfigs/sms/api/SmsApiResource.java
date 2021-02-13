@@ -1,7 +1,7 @@
 package org.ospic.platform.configurations.smsconfigs.sms.api;
 
 import io.swagger.annotations.Api;
-import org.ospic.platform.configurations.smsconfigs.sms.SMS;
+import org.ospic.platform.configurations.smsconfigs.sms.data.SMS;
 import org.ospic.platform.configurations.smsconfigs.sms.service.SMSControlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

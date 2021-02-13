@@ -1,6 +1,6 @@
 package org.ospic.platform.configurations.smsconfigs.sms.service;
 
-import org.ospic.platform.configurations.smsconfigs.sms.SMS;
+import org.ospic.platform.configurations.smsconfigs.sms.data.SMS;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 
