@@ -8,6 +8,7 @@ import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundExcepti
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.exception.BedNotFoundExceptionPlatform;
+import org.ospic.platform.inventory.beds.exception.OccupiedBedPlatformException;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsultationsException;
@@ -83,14 +84,10 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                 cm.setMessage("Cannot re-admit an admitted patient");
                 return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
             }
-            if (!bedRepository.existsById(admissionRequest.getBedId())){
-                cm.setMessage(String.format("Cannot find a Bed with an ID %2d ", admissionRequest.getBedId()));
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
-            }
-            Bed bed = bedRepository.findById(admissionRequest.getBedId()).get();
+        
+            Bed bed = bedRepository.findById(admissionRequest.getBedId()).orElseThrow(()->new BedNotFoundExceptionPlatform(admissionRequest.getBedId()));
             if (bed.getIsOccupied()){
-                cm.setMessage(String.format("Bed with an ID %2d is occupied", admissionRequest.getBedId()));
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.CONFLICT);
+               throw new OccupiedBedPlatformException(bed.getId());
             }
             /**Create new admission **/
             Admission admission = new Admission(admissionRequest.getIsActive(), startLocalDateTime, endLocalDateTime);
