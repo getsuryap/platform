@@ -78,7 +78,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     @Override
     public ResponseEntity<?> retrieveAServiceById(Long serviceId) {
         return resourceJpaRepository.findById(serviceId).map(service -> {
-            return ResponseEntity.ok().body(resourceJpaRepository.findById(serviceId));
+            return ResponseEntity.ok().body(service);
         }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
     }
 
