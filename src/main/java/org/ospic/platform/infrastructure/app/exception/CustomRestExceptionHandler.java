@@ -51,7 +51,7 @@ import java.util.List;
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AbstractPlatformException.class)
-    public ResponseEntity handleException(AbstractPlatformException e) {
+    public ResponseEntity<?> handleException(AbstractPlatformException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
     }
 
