@@ -49,6 +49,12 @@ import java.util.List;
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(AbstractPlatformException.class)
+    public ResponseEntity handleException(AbstractPlatformException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         //return super.handleMethodArgumentNotValid(ex, headers, status, request);
@@ -164,7 +170,8 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
-    @ExceptionHandler({ Exception.class })
+
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
         ApiError apiError = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred");
