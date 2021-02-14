@@ -1,32 +1,28 @@
 package org.ospic.platform.organization.authentication.users.api;
 
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
-import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
+import org.ospic.platform.organization.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
+import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
+import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.List;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -89,7 +85,7 @@ public class AuthenticationApiResource {
 
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN', 'SUPER_USER')")
+    @PreAuthorize("hasAuthority('MODERATOR')")
     ResponseEntity<?> retrieveAllRoles() {
         return roleReadPrincipleServices.retrieveAllRoles();
     }
