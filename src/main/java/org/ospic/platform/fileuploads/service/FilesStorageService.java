@@ -52,6 +52,6 @@ public interface FilesStorageService {
 
     public Stream<Path> loadAll();
 
-    public String uploadPatientImage(@NonNull Long patientId,@NonNull String documentLocation, MultipartFile multipartFile);
+    public String uploadPatientImage(@NonNull Long patientId,MultipartFile multipartFile, @NonNull String...strings);
 
 }
