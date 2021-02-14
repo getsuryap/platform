@@ -15,9 +15,6 @@ import javax.annotation.Resource;
 public class PlatformApplication implements CommandLineRunner {
 	@Resource
 	FilesStorageService filesStorageService;
-
-
-
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(PlatformApplication.class);
 		application.run( args);

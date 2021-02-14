@@ -38,7 +38,8 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.PATIENT_INFO_TABLE)
 @Table(name = DatabaseConstants.PATIENT_INFO_TABLE)
