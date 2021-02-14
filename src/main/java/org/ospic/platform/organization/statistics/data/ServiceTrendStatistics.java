@@ -7,8 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This file was created by eli on 08/01/2021 for org.ospic.platform.organization.statistics.data
@@ -34,20 +33,20 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class ServiceTrendStatistics {
-    private LocalDate date;
+    private String date;
     private Long total;
     private Long active;
     private Long inactive;
     private Long admitted;
-    private Long unadmitted;
+    private Long unAdmitted;
 
-    public ServiceTrendStatistics(LocalDate date, Long total, Long active, Long inactive, Long admitted, Long unadmitted) {
+    public ServiceTrendStatistics(String date, Long total, Long active, Long inactive, Long admitted, Long unAdmitted) {
         this.date = date;
         this.total = total;
         this.active = active;
         this.inactive = inactive;
         this.admitted = admitted;
-        this.unadmitted = unadmitted;
+        this.unAdmitted = unAdmitted;
     }
 
     public static class ServiceTrendStatisticsRowMapper implements RowMapper<ServiceTrendStatistics>{
@@ -55,13 +54,13 @@ public class ServiceTrendStatistics {
         @Override
         public ServiceTrendStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
             ServiceTrendStatistics sd = new ServiceTrendStatistics();
-            final LocalDate localDate= new DateUtil().convertToLocalDateViaSqlDate(rs.getDate("date"));
-            sd.setDate(localDate);
+            final String date = new DateUtil().convertToLocalDateViaSqlDate(rs.getDate("date")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));;
+            sd.setDate(date);
             sd.setTotal(rs.getLong("total"));
             sd.setActive(rs.getLong("active"));
             sd.setInactive(rs.getLong("active"));
             sd.setAdmitted(rs.getLong("admitted"));
-            sd.setUnadmitted(rs.getLong("unadmitted"));
+            sd.setUnAdmitted(rs.getLong("unadmitted"));
             return sd;
         }
     }
