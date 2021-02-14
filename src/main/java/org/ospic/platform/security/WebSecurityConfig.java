@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RoleHierarchyImpl r = new RoleHierarchyImpl();
         r.setHierarchy(
                 "SUPER_USER > ADMIN >  MODERATOR > USER\n"+
-                        "DOCTOR > NURSE"
+                        "MODERATOR > DOCTOR > NURSE"
         );
         return r;
     }

@@ -56,7 +56,6 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "RETRIEVE all patient service", notes = "RETRIEVE all patient service")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveServices(@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
@@ -93,7 +92,7 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "RETRIEVE staff assigned services by staff Id", notes = "RETRIEVE staff assigned service by staff Id")
     @RequestMapping(value = "/staff/{staffId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+
     ResponseEntity<?> retrieveServiceByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
@@ -109,28 +108,25 @@ public class ConsultationApiResources {
     @ApiOperation(value = "CREATE new consultation service", notes = "CREATE new consultation service")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createNewPatientService(@PathVariable Long patientId) {
-        return serviceWrite.createNewService(patientId);
+        return serviceWrite.createNewConsultation(patientId);
     }
 
     @ApiOperation(value = "RETRIEVE patient service by ID", notes = "RETRIEVE  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveServiceById(@PathVariable Long serviceId) {
         return serviceRead.retrieveAServiceById(serviceId);
     }
 
     @ApiOperation(value = "ASSIGN service to staff", notes = "ASSIGN service to staff")
     @RequestMapping(value = "/{serviceId}/{staffId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
-    @ResponseBody
     ResponseEntity<?> createNewPatientService(@PathVariable Long serviceId, @PathVariable Long staffId) {
-        return serviceWrite.assignServiceToStaff(serviceId, staffId);
+        return serviceWrite.assignConsultationToStaff(serviceId, staffId);
     }
 
     @ApiOperation(value = "END patient service by ID", notes = "END  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
-    @ResponseBody
     ResponseEntity<?> endServiceById(@PathVariable Long serviceId) {
-        return serviceWrite.endServiceById(serviceId);
+        return serviceWrite.endConsultationById(serviceId);
     }
 
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file")
