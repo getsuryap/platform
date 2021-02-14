@@ -54,7 +54,7 @@ public class ServiceTrendStatistics {
         @Override
         public ServiceTrendStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
             ServiceTrendStatistics sd = new ServiceTrendStatistics();
-            final String date = new DateUtil().convertToLocalDateViaSqlDate(rs.getDate("date")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));;
+            final String date = new DateUtil().convertToLocalDateViaSqlDate(rs.getDate("date")).format(DateTimeFormatter.ofPattern("yyy-MM-dd"));;
             sd.setDate(date);
             sd.setTotal(rs.getLong("total"));
             sd.setActive(rs.getLong("active"));
