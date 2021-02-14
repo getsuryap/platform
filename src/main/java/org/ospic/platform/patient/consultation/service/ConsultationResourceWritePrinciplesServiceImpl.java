@@ -58,7 +58,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     }
 
     @Override
-    public ResponseEntity<?> createNewService(Long patientId) {
+    public ResponseEntity<?> createNewConsultation(Long patientId) {
         return patientRepository.findById(patientId).map(patient -> {
             if (resourceJpaRepository.existsByPatientIdAndIsActiveTrue(patientId)) {
                 return ResponseEntity.badRequest().body(String.format("A patient with ID: %2d already have an active instance running", patientId));
@@ -77,7 +77,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     }
 
     @Override
-    public ResponseEntity<?> assignServiceToStaff(Long serviceId, Long staffId) {
+    public ResponseEntity<?> assignConsultationToStaff(Long serviceId, Long staffId) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
         return this.staffsRepository.findById(staffId).map(staff -> {
@@ -92,7 +92,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     }
 
     @Override
-    public ResponseEntity<?> endServiceById(Long serviceId) {
+    public ResponseEntity<?> endConsultationById(Long serviceId) {
         List<Admission> active = new ArrayList<>();
         return this.resourceJpaRepository.findById(serviceId).map(service -> {
             if (service.getPatient().getIsAdmitted()) {

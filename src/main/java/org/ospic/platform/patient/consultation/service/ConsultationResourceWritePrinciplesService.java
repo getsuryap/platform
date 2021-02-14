@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface ConsultationResourceWritePrinciplesService {
-    ResponseEntity<?> createNewService(Long patientId);
-    ResponseEntity<?> assignServiceToStaff(Long serviceId, Long staffId);
-    ResponseEntity<?> endServiceById(Long serviceId);
+    ResponseEntity<?> createNewConsultation(Long patientId);
+    ResponseEntity<?> assignConsultationToStaff(Long serviceId, Long staffId);
+    ResponseEntity<?> endConsultationById(Long serviceId);
 }
