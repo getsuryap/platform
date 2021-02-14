@@ -47,10 +47,10 @@ import java.util.List;
 @Api(value = "/api/patients", tags = "Patients", description = "Patient  API resources")
 public class PatientApiResources {
 
-    PatientInformationReadServices patientInformationReadServices;
-    PatientInformationWriteService patientInformationWriteService;
-    FilesStorageService filesStorageService;
-    PatientRepository patientRepository;
+    private final PatientInformationReadServices patientInformationReadServices;
+    private final PatientInformationWriteService patientInformationWriteService;
+    private final FilesStorageService filesStorageService;
+    private final PatientRepository patientRepository;
 
     @Autowired
     public PatientApiResources(PatientInformationReadServices patientInformationReadServices,
@@ -65,28 +65,24 @@ public class PatientApiResources {
 
     @ApiOperation(value = "GET List all un-assigned patients", notes = "Get list of all un-assigned patients")
     @RequestMapping(value = "/unassigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getAllUnassignedPatients() {
         return patientInformationReadServices.retrieveAllUnAssignedPatients();
     }
 
     @ApiOperation(value = "GET patient statistical data", notes = "Get Patient statistical data")
     @RequestMapping(value = "/statistics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getPatientStatisticalData() {
         return patientInformationReadServices.retrieveStatisticalData();
     }
 
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
     @RequestMapping(value = "/assigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getAllAssignedPatients() {
         return patientInformationReadServices.retrieveAllAssignedPatients();
     }
 
     @ApiOperation(value = "RETRIEVE list all assigned patients", notes = "RETRIEVE list of all assigned patients")
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getAllPatientPageable(@RequestParam(required = false) String group, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
         Pageable paging = PageRequest.of(page, size);
         return patientInformationReadServices.retrievePageablePatients(group, paging);
@@ -94,7 +90,6 @@ public class PatientApiResources {
 
     @ApiOperation(value = "RETRIEVE Patient creation Template for creating new Patient", notes = "RETRIEVE Patient creation Template for creating new Patient")
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @ResponseBody
     ResponseEntity<?> retrievePatientCreationTemplate(@RequestParam(value = "command", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("template")) {
@@ -107,14 +102,12 @@ public class PatientApiResources {
 
     @ApiOperation(value = "GET specific Patient information by patient ID", notes = "GET specific Patient information by patient ID")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
         return patientInformationReadServices.retrievePatientById(patientId);
     }
 
     @ApiOperation(value = "GET patient admitted in this bedId", notes = "GET patient admitted in this bedId")
     @RequestMapping(value = "/{bedId}/admitted", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> findPatientAdmittedInBedId(@PathVariable Long bedId) {
         return patientInformationReadServices.retrievePatientAdmittedInThisBed(bedId);
     }
@@ -122,14 +115,12 @@ public class PatientApiResources {
 
     @ApiOperation(value = "UPDATE specific Patient information", notes = "UPDATE specific Patient information")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> updatePatient(@ApiParam(name = "patient ID", required = true) @PathVariable Long patientId, @ApiParam(name = "Patient Entity", required = true) @RequestBody Patient patient) {
         return patientInformationWriteService.updatePatient(patientId, patient);
     }
 
     @ApiOperation(value = "ASSIGN patient to Staff", notes = "ASSIGN Patient to Staff")
     @RequestMapping(value = "/{patientId}/{physicianId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
             @ApiParam(name = "Staff ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
@@ -139,8 +130,6 @@ public class PatientApiResources {
 
     @ApiOperation(value = "CREATE new patient", notes = "CREATE new Patient", response = Patient.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
     Patient createNewPatient(@ApiParam(name = "Patient Entity", required = true) @Valid @RequestBody Patient patientInformationRequest) {
         return patientInformationWriteService.createNewPatient(patientInformationRequest);
     }
@@ -148,8 +137,6 @@ public class PatientApiResources {
 
     @ApiOperation(value = "CREATE patients by posting list of patients", notes = "CREATE patients by posting list of patients")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
     List<Patient> createNewPatients(
             @ApiParam(name = "List of Patient Entity", required = true)
             @Valid @RequestBody List<Patient> patientInformationListRequest) {
@@ -158,9 +145,7 @@ public class PatientApiResources {
 
     @ApiOperation(value = "UPDATE Patient upload Thumbnail image", notes = "UPDATE Patient upload Thumbnail image")
     @RequestMapping(value = "/{patientId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
-    public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
+    public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "patientId") Long patientId) {
         String message = "";
         try {
             return patientInformationWriteService.uploadPatientImage(patientId, file);
@@ -173,14 +158,12 @@ public class PatientApiResources {
 
     @ApiOperation(value = "DELETE Patient", notes = "DELETE Patient")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> deletePatient(@ApiParam(name = "Patient ID", required = true) @PathVariable Long id) {
         return patientInformationWriteService.deletePatientById(id);
     }
 
 
     @GetMapping("/{patientId}/images/{filename:.+}")
-    @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
         Resource file = filesStorageService.loadImage(patientId, filename);
         return ResponseEntity.ok()
@@ -188,25 +171,15 @@ public class PatientApiResources {
     }
 
     @RequestMapping(value = "/{patientId}/documents/{filename:.+}", method = RequestMethod.GET)
-    @ResponseBody
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
         Resource file = filesStorageService.loadDocument(patientId, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @RequestMapping(value = "/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE)
-    @ResponseBody
     public ResponseEntity<?> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
         //filesStorageService.deletePatientFileOrDocument("images",patientId, filename);
         return patientInformationWriteService.deletePatientImage(patientId, filename);
-    }
-
-
-    @ApiOperation(value = "INITIATE patients sample data`s ", notes = "INITIATE patients sample data`s",hidden = true, response = Patient.class)
-    @RequestMapping(value = "/initiate", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<?> initiateSampleDatas( @Valid @RequestBody Patient patient) {
-        return patientInformationWriteService.initialSampleData(patient);
     }
 
 }

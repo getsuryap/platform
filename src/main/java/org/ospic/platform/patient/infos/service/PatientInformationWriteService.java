@@ -58,5 +58,4 @@ public interface PatientInformationWriteService {
 
     public ResponseEntity<?> deletePatientImage(Long patientId ,String fileName);
 
-    public ResponseEntity<?> initialSampleData(Patient patient);
 }

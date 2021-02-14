@@ -2,6 +2,7 @@ package org.ospic.platform.patient.infos.service;
 
 import org.hibernate.SessionFactory;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
@@ -10,7 +11,6 @@ import org.ospic.platform.patient.contacts.services.ContactsInformationService;
 import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.patient.infos.exceptions.PatientNotFoundExceptionPlatform;
 import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,16 +50,6 @@ import java.util.Locale;
 @Repository
 public class PatientInformationWriteServiceImpl implements PatientInformationWriteService {
 
-    private final List<String> samples = Arrays.asList(
-            "Abbey Patton", "Emily Glover", "Brianne Shelton", "Sidney Henderson", "Gilbert Duncan",
-            "Madelyn Malone", "Judith Cobb", "Jacob Barnett", "Ramon Cole", "Stacey Fowler", "Marina Strickland",
-            "Gabriella Gomez", "Wilson Warren", "Gabriel Armstrong","Naomi Moran", "Kelly Hayes", "Corey Floyd",
-            "Zachary Young", "Kourtney Wheeler", "Sterling Frank", "Zachariah Austin", "Katelynn Harris", "Nicolas Lane",
-            "Marlene James", "Kailey Price", "Anastasia Holt", "Seth Harris", "Diego Ford", "Diego Carter", "Felix Baker",
-            "Makenzie Barber", "Walter Holland", "Trisha Norton","Bridget Fischer", "Timothy Bush", "Ciara Steele",
-            "Lorenzo Rogers", "Lucas Deleon", "Asia Lane", "Javon Goodman", "Josephine Acosta", "Kari Patton",
-            "Tiara Floyd", "Perry Ball", "Shayla Duncan", "Brenda Hopkins", "Brooklyn Pope", "Barbara Goodman",
-            "Tatiana Bell", "Dustin Farmer");
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
@@ -203,15 +191,4 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
         );
     }
 
-    @Override
-    public ResponseEntity<?> initialSampleData(Patient patient) {
-        List<Patient> patients = new ArrayList<>();
-        samples.forEach(sample->{
-            patient.setName(sample);
-            patients.add(patient);
-            patients.add(patient);
-        });
-
-        return ResponseEntity.ok().body(this.createByPatientListIterate(patients));
-    }
 }
