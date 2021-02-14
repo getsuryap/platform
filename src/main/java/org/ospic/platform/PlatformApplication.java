@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.ComponentScan;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
-import java.util.Properties;
 
 @SpringBootApplication(scanBasePackages ={"org.ospic.platform"},
 		exclude = HibernateJpaAutoConfiguration.class)
@@ -22,16 +20,6 @@ public class PlatformApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(PlatformApplication.class);
-		Properties properties = new Properties();
-
-		LocalDate date = LocalDate.now();
-
-		String logFile = String.format("logs/%2d-%2d-%2d.log", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-		properties.setProperty("spring.main.banner-mode", "log");
-		properties.setProperty("logging.level.root", "warn");
-		properties.setProperty("logging.level.org.hibernate","error");
-		properties.setProperty("logging.file", logFile);
-		application.setDefaultProperties(properties);
 		application.run( args);
 	}
 	@Override

@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
     public static final Logger logger = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("files");
 
     @Override
     public void init() {
@@ -138,24 +138,24 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public String uploadPatientImage(@NonNull Long patientId, @NonNull String documentLocation, MultipartFile file) {
+    public String uploadPatientImage(@NonNull Long patientId, MultipartFile file, @NonNull String...strings) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         try {
-            // Check if the file's name contains invalid characters
+            /** Check if the file's name contains invalid characters **/
             if (fileName.contains("..")) {
                 throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             // Copy file to the target location (Replacing existing file with the same name)
 
 
-            Path targetLocation = this.createDirectoryIfNotExists(patientId, documentLocation).resolve(fileName);
+            Path targetLocation = this.createDirectoryIfNotExists(patientId, strings).resolve(fileName);
 
             logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
             logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
 
-            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(documentLocation + "/").concat(fileName));
+            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(strings + "/").concat(fileName));
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(fileName);
@@ -164,12 +164,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path createDirectoryIfNotExists(Long patientId, String documentLocation) {
+    private Path createDirectoryIfNotExists(Long patientId, String...strings) {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("uploads/");
+            sb.append("files/");
+            sb.append("patients/");
             sb.append(patientId);
-            sb.append("/" + documentLocation);
+            sb.append("/");
+            for(String str: strings){
+                sb.append(str);
+            }
             Path image = Paths.get(sb.toString());
             return Files.createDirectories(image);
         } catch (IOException e) {
@@ -179,7 +183,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     private Path retrieveEntityImagePath(String documentLocation, @NonNull Long patientId) {
         StringBuilder sb = new StringBuilder();
-        sb.append("uploads/");
+        sb.append("files/");
+        sb.append("patients/");
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);
@@ -188,7 +193,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     private Path retrieveDocumentOrImagePath(String documentLocation, @NonNull Long patientId, @NonNull String fileName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("uploads/");
+        sb.append("files/");
+        sb.append("patients/");
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);

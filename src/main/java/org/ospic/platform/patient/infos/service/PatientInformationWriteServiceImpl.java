@@ -140,9 +140,8 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Transactional
     @Override
     public ResponseEntity<?> uploadPatientImage(Long patientId, MultipartFile file) {
-
         return patientRepository.findById(patientId).map(patient -> {
-            String imagePath = filesStorageService.uploadPatientImage(patientId, "images", file);
+            String imagePath = filesStorageService.uploadPatientImage(patientId,  file,"images");
             patient.setPatientPhoto(imagePath);
             return ResponseEntity.ok().body(patientRepository.save(patient));
         }).orElseThrow(() -> new PatientNotFoundExceptionPlatform(patientId));
