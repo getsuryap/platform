@@ -173,6 +173,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             sb.append("/");
             for(String str: strings){
                 sb.append(str);
+                sb.append("/");
             }
             Path image = Paths.get(sb.toString());
             return Files.createDirectories(image);

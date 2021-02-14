@@ -1,5 +1,6 @@
 package org.ospic.platform.infrastructure.app.exception;
 
+import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -48,11 +50,15 @@ import java.util.List;
  */
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControllerAdviceRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AbstractPlatformException.class)
     public ResponseEntity<?> handleException(AbstractPlatformException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    }
+
+    public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!"));
     }
 
     @Override

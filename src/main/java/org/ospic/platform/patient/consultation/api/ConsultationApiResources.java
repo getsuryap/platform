@@ -2,12 +2,16 @@ package org.ospic.platform.patient.consultation.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.api
@@ -37,12 +41,15 @@ import org.springframework.web.bind.annotation.*;
 public class ConsultationApiResources {
     ConsultationResourceReadPrinciplesService serviceRead;
     ConsultationResourceWritePrinciplesService serviceWrite;
+    private final FilesStorageService filesystem;
 
     @Autowired
     public ConsultationApiResources(
-            ConsultationResourceReadPrinciplesService serviceRead, ConsultationResourceWritePrinciplesService serviceWrite) {
+            ConsultationResourceReadPrinciplesService serviceRead, ConsultationResourceWritePrinciplesService serviceWrite,
+            FilesStorageService filesystem) {
         this.serviceRead = serviceRead;
         this.serviceWrite = serviceWrite;
+        this.filesystem = filesystem;
     }
 
 
@@ -124,5 +131,18 @@ public class ConsultationApiResources {
     @ResponseBody
     ResponseEntity<?> endServiceById(@PathVariable Long serviceId) {
         return serviceWrite.endServiceById(serviceId);
+    }
+
+    @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file")
+    @RequestMapping(value = "/{consultationId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
+        String message = "";
+        try {
+            String imageFile = filesystem.uploadPatientImage(consultationId, file, "consultations",String.valueOf(consultationId),"laboratory");
+            return ResponseEntity.ok().body(imageFile.trim());
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
     }
 }
