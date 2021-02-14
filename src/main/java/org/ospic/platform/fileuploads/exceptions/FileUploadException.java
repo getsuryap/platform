@@ -1,11 +1,10 @@
 package org.ospic.platform.fileuploads.exceptions;
 
 import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformFileUploadResourceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
  * This file was created by eli on 16/10/2020 for org.ospic.platform.fileuploads.exceptions
@@ -28,10 +27,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * specific language governing permissions and limitations
  * under the License.
  */
-public class FileUploadExceptionAdvice extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!"));
+public class FileUploadException extends AbstractPlatformFileUploadResourceException {
+    protected FileUploadException(String globalisationMessageCode, String defaultUserMessage) {
+        super(globalisationMessageCode, defaultUserMessage);
     }
+
+
 }
 
