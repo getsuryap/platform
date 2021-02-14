@@ -2,7 +2,6 @@ package org.ospic.platform.accounting.transactions.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.accounting.transactions.service.TransactionsWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/transactions")
-@Api(value = "/api/transactions", tags = "List of other medical service transaction's")
+@Api(value = "/api/transactions", tags = "Medical service transaction's")
 @Transactional
 public class TransactionApiResource {
     @Autowired

@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.api
  * --
@@ -36,7 +34,7 @@ import javax.transaction.Transactional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/services")
-@Api(value = "/api/services", tags = "List of other medical service's provided by this hospital institution")
+@Api(value = "/api/services", tags = "List of medical service's")
 public class MedicalServiceApiResource {
     @Autowired
     MedicalServiceReadPrincipleService readService;
