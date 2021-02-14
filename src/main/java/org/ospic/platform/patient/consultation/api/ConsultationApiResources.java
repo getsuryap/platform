@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,7 +78,7 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "RETRIEVE patient service by patient ID", notes = "RETRIEVE  patient service by patient ID")
     @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @PreAuthorize("hasAnyAuthority('MODERATOR')")
     ResponseEntity<?> retrieveServiceByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
@@ -105,9 +106,8 @@ public class ConsultationApiResources {
         return serviceRead.retrieveServiceByStaffIdAll(staffId);
     }
 
-    @ApiOperation(value = "CREATE new patient service", notes = "CREATE new patient service")
+    @ApiOperation(value = "CREATE new consultation service", notes = "CREATE new consultation service")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> createNewPatientService(@PathVariable Long patientId) {
         return serviceWrite.createNewService(patientId);
     }
