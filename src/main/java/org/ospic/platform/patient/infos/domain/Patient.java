@@ -50,8 +50,7 @@ public class Patient extends Auditable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    private @Setter(AccessLevel.PROTECTED)
-    Long id;
+    private Long id;
 
     @NotBlank
     @Column(length = 100)
