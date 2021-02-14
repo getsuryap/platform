@@ -39,10 +39,8 @@ import java.util.List;
 @Api(value = "/api/transactions", tags = "Medical service transaction's")
 @Transactional
 public class TransactionApiResource {
-    @Autowired
-    TransactionReadPrincipleService readService;
-    @Autowired
-    TransactionsWritePrincipleService writeService;
+   private final TransactionReadPrincipleService readService;
+   private final TransactionsWritePrincipleService writeService;
 
     @Autowired
     public TransactionApiResource(TransactionReadPrincipleService readService, TransactionsWritePrincipleService writeService) {
