@@ -4,11 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.statistics.data.StatisticResponseData;
 import org.ospic.platform.organization.statistics.service.ReadPrincipleService;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * This file was created by eli on 08/01/2021 for org.ospic.platform.organization.statistics.api
@@ -36,9 +38,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/statistics")
 @Api(value = "/api/statistics", tags = "Statistics", description = "Statistics Api's")
 public class StatisticsApiResource {
-
-    @Autowired
-    ReadPrincipleService readPrincipleService;
+    private final ReadPrincipleService readPrincipleService;
     @Autowired
     public StatisticsApiResource(ReadPrincipleService readPrincipleService){
         this.readPrincipleService = readPrincipleService;
@@ -46,7 +46,6 @@ public class StatisticsApiResource {
 
     @ApiOperation(value = "GET statistical data's", notes = "Get  statistical data's", response = StatisticResponseData.class)
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getAllUnassignedPatients() {
         return readPrincipleService.retrieveStatistic();
     }
