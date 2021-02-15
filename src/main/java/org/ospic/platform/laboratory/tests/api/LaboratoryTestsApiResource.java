@@ -35,11 +35,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @RequestMapping("/api/lab/services")
 @Api(value = "/api/lab/services", tags = "Laboratory services", description = "Laboratory services")
-public class LaboratoryServiceApiResource {
+public class LaboratoryTestsApiResource {
+    private final LaboratoryServiceReadPrincipleService readPrincipleService;
+    private final LaboratoryServiceWritePrincipleService writePrincipleService;
+
     @Autowired
-    LaboratoryServiceReadPrincipleService readPrincipleService;
-    @Autowired
-    LaboratoryServiceWritePrincipleService writePrincipleService;
+    public LaboratoryTestsApiResource(
+            LaboratoryServiceReadPrincipleService readPrincipleService,
+            LaboratoryServiceWritePrincipleService writePrincipleService) {
+        this.readPrincipleService = readPrincipleService;
+        this.writePrincipleService = writePrincipleService;
+    }
 
 
     @ApiOperation(value = "CREATE laboratory service", notes = "CREATE laboratory service")
@@ -50,7 +56,7 @@ public class LaboratoryServiceApiResource {
 
     @ApiOperation(value = "UPDATE laboratory service", notes = "UPDATE laboratory service")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId,@RequestBody(required = true) LaboratoryService payload) {
+    ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) LaboratoryService payload) {
         return this.writePrincipleService.updateLaboratoryService(serviceId, payload);
     }
 
@@ -65,25 +71,25 @@ public class LaboratoryServiceApiResource {
     ResponseEntity<?> activateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
         if (active) {
             return this.writePrincipleService.activateLaboratoryService(serviceId);
-        }else return this.writePrincipleService.deactivateLaboratoryService(serviceId);
+        } else return this.writePrincipleService.deactivateLaboratoryService(serviceId);
     }
 
     @ApiOperation(value = "GET laboratory service", notes = "GET laboratory service")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> readLabServices() {
+    ResponseEntity<?> readListOfLaboratoryServices() {
         return this.readPrincipleService.listLaboratoryServices();
     }
 
     @ApiOperation(value = "GET laboratory service by ID", notes = "GET laboratory service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> readLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId) {
+    ResponseEntity<?> readLabServiceById(@PathVariable(name = "serviceId", required = true) Long serviceId) {
         return this.readPrincipleService.findLaboratoryServiceById(serviceId);
     }
 
 
     @ApiOperation(value = "READ laboratory service by active status", notes = "READ laboratory service by active status")
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> findLabServicesByStatus(@RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
-            return this.readPrincipleService.findLaboratoryServiceByActiveStatus(active);
+        return this.readPrincipleService.findLaboratoryServiceByActiveStatus(active);
     }
 }
