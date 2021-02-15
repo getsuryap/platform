@@ -1,5 +1,6 @@
 package org.ospic.platform.laboratory.tests.services;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,7 @@ import org.springframework.stereotype.Repository;
 @Component
 @Repository
 public interface LaboratoryServiceReadPrincipleService {
+    ResponseEntity<?> listLaboratoryServices();
+    ResponseEntity<?> findLaboratoryServiceById(Long id);
+    ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status);
 }
