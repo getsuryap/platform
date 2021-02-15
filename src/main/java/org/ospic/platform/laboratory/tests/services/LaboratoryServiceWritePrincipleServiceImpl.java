@@ -47,9 +47,12 @@ public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratorySer
     @Override
     public ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload) {
         return this.repository.findById(id).map(service->{
-            payload.setId(service.getId());
-            LaboratoryService ups = this.repository.save(payload);
-            return ResponseEntity.ok().body(ups);
+            service.setIsActive(payload.getIsActive() ==null? service.getIsActive() : payload.getIsActive());
+            service.setDescriptions(payload.getDescriptions()==null? service.getDescriptions() : payload.getDescriptions());
+            service.setName(payload.getName() == null?  service.getName() :  payload.getName());
+            service.setPrice(payload.getPrice() ==null? service.getPrice() : payload.getPrice());
+            LaboratoryService ups = this.repository.save(service);
+            return ResponseEntity.status(HttpStatus.OK).body(ups);
         }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
     }
 
