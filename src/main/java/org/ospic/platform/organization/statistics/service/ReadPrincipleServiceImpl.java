@@ -3,7 +3,7 @@ package org.ospic.platform.organization.statistics.service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.ospic.platform.organization.statistics.data.*;
-import org.ospic.platform.patient.infos.data.PatientTrendsDataRowMapper;
+import org.ospic.platform.patient.details.data.PatientTrendsDataRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;

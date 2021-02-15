@@ -13,7 +13,7 @@ import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
-import org.ospic.platform.patient.infos.domain.Patient;
+import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;

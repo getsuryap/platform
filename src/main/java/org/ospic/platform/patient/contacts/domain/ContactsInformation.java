@@ -1,9 +1,8 @@
 package org.ospic.platform.patient.contacts.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.ospic.platform.util.constants.DatabaseConstants;
-import org.ospic.platform.patient.infos.domain.Patient;
+import org.ospic.platform.patient.details.domain.Patient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;

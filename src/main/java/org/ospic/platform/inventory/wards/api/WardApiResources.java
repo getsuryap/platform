@@ -2,6 +2,7 @@ package org.ospic.platform.inventory.wards.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.data.WardResponseData;
@@ -9,7 +10,6 @@ import org.ospic.platform.inventory.wards.domain.Ward;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
 import org.ospic.platform.inventory.wards.service.WardReadPrincipleService;
 import org.ospic.platform.inventory.wards.service.WardWritePrincipleService;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -119,14 +119,14 @@ public class WardApiResources {
     @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
     @RequestMapping(value = "/{wardId}/bed", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    ResponseEntity<String> addNewBedInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid Bed bed) throws ResourceNotFoundException {
+    ResponseEntity<String> addNewBedInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardWritePrincipleService.addBedInWard(wardId, bed);
     }
 
     @ApiOperation(value = "ADD new bed in Ward", notes = "ADD new bed in Ward")
     @RequestMapping(value = "/{wardId}/beds", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
-    ResponseEntity<String> addNewListOfBedsInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid List<Bed> beds) throws ResourceNotFoundException {
+    ResponseEntity<String> addNewListOfBedsInWard(@PathVariable(value = "wardId", required = true) Long wardId, @RequestBody @Valid List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardWritePrincipleService.addListOfBedsInWard(wardId, beds);
     }
 

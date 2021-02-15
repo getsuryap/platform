@@ -1,17 +1,17 @@
-package org.ospic.platform.patient.infos.service;
+package org.ospic.platform.patient.details.service;
 
 import org.hibernate.SessionFactory;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
 import org.ospic.platform.patient.contacts.services.ContactsInformationService;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.infos.exceptions.PatientNotFoundExceptionPlatform;
-import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
+import org.ospic.platform.patient.details.domain.Patient;
+import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.infos.service
+ * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.details.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -127,7 +127,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
 
     @Transactional
     @Override
-    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException {
+    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return patientRepository.findById(patientId).map(patient -> {
             return staffsRepository.findById(physicianId).map(physician -> {
                 patientRepository.save(patient);

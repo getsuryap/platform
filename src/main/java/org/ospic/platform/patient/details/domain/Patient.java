@@ -1,4 +1,4 @@
-package org.ospic.platform.patient.infos.domain;
+package org.ospic.platform.patient.details.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;

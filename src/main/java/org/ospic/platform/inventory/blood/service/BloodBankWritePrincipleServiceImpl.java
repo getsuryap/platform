@@ -1,10 +1,10 @@
 package org.ospic.platform.inventory.blood.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.blood.data.BloodPayload;
 import org.ospic.platform.inventory.blood.domain.BloodGroup;
 import org.ospic.platform.inventory.blood.repository.BloodBankRepository;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,12 +56,12 @@ public class BloodBankWritePrincipleServiceImpl implements BloodBankWritePrincip
     }
 
     @Override
-    public ResponseEntity<?> addMoreBloodBagsForThisGroup(BloodPayload payload) throws ResourceNotFoundException{
+    public ResponseEntity<?> addMoreBloodBagsForThisGroup(BloodPayload payload) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return bloodBankRepository.findById(payload.getGroupId()).map(group ->{
             group.setCounts(group.getCounts() + payload.getBagsCount());
             bloodBankRepository.save(group);
             return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),"Blood group updated successfully"));
-        }).orElseThrow(() -> new ResourceNotFoundException("Blood group with such an ID os not found"));
+        }).orElseThrow(() -> new AbstractPlatformInactiveResourceException.ResourceNotFoundException("Blood group with such an ID os not found"));
     }
 
     @Override

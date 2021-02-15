@@ -1,8 +1,8 @@
-package org.ospic.platform.patient.infos.service;
+package org.ospic.platform.patient.details.service;
 
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
+import org.ospic.platform.patient.details.domain.Patient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.infos.service
+ * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.details.service
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -42,7 +42,7 @@ public interface PatientInformationWriteService {
     public ResponseEntity<?> updatePatient(Long id, Patient patient);
 
     @Transactional
-    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws ResourceNotFoundException;
+    public ResponseEntity<?> assignPatientToPhysician(Long patientId, Long physicianId) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
     @Transactional
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest);

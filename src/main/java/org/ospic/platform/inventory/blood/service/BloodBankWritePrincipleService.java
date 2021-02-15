@@ -1,7 +1,7 @@
 package org.ospic.platform.inventory.blood.service;
 
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.blood.data.BloodPayload;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ import java.util.Collection;
 @Component
 @Service
 public interface BloodBankWritePrincipleService {
-    ResponseEntity<?> addMoreBloodBagsForThisGroup(BloodPayload payload) throws ResourceNotFoundException;
+    ResponseEntity<?> addMoreBloodBagsForThisGroup(BloodPayload payload) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
     ResponseEntity<?> addMoreBloodBagsForListOfBloodGroups(Collection<BloodPayload> payloads);
     public void initiateData();
 

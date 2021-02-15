@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * This file was created by eli on 01/11/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 01/11/2020 for org.ospic.platform.patient.details.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

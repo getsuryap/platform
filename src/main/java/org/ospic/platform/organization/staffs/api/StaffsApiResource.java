@@ -6,7 +6,7 @@ import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
 import io.swagger.annotations.Api;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
-import org.ospic.platform.patient.infos.service.PatientInformationReadServices;
+import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
