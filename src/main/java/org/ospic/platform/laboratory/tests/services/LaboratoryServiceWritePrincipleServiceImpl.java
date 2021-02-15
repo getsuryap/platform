@@ -37,6 +37,9 @@ public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratorySer
 
     @Override
     public ResponseEntity<?> createLaboratoryService(LaboratoryService  payload) {
+        if (payload.getIsActive() == null){
+            payload.setIsActive(true);
+        }
        LaboratoryService ls = this.repository.save(payload);
         return ResponseEntity.ok().body(ls);
     }
