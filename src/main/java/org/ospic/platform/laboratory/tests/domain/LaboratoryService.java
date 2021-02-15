@@ -43,7 +43,6 @@ import java.io.Serializable;
 @Table(name = DatabaseConstants.TABLE_LABORATORY_SERVICES)
 @ApiModel(value = "Patient", description = "Laboratory test services")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class LaboratoryService extends AbstractPersistableCustom implements Serializable {
     @Column(length = 200, name = "name", unique = true)
     private String name;
