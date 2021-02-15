@@ -1,8 +1,13 @@
 package org.ospic.platform.laboratory.tests.services;
 
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
 import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * This file was created by eli on 15/02/2021 for org.ospic.platform.laboratory.tests.services
@@ -29,4 +34,27 @@ import org.springframework.stereotype.Repository;
 public class LaboratoryServiceReadPrincipleServiceImpl implements LaboratoryServiceReadPrincipleService {
     @Autowired
     LaboratoryServiceJpaRepository repository;
+
+    @Override
+    public ResponseEntity<?> listLaboratoryServices() {
+        List<LaboratoryService> list = this.repository.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @Override
+    public ResponseEntity<?> findLaboratoryServiceById(Long id) {
+        return this.repository.findById(id).map(service->{
+            return ResponseEntity.ok().body(service);
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status) {
+        List<LaboratoryService> services;
+        if (status){
+            services = this.repository.findByIsActiveTrue();
+        }else services = this.repository.findByIsActiveFalse();
+
+        return ResponseEntity.ok().body(services);
+    }
 }
