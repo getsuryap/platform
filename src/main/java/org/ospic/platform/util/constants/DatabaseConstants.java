@@ -41,4 +41,7 @@ public class DatabaseConstants {
     public static final String UNITS_OF_MEASUREMENT_TABLE = TI+"units";
     public static final String TABLE_TRANSACTIONS = TI+"transactions";
     public static final String TABLE_SERVICES = TI+"services";
+    public static final String TABLE_LABORATORY_SERVICES= TI+"laboratory_services";
+    public static final String TABLE_RADIOLOGY_SERVICES = TI+"radiology_services";
+    public static final String TABLE_CONSULTATION_LABORATORY_TESTS = TI+"lab_tests";
 }
