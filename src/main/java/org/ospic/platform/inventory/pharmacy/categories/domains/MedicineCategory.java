@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;

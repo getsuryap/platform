@@ -1,12 +1,12 @@
-package org.ospic.platform.patient.infos.api;
+package org.ospic.platform.patient.details.api;
 
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.patient.infos.repository.PatientRepository;
-import org.ospic.platform.patient.infos.service.PatientInformationReadServices;
-import org.ospic.platform.patient.infos.service.PatientInformationWriteService;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
+import org.ospic.platform.patient.details.domain.Patient;
+import org.ospic.platform.patient.details.repository.PatientRepository;
+import org.ospic.platform.patient.details.service.PatientInformationReadServices;
+import org.ospic.platform.patient.details.service.PatientInformationWriteService;
 import io.swagger.annotations.*;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +102,7 @@ public class PatientApiResources {
 
     @ApiOperation(value = "GET specific Patient information by patient ID", notes = "GET specific Patient information by patient ID")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, ResourceNotFoundException {
+    ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return patientInformationReadServices.retrievePatientById(patientId);
     }
 
@@ -123,7 +123,7 @@ public class PatientApiResources {
     @RequestMapping(value = "/{patientId}/{physicianId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> assignPatientToPhysician(
             @ApiParam(name = "Patient ID", required = true) @PathVariable Long patientId,
-            @ApiParam(name = "Staff ID", required = true) @PathVariable Long physicianId) throws ResourceNotFoundException {
+            @ApiParam(name = "Staff ID", required = true) @PathVariable Long physicianId) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return patientInformationWriteService.assignPatientToPhysician(patientId, physicianId);
     }
 

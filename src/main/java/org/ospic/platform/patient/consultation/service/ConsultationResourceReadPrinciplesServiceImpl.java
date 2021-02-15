@@ -1,6 +1,6 @@
 package org.ospic.platform.patient.consultation.service;
 
-import org.ospic.platform.patient.infos.repository.PatientRepository;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.consultation.data.ConsultationPayload;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.mappers.ConsultationResourceMapper;

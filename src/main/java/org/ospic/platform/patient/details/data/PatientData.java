@@ -1,4 +1,4 @@
-package org.ospic.platform.patient.infos.data;
+package org.ospic.platform.patient.details.data;
 
 import org.ospic.platform.organization.staffs.domains.Staff;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * This file was created by eli on 14/10/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 14/10/2020 for org.ospic.platform.patient.details.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -8,16 +8,13 @@ import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.domain.Ward;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
 import org.ospic.platform.util.constants.DatabaseConstants;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * This file was created by eli on 06/11/2020 for org.ospic.platform.inventory.beds.service

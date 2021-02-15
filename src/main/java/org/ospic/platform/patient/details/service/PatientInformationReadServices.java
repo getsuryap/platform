@@ -1,13 +1,12 @@
-package org.ospic.platform.patient.infos.service;
+package org.ospic.platform.patient.details.service;
 
-import org.ospic.platform.patient.infos.domain.Patient;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
+import org.ospic.platform.patient.details.domain.Patient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -41,7 +40,7 @@ import java.util.List;
 
      ResponseEntity<?> retrievePageablePatients(String bloodGroup, Pageable pageable);
 
-     ResponseEntity<?> retrievePatientById(Long id) throws ResourceNotFoundException;
+     ResponseEntity<?> retrievePatientById(Long id) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
      ResponseEntity<?> retrievePatientCreationDataTemplate();
 

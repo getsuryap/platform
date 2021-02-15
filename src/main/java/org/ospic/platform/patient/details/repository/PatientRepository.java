@@ -1,9 +1,12 @@
-package org.ospic.platform.util.exceptions;
+package org.ospic.platform.patient.details.repository;
+
+import org.ospic.platform.patient.details.domain.Patient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
+import javax.transaction.Transactional;
 
 /**
- * This file was created by eli on 10/10/2020 for org.ospic.platform.util.exceptions
- * --
- * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -21,19 +24,10 @@ package org.ospic.platform.util.exceptions;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class TaskNotFoundException extends RuntimeException {
-    private Long id;
+public interface PatientRepository extends JpaRepository<Patient,Long> {
+    @Transactional
+    Patient getById(String id);
+   Page<Patient> findByBloodGroup(String bloodGroup, Pageable pageable);
 
-    public TaskNotFoundException(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public String getMessage() {
-        return "Task with ID '" + id + "' not found";
-    }
+    Page<Patient> findAll(Pageable pageable);
 }

@@ -6,11 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.inventory.wards.domain.Ward;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.*;
 

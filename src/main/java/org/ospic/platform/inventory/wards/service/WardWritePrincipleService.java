@@ -1,8 +1,8 @@
 package org.ospic.platform.inventory.wards.service;
 
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.wards.domain.Ward;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -35,8 +35,8 @@ public interface WardWritePrincipleService {
 
     ResponseEntity<String> deleteWard(Long id);
 
-    ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException;
+    ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
-    ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException;
+    ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
 }

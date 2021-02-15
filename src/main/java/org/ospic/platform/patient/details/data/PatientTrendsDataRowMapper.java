@@ -1,4 +1,4 @@
-package org.ospic.platform.patient.infos.data;
+package org.ospic.platform.patient.details.data;
 
 import org.ospic.platform.organization.statistics.data.PatientTrendStatistics;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 02/11/2020 for org.ospic.platform.patient.details.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -1,9 +1,9 @@
-package org.ospic.platform.patient.infos.exceptions;
+package org.ospic.platform.patient.details.exceptions;
 
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.patient.infos
+ * This file was created by eli on 28/11/2020 for org.ospic.platform.patient.details
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

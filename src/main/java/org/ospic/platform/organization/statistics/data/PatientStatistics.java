@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * This file was created by eli on 20/12/2020 for org.ospic.platform.patient.infos.data
+ * This file was created by eli on 20/12/2020 for org.ospic.platform.patient.details.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one

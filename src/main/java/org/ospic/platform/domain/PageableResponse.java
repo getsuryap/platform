@@ -1,7 +1,6 @@
 package org.ospic.platform.domain;
 
 import lombok.*;
-import org.ospic.platform.patient.infos.domain.Patient;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;

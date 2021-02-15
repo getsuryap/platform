@@ -1,15 +1,14 @@
 package org.ospic.platform.inventory.wards.service;
 
 import org.hibernate.SessionFactory;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.inventory.wards.domain.Ward;
 import org.ospic.platform.inventory.wards.exceptions.DuplicateWardFoundExceptions;
 import org.ospic.platform.inventory.wards.exceptions.WardNotFoundExceptions;
 import org.ospic.platform.inventory.wards.repository.WardRepository;
-import org.ospic.platform.util.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -77,7 +76,7 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws ResourceNotFoundException {
+    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardRepository.findById(wardId).map(ward -> {
             if (bedRepository.existsByIdentifier(bed.getIdentifier())) {
                 return ResponseEntity.badRequest().body(String.format("Bed with the same Identifier %s is already exist", bed.getIdentifier()));
@@ -86,11 +85,11 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
             ward.addBed(bed);
             wardRepository.save(ward);
             return ResponseEntity.ok().body("Bed added successfully...");
-        }).orElseThrow(() -> new ResourceNotFoundException("Ward with such an ID os not found"));
+        }).orElseThrow(() -> new AbstractPlatformInactiveResourceException.ResourceNotFoundException("Ward with such an ID os not found"));
     }
 
     @Override
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws ResourceNotFoundException {
+    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardRepository.findById(wardId).map(ward -> {
             beds.forEach(bed -> {
                 if (!bedRepository.existsByIdentifier(bed.getIdentifier())) {
@@ -99,7 +98,7 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
             });
             wardRepository.save(ward);
             return ResponseEntity.ok().body("Bed added successfully...");
-        }).orElseThrow(() -> new ResourceNotFoundException("Ward with such an ID os not found"));
+        }).orElseThrow(() -> new AbstractPlatformInactiveResourceException.ResourceNotFoundException("Ward with such an ID os not found"));
     }
 
     @Override
