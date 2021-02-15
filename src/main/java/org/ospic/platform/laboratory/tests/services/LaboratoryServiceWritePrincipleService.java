@@ -1,5 +1,7 @@
 package org.ospic.platform.laboratory.tests.services;
 
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +29,9 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface LaboratoryServiceWritePrincipleService {
+    ResponseEntity<?> createLaboratoryService(LaboratoryService payload);
+    ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload);
+    ResponseEntity<?> deleteLaboratoryService(Long id);
+    ResponseEntity<?> activateLaboratoryService(Long id);
+    ResponseEntity<?> deactivateLaboratoryService(Long id);
 }

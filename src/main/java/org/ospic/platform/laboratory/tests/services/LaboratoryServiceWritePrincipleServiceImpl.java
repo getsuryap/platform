@@ -1,7 +1,12 @@
 package org.ospic.platform.laboratory.tests.services;
 
+import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
 import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,4 +34,45 @@ import org.springframework.stereotype.Repository;
 public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratoryServiceWritePrincipleService {
     @Autowired
     LaboratoryServiceJpaRepository repository;
+
+    @Override
+    public ResponseEntity<?> createLaboratoryService(LaboratoryService  payload) {
+       LaboratoryService ls = this.repository.save(payload);
+        return ResponseEntity.ok().body(ls);
+    }
+
+    @Override
+    public ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload) {
+        return this.repository.findById(id).map(service->{
+            payload.setId(service.getId());
+            LaboratoryService ups = this.repository.save(payload);
+            return ResponseEntity.ok().body(ups);
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteLaboratoryService(Long id) {
+        return this.repository.findById(id).map(service->{
+            this.repository.deleteById(id);
+            return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),String.format("Laboratory service %2d deleted",id)));
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> activateLaboratoryService(Long id) {
+        return this.repository.findById(id).map(service->{
+            service.setIsActive(true);
+            LaboratoryService ups = this.repository.save(service);
+            return ResponseEntity.ok().body(ups);
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> deactivateLaboratoryService(Long id) {
+        return this.repository.findById(id).map(service->{
+            service.setIsActive(false);
+            LaboratoryService ups = this.repository.save(service);
+            return ResponseEntity.ok().body(ups);
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+    }
 }
