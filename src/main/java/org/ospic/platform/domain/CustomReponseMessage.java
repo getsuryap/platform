@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 /**
  * This file was created by eli on 27/11/2020 for org.ospic.platform.domain
@@ -37,4 +36,5 @@ public class CustomReponseMessage {
         this.httpStatus = httpStatus;
         this.message = message;
     }
+
 }

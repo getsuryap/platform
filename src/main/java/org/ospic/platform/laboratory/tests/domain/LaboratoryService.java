@@ -58,4 +58,10 @@ public class LaboratoryService extends AbstractPersistableCustom implements Seri
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
+    public LaboratoryService(String name, String descriptions, Double price, Boolean isActive) {
+        this.name = name;
+        this.descriptions = descriptions;
+        this.price = price;
+        this.isActive = isActive;
+    }
 }
