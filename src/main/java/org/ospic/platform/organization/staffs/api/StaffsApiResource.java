@@ -1,10 +1,10 @@
 package org.ospic.platform.organization.staffs.api;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.staffs.data.StaffToDepartmentRequest;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.service.StaffsReadPrinciplesService;
-import io.swagger.annotations.Api;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +56,12 @@ public class StaffsApiResource {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     List<Staff> all() {
         return readServices.retrieveAllStaffs();
+    }
+
+    @ApiOperation(value = "LIST staffs by status", notes = "LIST staff's by status")
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    ResponseEntity<?> staffByStatus(@RequestParam(value = "status", required = false) String status) {
+        return readServices.getStaffsByStatus(status);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)

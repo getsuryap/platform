@@ -4,6 +4,7 @@ import org.ospic.platform.organization.staffs.domains.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,4 +29,11 @@ public interface StaffsRepository extends JpaRepository<Staff, Long> {
     Boolean existsByUsername(String username);
     Staff getById(Long id);
     Collection<Staff> findByDepartmentId(Long departmentId);
+    List<Staff> findByIsActiveTrue();
+    List<Staff> findByIsActiveFalse();
+    List<Staff> findByIsAvailableTrue();
+    List<Staff> findByIsAvailableFalse();
+    List<Staff> findByIsActiveTrueAndIsAvailableFalse();
+    List<Staff> findByIsAvailableTrueAndIsActiveTrue();
+
 }
