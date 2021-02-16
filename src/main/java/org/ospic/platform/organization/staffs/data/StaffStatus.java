@@ -1,14 +1,9 @@
-package org.ospic.platform.organization.staffs.service;
-
-
-import org.ospic.platform.organization.staffs.domains.Staff;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+package org.ospic.platform.organization.staffs.data;
 
 /**
+ * This file was created by eli on 16/02/2021 for org.ospic.platform.organization.staffs.data
+ * --
+ * --
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -26,12 +21,24 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface StaffsReadPrinciplesService {
-    public List<Staff> retrieveAllStaffs();
-    public Staff retrieveStaffById(Long id);
-    public ResponseEntity<?> getStaffById(Long Id);
-    public ResponseEntity<?> getStaffInDepartment(Long departmentId);
-    public ResponseEntity<?> getStaffsByStatus(String status);
+public enum StaffStatus {
+    ACTIVE("active"),
+    INACTIVE("inactive"),
+    AVAILABLE("available"),
+    UNAVAILABLE("unavailable"),
+    ACTIVE_UNAVAILABLE("activeunavailable"),
+    ACTIVE_AVAILABLE("activeavailable");
+
+    public final String status;
+
+    private StaffStatus(String  status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+    public boolean equals(String s){
+        return this.status.equals(s);
+    }
 }

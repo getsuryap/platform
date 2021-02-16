@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.staffs.service;
 
+import org.ospic.platform.organization.staffs.data.StaffStatus;
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
@@ -7,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 @Repository
 public class StaffsReadPrinciplesServiceImpl implements StaffsReadPrinciplesService {
-    StaffsRepository staffsRepository;
+    private final StaffsRepository staffsRepository;
 
     @Autowired
     public StaffsReadPrinciplesServiceImpl(StaffsRepository staffsRepository) {
@@ -55,5 +55,31 @@ public class StaffsReadPrinciplesServiceImpl implements StaffsReadPrinciplesServ
     public ResponseEntity<?> getStaffInDepartment(Long departmentId) {
         List<Staff> staffs = (List<Staff>) staffsRepository.findByDepartmentId(departmentId);
         return ResponseEntity.ok(staffs);
+    }
+
+    @Override
+    public ResponseEntity<?> getStaffsByStatus(String status) {
+        List<Staff> staffs = new ArrayList<>();
+        if (StaffStatus.ACTIVE.equals(status) ){
+            staffs = this.staffsRepository.findByIsActiveTrue();
+        }
+        else if (StaffStatus.INACTIVE.equals(status) ){
+            staffs = this.staffsRepository.findByIsActiveFalse();
+        }
+        else if (StaffStatus.AVAILABLE.equals(status) ){
+            staffs = this.staffsRepository.findByIsAvailableTrue();
+        }
+        else if (StaffStatus.UNAVAILABLE.equals(status) ){
+            staffs = this.staffsRepository.findByIsAvailableFalse();
+        }
+        else if (StaffStatus.ACTIVE_AVAILABLE.equals(status) ){
+            staffs = this.staffsRepository.findByIsAvailableTrueAndIsActiveTrue();
+        }
+        else if (StaffStatus.ACTIVE_UNAVAILABLE.equals(status) ){
+            staffs = this.staffsRepository.findByIsActiveTrueAndIsAvailableFalse();
+        }else {
+            staffs = this.staffsRepository.findAll();
+        }
+        return ResponseEntity.ok().body(staffs);
     }
 }
