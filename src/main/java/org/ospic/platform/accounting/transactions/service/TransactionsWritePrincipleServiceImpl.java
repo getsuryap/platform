@@ -92,7 +92,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
         List<Transactions> trxns = new ArrayList<>();
         if (!user.getIsStaff()) {
-            String message = "Insufficient role to perform this operation";
+            String message = "Insufficient role to perform this operation. Not member of any active department";
             throw new InsufficientRoleException(user.getId(), message);
         } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
             Department department = (Department) user.getStaff().getDepartment();
