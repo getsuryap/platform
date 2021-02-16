@@ -9,7 +9,7 @@ import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserAuthenticationExceptionPlatform;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
+import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
@@ -112,7 +112,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     }
 
     @Override
-    public ResponseEntity<?> updateUserPassword(UserRequestData payload) {
+    public ResponseEntity<?> updateUserPassword(PasswordUpdatePayload payload) {
         CustomReponseMessage cm = new CustomReponseMessage();
         HttpHeaders httpHeaders = new HttpHeaders();
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

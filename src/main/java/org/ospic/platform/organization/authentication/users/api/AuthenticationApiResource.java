@@ -8,7 +8,7 @@ import org.ospic.platform.organization.authentication.roles.services.RoleReadPri
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
+import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
 import org.ospic.platform.organization.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
@@ -79,7 +79,7 @@ public class AuthenticationApiResource {
     @ApiOperation(value = "Update user password", notes = "Update user password")
     @RequestMapping(value = "/password", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(@ApiResponse(code = 200, message = "", response = UserRequestDataApiResourceSwagger.GetUserRequestDataResponse.class))
-    public ResponseEntity<?> updateUserPassword(@Valid @RequestBody UserRequestData payload) {
+    public ResponseEntity<?> updateUserPassword(@Valid @RequestBody PasswordUpdatePayload payload) {
         return this.usersWritePrincipleService.updateUserPassword(payload);
     }
 

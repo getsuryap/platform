@@ -29,17 +29,17 @@ import lombok.Setter;
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-public class UserRequestData {
+public class PasswordUpdatePayload {
     private String oldPassword;
     private String newPassword;
 
 
-    public static UserRequestData updatePasswordInstance(String oldPassword, String newPassword) {
-        return new UserRequestData(oldPassword, newPassword);
+    public static PasswordUpdatePayload updatePasswordInstance(String oldPassword, String newPassword) {
+        return new PasswordUpdatePayload(oldPassword, newPassword);
     }
 
 
-    public UserRequestData(String oldPassword, String newPassword) {
+    public PasswordUpdatePayload(String oldPassword, String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
 

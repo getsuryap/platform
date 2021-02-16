@@ -1,7 +1,7 @@
 package org.ospic.platform.organization.authentication.users.services;
 
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
+import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public interface UsersWritePrincipleService {
     ResponseEntity<?> registerUser(SignupRequest payload);
-    ResponseEntity<?> updateUserPassword(UserRequestData payload);
+    ResponseEntity<?> updateUserPassword(PasswordUpdatePayload payload);
     ResponseEntity<?> refreshToken(HttpServletRequest request);
     ResponseEntity<?> updateUserDetails(SignupRequest payload);
     public ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
