@@ -6,6 +6,7 @@ import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserAuthenticationExceptionPlatform;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
 import org.ospic.platform.organization.authentication.users.payload.request.UserRequestData;
@@ -50,7 +51,7 @@ import java.util.*;
  * under the License.
  */
 @Repository
-public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleService{
+public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleService {
     @Autowired
     UserJpaRepository userJpaRepository;
     @Autowired
@@ -67,26 +68,19 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     @Override
     public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
         if (userJpaRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+            throw new DuplicateUsernameException(signUpRequest.getUsername());
         }
 
         if (userJpaRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+            String code = "error.msg.duplicate.email.address";
+            String message = "Duplicate email address";
+            throw new DuplicateUsernameException(code, message);
         }
 
-
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()), signUpRequest.getIsStaff());
-
+        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getIsStaff());
         Set<Long> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
-
 
 
         if (strRoles == null) {
@@ -110,6 +104,11 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @Override
+    public ResponseEntity<?> updateUserDetails(SignupRequest payload) {
+        return null;
     }
 
     @Override
