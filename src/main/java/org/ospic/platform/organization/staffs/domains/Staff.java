@@ -61,6 +61,12 @@ public class Staff extends AbstractPersistableCustom implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+
+    @Column(name = "is_available")
+    private Boolean isAvailable = true;
+
     @OneToMany(
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,

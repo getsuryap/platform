@@ -23,13 +23,13 @@ import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceN
  * specific language governing permissions and limitations
  * under the License.
  */
-public class UserAuthenticationExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+public class UserNotFoundPlatformException extends AbstractPlatformResourceNotFoundException {
 
-    public UserAuthenticationExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+    public UserNotFoundPlatformException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public UserAuthenticationExceptionPlatform(Long id){
+    public UserNotFoundPlatformException(Long id){
         super("error.message.authentication.usernotfound","User with id "+ id+" does not exist", id);
     }
 }
