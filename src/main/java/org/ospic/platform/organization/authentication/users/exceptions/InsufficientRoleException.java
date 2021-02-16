@@ -29,6 +29,6 @@ public class InsufficientRoleException extends AbstractPlatformResourceNotFoundE
     }
 
     public InsufficientRoleException(Long id, String defaultUserMessage){
-        super("error.msg.insufficient.role", defaultUserMessage, id);
+        super("error.msg.insufficient.role", defaultUserMessage);
     }
 }

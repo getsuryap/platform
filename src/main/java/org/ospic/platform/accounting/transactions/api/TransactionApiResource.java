@@ -7,7 +7,7 @@ import org.ospic.platform.accounting.transactions.service.TransactionsWritePrinc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/transactions")
 @Api(value = "/api/transactions", tags = "Medical service transaction's")
-@Transactional
+
 public class TransactionApiResource {
    private final TransactionReadPrincipleService readService;
    private final TransactionsWritePrincipleService writeService;
@@ -51,7 +51,7 @@ public class TransactionApiResource {
 
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction")
     @RequestMapping(value = "/{serviceId}/{type}", method = RequestMethod.POST)
-    @ResponseBody
+    @PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
     ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @PathVariable(name = "type") String type, @RequestBody List<Long> list) {
         if (type.equals("medicine")) {
 
