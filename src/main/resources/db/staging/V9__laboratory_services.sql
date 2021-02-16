@@ -10,3 +10,8 @@ CREATE TABLE `m_laboratory_services`(
   primary key (`id`),
   unique key(`name`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
+
+ALTER TABLE `m_staff`
+      ADD COLUMN `is_active` boolean NOT NULL default true COMMENT 'check if this staff is active',
+      ADD COLUMN `is_available` boolean NOT NULL default true COMMENT 'check if this staff is available';
+

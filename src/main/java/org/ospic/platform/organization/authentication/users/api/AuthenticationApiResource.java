@@ -6,10 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
-import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
-import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
-import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
-import org.ospic.platform.organization.authentication.users.payload.request.UserRequestDataApiResourceSwagger;
+import org.ospic.platform.organization.authentication.users.payload.request.*;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +47,12 @@ public class AuthenticationApiResource {
     @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN', 'SUPER_USER')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return this.usersWritePrincipleService.registerUser(signUpRequest);
+    }
+
+    @ApiOperation(value = "UPDATE User by ID", notes = "UPDATE User by ID")
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> updateUserDetails(@PathVariable("userId") Long userId, @RequestBody UpdateUserPayload payload) {
+        return this.usersWritePrincipleService.updateUserDetails(userId, payload);
     }
 
     @ApiOperation(value = "RETRIEVE List of all Application Users", notes = "RETRIEVE List of all Application Users")

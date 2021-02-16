@@ -7,11 +7,16 @@ import org.ospic.platform.organization.authentication.roles.repository.RoleRepos
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
-import org.ospic.platform.organization.authentication.users.exceptions.UserAuthenticationExceptionPlatform;
-import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
+import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
+import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
+import org.ospic.platform.organization.authentication.users.payload.request.UpdateUserPayload;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
+import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
+import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.security.jwt.JwtUtils;
 import org.ospic.platform.security.services.UserDetailsImpl;
@@ -52,14 +57,28 @@ import java.util.*;
  */
 @Repository
 public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleService {
-    @Autowired
-    UserJpaRepository userJpaRepository;
-    @Autowired
-    StaffsWritePrinciplesService staffsWritePrinciplesService;
-    @Autowired
-    RoleRepository roleRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final StaffsWritePrinciplesService staffsWritePrinciplesService;
+    private final RoleRepository roleRepository;
+    private final DepartmentJpaRepository departmentRepository;
+    private final StaffsRepository staffsRepository;
+
     @Autowired
     PasswordEncoder encoder;
+
+    public UsersWritePrincipleServiceImpl(
+            UserJpaRepository userJpaRepository,
+            StaffsWritePrinciplesService staffsWritePrinciplesService,
+            RoleRepository roleRepository,
+            DepartmentJpaRepository departmentRepository,
+            StaffsRepository staffsRepository) {
+
+        this.userJpaRepository = userJpaRepository;
+        this.staffsWritePrinciplesService = staffsWritePrinciplesService;
+        this.roleRepository = roleRepository;
+        this.departmentRepository = departmentRepository;
+        this.staffsRepository = staffsRepository;
+    }
 
     @Autowired
     JwtUtils jwtUtils;
@@ -107,8 +126,47 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     }
 
     @Override
-    public ResponseEntity<?> updateUserDetails(SignupRequest payload) {
-        return null;
+    public ResponseEntity<?> updateUserDetails(Long id, UpdateUserPayload payload) {
+        return this.userJpaRepository.findById(id).map(user -> {
+            return this.departmentRepository.findById(payload.getDepartmentId()).map(department -> {
+                Staff staff = user.getStaff();
+                if (payload.getIsStaff() && staff == null && payload.getDepartmentId() != null) {
+                    //Create new staff
+                    return staffsWritePrinciplesService.createNewStaff(user.getId(), payload.getDepartmentId());
+                } else if (staff != null) {
+                    //Move
+                    if (!payload.getIsStaff()) {
+                        staff.setIsActive(false);
+                        staff.setIsAvailable(false);
+                    }else {
+                        staff.setIsActive(true);
+                        staff.setIsAvailable(true);
+                    }
+                    staff.setDepartment(department);
+                    Set<Long> strRoles = payload.getRoles();
+                    Set<Role> roles = new HashSet<>();
+
+
+                    if (strRoles == null) {
+                        roles.addAll(user.getRoles());
+                    } else {
+                        strRoles.forEach(role -> {
+                            Optional<Role> optionalRole = roleRepository.findById(role);
+                            if (optionalRole.isPresent()) {
+                                Role userRole = optionalRole.get();
+                                roles.add(userRole);
+                            }
+                        });
+                    }
+                    user.setRoles(roles);
+                    this.staffsRepository.save(staff);
+
+                    User u = userJpaRepository.save(user);
+                    return ResponseEntity.ok().body(u);
+                }
+                return null;
+            }).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(payload.getDepartmentId()));
+        }).orElseThrow(() -> new UserNotFoundPlatformException(id));
     }
 
     @Override
@@ -130,7 +188,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
 
 
-        }).orElseThrow(() -> new UserAuthenticationExceptionPlatform(ud.getId()));
+        }).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
     }
 
 
