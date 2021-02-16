@@ -34,7 +34,7 @@ public class PlatformDataIntegrityException extends RuntimeException {
     private final String parameterName;
     private final Object[] defaultUserMessageArgs;
 
-    public PlatformDataIntegrityException(final String globalisationMessageCode, final String defaultUserMessage,
+    protected PlatformDataIntegrityException(final String globalisationMessageCode, final String defaultUserMessage,
                                           final Object... defaultUserMessageArgs) {
         this.globalisationMessageCode = globalisationMessageCode;
         this.defaultUserMessage = defaultUserMessage;
@@ -42,7 +42,7 @@ public class PlatformDataIntegrityException extends RuntimeException {
         this.defaultUserMessageArgs = defaultUserMessageArgs;
     }
 
-    public PlatformDataIntegrityException(final String globalisationMessageCode, final String defaultUserMessage,
+    protected PlatformDataIntegrityException(final String globalisationMessageCode, final String defaultUserMessage,
                                           final String parameterName, final Object... defaultUserMessageArgs) {
         this.globalisationMessageCode = globalisationMessageCode;
         this.defaultUserMessage = defaultUserMessage;

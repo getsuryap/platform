@@ -36,5 +36,6 @@ public interface UsersWritePrincipleService {
     ResponseEntity<?> registerUser(SignupRequest payload);
     ResponseEntity<?> updateUserPassword(UserRequestData payload);
     ResponseEntity<?> refreshToken(HttpServletRequest request);
+    ResponseEntity<?> updateUserDetails(SignupRequest payload);
     public ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 }
