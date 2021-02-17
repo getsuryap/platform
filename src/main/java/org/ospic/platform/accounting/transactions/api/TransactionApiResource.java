@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.api
@@ -39,8 +40,8 @@ import java.util.List;
 @Api(value = "/api/transactions", tags = "Medical service transaction's")
 
 public class TransactionApiResource {
-   private final TransactionReadPrincipleService readService;
-   private final TransactionsWritePrincipleService writeService;
+    private final TransactionReadPrincipleService readService;
+    private final TransactionsWritePrincipleService writeService;
 
     @Autowired
     public TransactionApiResource(TransactionReadPrincipleService readService, TransactionsWritePrincipleService writeService) {
@@ -73,7 +74,10 @@ public class TransactionApiResource {
     @ApiOperation(value = "LIST medical service transaction's", notes = "LIST medical service transaction's")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> listMedicalService() {
+    ResponseEntity<?> listMedicalService(@RequestParam(value = "from", required = false) Optional<String> from, @RequestParam(value = "to", required = false) Optional<String> to) {
+       if (from.isPresent() && to.isPresent()){
+           return readService.readTransactionsByDateRange(from.get(), to.get());
+       }else
         return readService.readTransactions();
     }
 
