@@ -41,4 +41,5 @@ public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactionByMedicalServiceIdAndDate(Long id, LocalDateTime date);
     ResponseEntity<?> readTransactionsByDepartmentId(Long id);
     ResponseEntity<?> readTransactionByDepartmentIdAndDate(Long id, LocalDateTime date);
+    ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate);
 }

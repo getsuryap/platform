@@ -1,16 +1,8 @@
 package org.ospic.platform.accounting.transactions.service;
 
-import org.apache.poi.hpsf.Decimal;
 import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
-import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
-import org.ospic.platform.inventory.admission.service.AdmissionsReadServiceImpl;
-import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
-import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
-import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,9 +13,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -126,6 +116,14 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     @Override
     public ResponseEntity<?> readTransactionByDepartmentIdAndDate(Long id, LocalDateTime date) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate) {
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where tr.transaction_date between ? and  ?  order by tr.transaction_date desc";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{fromDate, toDate});
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
     private static final class TransactionDataRowMapper implements RowMapper<TransactionRowMap> {
