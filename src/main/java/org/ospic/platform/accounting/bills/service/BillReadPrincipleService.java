@@ -1,5 +1,6 @@
 package org.ospic.platform.accounting.bills.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,6 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface BillReadPrincipleService {
+    ResponseEntity<?> readAllBills();
+    ResponseEntity<?> readBillById(Long id);
 }
