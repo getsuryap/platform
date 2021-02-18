@@ -1,9 +1,13 @@
 package org.ospic.platform.accounting.bills.api;
 
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
+import org.ospic.platform.accounting.bills.service.BillWritePrincipleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.api
@@ -31,4 +35,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/bills")
 @Api(value = "/api/bills", tags = "Medical service transaction's")
 public class BillsApiResources {
+    @Autowired
+    BillReadPrincipleService readService;
+    @Autowired
+    BillWritePrincipleService writeService;
+
+    @ApiOperation(value = "LIST bill's", notes = "LIST bill's")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> listBills() {
+        return readService.readAllBills();
+    }
+
+
+    @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID")
+    @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
+        return readService.readBillById(billId);
+    }
+
+
 }

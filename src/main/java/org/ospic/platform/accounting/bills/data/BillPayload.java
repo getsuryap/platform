@@ -3,11 +3,13 @@ package org.ospic.platform.accounting.bills.data;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.Transaction;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.data
@@ -49,6 +51,7 @@ public class BillPayload {
     private String createdBy;
     private Date lastUpdatedDate;
     private String lastUpdatedBy;
+    private List<Transaction> transactions;
 
     public static BillPayload fromResultSet(ResultSet rs) throws SQLException {
         final Long id = rs.getLong("id");
