@@ -4,15 +4,14 @@ import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.exceptions.BillNotFoundException;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
 import org.ospic.platform.accounting.bills.service.mapper.BillsRowMapper;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
-import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.ospic.platform.accounting.transactions.data.TransactionResponse;
+import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,14 +39,14 @@ import java.util.List;
 public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
     private final BillsJpaRepository repository;
     private final JdbcTemplate jdbcTemplate;
-    private final TransactionJpaRepository transactionJpaRepository;
+    private final TransactionReadPrincipleService transactionReadPrincipleService;
 
     @Autowired
     public BillReadPrincipleServiceImpl(
             final BillsJpaRepository repository, final DataSource dataSource,
-            final TransactionJpaRepository transactionJpaRepository) {
+            final TransactionReadPrincipleService transactionReadPrincipleService) {
         this.repository = repository;
-        this.transactionJpaRepository = transactionJpaRepository;
+        this.transactionReadPrincipleService = transactionReadPrincipleService;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -61,20 +60,19 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
 
     @Override
     public ResponseEntity<?> readBillById(Long id) {
-       return this.repository.findById(id).map(b->{
-        BillsRowMapper rm = new BillsRowMapper();
-        final String sql = rm.schema() + " where b.id = ? order by b.id DESC ";
-        List<BillPayload> bill = this.jdbcTemplate.query(sql, rm, new Object[]{id});
-        BillPayload billPayload = bill.get(0);
-        List<Transactions> transactions = (List) this.transactionJpaRepository.findByConsultationId(billPayload.getConsultationId());
-        BigDecimal total = new BigDecimal(0);
-        for (Transactions transaction : transactions) {
-           total =total.add(transaction.getAmount());
-        }
-        b.setTotalAmount(total);
-        billPayload.setTotalAmount(this.repository.save(b).getTotalAmount());
-        billPayload.setTransactions(transactions);
-        return ResponseEntity.ok().body(billPayload);
+        return this.repository.findById(id).map(b -> {
+            BillsRowMapper rm = new BillsRowMapper();
+            final String sql = rm.schema() + " where b.id = ? order by b.id DESC ";
+            List<BillPayload> bill = this.jdbcTemplate.query(sql, rm, new Object[]{id});
+            BillPayload billPayload = bill.get(0);
+            ResponseEntity<TransactionResponse> tresponse = this.transactionReadPrincipleService.readTransactionsByConsultationId(billPayload.getConsultationId());
+            TransactionResponse tr = tresponse.getBody();
+
+            assert tr != null;
+            b.setTotalAmount(tr.getTotalAmount());
+            billPayload.setTotalAmount(this.repository.save(b).getTotalAmount());
+            billPayload.setTransactionResponse(tr);
+            return ResponseEntity.ok().body(billPayload);
         }).orElseThrow(() -> new BillNotFoundException(id));
 
     }
