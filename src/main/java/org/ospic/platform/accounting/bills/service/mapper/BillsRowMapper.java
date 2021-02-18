@@ -31,7 +31,7 @@ import java.sql.SQLException;
 public final class BillsRowMapper implements RowMapper<BillPayload> {
 
     public String schema() {
-        return "  b.*, c.id as consultationId,  " +
+        return " select b.*, c.id as consultationId,  " +
                 " c.is_active as isActive, p.id as patientId, p.name as patientName,  " +
                 " p.phone as phoneNumber, p.address as address, " +
                 " p.email_address as emailAddress  " +
