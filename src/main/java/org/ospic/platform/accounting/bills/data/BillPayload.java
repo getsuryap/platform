@@ -3,7 +3,7 @@ package org.ospic.platform.accounting.bills.data;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Transaction;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -51,7 +51,7 @@ public class BillPayload {
     private String createdBy;
     private Date lastUpdatedDate;
     private String lastUpdatedBy;
-    private List<Transaction> transactions;
+    private List<Transactions> transactions;
 
     public static BillPayload fromResultSet(ResultSet rs) throws SQLException {
         final Long id = rs.getLong("id");

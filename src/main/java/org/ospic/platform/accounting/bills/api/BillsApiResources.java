@@ -46,7 +46,6 @@ public class BillsApiResources {
         return readService.readAllBills();
     }
 
-
     @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID")
     @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
