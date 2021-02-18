@@ -1,10 +1,10 @@
 package org.ospic.platform.patient.consultation.service;
 
-import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.consultation.data.ConsultationPayload;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.mappers.ConsultationResourceMapper;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -77,9 +77,10 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
 
     @Override
     public ResponseEntity<?> retrieveAServiceById(Long serviceId) {
-        return resourceJpaRepository.findById(serviceId).map(service -> {
-            return ResponseEntity.ok().body(service);
-        }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
+      return resourceJpaRepository.findById(serviceId).map(service ->
+                ResponseEntity.ok().body(service)
+        ).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
+       
     }
 
     @Override

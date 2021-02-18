@@ -6,20 +6,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.organization.staffs.domains.Staff;
-import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
 import org.ospic.platform.patient.details.domain.Patient;
+import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.domain
@@ -99,6 +104,13 @@ public class ConsultationResource implements Serializable {
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medical consultation transactions")
     @JsonIgnore
     private List<Transactions> transactions = new ArrayList<>();
+
+
+    @OneToOne(mappedBy = "consultation", cascade = CascadeType.ALL)
+    @JoinColumn(name = "consultation_id")
+    private Bill bill;
+
+
 
     public ConsultationResource(Long id, LocalDate fromdate, LocalDate todate, Boolean isActive, Patient patient, Staff staff) {
         this.id = id;
