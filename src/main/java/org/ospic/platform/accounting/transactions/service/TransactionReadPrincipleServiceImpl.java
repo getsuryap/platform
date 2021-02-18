@@ -3,16 +3,13 @@ package org.ospic.platform.accounting.transactions.service;
 import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
+import org.ospic.platform.accounting.transactions.service.mapper.TransactionDataRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -126,39 +123,4 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
-    private static final class TransactionDataRowMapper implements RowMapper<TransactionRowMap> {
-
-        public String schema() {
-            return " tr.id as id, tr.amount as amount, " +
-                    " tr.currency_code as currencyCode, tr.is_reversed as isReversed, " +
-                    " DATE_FORMAT(tr.transaction_date, \"%W %M %e %Y %r\") AS  transactionDate, " +
-                    " co.id as consultationId, " +
-                    " d.id as departmentId, d.name as departmentName, " +
-                    " s.id as medicalServiceId, s.name as medicalServiceName, " +
-                    " md.name as medicineName, md.id as medicineId " +
-                    " FROM m_transactions tr " +
-                    " JOIN m_consultations co on co.id = tr.consultation_id " +
-                    " JOIN m_department d on d.id = tr.department_id " +
-                    " LEFT JOIN m_services s on s.id = tr.medical_service_id " +
-                    " LEFT JOIN m_medicines md on md.id = tr.medicine_id ";
-        }
-
-        @Override
-        public TransactionRowMap mapRow(ResultSet rs, int rowNum) throws SQLException {
-            final Long id = rs.getLong("id");
-            final String currencyCode = rs.getString("currencyCode");
-            final BigDecimal amount = rs.getBigDecimal("amount");
-            final Boolean isReversed = rs.getBoolean("isReversed");
-            final String transactionDate = rs.getString("transactionDate");
-            final Long consultationId = rs.getLong("consultationId");
-            final Long departmentId = rs.getLong("departmentId");
-            final String departmentName = rs.getString("departmentName");
-            final Long medicalServiceId = rs.getLong("medicalServiceId");
-            final String medicalServiceName = rs.getString("medicalServiceName");
-            final String medicineName = rs.getString("medicineName");
-            final Long medicineId = rs.getLong("medicineId");
-
-            return new TransactionRowMap(id, amount, currencyCode, isReversed, transactionDate, consultationId, departmentId, departmentName, medicalServiceId, medicalServiceName, medicineId, medicineName);
-        }
-    }
 }
