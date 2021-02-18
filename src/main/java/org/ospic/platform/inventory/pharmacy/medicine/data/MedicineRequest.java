@@ -3,6 +3,7 @@ package org.ospic.platform.inventory.pharmacy.medicine.data;
 import lombok.*;
 
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.data
@@ -37,9 +38,9 @@ public class MedicineRequest {
     private int units;
     private Long group;
     private Long category;
-    private Double price;
+    private BigDecimal price;
 
-    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category, Double price) {
+    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category, BigDecimal price) {
         this.name = name;
         this.company = company;
         this.compositions = compositions;

@@ -12,6 +12,7 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.domain
@@ -54,20 +55,21 @@ public class Bill extends Auditable {
     private Boolean isPaid;
 
     @Column(name = "total_amount", nullable = true, columnDefinition = "Decimal(13,4) default '0.00'")
-    private Double totalAmount;
+    private BigDecimal totalAmount;
 
     @Column(name = "paid_amount", nullable = true, columnDefinition = "Decimal(13,4) default '0.00'")
-    private Double paid;
+    private BigDecimal paid;
 
     @OneToOne
     @MapsId
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
 
-    public Bill(Long id, String extraId, Boolean isPaid) {
+    public Bill(Long id, String extraId, Boolean isPaid, BigDecimal totalAmount, BigDecimal paid) {
         this.id = id;
         this.extraId = extraId;
         this.isPaid = isPaid;
-
+        this.totalAmount = totalAmount;
+        this.paid = paid;
     }
 }

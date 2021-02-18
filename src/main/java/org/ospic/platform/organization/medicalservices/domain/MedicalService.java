@@ -11,6 +11,7 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
     private Boolean isActive;
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
-    private Double price;
+    private BigDecimal price;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "medical_service_id")
@@ -60,11 +61,11 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
     private List<Transactions> transactions = new ArrayList<>();
 
 
-    public MedicalService instance(String name, Boolean isActive, Double price){
+    public MedicalService instance(String name, Boolean isActive, BigDecimal price){
         return new MedicalService(name, isActive, price);
     }
 
-    public MedicalService(String name, Boolean isActive, Double price) {
+    public MedicalService(String name, Boolean isActive, BigDecimal price) {
         this.name = name;
         this.isActive = isActive;
         this.price = price;

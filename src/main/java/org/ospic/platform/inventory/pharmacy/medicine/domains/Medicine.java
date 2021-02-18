@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
@@ -15,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class Medicine implements Serializable {
     private int units;
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
-    private Double price;
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

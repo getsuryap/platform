@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.*;
-import org.hibernate.Transaction;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
@@ -16,8 +17,8 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.accounting.transactions.domain
@@ -52,7 +53,7 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     private String currencyCode;
 
     @Column(name = "amount", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(name = "is_reversed", nullable = false, columnDefinition = "boolean default false")
     private Boolean isReversed;
@@ -85,11 +86,11 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     public Transactions fromTransactionPayload(TransactionPayload payload, MedicalService service){
         return new Transactions(null, service.getPrice(), null);
     }
-    public Transactions instance(String currencyCode, Double price, LocalDateTime transactionDate){
+    public Transactions instance(String currencyCode, BigDecimal price, LocalDateTime transactionDate){
         return new Transactions(currencyCode, price, transactionDate);
     }
 
-   public Transactions(String currencyCode,  Double amount, LocalDateTime transactionDate) {
+   public Transactions(String currencyCode,  BigDecimal amount, LocalDateTime transactionDate) {
         this.currencyCode = currencyCode;
         this.amount = amount;
         this.transactionDate = transactionDate;
