@@ -1,9 +1,15 @@
 package org.ospic.platform.accounting.bills.service;
 
+import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
+import org.ospic.platform.accounting.bills.service.mapper.BillsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.util.List;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.service
@@ -29,15 +35,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
     private final BillsJpaRepository repository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public BillReadPrincipleServiceImpl(BillsJpaRepository repository) {
+    public BillReadPrincipleServiceImpl(BillsJpaRepository repository, final DataSource dataSource) {
         this.repository = repository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ResponseEntity<?> readAllBills() {
-        return null;
+        BillsRowMapper rm = new BillsRowMapper();
+        final String sql =   rm.schema() + "  order by b.id DESC ";
+        List<BillPayload> bills =  this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(bills);
     }
 
     @Override
