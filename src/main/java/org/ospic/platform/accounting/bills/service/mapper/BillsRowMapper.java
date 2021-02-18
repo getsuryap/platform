@@ -31,7 +31,8 @@ import java.sql.SQLException;
 public final class BillsRowMapper implements RowMapper<BillPayload> {
 
     public String schema() {
-        return " select b.*, c.id as consultationId,  " +
+        return " select b.*, DATE_FORMAT(b.created_date, \"%W %M %e %Y %r\") AS  createdDate," +
+                "DATE_FORMAT(b.last_modified_date, \"%W %M %e %Y %r\") AS  lastModifiedDate, c.id as consultationId,  " +
                 " c.is_active as isActive, p.id as patientId, p.name as patientName,  " +
                 " p.phone as phoneNumber, p.address as address, " +
                 " p.email_address as emailAddress  " +

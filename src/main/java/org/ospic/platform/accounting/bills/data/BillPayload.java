@@ -8,7 +8,6 @@ import org.ospic.platform.accounting.transactions.domain.Transactions;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,9 +46,9 @@ public class BillPayload {
     private String phoneNumber;
     private String address;
     private String emailAddress;
-    private Date createdDate;
+    private String createdDate;
     private String createdBy;
-    private Date lastUpdatedDate;
+    private String lastUpdatedDate;
     private String lastUpdatedBy;
     private List<Transactions> transactions;
 
@@ -59,9 +58,9 @@ public class BillPayload {
         final String extraId = rs.getString("extra_id");
         final BigDecimal totalAmount = rs.getBigDecimal("total_amount");
         final BigDecimal paidAmount = rs.getBigDecimal("paid_amount");
-        final Date createdDate = rs.getDate("created_date");
+        final String createdDate = rs.getString("createdDate");
         final String createdBy = rs.getString("created_by");
-        final Date lastModifiedDate = rs.getDate("last_modified_date");
+        final String lastModifiedDate = rs.getString("lastModifiedDate");
         final String lastModifiedBy = rs.getString("last_modified_by");
         final Long consultationId = rs.getLong("consultation_id");
         final Long patientId = rs.getLong("patientId");
@@ -74,7 +73,7 @@ public class BillPayload {
                 phoneNumbers,addresses,email,createdDate,createdBy,lastModifiedDate,lastModifiedBy);
     }
 
-    private BillPayload(Long id, Boolean isPaid, String extraId, BigDecimal totalAmount, BigDecimal paidAmount, Long consultationId, Long patientId, Boolean isActive, String patientName, String phoneNumber, String address, String emailAddress, Date createdDate, String createdBy, Date lastUpdatedDate, String lastUpdatedBy) {
+    private BillPayload(Long id, Boolean isPaid, String extraId, BigDecimal totalAmount, BigDecimal paidAmount, Long consultationId, Long patientId, Boolean isActive, String patientName, String phoneNumber, String address, String emailAddress, String createdDate, String createdBy, String lastUpdatedDate, String lastUpdatedBy) {
         this.id = id;
         this.isPaid = isPaid;
         this.extraId = extraId;
