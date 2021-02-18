@@ -56,7 +56,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         final TransactionDataRowMapper rm = new TransactionDataRowMapper();
         final String sql = "select " + rm.schema() + "  order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(transactions);
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
     @Override
