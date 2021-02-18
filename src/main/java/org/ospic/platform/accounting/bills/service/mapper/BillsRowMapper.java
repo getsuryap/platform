@@ -36,7 +36,7 @@ public final class BillsRowMapper implements RowMapper<BillPayload> {
                 " c.is_active as isActive, p.id as patientId, p.name as patientName,  " +
                 " p.phone as phoneNumber, p.address as address, " +
                 " p.email_address as emailAddress  " +
-                " FROM `ospic-schema`.m_bills b  " +
+                " FROM m_bills b  " +
                 " inner join m_consultations c on c.id = b.consultation_id  " +
                 " inner join m_patients p on p.id = c.patient_id ";
     }
