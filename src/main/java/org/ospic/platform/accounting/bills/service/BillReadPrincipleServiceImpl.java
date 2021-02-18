@@ -53,6 +53,10 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
 
     @Override
     public ResponseEntity<?> readBillById(Long id) {
-        return null;
+        BillsRowMapper rm = new BillsRowMapper();
+        final String sql =   rm.schema() + " where b.id = ? order by b.id DESC ";
+        List<BillPayload> bill =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
+
+        return ResponseEntity.ok().body(bill.get(0));
     }
 }
