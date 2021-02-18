@@ -38,7 +38,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/transactions")
 @Api(value = "/api/transactions", tags = "Medical service transaction's")
-
 public class TransactionApiResource {
     private final TransactionReadPrincipleService readService;
     private final TransactionsWritePrincipleService writeService;
