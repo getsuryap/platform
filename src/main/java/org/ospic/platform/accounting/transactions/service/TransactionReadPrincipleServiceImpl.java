@@ -75,7 +75,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     }
 
     @Override
-    public ResponseEntity<?> readTransactionsByConsultationId(Long id) {
+    public ResponseEntity<TransactionResponse> readTransactionsByConsultationId(Long id) {
         final TransactionDataRowMapper rm = new TransactionDataRowMapper();
         final String sql = "select " + rm.schema() + " where co.id = ?  order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, id);

@@ -1,5 +1,6 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public interface TransactionReadPrincipleService {
     ResponseEntity<?> readReversedTransactions();
     ResponseEntity<?> readTransactionById(Long id);
     ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime);
-    ResponseEntity<?> readTransactionsByConsultationId(Long id);
+    ResponseEntity<TransactionResponse> readTransactionsByConsultationId(Long id);
     ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id);
     ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id);
     ResponseEntity<?> readTransactionByMedicalServiceId(Long id);
