@@ -1,11 +1,15 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
+import org.ospic.platform.organization.authentication.users.domain.User;
+import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
+import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
@@ -14,9 +18,6 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsultationsException;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.organization.authentication.users.domain.User;
-import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
-import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.ospic.platform.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             throw new InsufficientRoleException(user.getId(), message);
         } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
             Department department = (Department) user.getStaff().getDepartment();
+            if (consultation.getBill() == null) {
+                createServiceBillIfNotExists(consultation);
+            }
 
             services.forEach(servicesId -> {
                 Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
@@ -139,7 +143,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             throw new InsufficientRoleException(user.getId(), message);
         } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
             Department department = (Department) user.getStaff().getDepartment();
-
+            if (consultation.getBill() == null) {
+                createServiceBillIfNotExists(consultation);
+            }
             medics.forEach(medicationId -> {
                 Optional<Medicine> medicsOptional = medicineRepository.findById(medicationId);
                 if (medicsOptional.isPresent()) {
@@ -175,5 +181,14 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             repository.save(trx);
             return ResponseEntity.ok().body("Transaction reversed");
         }).orElseThrow(() -> new TransactionNotFoundExceptionPlatform(id));
+    }
+
+    private void createServiceBillIfNotExists(ConsultationResource consultation) {
+        Bill bill = new Bill();
+        bill.setIsPaid(false);
+        bill.setExtraId(String.format("PT%2d-C0%2d", consultation.getPatient().getId(), consultation.getId()).replaceAll("\\s+", ""));
+        consultation.setBill(bill);
+        bill.setConsultation(consultation);
+        consultationResourceRepository.save(consultation);
     }
 }
