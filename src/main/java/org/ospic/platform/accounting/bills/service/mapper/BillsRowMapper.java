@@ -1,9 +1,11 @@
-package org.ospic.platform.accounting.bills.service;
+package org.ospic.platform.accounting.bills.service.mapper;
 
-import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+import org.ospic.platform.accounting.bills.data.BillPayload;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.service
@@ -26,22 +28,20 @@ import org.springframework.stereotype.Repository;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Repository
-public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
-    private final BillsJpaRepository repository;
+public final class BillsRowMapper implements RowMapper<BillPayload> {
 
-    @Autowired
-    public BillReadPrincipleServiceImpl(BillsJpaRepository repository) {
-        this.repository = repository;
+    public String schema() {
+        return "  b.*, c.id as consultationId,  " +
+                " c.is_active as isActive, p.id as patientId, p.name as patientName,  " +
+                " p.phone as phoneNumber, p.address as address, " +
+                " p.email_address as emailAddress  " +
+                " FROM `ospic-schema`.m_bills b  " +
+                " inner join m_consultations c on c.id = b.consultation_id  " +
+                " inner join m_patients p on p.id = c.patient_id ";
     }
 
     @Override
-    public ResponseEntity<?> readAllBills() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> readBillById(Long id) {
-        return null;
+    public BillPayload mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return BillPayload.fromResultSet(rs);
     }
 }
