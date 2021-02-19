@@ -6,6 +6,7 @@ import org.ospic.platform.accounting.bills.service.mapper.BillsRowMapper;
 import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.service.mapper.TransactionDataRowMapper;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,6 +42,8 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
     @Autowired
     BillsJpaRepository repository;
     private final JdbcTemplate jdbcTemplate;
+    @Autowired
+    ConsultationResourceJpaRepository consultationResourceJpaRepository;
 
     @Autowired
     public BillReadPrincipleServiceImpl(
@@ -64,21 +67,24 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
         final String sql = rm.schema() + " where b.id = ? order by b.id DESC ";
         List<BillPayload> bill = this.jdbcTemplate.query(sql, rm, new Object[]{id});
         BillPayload billPayload = bill.get(0);
+
+
         final TransactionDataRowMapper trm = new TransactionDataRowMapper();
         final String sq = "select " + trm.schema() + " where co.id = ?  order by tr.id DESC ";
         List<TransactionRowMap> transactions = this.jdbcTemplate.query(sq, trm, billPayload.getConsultationId());
         TransactionResponse tresponse = new TransactionResponse().transactionResponse(transactions);
-        billPayload.setTotalAmount(updateBillAmount(id, tresponse.getTotalAmount()));
+
+        this.updateBillAmount(billPayload.getConsultationId(), tresponse.getTotalAmount());
+        billPayload.setTotalAmount(tresponse.getTotalAmount());
         billPayload.setTransactionResponse(tresponse);
         return ResponseEntity.ok().body(billPayload);
     }
 
-    private BigDecimal updateBillAmount(Long id, BigDecimal amount) {
-        this.repository.findById(id).map(b -> {
-            b.setTotalAmount(amount);
-            this.repository.save(b);
+    private void updateBillAmount(Long consultationId, BigDecimal amount) {
+        this.consultationResourceJpaRepository.findById(consultationId).map(c -> {
+            c.getBill().setTotalAmount(amount);
+            this.consultationResourceJpaRepository.save(c);
             return null;
         });
-        return amount;
     }
 }

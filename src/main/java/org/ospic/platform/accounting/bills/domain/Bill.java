@@ -60,7 +60,7 @@ public class Bill extends Auditable {
     @Column(name = "paid_amount", nullable = true, columnDefinition = "Decimal(13,4) default '0.00'")
     private BigDecimal paid;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
