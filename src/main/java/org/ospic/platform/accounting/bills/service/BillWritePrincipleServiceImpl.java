@@ -1,7 +1,11 @@
 package org.ospic.platform.accounting.bills.service;
 
+import org.ospic.platform.accounting.bills.data.PaymentPayload;
+import org.ospic.platform.accounting.bills.exceptions.BillNotFoundException;
+import org.ospic.platform.accounting.bills.exceptions.InsufficientBillPaymentAmountException;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -32,5 +36,20 @@ public class BillWritePrincipleServiceImpl implements BillWritePrincipleService 
     @Autowired
     public BillWritePrincipleServiceImpl(BillsJpaRepository repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public ResponseEntity<?> payBill(PaymentPayload payload) {
+        return repository.findById(payload.getConsultationId()).map(bill -> {
+            if (payload.getAmount().compareTo(bill.getTotalAmount())>0){
+                throw  new InsufficientBillPaymentAmountException(payload.getConsultationId());
+            }else  if (payload.getAmount().compareTo(bill.getTotalAmount())<0){
+                throw  new InsufficientBillPaymentAmountException(payload.getAmount());
+            }
+            bill.setPaidAmount(payload.getAmount());
+            bill.setIsPaid(true);
+            return ResponseEntity.ok().body(this.repository.save(bill));
+
+        }).orElseThrow(()->new BillNotFoundException(payload.getConsultationId()));
     }
 }

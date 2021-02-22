@@ -2,6 +2,7 @@ package org.ospic.platform.accounting.bills.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.bills.data.PaymentPayload;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.bills.service.BillWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class BillsApiResources {
     @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
         return readService.readBillById(billId);
+    }
+
+
+    @ApiOperation(value = "PAY Bill", notes = "PAY Bill")
+    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
+        return writeService.payBill(payload);
     }
 
 

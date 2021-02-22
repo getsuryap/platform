@@ -1,12 +1,13 @@
-package org.ospic.platform.accounting.bills.service;
+package org.ospic.platform.accounting.bills.data;
 
-import org.ospic.platform.accounting.bills.data.PaymentPayload;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
 
 /**
- * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.service
+ * This file was created by eli on 22/02/2021 for org.ospic.platform.accounting.bills.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,8 +27,9 @@ import org.springframework.stereotype.Service;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface BillWritePrincipleService {
-    ResponseEntity<?> payBill(PaymentPayload payload);
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+public class PaymentPayload {
+    private Long consultationId;
+    private BigDecimal amount;
 }
