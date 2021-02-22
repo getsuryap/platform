@@ -51,6 +51,9 @@ public class BillWritePrincipleServiceImpl implements BillWritePrincipleService 
             }else  if (payload.getAmount().compareTo(bill.getTotalAmount())<0){
                 throw  new InsufficientBillPaymentAmountException(payload.getAmount());
             }
+            if (!consultation.getIsAdmitted()){
+                consultation.setIsActive(false);
+            }
             bill.setPaidAmount(payload.getAmount());
             bill.setIsPaid(true);
             consultation.setBill(bill);
