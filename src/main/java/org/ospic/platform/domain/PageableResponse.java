@@ -40,7 +40,7 @@ public class PageableResponse  {
         this.response = response;
     }
     public Map<String, Object> instance(Page page, Class<?> object){
-        List<Object> items = new ArrayList<>();
+        List<?> items = new ArrayList<>();
         items = page.getContent();
         Map<String, Object> response = new HashMap<>();
         response.put("currentPage", page.getNumber());

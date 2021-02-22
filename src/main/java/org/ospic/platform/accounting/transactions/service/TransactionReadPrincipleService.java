@@ -1,6 +1,7 @@
 package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.transactions.data.TransactionResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
 @Service
 public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactions();
+    ResponseEntity<?> readPageableTransaction(Pageable pageable);
     ResponseEntity<?> readReversedTransactions();
     ResponseEntity<?> readTransactionById(Long id);
     ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime);

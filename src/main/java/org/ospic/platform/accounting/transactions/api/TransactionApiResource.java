@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.accounting.transactions.service.TransactionsWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,6 +80,13 @@ public class TransactionApiResource {
            return readService.readTransactionsByDateRange(from.get(), to.get());
        }else
         return readService.readTransactions();
+    }
+
+    @ApiOperation(value = "LIST all medical service transaction's", notes = "LIST all medical service transaction's")
+    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getAllMedicalTransactionPageable( @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return readService.readPageableTransaction(paging);
     }
 
 
