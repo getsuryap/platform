@@ -1,9 +1,11 @@
 package org.ospic.platform.accounting.bills.service;
 
 import org.ospic.platform.accounting.bills.data.PaymentPayload;
-import org.ospic.platform.accounting.bills.exceptions.BillNotFoundException;
+import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.bills.exceptions.InsufficientBillPaymentAmountException;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -32,15 +34,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BillWritePrincipleServiceImpl implements BillWritePrincipleService {
     private final BillsJpaRepository repository;
+    private final ConsultationResourceJpaRepository consultationRepository;
 
     @Autowired
-    public BillWritePrincipleServiceImpl(BillsJpaRepository repository) {
+    public BillWritePrincipleServiceImpl(BillsJpaRepository repository,ConsultationResourceJpaRepository consultationRepository) {
         this.repository = repository;
+        this.consultationRepository = consultationRepository;
     }
 
     @Override
     public ResponseEntity<?> payBill(PaymentPayload payload) {
-        return repository.findById(payload.getConsultationId()).map(bill -> {
+        return consultationRepository.findById(payload.getConsultationId()).map(consultation -> {
+            Bill bill = consultation.getBill();
             if (payload.getAmount().compareTo(bill.getTotalAmount())>0){
                 throw  new InsufficientBillPaymentAmountException(payload.getConsultationId());
             }else  if (payload.getAmount().compareTo(bill.getTotalAmount())<0){
@@ -48,8 +53,10 @@ public class BillWritePrincipleServiceImpl implements BillWritePrincipleService 
             }
             bill.setPaidAmount(payload.getAmount());
             bill.setIsPaid(true);
-            return ResponseEntity.ok().body(this.repository.save(bill));
+            consultation.setBill(bill);
+            bill.setConsultation(consultation);
+            return ResponseEntity.ok().body(this.consultationRepository.save(consultation));
 
-        }).orElseThrow(()->new BillNotFoundException(payload.getConsultationId()));
+        }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(payload.getConsultationId()));
     }
 }
