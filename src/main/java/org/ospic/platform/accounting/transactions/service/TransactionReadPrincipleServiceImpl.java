@@ -4,7 +4,11 @@ import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.accounting.transactions.service.mapper.TransactionDataRowMapper;
+import org.ospic.platform.domain.PageableResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -54,6 +58,18 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         final String sql = "select " + rm.schema() + "  order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{});
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+    }
+
+    @Override
+    public ResponseEntity<?> readPageableTransaction(Pageable page) {
+        long total = this.repository.count();
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        Sort.Order order = !page.getSort().isEmpty() ? page.getSort().toList().get(0) : Sort.Order.by(" tr.id ");
+        final String sql = "select " + rm.schema() + "  order by "+order.getProperty() + ""+
+                order.getDirection().name() + " LIMIT " + page.getPageSize() +" OFFSET "+page.getOffset();
+        List<TransactionRowMap> transactions = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(new PageableResponse().instance(new PageImpl<>(transactions, page, total), TransactionRowMap.class));
+
     }
 
     @Override
