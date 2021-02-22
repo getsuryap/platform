@@ -58,18 +58,18 @@ public class Bill extends Auditable {
     private BigDecimal totalAmount;
 
     @Column(name = "paid_amount", nullable = true, columnDefinition = "Decimal(13,4) default '0.00'")
-    private BigDecimal paid;
+    private BigDecimal paidAmount;
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
 
-    public Bill(Long id, String extraId, Boolean isPaid, BigDecimal totalAmount, BigDecimal paid) {
+    public Bill(Long id, String extraId, Boolean isPaid, BigDecimal totalAmount, BigDecimal paidAmount) {
         this.id = id;
         this.extraId = extraId;
         this.isPaid = isPaid;
         this.totalAmount = totalAmount;
-        this.paid = paid;
+        this.paidAmount = paidAmount;
     }
 }
