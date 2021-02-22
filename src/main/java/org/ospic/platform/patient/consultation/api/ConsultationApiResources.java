@@ -77,7 +77,7 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "RETRIEVE patient service by patient ID", notes = "RETRIEVE  patient service by patient ID")
     @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('MODERATOR')")
+    @PreAuthorize("hasAnyAuthority('NURSE')")
     ResponseEntity<?> retrieveServiceByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
