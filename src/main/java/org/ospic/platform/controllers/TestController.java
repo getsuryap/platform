@@ -9,17 +9,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -64,15 +69,28 @@ public class TestController {
 
 	@GetMapping("/view")
 	@ResponseBody
-	public void viewReport(HttpServletResponse response) throws IOException, JRException,ServletException, SQLException {
-		OutputStream out = response.getOutputStream();
-		response.setContentType("application/pdf");
-		response.setHeader("Content-Disposition", "inline; filename=" + "example.pdf");
-		this.exportPdfReport(repository.findAll(), out);
+	public ResponseEntity<?> viewReport() throws IOException, JRException,ServletException, SQLException {
+		//OutputStream out = response.getOutputStream();
+		HttpHeaders headers = new HttpHeaders();
+
+		String filename = "pdf1.pdf";
+
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		headers.add("content-disposition", "inline;filename=" + filename);
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+
+		//response.setContentType("application/pdf");
+		//response.setHeader("Content-Disposition", "inline; filename=" +  filename);
+		//response.addHeader();
+		byte[] bytes = this.exportPdfReport(repository.findAll());
+		ResponseEntity<byte[]> responseEntity = new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
+
+		return responseEntity;
 	}
 
 	// Method to create the pdf file using the employee list datasource.
-	private void  exportPdfReport(final List<Patient> employees, OutputStream outputStream) throws ServletException, JRException, IOException {
+	private byte[]  exportPdfReport(final List<Patient> employees) throws ServletException, JRException, IOException {
 
 		try {
 			// Fetching the .jrxml file from the resources folder.
@@ -94,7 +112,7 @@ public class TestController {
 			final JasperPrint print = JasperFillManager.fillReport(report, parameters, source);
 			final String filePath = "\\";
 			// Export the report to a PDF file.
-			JasperExportManager.exportReportToPdfStream(print, outputStream);
+			return JasperExportManager.exportReportToPdf(print);
 		} catch (JRException ex) {
 			throw new ServletException(ex);
 		}
