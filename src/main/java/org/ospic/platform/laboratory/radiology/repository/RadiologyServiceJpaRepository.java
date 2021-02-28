@@ -1,6 +1,6 @@
 package org.ospic.platform.laboratory.radiology.repository;
 
-import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -26,9 +26,10 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface LaboratoryServiceJpaRepository extends JpaRepository<LaboratoryService, Long> {
+public interface RadiologyServiceJpaRepository extends JpaRepository<RadiologyService, Long> {
     Boolean isActive(Long id);
     boolean existsById(Long id);
-    List<LaboratoryService> findByIsActiveTrue();
-    List<LaboratoryService> findByIsActiveFalse();
+    List<RadiologyService> findByIsActiveTrue();
+    List<RadiologyService> findByIsActiveFalse();
+
 }

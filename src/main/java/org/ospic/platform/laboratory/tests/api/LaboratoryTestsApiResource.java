@@ -2,9 +2,9 @@ package org.ospic.platform.laboratory.tests.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.laboratory.tests.domain.RadiologyService;
-import org.ospic.platform.laboratory.tests.services.RadiologyServiceReadPrincipleService;
-import org.ospic.platform.laboratory.tests.services.RadiologyServiceWritePrincipleService;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.services.RadiologyServiceReadPrincipleService;
+import org.ospic.platform.laboratory.radiology.services.RadiologyServiceWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

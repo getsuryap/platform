@@ -1,9 +1,9 @@
-package org.ospic.platform.laboratory.tests.services;
+package org.ospic.platform.laboratory.radiology.services;
 
 import org.ospic.platform.domain.CustomReponseMessage;
-import org.ospic.platform.laboratory.tests.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.repository.RadiologyServiceJpaRepository;
 import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
-import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RadiologyServiceWritePrincipleServiceImpl implements RadiologyServiceWritePrincipleService {
     @Autowired
-    LaboratoryServiceJpaRepository repository;
+    RadiologyServiceJpaRepository repository;
 
     @Override
     public ResponseEntity<?> createLaboratoryService(RadiologyService payload) {

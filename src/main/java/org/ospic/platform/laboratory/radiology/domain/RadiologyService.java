@@ -1,4 +1,4 @@
-package org.ospic.platform.laboratory.tests.domain;
+package org.ospic.platform.laboratory.radiology.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
