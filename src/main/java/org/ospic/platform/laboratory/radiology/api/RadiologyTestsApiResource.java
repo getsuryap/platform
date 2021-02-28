@@ -2,9 +2,9 @@ package org.ospic.platform.laboratory.radiology.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.laboratory.tests.domain.RadiologyService;
-import org.ospic.platform.laboratory.tests.services.RadiologyServiceReadPrincipleService;
-import org.ospic.platform.laboratory.tests.services.RadiologyServiceWritePrincipleService;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.services.RadiologyServiceReadPrincipleService;
+import org.ospic.platform.laboratory.radiology.services.RadiologyServiceWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,27 +48,27 @@ public class RadiologyTestsApiResource {
     }
 
 
-    @ApiOperation(value = "CREATE laboratory service", notes = "CREATE laboratory service")
+    @ApiOperation(value = "CREATE radiology service", notes = "CREATE radiology service")
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> createLabServices(@RequestBody(required = true) RadiologyService payload) {
+    ResponseEntity<?> createRadiologyServices(@RequestBody(required = true) RadiologyService payload) {
         return this.writePrincipleService.createLaboratoryService(payload);
     }
 
     @ApiOperation(value = "UPDATE laboratory service", notes = "UPDATE laboratory service")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) RadiologyService payload) {
+    ResponseEntity<?> updateRadiologyServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) RadiologyService payload) {
         return this.writePrincipleService.updateLaboratoryService(serviceId, payload);
     }
 
     @ApiOperation(value = "DELETE laboratory service", notes = "DELETE laboratory service")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> deleteLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId) {
+    ResponseEntity<?> deleteRadiologyServices(@PathVariable(name = "serviceId", required = true) Long serviceId) {
         return this.writePrincipleService.deleteLaboratoryService(serviceId);
     }
 
     @ApiOperation(value = "DE/ACTIVATE laboratory service", notes = "DE/ACTIVATE laboratory service")
     @RequestMapping(value = "/{serviceId}/status", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> activateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
+    ResponseEntity<?> activateRadiologyServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
         if (active) {
             return this.writePrincipleService.activateLaboratoryService(serviceId);
         } else return this.writePrincipleService.deactivateLaboratoryService(serviceId);
@@ -76,20 +76,20 @@ public class RadiologyTestsApiResource {
 
     @ApiOperation(value = "GET laboratory service", notes = "GET laboratory service")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> readListOfLaboratoryServices() {
+    ResponseEntity<?> readListOfRadiologyServices() {
         return this.readPrincipleService.listLaboratoryServices();
     }
 
     @ApiOperation(value = "GET laboratory service by ID", notes = "GET laboratory service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> readLabServiceById(@PathVariable(name = "serviceId", required = true) Long serviceId) {
+    ResponseEntity<?> readRadiologyServiceById(@PathVariable(name = "serviceId", required = true) Long serviceId) {
         return this.readPrincipleService.findLaboratoryServiceById(serviceId);
     }
 
 
     @ApiOperation(value = "READ laboratory service by active status", notes = "READ laboratory service by active status")
     @RequestMapping(value = "/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> findLabServicesByStatus(@RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
+    ResponseEntity<?> findRadiologyServicesByStatus(@RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
         return this.readPrincipleService.findLaboratoryServiceByActiveStatus(active);
     }
 }

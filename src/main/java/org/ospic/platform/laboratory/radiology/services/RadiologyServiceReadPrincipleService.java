@@ -1,4 +1,4 @@
-package org.ospic.platform.laboratory.tests.services;
+package org.ospic.platform.laboratory.radiology.services;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

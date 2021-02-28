@@ -1,8 +1,9 @@
-package org.ospic.platform.laboratory.radiology.services;
+package org.ospic.platform.laboratory.tests.services;
 
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  * This file was created by eli on 15/02/2021 for org.ospic.platform.laboratory.tests.services
@@ -26,9 +27,11 @@ import org.springframework.stereotype.Repository;
  * under the License.
  */
 @Component
-@Repository
-public interface LaboratoryServiceReadPrincipleService {
-    ResponseEntity<?> listLaboratoryServices();
-    ResponseEntity<?> findLaboratoryServiceById(Long id);
-    ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status);
+@Service
+public interface LaboratoryServiceWritePrincipleService {
+    ResponseEntity<?> createLaboratoryService(LaboratoryService payload);
+    ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload);
+    ResponseEntity<?> deleteLaboratoryService(Long id);
+    ResponseEntity<?> activateLaboratoryService(Long id);
+    ResponseEntity<?> deactivateLaboratoryService(Long id);
 }

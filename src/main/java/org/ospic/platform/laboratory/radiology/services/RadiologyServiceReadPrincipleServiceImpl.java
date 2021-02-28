@@ -1,8 +1,8 @@
 package org.ospic.platform.laboratory.radiology.services;
 
-import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
-import org.ospic.platform.laboratory.radiology.exceptions.RadiologyServiceNotFoundException;
-import org.ospic.platform.laboratory.radiology.repository.LaboratoryServiceJpaRepository;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.repository.RadiologyServiceJpaRepository;
+import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -31,13 +31,13 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class LaboratoryServiceReadPrincipleServiceImpl implements LaboratoryServiceReadPrincipleService {
+public class RadiologyServiceReadPrincipleServiceImpl implements RadiologyServiceReadPrincipleService {
     @Autowired
-    LaboratoryServiceJpaRepository repository;
+    RadiologyServiceJpaRepository repository;
 
     @Override
     public ResponseEntity<?> listLaboratoryServices() {
-        List<LaboratoryService> list = this.repository.findAll();
+        List<RadiologyService> list = this.repository.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -45,12 +45,12 @@ public class LaboratoryServiceReadPrincipleServiceImpl implements LaboratoryServ
     public ResponseEntity<?> findLaboratoryServiceById(Long id) {
         return this.repository.findById(id).map(service->{
             return ResponseEntity.ok().body(service);
-        }).orElseThrow(()->new RadiologyServiceNotFoundException(id));
+        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
     }
 
     @Override
     public ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status) {
-        List<LaboratoryService> services;
+        List<RadiologyService> services;
         if (status){
             services = this.repository.findByIsActiveTrue();
         }else services = this.repository.findByIsActiveFalse();

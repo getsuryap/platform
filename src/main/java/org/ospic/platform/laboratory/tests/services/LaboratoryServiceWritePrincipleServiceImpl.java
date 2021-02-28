@@ -1,9 +1,9 @@
-package org.ospic.platform.laboratory.radiology.services;
+package org.ospic.platform.laboratory.tests.services;
 
 import org.ospic.platform.domain.CustomReponseMessage;
-import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
 import org.ospic.platform.laboratory.radiology.exceptions.RadiologyServiceNotFoundException;
-import org.ospic.platform.laboratory.radiology.repository.LaboratoryServiceJpaRepository;
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

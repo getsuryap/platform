@@ -1,6 +1,6 @@
 package org.ospic.platform.laboratory.radiology.services;
 
-import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
+import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,9 @@ import org.springframework.stereotype.Service;
  */
 @Component
 @Service
-public interface LaboratoryServiceWritePrincipleService {
-    ResponseEntity<?> createLaboratoryService(LaboratoryService payload);
-    ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload);
+public interface RadiologyServiceWritePrincipleService {
+    ResponseEntity<?> createLaboratoryService(RadiologyService payload);
+    ResponseEntity<?> updateLaboratoryService(Long id, RadiologyService payload);
     ResponseEntity<?> deleteLaboratoryService(Long id);
     ResponseEntity<?> activateLaboratoryService(Long id);
     ResponseEntity<?> deactivateLaboratoryService(Long id);
