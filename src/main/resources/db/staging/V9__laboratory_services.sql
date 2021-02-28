@@ -34,3 +34,14 @@ CREATE TABLE `m_bills`(
 ) COLLATE = 'utf8_unicode_ci' ENGINE = InnoDB;
 
 
+DROP TABLE IF EXISTS `m_radiology`;
+CREATE TABLE `m_radiology`(
+  id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'radiology service id',
+  name VARCHAR (50) NOT  NULL COMMENT 'radiology service name',
+  descriptions VARCHAR (250) NULL COMMENT 'radiology service extra descriptions',
+  price  DECIMAL(13,4) NOT NULL COMMENT 'radiology service price',
+  is_active boolean NOT NULL default true COMMENT 'check if this service is active',
+  primary key (`id`),
+  unique key(`name`)
+) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
+
