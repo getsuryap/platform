@@ -2,9 +2,9 @@ package org.ospic.platform.laboratory.tests.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
-import org.ospic.platform.laboratory.radiology.services.RadiologyServiceReadPrincipleService;
-import org.ospic.platform.laboratory.radiology.services.RadiologyServiceWritePrincipleService;
+import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.ospic.platform.laboratory.tests.services.LaboratoryServiceReadPrincipleService;
+import org.ospic.platform.laboratory.tests.services.LaboratoryServiceWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +36,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/lab/services")
 @Api(value = "/api/lab/services", tags = "Laboratory services", description = "Laboratory services")
 public class LaboratoryTestsApiResource {
-    private final RadiologyServiceReadPrincipleService readPrincipleService;
-    private final RadiologyServiceWritePrincipleService writePrincipleService;
+    private final LaboratoryServiceReadPrincipleService readPrincipleService;
+    private final LaboratoryServiceWritePrincipleService writePrincipleService;
 
     @Autowired
     public LaboratoryTestsApiResource(
-            RadiologyServiceReadPrincipleService readPrincipleService,
-            RadiologyServiceWritePrincipleService writePrincipleService) {
+            LaboratoryServiceReadPrincipleService readPrincipleService,
+            LaboratoryServiceWritePrincipleService writePrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
     }
@@ -50,13 +50,13 @@ public class LaboratoryTestsApiResource {
 
     @ApiOperation(value = "CREATE laboratory service", notes = "CREATE laboratory service")
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> createLabServices(@RequestBody(required = true) RadiologyService payload) {
+    ResponseEntity<?> createLabServices(@RequestBody(required = true) LaboratoryService payload) {
         return this.writePrincipleService.createLaboratoryService(payload);
     }
 
     @ApiOperation(value = "UPDATE laboratory service", notes = "UPDATE laboratory service")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) RadiologyService payload) {
+    ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) LaboratoryService payload) {
         return this.writePrincipleService.updateLaboratoryService(serviceId, payload);
     }
 
