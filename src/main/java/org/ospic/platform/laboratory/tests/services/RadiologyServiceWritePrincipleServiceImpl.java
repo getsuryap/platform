@@ -1,7 +1,7 @@
 package org.ospic.platform.laboratory.tests.services;
 
 import org.ospic.platform.domain.CustomReponseMessage;
-import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
+import org.ospic.platform.laboratory.tests.domain.RadiologyService;
 import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
 import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,27 +31,27 @@ import org.springframework.stereotype.Repository;
  * under the License.
  */
 @Repository
-public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratoryServiceWritePrincipleService {
+public class RadiologyServiceWritePrincipleServiceImpl implements RadiologyServiceWritePrincipleService {
     @Autowired
     LaboratoryServiceJpaRepository repository;
 
     @Override
-    public ResponseEntity<?> createLaboratoryService(LaboratoryService  payload) {
+    public ResponseEntity<?> createLaboratoryService(RadiologyService payload) {
         if (payload.getIsActive() == null){
             payload.setIsActive(true);
         }
-       LaboratoryService ls = this.repository.save(payload);
+       RadiologyService ls = this.repository.save(payload);
         return ResponseEntity.ok().body(ls);
     }
 
     @Override
-    public ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload) {
+    public ResponseEntity<?> updateLaboratoryService(Long id, RadiologyService payload) {
         return this.repository.findById(id).map(service->{
             service.setIsActive(payload.getIsActive() ==null? service.getIsActive() : payload.getIsActive());
             service.setDescriptions(payload.getDescriptions()==null? service.getDescriptions() : payload.getDescriptions());
             service.setName(payload.getName() == null?  service.getName() :  payload.getName());
             service.setPrice(payload.getPrice() ==null? service.getPrice() : payload.getPrice());
-            LaboratoryService ups = this.repository.save(service);
+            RadiologyService ups = this.repository.save(service);
             return ResponseEntity.status(HttpStatus.OK).body(ups);
         }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
     }
@@ -68,7 +68,7 @@ public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratorySer
     public ResponseEntity<?> activateLaboratoryService(Long id) {
         return this.repository.findById(id).map(service->{
             service.setIsActive(true);
-            LaboratoryService ups = this.repository.save(service);
+            RadiologyService ups = this.repository.save(service);
             return ResponseEntity.ok().body(ups);
         }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
     }
@@ -77,7 +77,7 @@ public class LaboratoryServiceWritePrincipleServiceImpl implements LaboratorySer
     public ResponseEntity<?> deactivateLaboratoryService(Long id) {
         return this.repository.findById(id).map(service->{
             service.setIsActive(false);
-            LaboratoryService ups = this.repository.save(service);
+            RadiologyService ups = this.repository.save(service);
             return ResponseEntity.ok().body(ups);
         }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
     }

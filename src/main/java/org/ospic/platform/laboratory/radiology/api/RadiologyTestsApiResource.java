@@ -1,4 +1,4 @@
-package org.ospic.platform.laboratory.tests.api;
+package org.ospic.platform.laboratory.radiology.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,14 +33,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@RequestMapping("/api/lab/services")
-@Api(value = "/api/lab/services", tags = "Laboratory services", description = "Laboratory services")
-public class LaboratoryTestsApiResource {
+@RequestMapping("/api/radiology/services")
+@Api(value = "/api/radiology/services", tags = "Laboratory services", description = "Laboratory services")
+public class RadiologyTestsApiResource {
     private final RadiologyServiceReadPrincipleService readPrincipleService;
     private final RadiologyServiceWritePrincipleService writePrincipleService;
 
     @Autowired
-    public LaboratoryTestsApiResource(
+    public RadiologyTestsApiResource(
             RadiologyServiceReadPrincipleService readPrincipleService,
             RadiologyServiceWritePrincipleService writePrincipleService) {
         this.readPrincipleService = readPrincipleService;

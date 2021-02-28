@@ -1,8 +1,8 @@
-package org.ospic.platform.laboratory.tests.services;
+package org.ospic.platform.laboratory.radiology.services;
 
-import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
-import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
-import org.ospic.platform.laboratory.tests.repository.LaboratoryServiceJpaRepository;
+import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
+import org.ospic.platform.laboratory.radiology.exceptions.RadiologyServiceNotFoundException;
+import org.ospic.platform.laboratory.radiology.repository.LaboratoryServiceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -45,7 +45,7 @@ public class LaboratoryServiceReadPrincipleServiceImpl implements LaboratoryServ
     public ResponseEntity<?> findLaboratoryServiceById(Long id) {
         return this.repository.findById(id).map(service->{
             return ResponseEntity.ok().body(service);
-        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+        }).orElseThrow(()->new RadiologyServiceNotFoundException(id));
     }
 
     @Override

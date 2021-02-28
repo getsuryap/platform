@@ -1,12 +1,12 @@
-package org.ospic.platform.laboratory.tests.services;
+package org.ospic.platform.laboratory.radiology.repository;
 
-import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.ospic.platform.laboratory.radiology.domain.LaboratoryService;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 /**
- * This file was created by eli on 15/02/2021 for org.ospic.platform.laboratory.tests.services
+ * This file was created by eli on 15/02/2021 for org.ospic.platform.laboratory.tests.repository
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,12 +26,9 @@ import org.springframework.stereotype.Service;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface LaboratoryServiceWritePrincipleService {
-    ResponseEntity<?> createLaboratoryService(LaboratoryService payload);
-    ResponseEntity<?> updateLaboratoryService(Long id, LaboratoryService payload);
-    ResponseEntity<?> deleteLaboratoryService(Long id);
-    ResponseEntity<?> activateLaboratoryService(Long id);
-    ResponseEntity<?> deactivateLaboratoryService(Long id);
+public interface LaboratoryServiceJpaRepository extends JpaRepository<LaboratoryService, Long> {
+    Boolean isActive(Long id);
+    boolean existsById(Long id);
+    List<LaboratoryService> findByIsActiveTrue();
+    List<LaboratoryService> findByIsActiveFalse();
 }

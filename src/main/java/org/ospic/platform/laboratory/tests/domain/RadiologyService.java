@@ -39,11 +39,11 @@ import java.io.Serializable;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-@Entity(name = DatabaseConstants.TABLE_LABORATORY_SERVICES)
-@Table(name = DatabaseConstants.TABLE_LABORATORY_SERVICES)
-@ApiModel(value = "Patient", description = "Laboratory test services")
+@Entity(name = DatabaseConstants.TABLE_RADIOLOGY_SERVICES)
+@Table(name = DatabaseConstants.TABLE_RADIOLOGY_SERVICES)
+@ApiModel(value = "Patient", description = "Radiology test services")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class LaboratoryService extends AbstractPersistableCustom implements Serializable {
+public class RadiologyService extends AbstractPersistableCustom implements Serializable {
     @Column(length = 200, name = "name", unique = true)
     private String name;
 
@@ -57,7 +57,7 @@ public class LaboratoryService extends AbstractPersistableCustom implements Seri
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
-    public LaboratoryService(String name, String descriptions, Double price, Boolean isActive) {
+    public RadiologyService(String name, String descriptions, Double price, Boolean isActive) {
         this.name = name;
         this.descriptions = descriptions;
         this.price = price;
