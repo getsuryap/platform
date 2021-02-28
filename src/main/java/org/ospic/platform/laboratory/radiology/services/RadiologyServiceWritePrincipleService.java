@@ -29,9 +29,9 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface RadiologyServiceWritePrincipleService {
-    ResponseEntity<?> createLaboratoryService(RadiologyService payload);
-    ResponseEntity<?> updateLaboratoryService(Long id, RadiologyService payload);
-    ResponseEntity<?> deleteLaboratoryService(Long id);
-    ResponseEntity<?> activateLaboratoryService(Long id);
-    ResponseEntity<?> deactivateLaboratoryService(Long id);
+    ResponseEntity<?> createRadiologyService(RadiologyService payload);
+    ResponseEntity<?> updateRadiologyService(Long id, RadiologyService payload);
+    ResponseEntity<?> deleteRadiologyService(Long id);
+    ResponseEntity<?> activateRadiologyService(Long id);
+    ResponseEntity<?> deactivateRadiologyService(Long id);
 }

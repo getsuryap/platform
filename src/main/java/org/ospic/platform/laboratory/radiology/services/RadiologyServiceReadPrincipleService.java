@@ -28,7 +28,7 @@ import org.springframework.stereotype.Repository;
 @Component
 @Repository
 public interface RadiologyServiceReadPrincipleService {
-    ResponseEntity<?> listLaboratoryServices();
-    ResponseEntity<?> findLaboratoryServiceById(Long id);
-    ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status);
+    ResponseEntity<?> listRadiologyServices();
+    ResponseEntity<?> findRadiologyServiceById(Long id);
+    ResponseEntity<?> findRadiologyServiceByActiveStatus(Boolean status);
 }

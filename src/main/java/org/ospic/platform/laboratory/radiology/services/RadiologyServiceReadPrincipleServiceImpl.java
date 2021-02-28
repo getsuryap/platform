@@ -1,8 +1,8 @@
 package org.ospic.platform.laboratory.radiology.services;
 
 import org.ospic.platform.laboratory.radiology.domain.RadiologyService;
+import org.ospic.platform.laboratory.radiology.exceptions.RadiologyServiceNotFoundException;
 import org.ospic.platform.laboratory.radiology.repository.RadiologyServiceJpaRepository;
-import org.ospic.platform.laboratory.tests.exceptions.LaboratoryServiceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -36,20 +36,20 @@ public class RadiologyServiceReadPrincipleServiceImpl implements RadiologyServic
     RadiologyServiceJpaRepository repository;
 
     @Override
-    public ResponseEntity<?> listLaboratoryServices() {
+    public ResponseEntity<?> listRadiologyServices() {
         List<RadiologyService> list = this.repository.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @Override
-    public ResponseEntity<?> findLaboratoryServiceById(Long id) {
+    public ResponseEntity<?> findRadiologyServiceById(Long id) {
         return this.repository.findById(id).map(service->{
             return ResponseEntity.ok().body(service);
-        }).orElseThrow(()->new LaboratoryServiceNotFoundException(id));
+        }).orElseThrow(()->new RadiologyServiceNotFoundException(id));
     }
 
     @Override
-    public ResponseEntity<?> findLaboratoryServiceByActiveStatus(Boolean status) {
+    public ResponseEntity<?> findRadiologyServiceByActiveStatus(Boolean status) {
         List<RadiologyService> services;
         if (status){
             services = this.repository.findByIsActiveTrue();
