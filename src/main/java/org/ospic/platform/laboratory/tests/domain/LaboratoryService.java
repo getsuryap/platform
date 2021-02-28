@@ -13,6 +13,8 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -44,20 +46,24 @@ import java.io.Serializable;
 @ApiModel(value = "Patient", description = "Laboratory test services")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class LaboratoryService extends AbstractPersistableCustom implements Serializable {
-    @Column(length = 200, name = "name", unique = true)
+    @NotBlank
+    @Column(length = 200, name = "name", unique = true, nullable = false)
     private String name;
 
 
     @Column(length = 200, name = "descriptions")
+    @NotBlank
     private String  descriptions;
 
+    @NotNull
     @Column(name = "price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
     private Double price;
 
+    @NotNull
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
     private Boolean isActive;
 
-    public LaboratoryService(String name, String descriptions, Double price, Boolean isActive) {
+    public LaboratoryService(@NotBlank String name, @NotBlank String descriptions, @NotNull Double price, Boolean isActive) {
         this.name = name;
         this.descriptions = descriptions;
         this.price = price;
