@@ -33,15 +33,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
-@RequestMapping("/api/radiology/services")
-@Api(value = "/api/radiology/services", tags = "Radiology services", description = "Radiology services")
+@RequestMapping("/api/radiology")
+@Api(value = "/api/radiology", tags = "Radiology services", description = "Radiology services")
 public class RadiologyTestsApiResource {
     private final RadiologyServiceReadPrincipleService readPrincipleService;
     private final RadiologyServiceWritePrincipleService writePrincipleService;
 
     @Autowired
-    public RadiologyTestsApiResource(
-            RadiologyServiceReadPrincipleService readPrincipleService,
+    public RadiologyTestsApiResource(RadiologyServiceReadPrincipleService readPrincipleService,
             RadiologyServiceWritePrincipleService writePrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
