@@ -94,7 +94,7 @@ public class TestController {
 
 		try {
 			// Fetching the .jrxml file from the resources folder.
-			Resource resource = context.getResource("classpath:jasperreports/patient_list.jrxml");
+			Resource resource = context.getResource("classpath:reports/patient_list.jrxml");
 			final InputStream stream = resource.getInputStream();
 
 			// Compile the Jasper report from .jrxml to .japser
