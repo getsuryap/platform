@@ -4,6 +4,7 @@ import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Repository
 public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleService{
     private ReportsJpaRepository repository;
     @Autowired

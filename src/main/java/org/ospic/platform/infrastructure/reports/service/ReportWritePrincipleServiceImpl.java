@@ -5,6 +5,7 @@ import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Repository
 public class ReportWritePrincipleServiceImpl implements ReportWritePrincipleService{
     private final ReportsJpaRepository repository;
     private final FilesStorageService filesystemService;

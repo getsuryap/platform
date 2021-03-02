@@ -1,6 +1,8 @@
 package org.ospic.platform.infrastructure.reports.service;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Service
+@Component
 public interface ReportWritePrincipleService {
     ResponseEntity<?> createReport(MultipartFile file);
 }
