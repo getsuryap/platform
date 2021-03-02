@@ -13,7 +13,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -42,6 +45,7 @@ import java.util.stream.Stream;
 public class FilesStorageServiceImpl implements FilesStorageService {
     public static final Logger logger = LoggerFactory.getLogger(FilesStorageServiceImpl.class);
     private final Path root = Paths.get("files");
+    private final Path reportsRoot = Paths.get("src","main","resources","reports");
 
     @Override
     public void init() {
@@ -74,6 +78,34 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(targetLocation.toString()));
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    }
+
+    @Override
+    public String uploadReportFile(MultipartFile file) {
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        try {
+            // Check if the file's name contains invalid characters
+            if (fileName.contains("..")) {
+                throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+            if (!extension.equals("jrxml")){
+                throw new RuntimeException("Sorry! File contains invalid format  "+extension);
+            }
+            // Copy file to the target location (Replacing existing file with the same name)
+
+            Path targetLocation = this.reportsRoot.resolve(fileName);
+
+            logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+            logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequestUri());
+
+            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(targetLocation.toString()));
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            return fileName;
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }

@@ -1,7 +1,10 @@
 package org.ospic.platform.controllers;
 
+import io.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.slf4j.Logger;
@@ -15,10 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -41,7 +42,8 @@ public class TestController {
 	ApplicationContext context;
 	@Autowired
 	PatientRepository repository;
-
+	@Autowired
+	FilesStorageService filesStorageService;
 	@GetMapping("/all")
 	public String allAccess() {
 		return "Public Content.";
@@ -57,6 +59,19 @@ public class TestController {
 	@PreAuthorize("hasRole('MODERATOR')")
 	public String moderatorAccess() {
 		return "Moderator Board.";
+	}
+
+	@ApiOperation(value = "UPDATE Patient upload Thumbnail image", notes = "UPDATE Patient upload Thumbnail image")
+	@RequestMapping(value = "/reports", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> uploadReportFile(@RequestParam("file") MultipartFile file) {
+		String message = "";
+		try {
+			//filesStorageService.uploadReportFile(file);
+			return ResponseEntity.ok().body("FIle saved with name: " +filesStorageService.uploadReportFile(file));
+		} catch (Exception e) {
+			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+		}
 	}
 
 
