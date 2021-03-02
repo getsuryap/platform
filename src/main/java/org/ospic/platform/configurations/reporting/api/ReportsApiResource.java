@@ -33,8 +33,8 @@ import java.io.IOException;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/reports")
-@Api(value = "/api/reports", tags = "Patient Reports")
+@RequestMapping("/api/poi/reports")
+@Api(value = "/api/poi/reports", tags = "Patient Reports")
 public class ReportsApiResource {
 
     @Autowired

@@ -1,6 +1,8 @@
 package org.ospic.platform.infrastructure.reports.service;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
@@ -23,6 +25,8 @@ import org.springframework.http.ResponseEntity;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Component
+@Service
 public interface ReportReadPrincipleService {
     ResponseEntity<?> readAllReports();
     ResponseEntity<?> readReportsByType(String type);
