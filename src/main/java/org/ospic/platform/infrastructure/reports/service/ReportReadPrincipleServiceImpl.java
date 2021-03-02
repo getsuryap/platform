@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Repository
 public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleService{
-    private ReportsJpaRepository repository;
+    private final ReportsJpaRepository repository;
     @Autowired
     ReportReadPrincipleServiceImpl(ReportsJpaRepository repository){
         this.repository = repository;

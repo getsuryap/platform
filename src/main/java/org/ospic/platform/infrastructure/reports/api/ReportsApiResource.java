@@ -49,7 +49,7 @@ public class ReportsApiResource {
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report")
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.POST,consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     public ResponseEntity<?> uploadReportFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         if (file.isEmpty()){
@@ -63,8 +63,8 @@ public class ReportsApiResource {
         }
     }
 
-    @ApiOperation(value = "CREATE Bed", notes = "CREATE bed")
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ApiOperation(value = "GET reports", notes = "GET reports")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> readAllReports(){
         return readPrincipleService.readAllReports();
