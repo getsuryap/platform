@@ -35,13 +35,13 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/poi/reports")
 @Api(value = "/api/poi/reports", tags = "Patient Reports")
-public class ReportsApiResource {
+public class PoiReportsApiResource {
 
     @Autowired
     PatientReportingReadPrincipleService patientReportingReadPrincipleService;
 
     @Autowired
-    public ReportsApiResource(PatientReportingReadPrincipleService patientReportingReadPrincipleService) {
+    public PoiReportsApiResource(PatientReportingReadPrincipleService patientReportingReadPrincipleService) {
         this.patientReportingReadPrincipleService = patientReportingReadPrincipleService;
     }
 
