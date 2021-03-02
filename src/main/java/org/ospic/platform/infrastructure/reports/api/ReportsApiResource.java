@@ -1,9 +1,16 @@
 package org.ospic.platform.infrastructure.reports.api;
 
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
+import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.api
@@ -31,4 +38,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/reports")
 @Api(value = "/api/reports", tags = "Reports", description = "Reports")
 public class ReportsApiResource {
+    private final ReportReadPrincipleService readPrincipleService;
+    private final ReportWritePrincipleService writePrincipleService;
+    @Autowired
+    public ReportsApiResource(ReportReadPrincipleService readPrincipleService, ReportWritePrincipleService writePrincipleService){
+        this.readPrincipleService = readPrincipleService;
+        this.writePrincipleService = writePrincipleService;
+    }
+
+    @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report")
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> uploadReportFile(@RequestParam("file") MultipartFile file) {
+        String message = "";
+        try {
+            return writePrincipleService.createReport(file);
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
+
+    @ApiOperation(value = "CREATE Bed", notes = "CREATE bed")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.ALL_VALUE)
+    @ResponseBody
+    ResponseEntity<?> readAllReports(){
+        return readPrincipleService.readAllReports();
+    }
+
 }

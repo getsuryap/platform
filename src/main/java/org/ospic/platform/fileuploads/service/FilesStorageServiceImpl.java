@@ -1,6 +1,7 @@
 package org.ospic.platform.fileuploads.service;
 
 import lombok.NonNull;
+import org.ospic.platform.infrastructure.reports.exception.InvalidReportNameExtensionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -94,7 +95,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             if (!extension.equals("jrxml")){
-                throw new RuntimeException("Sorry! File contains invalid format  "+extension);
+                throw new InvalidReportNameExtensionException();
             }
             // Copy file to the target location (Replacing existing file with the same name)
 
