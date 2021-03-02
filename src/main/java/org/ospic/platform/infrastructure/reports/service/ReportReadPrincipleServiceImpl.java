@@ -1,5 +1,12 @@
 package org.ospic.platform.infrastructure.reports.service;
 
+import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
  * --
@@ -21,5 +28,20 @@ package org.ospic.platform.infrastructure.reports.service;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class ReportReadPrincipleServiceImpl {
+public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleService{
+    private ReportsJpaRepository repository;
+    @Autowired
+    ReportReadPrincipleServiceImpl(ReportsJpaRepository repository){
+        this.repository = repository;
+    }
+    @Override
+    public ResponseEntity<?> readAllReports() {
+        List<Reports> reports = repository.findAll();
+        return ResponseEntity.ok().body(reports);
+    }
+
+    @Override
+    public ResponseEntity<?> readReportsByType(String type) {
+        return null;
+    }
 }

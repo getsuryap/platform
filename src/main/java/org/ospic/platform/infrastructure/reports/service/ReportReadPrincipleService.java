@@ -1,5 +1,7 @@
 package org.ospic.platform.infrastructure.reports.service;
 
+import org.springframework.http.ResponseEntity;
+
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
  * --
@@ -22,4 +24,6 @@ package org.ospic.platform.infrastructure.reports.service;
  * under the License.
  */
 public interface ReportReadPrincipleService {
+    ResponseEntity<?> readAllReports();
+    ResponseEntity<?> readReportsByType(String type);
 }
