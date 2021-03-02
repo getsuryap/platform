@@ -1,6 +1,7 @@
 package org.ospic.platform.fileuploads.service;
 
 import lombok.NonNull;
+import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.exception.InvalidReportNameExtensionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +97,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             }
             if (!extension.equals("jrxml")){
                 throw new InvalidReportNameExtensionException();
+            }
+            if (file.isEmpty()){
+                throw new EmptyContentFileException();
             }
             // Copy file to the target location (Replacing existing file with the same name)
 

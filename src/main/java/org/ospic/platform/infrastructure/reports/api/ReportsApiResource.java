@@ -3,12 +3,14 @@ package org.ospic.platform.infrastructure.reports.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
  * under the License.
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RestController()
+@Controller
 @RequestMapping("/api/reports")
 @Api(value = "/api/reports", tags = "Reports", description = "Reports")
 public class ReportsApiResource {
@@ -48,9 +50,11 @@ public class ReportsApiResource {
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
-    @ResponseBody
     public ResponseEntity<?> uploadReportFile(@RequestParam("file") MultipartFile file) {
         String message = "";
+        if (file.isEmpty()){
+            throw new EmptyContentFileException();
+        }
         try {
             return writePrincipleService.createReport(file);
         } catch (Exception e) {
