@@ -43,6 +43,6 @@ public class DatabaseConstants {
     public static final String TABLE_SERVICES = TI+"services";
     public static final String TABLE_LABORATORY_SERVICES= TI+"laboratory_services";
     public static final String TABLE_RADIOLOGY_SERVICES = TI+"radiology";
-    public static final String TABLE_CONSULTATION_LABORATORY_TESTS = TI+"lab_tests";
+    public static final String TABLE_REPORTS = TI+"reports";
     public static final String TABLE_BILLS = TI+"bills";
 }
