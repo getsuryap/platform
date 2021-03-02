@@ -3,6 +3,8 @@ package org.ospic.platform.infrastructure.reports.repository;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.repository
  * --
@@ -25,4 +27,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface ReportsJpaRepository extends JpaRepository<Reports, Long> {
+    Optional<Reports> findByfilename(String fileName);
 }
