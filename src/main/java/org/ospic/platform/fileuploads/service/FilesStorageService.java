@@ -41,6 +41,7 @@ public interface FilesStorageService {
      * Save new File in the storage
      * **/
     public void save(MultipartFile multipartFile);
+    public String uploadReportFile(MultipartFile multipartFile);
 
     public Resource loadImage(Long patientId,String filename);
 
