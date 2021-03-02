@@ -1,5 +1,12 @@
 package org.ospic.platform.infrastructure.reports.service;
 
+import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
  * --
@@ -21,5 +28,19 @@ package org.ospic.platform.infrastructure.reports.service;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class ReportWritePrincipleServiceImpl {
+public class ReportWritePrincipleServiceImpl implements ReportWritePrincipleService{
+    private final ReportsJpaRepository repository;
+    private final FilesStorageService filesystemService;
+    @Autowired
+    ReportWritePrincipleServiceImpl(ReportsJpaRepository repository, FilesStorageService filesystemService){
+        this.repository = repository;
+        this.filesystemService = filesystemService;
+    }
+
+    @Override
+    public ResponseEntity<?> createReport(MultipartFile file) {
+        String filename = filesystemService.uploadReportFile(file);
+        Reports report = new Reports().fromFileStorage(filename);
+        return ResponseEntity.ok().body(repository.save(report));
+    }
 }

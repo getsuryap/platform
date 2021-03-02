@@ -62,7 +62,12 @@ public class Reports extends AbstractPersistableCustom implements Serializable {
     @Column(name = "type", nullable = false)
     private Long type;
 
-    public Reports(@NotBlank String name, @NotBlank String filename, @NotBlank String descriptions, @NotNull Long type) {
+    public Reports fromFileStorage(String filename){
+        String reportName = filename.replaceAll("_", "");
+        return new Reports(reportName,filename,reportName + " Report",1L);
+    }
+
+    private Reports(@NotBlank String name, @NotBlank String filename, @NotBlank String descriptions, @NotNull Long type) {
         this.name = name;
         this.filename = filename;
         this.descriptions = descriptions;

@@ -1,5 +1,8 @@
 package org.ospic.platform.infrastructure.reports.service;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
  * --
@@ -22,4 +25,5 @@ package org.ospic.platform.infrastructure.reports.service;
  * under the License.
  */
 public interface ReportWritePrincipleService {
+    ResponseEntity<?> createReport(MultipartFile file);
 }
