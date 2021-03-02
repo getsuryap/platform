@@ -2,10 +2,12 @@ package org.ospic.platform.infrastructure.reports.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.jasperreports.engine.JRException;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.api
@@ -42,10 +48,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class ReportsApiResource {
     private final ReportReadPrincipleService readPrincipleService;
     private final ReportWritePrincipleService writePrincipleService;
+    private final PatientRepository patientRepository;
     @Autowired
-    public ReportsApiResource(ReportReadPrincipleService readPrincipleService, ReportWritePrincipleService writePrincipleService){
+    public ReportsApiResource(
+            ReportReadPrincipleService readPrincipleService,
+            ReportWritePrincipleService writePrincipleService,
+            PatientRepository patientRepository){
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
+        this.patientRepository = patientRepository;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report")
@@ -69,4 +80,14 @@ public class ReportsApiResource {
         return readPrincipleService.readAllReports();
     }
 
-}
+    @GetMapping("/view")
+    @ResponseBody
+    public ResponseEntity<?> viewReport(@RequestParam(value = "reportName", required = true) String reportName,
+                                        @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
+        if (entity.equals("client")){
+            return readPrincipleService.readReport(reportName,this.patientRepository.findAll());
+        }
+        else return null;
+    }
+
+    }
