@@ -82,6 +82,12 @@ public class TestController {
 		return model;
 	}
 
+	@GetMapping(value= "/login")
+	public ModelAndView login() {
+		model.setViewName("login");
+		return model;
+	}
+
 	@GetMapping("/view")
 	@ResponseBody
 	public ResponseEntity<?> viewReport() throws IOException, JRException,ServletException, SQLException {
