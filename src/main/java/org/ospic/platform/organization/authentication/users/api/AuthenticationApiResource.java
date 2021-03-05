@@ -90,30 +90,34 @@ public class AuthenticationApiResource {
         return this.usersWritePrincipleService.updateUserPassword(payload);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_ROLE')")
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")
     @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('MODERATOR')")
     ResponseEntity<?> retrieveAllRoles() {
         return roleReadPrincipleServices.retrieveAllRoles();
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_ROLE')")
     @ApiOperation(value = "RETRIEVE role by ID", notes = "RETRIEVE role by ID")
     @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveRoleById(@PathVariable Long roleId) {
         return roleReadPrincipleServices.fetchRoleById(roleId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_ROLE')")
     @ApiOperation(value = "UPDATE role privilege", notes = "UPDATE role privilege")
     @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody List<Long> privileges) {
         return roleWriteService.updateRole(roleId, privileges);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_ROLE')")
     @ApiOperation(value = "RETRIEVE all authorities", notes = "RETRIEVE all authorities")
     @RequestMapping(value = "/authorities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> fetchAllAvailableAuthorities() {
         return roleReadPrincipleServices.fetchAuthorities();
     }
+
 
     @RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
     public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
