@@ -58,7 +58,7 @@ public class BillsApiResources {
 
 
     @ApiOperation(value = "PAY Bill", notes = "PAY Bill")
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_BILL')")
+    @PreAuthorize("hasAnyAuthority('UPDATE_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
         return writeService.payBill(payload);
