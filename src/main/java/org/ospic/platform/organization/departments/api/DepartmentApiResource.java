@@ -8,6 +8,7 @@ import org.ospic.platform.organization.departments.services.DepartmentWriteServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -53,6 +54,7 @@ public class DepartmentApiResource {
         this.departmentWrite = departmentWrite;
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
     @ApiOperation(value = "RETRIEVE Departments", notes = "RETRIEVE  Departments")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -61,6 +63,7 @@ public class DepartmentApiResource {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
     @ApiOperation(value = "RETRIEVE Departments by id ", notes = "RETRIEVE  Departments by id")
     @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -69,6 +72,7 @@ public class DepartmentApiResource {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_DEPARTMENT')")
     @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

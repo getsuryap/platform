@@ -44,17 +44,20 @@ public class AuthenticationApiResource {
     }
 
     @PostMapping("/signup")
-    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN', 'SUPER_USER')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_USER')")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return this.usersWritePrincipleService.registerUser(signUpRequest);
     }
 
     @ApiOperation(value = "UPDATE User by ID", notes = "UPDATE User by ID")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_USER')")
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> updateUserDetails(@PathVariable("userId") Long userId, @RequestBody UpdateUserPayload payload) {
         return this.usersWritePrincipleService.updateUserDetails(userId, payload);
     }
 
+
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_USER')")
     @ApiOperation(value = "RETRIEVE List of all Application Users", notes = "RETRIEVE List of all Application Users")
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveAllApplicationUsersResponse() {
@@ -67,6 +70,7 @@ public class AuthenticationApiResource {
         return this.usersReadPrincipleService.retrieveLoggerInUser();
  }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_USER')")
     @ApiOperation(value = "RETRIEVE User by ID", notes = "RETRIEVE User by ID")
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
