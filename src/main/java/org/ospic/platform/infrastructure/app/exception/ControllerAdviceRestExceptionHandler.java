@@ -144,9 +144,9 @@ public class ControllerAdviceRestExceptionHandler extends ResponseEntityExceptio
     public ResponseEntity<Object> handleAccessDeniedException(Exception ex, WebRequest request) {
         if(ex.getMessage().toLowerCase().indexOf("access is denied") > -1) {
             Map<String, String> response = new HashMap<>();
-            response.put("message","Sorry <p>&#128532;</p> you are Unauthorized access to this resource or operation ");
+            response.put("defaultUserMessage","Sorry &nbsp;&nbsp; <p>&#128532;</p> &nbsp;&nbsp; you have Unauthorized access to this resource or operation ");
             response.put("status", HttpStatus.UNAUTHORIZED.toString());
-            return ResponseEntity.ok().body(new JSONObject(response));
+            return new ResponseEntity<Object>(new JSONObject(response), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
