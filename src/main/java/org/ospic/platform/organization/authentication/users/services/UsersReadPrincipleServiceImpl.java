@@ -79,7 +79,7 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
 
 
         return ResponseEntity.ok(rs.loginResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), roles, permissions));
+                userDetails.getEmail(),  permissions));
     }
 
     @Override
