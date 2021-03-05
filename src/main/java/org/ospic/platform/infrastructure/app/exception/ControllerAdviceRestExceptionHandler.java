@@ -1,5 +1,6 @@
 package org.ospic.platform.infrastructure.app.exception;
 
+import net.minidev.json.JSONObject;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
@@ -7,11 +8,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.*;
-import org.springframework.web.bind.*;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,7 +28,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This file was created by eli on 23/01/2021 for org.ospic.platform.infrastructure.app.exceptions
@@ -133,6 +138,17 @@ public class ControllerAdviceRestExceptionHandler extends ResponseEntityExceptio
         String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(Exception ex, WebRequest request) {
+        if(ex.getMessage().toLowerCase().indexOf("access is denied") > -1) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message","Sorry <p>&#128532;</p> you are Unauthorized access to this resource or operation ");
+            response.put("status", HttpStatus.UNAUTHORIZED.toString());
+            return ResponseEntity.ok().body(new JSONObject(response));
+        }
+        return new ResponseEntity<Object>(ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
