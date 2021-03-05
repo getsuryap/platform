@@ -56,4 +56,6 @@ CREATE TABLE `m_reports`(
   unique key(`name`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
-
+REPLACE INTO `m_privilege` ( `name`) VALUES
+  ("DELETE_PRIVILEGE"),("ALL_FUNCTIONS"),
+  ("READ_BILL"),("WRITE_BILL"),("UPDATE_BILL"),("DELETE_BILL");

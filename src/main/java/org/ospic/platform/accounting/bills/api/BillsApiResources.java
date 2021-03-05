@@ -8,6 +8,7 @@ import org.ospic.platform.accounting.bills.service.BillWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,12 +43,14 @@ public class BillsApiResources {
     BillWritePrincipleService writeService;
 
     @ApiOperation(value = "LIST bill's", notes = "LIST bill's")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> listBills() {
         return readService.readAllBills();
     }
 
     @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
         return readService.readBillById(billId);
@@ -55,6 +58,7 @@ public class BillsApiResources {
 
 
     @ApiOperation(value = "PAY Bill", notes = "PAY Bill")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
         return writeService.payBill(payload);

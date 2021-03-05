@@ -76,6 +76,8 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+
+
         return ResponseEntity.ok(rs.loginResponse(jwt, userDetails.getId(), userDetails.getUsername(),
                 userDetails.getEmail(), roles, permissions));
     }
