@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.configurations.audit.Auditable;
+import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
@@ -115,6 +116,9 @@ public class Patient extends Auditable implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition = "boolean default false")
     private Boolean isActive;
 
+    @Column(name = "has_self_service_account", nullable = false, columnDefinition = "boolean default false")
+    private Boolean hasSelfServiceUserAccount;
+
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private ContactsInformation contactsInformation;
@@ -126,12 +130,19 @@ public class Patient extends Auditable implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<ConsultationResource> consultationResources = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_id")
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<User> selfServiceUsers = new ArrayList<>();
+
+
 
     public Patient(
             String name, String guardianName, String phone, String address, String emailAddress,
             String height, String weight, String bloodPressure, int age, Boolean isAdmitted, String patientPhoto,
             String bloodGroup, String note, String symptoms, String marriageStatus, String gender,
-            ContactsInformation contactsInformation, Boolean isActive) {
+            ContactsInformation contactsInformation, Boolean isActive,Boolean hasSelfServiceUserAccount) {
         this.name = name;
         this.guardianName = guardianName;
         this.phone = phone;
@@ -150,6 +161,6 @@ public class Patient extends Auditable implements Serializable {
         this.gender = gender;
         this.contactsInformation = contactsInformation;
         this.isActive = isActive;
-
+        this.hasSelfServiceUserAccount = hasSelfServiceUserAccount;
     }
 }
