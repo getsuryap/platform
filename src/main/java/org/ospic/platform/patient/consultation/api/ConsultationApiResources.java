@@ -53,8 +53,8 @@ public class ConsultationApiResources {
         this.filesystem = filesystem;
     }
 
-
-    @ApiOperation(value = "RETRIEVE all patient service", notes = "RETRIEVE all patient service")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
+    @ApiOperation(value = "RETRIEVE all consultations", notes = "RETRIEVE all patient consultations")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveServices(@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
@@ -77,7 +77,7 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "RETRIEVE patient service by patient ID", notes = "RETRIEVE  patient service by patient ID")
     @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyAuthority('NURSE')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     ResponseEntity<?> retrieveServiceByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
@@ -90,9 +90,9 @@ public class ConsultationApiResources {
         return serviceRead.retrieveServiceByPatientId(patientId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE staff assigned services by staff Id", notes = "RETRIEVE staff assigned service by staff Id")
     @RequestMapping(value = "/staff/{staffId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-
     ResponseEntity<?> retrieveServiceByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
@@ -105,30 +105,35 @@ public class ConsultationApiResources {
         return serviceRead.retrieveServiceByStaffIdAll(staffId);
     }
 
+    @PreAuthorize("hasAnyAuthority('CREATE_CONSULTATION')")
     @ApiOperation(value = "CREATE new consultation service", notes = "CREATE new consultation service")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createNewPatientService(@PathVariable Long patientId) {
         return serviceWrite.createNewConsultation(patientId);
     }
 
+    @PreAuthorize("hasAnyAuthority('READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE patient service by ID", notes = "RETRIEVE  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveServiceById(@PathVariable Long serviceId) {
         return serviceRead.retrieveAServiceById(serviceId);
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "ASSIGN service to staff", notes = "ASSIGN service to staff")
     @RequestMapping(value = "/{serviceId}/{staffId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     ResponseEntity<?> createNewPatientService(@PathVariable Long serviceId, @PathVariable Long staffId) {
         return serviceWrite.assignConsultationToStaff(serviceId, staffId);
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "END patient service by ID", notes = "END  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
     ResponseEntity<?> endServiceById(@PathVariable Long serviceId) {
         return serviceWrite.endConsultationById(serviceId);
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file")
     @RequestMapping(value = "/{consultationId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
