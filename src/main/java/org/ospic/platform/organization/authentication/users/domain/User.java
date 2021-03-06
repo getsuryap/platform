@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.patient.details.domain.Patient;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -64,6 +65,12 @@ public class User implements Serializable {
 	@JoinColumn(name = "user")
 	private Staff staff;
 
+	@Column(name = "is_self_service")
+	private Boolean isSelfService = false;
+
+	@ManyToOne
+	@JoinColumn(name = "patient_id")
+	private Patient patient;
 
 
 	public User(String username, String email, String password, Boolean isStaff) {

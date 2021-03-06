@@ -56,9 +56,12 @@ CREATE TABLE `m_reports`(
   unique key(`name`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
-REPLACE INTO `m_privilege` ( `name`) VALUES
-  ("DELETE_PRIVILEGE"),("ALL_FUNCTIONS"),("READ_USER"),
-  ("CREATE_BILL"),("READ_BILL"),("UPDATE_BILL"),("DELETE_BILL"),
-  ("CREATE_DEPARTMENT"),("READ_DEPARTMENT"),("UPDATE_DEPARTMENT"),("DELETE_DEPARTMENT"),
-  ("CREATE_ROLE"),("READ_ROLE"),("UPDATE_ROLE"),("DELETE_ROLE"),
-  ("CREATE_CONSULTATION"),("READ_CONSULTATION"),("UPDATE_CONSULTATION"),("DELETE_CONSULTATION");
+
+
+ALTER TABLE `users`
+        ADD COLUMN `is_self_service` boolean NOT NULL default false COMMENT 'check if user is self service',
+        ADD COLUMN `patient_id` BIGINT NULL COMMENT 'self service patient account',
+        ADD CONSTRAINT `fk_patient_self_service_account` FOREIGN KEY (`patient_id`) REFERENCES `m_patients`(`id`) ON DELETE CASCADE;
+
+ALTER TABLE `m_patients`
+          ADD COLUMN `has_self_service_account` boolean NOT NULL default false COMMENT 'check if user has self service';

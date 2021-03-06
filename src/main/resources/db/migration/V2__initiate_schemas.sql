@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS  `m_roles` (
 
 DROP TABLE IF EXISTS  `m_privilege`;
 CREATE TABLE IF NOT EXISTS  `m_privilege` (
-  id BIGINT  NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR (250) NOT NULL
+  id BIGINT  NOT NULL AUTO_INCREMENT,
+  name VARCHAR (250) NOT NULL,
+  constraint unique_constraint_privilege unique (`name`),
+  constraint privilege_primary_key primary key (`id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
 
