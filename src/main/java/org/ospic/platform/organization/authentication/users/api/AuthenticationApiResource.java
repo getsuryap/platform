@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
+import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
 import org.ospic.platform.organization.authentication.users.payload.request.*;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
@@ -28,14 +29,23 @@ import java.util.List;
 @RequestMapping("/api/auth")
 @Api(value = "/api/auth", tags = "Authentication")
 public class AuthenticationApiResource {
+   private final UsersReadPrincipleService usersReadPrincipleService;
+   private final UsersWritePrincipleService usersWritePrincipleService;
+   private final RoleReadPrincipleServices roleReadPrincipleServices;
+   private final RoleWritePrincipleService roleWriteService;
+
     @Autowired
-    UsersReadPrincipleService usersReadPrincipleService;
-    @Autowired
-    UsersWritePrincipleService usersWritePrincipleService;
-    @Autowired
-    RoleReadPrincipleServices roleReadPrincipleServices;
-    @Autowired
-    RoleWritePrincipleService roleWriteService;
+    AuthenticationApiResource(
+            UsersReadPrincipleService usersReadPrincipleService,
+                    UsersWritePrincipleService usersWritePrincipleService,
+                    RoleReadPrincipleServices roleReadPrincipleServices,
+                    RoleWritePrincipleService roleWriteService){
+        this.roleWriteService = roleWriteService;
+        this.roleReadPrincipleServices = roleReadPrincipleServices;
+        this.usersWritePrincipleService = usersWritePrincipleService;
+        this.usersReadPrincipleService = usersReadPrincipleService;
+
+    }
 
 
     @PostMapping("/signin")
@@ -45,8 +55,14 @@ public class AuthenticationApiResource {
 
     @PostMapping("/signup")
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_USER')")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        return this.usersWritePrincipleService.registerUser(signUpRequest);
+    public ResponseEntity<?> registerSelfServiceUser(@Valid @RequestBody SignupRequest payload) {
+        return this.usersWritePrincipleService.registerUser(payload);
+    }
+
+    @PostMapping("/self")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_SELF_SERVICE','UPDATE_SELF_SERVICE')")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SelfServicePayload payload) {
+        return this.usersWritePrincipleService.registerSelfServiceUser(payload);
     }
 
     @ApiOperation(value = "UPDATE User by ID", notes = "UPDATE User by ID")

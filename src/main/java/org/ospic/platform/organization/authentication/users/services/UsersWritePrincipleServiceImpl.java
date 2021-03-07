@@ -4,6 +4,7 @@ import io.jsonwebtoken.impl.DefaultClaims;
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
+import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
@@ -18,6 +19,9 @@ import org.ospic.platform.organization.departments.repository.DepartmentJpaRepos
 import org.ospic.platform.organization.staffs.domains.Staff;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
+import org.ospic.platform.patient.details.domain.Patient;
+import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.security.jwt.JwtUtils;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +66,8 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     private final RoleRepository roleRepository;
     private final DepartmentJpaRepository departmentRepository;
     private final StaffsRepository staffsRepository;
+    @Autowired
+    PatientRepository patientRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -123,6 +129,29 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         }
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @Override
+    public ResponseEntity<?> registerSelfServiceUser(SelfServicePayload payload){
+        User user = new User(payload.getUsername(), payload.getEmail(), encoder.encode(payload.getPassword()), false);
+        Set<Role> roles = new HashSet<>();
+        Optional<Role> optionalRole = roleRepository.findByName("SELF SERVICE");
+        roles.add(optionalRole.isPresent() ? optionalRole.get(): null);
+        Optional<Patient> patientOptional = patientRepository.findById(payload.getPatientId());
+        user.setIsSelfService(true);
+        if (userJpaRepository.existsByUsername(payload.getUsername())){
+            throw new DuplicateUsernameException(payload.getUsername());
+        }
+        if (userJpaRepository.existsByEmail(payload.getEmail())) {
+            String code = "error.msg.duplicate.email.address";
+            String message = "Duplicate email address";
+            throw new DuplicateUsernameException(code, message);
+        }
+        if (!patientOptional.isPresent()){
+            throw new PatientNotFoundExceptionPlatform(payload.getPatientId());
+        }
+        user.setPatient(patientOptional.get());
+        return ResponseEntity.ok().body(this.userJpaRepository.save(user));
     }
 
     @Override

@@ -1,9 +1,9 @@
-package org.ospic.platform.organization.authentication.users.exceptions;
+package org.ospic.platform.organization.authentication.selfservice.data;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException;
+import lombok.*;
 
 /**
- * This file was created by eli on 28/11/2020 for org.ospic.platform.organization.authentication.users.exceptions
+ * This file was created by eli on 07/03/2021 for org.ospic.platform.organization.authentication.selfservice.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,13 +23,13 @@ import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException
  * specific language governing permissions and limitations
  * under the License.
  */
-public class UserNotFoundPlatformException extends AbstractPlatformException {
-
-    public UserNotFoundPlatformException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
-        super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
-    }
-
-    public UserNotFoundPlatformException(Long id){
-        super("error.msg.user.not.found",String.format( "User with id %2d does not exist", id));
-    }
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@AllArgsConstructor
+public class SelfServicePayload {
+    private String username;
+    private String password;
+    private String email;
+    private Long patientId;
 }
