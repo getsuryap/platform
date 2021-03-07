@@ -138,7 +138,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         Optional<Role> optionalRole = roleRepository.findByName("SELF SERVICE");
         roles.add(optionalRole.isPresent() ? optionalRole.get(): null);
         Optional<Patient> patientOptional = patientRepository.findById(payload.getPatientId());
-        user.setIsSelfService(true);
+
         if (userJpaRepository.existsByUsername(payload.getUsername())){
             throw new DuplicateUsernameException(payload.getUsername());
         }
@@ -156,6 +156,8 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             String message = String.format("Self service account for patient %s already exist", patient.getName());
             throw new DuplicateUsernameException(code, message);
         }
+        user.setIsSelfService(true);
+        user.setRoles(roles);
         user.setPatient(patient);
         patient.setHasSelfServiceUserAccount(true);
         this.patientRepository.save(patient);
