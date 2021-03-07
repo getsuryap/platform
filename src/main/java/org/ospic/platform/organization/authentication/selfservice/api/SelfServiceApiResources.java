@@ -6,6 +6,7 @@ import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
+import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class SelfServiceApiResources {
     @Autowired UsersReadPrincipleService usersReadPrincipleService;
     @Autowired PatientInformationReadServices patientInformationReadServices;
     @Autowired UserJpaRepository userJpaRepository;
+    @Autowired
+    ConsultationResourceReadPrinciplesService consultationReadService;
 
 
 
@@ -63,5 +66,15 @@ public class SelfServiceApiResources {
             throw new NotSelfServiceUserException(u.getUsername());
         }
         return this.patientInformationReadServices.retrievePatientById(u.getPatient().getId());
+    }
+
+    @GetMapping("/consultations")
+    public ResponseEntity<?> readConsultations() throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return this.consultationReadService.retrieveConsultationByPatientId(u.getPatient().getId());
     }
 }
