@@ -1,6 +1,7 @@
 package org.ospic.platform.organization.authentication.selfservice.api;
 
 import io.swagger.annotations.Api;
+import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
@@ -52,13 +53,15 @@ public class SelfServiceApiResources {
     @GetMapping("/users")
     public ResponseEntity<?> getUser() throws Exception {
          UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return this.usersReadPrincipleService.retrieveUserById(ud.getId());
     }
     @GetMapping("/patients")
     public ResponseEntity<?> getPatient() throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
         return this.patientInformationReadServices.retrievePatientById(u.getPatient().getId());
     }
 }
