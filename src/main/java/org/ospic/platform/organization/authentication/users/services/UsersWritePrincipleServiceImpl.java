@@ -151,6 +151,11 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             throw new PatientNotFoundExceptionPlatform(payload.getPatientId());
         }
         Patient patient = patientOptional.get();
+        if (patient.getHasSelfServiceUserAccount()) {
+            String code = "error.msg.duplicate.self.service";
+            String message = String.format("Self service account for patient %s already exist", patient.getName());
+            throw new DuplicateUsernameException(code, message);
+        }
         user.setPatient(patient);
         patient.setHasSelfServiceUserAccount(true);
         this.patientRepository.save(patient);
