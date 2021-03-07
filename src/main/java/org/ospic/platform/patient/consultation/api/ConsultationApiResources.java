@@ -59,77 +59,77 @@ public class ConsultationApiResources {
     ResponseEntity<?> retrieveServices(@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return serviceRead.retrialAllActiveServices();
+                return serviceRead.retrialAllActiveConsultations();
             }
             if (command.equals("false")) {
-                return serviceRead.retrieveAllInactiveServices();
+                return serviceRead.retrieveAllInactiveConsultations();
             }
             if(command.equals("activeipd")){
-                return serviceRead.retrieveAllActiveServicesInIpd();
+                return serviceRead.retrieveAllActiveConsultationsInIpd();
             }
             if (command.equals("activeopd")){
-                return serviceRead.retrialAllAllActiveServiceInOpd();
+                return serviceRead.retrialAllAllActiveConsultationInOpd();
             }
         }
-        return serviceRead.retrieveAllServices();
+        return serviceRead.retrieveAllConsultations();
     }
 
 
     @ApiOperation(value = "RETRIEVE patient service by patient ID", notes = "RETRIEVE  patient service by patient ID")
     @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
-    ResponseEntity<?> retrieveServiceByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
+    ResponseEntity<?> retrieveConsultationByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return serviceRead.retrieveServiceByPatientIdAndIsActiveTrue(patientId);
+                return serviceRead.retrieveConsultationByPatientIdAndIsActiveTrue(patientId);
             }
             if (command.equals("false")) {
-                return serviceRead.retrieveServiceByPatientIdAndIsActiveFalse(patientId);
+                return serviceRead.retrieveConsultationByPatientIdAndIsActiveFalse(patientId);
             }
         }
-        return serviceRead.retrieveServiceByPatientId(patientId);
+        return serviceRead.retrieveConsultationByPatientId(patientId);
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE staff assigned services by staff Id", notes = "RETRIEVE staff assigned service by staff Id")
     @RequestMapping(value = "/staff/{staffId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveServiceByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
+    ResponseEntity<?> retrieveConsultationByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return serviceRead.retrieveServiceByStaffIdAndIsActiveTrue(staffId);
+                return serviceRead.retrieveConsultationByStaffIdAndIsActiveTrue(staffId);
             }
             if (command.equals("false")) {
-                return serviceRead.retrieveServiceByStaffIdAndIsActiveFalse(staffId);
+                return serviceRead.retrieveConsultationByStaffIdAndIsActiveFalse(staffId);
             }
         }
-        return serviceRead.retrieveServiceByStaffIdAll(staffId);
+        return serviceRead.retrieveConsultationByStaffIdAll(staffId);
     }
 
     @PreAuthorize("hasAnyAuthority('CREATE_CONSULTATION')")
     @ApiOperation(value = "CREATE new consultation service", notes = "CREATE new consultation service")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> createNewPatientService(@PathVariable Long patientId) {
+    ResponseEntity<?> createNewPatientConsultation(@PathVariable Long patientId) {
         return serviceWrite.createNewConsultation(patientId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE patient service by ID", notes = "RETRIEVE  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveServiceById(@PathVariable Long serviceId) {
-        return serviceRead.retrieveAServiceById(serviceId);
+    ResponseEntity<?> retrieveConsultationById(@PathVariable Long serviceId) {
+        return serviceRead.retrieveAConsultationById(serviceId);
     }
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "ASSIGN service to staff", notes = "ASSIGN service to staff")
     @RequestMapping(value = "/{serviceId}/{staffId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
-    ResponseEntity<?> createNewPatientService(@PathVariable Long serviceId, @PathVariable Long staffId) {
+    ResponseEntity<?> createNewPatientConsultation(@PathVariable Long serviceId, @PathVariable Long staffId) {
         return serviceWrite.assignConsultationToStaff(serviceId, staffId);
     }
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "END patient service by ID", notes = "END  patient service by ID")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
-    ResponseEntity<?> endServiceById(@PathVariable Long serviceId) {
+    ResponseEntity<?> endConsultationById(@PathVariable Long serviceId) {
         return serviceWrite.endConsultationById(serviceId);
     }
 
