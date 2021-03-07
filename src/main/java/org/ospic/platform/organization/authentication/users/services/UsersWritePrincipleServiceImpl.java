@@ -150,7 +150,10 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
         if (!patientOptional.isPresent()){
             throw new PatientNotFoundExceptionPlatform(payload.getPatientId());
         }
-        user.setPatient(patientOptional.get());
+        Patient patient = patientOptional.get();
+        user.setPatient(patient);
+        patient.setHasSelfServiceUserAccount(true);
+        this.patientRepository.save(patient);
         return ResponseEntity.ok().body(this.userJpaRepository.save(user));
     }
 
