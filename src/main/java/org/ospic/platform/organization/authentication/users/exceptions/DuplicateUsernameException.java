@@ -1,6 +1,6 @@
 package org.ospic.platform.organization.authentication.users.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.PlatformDataIntegrityException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException;
 
 /**
  * This file was created by eli on 16/02/2021 for org.ospic.platform.organization.authentication.users.exceptions
@@ -23,7 +23,7 @@ import org.ospic.platform.infrastructure.app.exception.PlatformDataIntegrityExce
  * specific language governing permissions and limitations
  * under the License.
  */
-public class DuplicateUsernameException extends PlatformDataIntegrityException {
+public class DuplicateUsernameException extends AbstractPlatformException {
     protected DuplicateUsernameException(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }

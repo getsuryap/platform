@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.authentication.users.services;
 
+import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
 import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
 import org.ospic.platform.organization.authentication.users.payload.request.UpdateUserPayload;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public interface UsersWritePrincipleService {
     ResponseEntity<?> registerUser(SignupRequest payload);
+    ResponseEntity<?> registerSelfServiceUser(SelfServicePayload payload);
     ResponseEntity<?> updateUserPassword(PasswordUpdatePayload payload);
     ResponseEntity<?> refreshToken(HttpServletRequest request);
     ResponseEntity<?> updateUserDetails(Long id, UpdateUserPayload payload);
