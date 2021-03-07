@@ -52,7 +52,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllServices() {
+    public ResponseEntity<?> retrieveAllConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + "";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
@@ -60,7 +60,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrialAllActiveServices() {
+    public ResponseEntity<?> retrialAllActiveConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = true";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
@@ -68,7 +68,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllInactiveServices() {
+    public ResponseEntity<?> retrieveAllInactiveConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = false";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
@@ -76,7 +76,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveAServiceById(Long serviceId) {
+    public ResponseEntity<?> retrieveAConsultationById(Long serviceId) {
       return resourceJpaRepository.findById(serviceId).map(service ->
                 ResponseEntity.ok().body(service)
         ).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
@@ -84,7 +84,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByPatientId(Long patientId) {
+    public ResponseEntity<?> retrieveConsultationByPatientId(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ?";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
@@ -92,7 +92,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveFalse(Long patientId) {
+    public ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND !s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
@@ -100,7 +100,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveTrue(Long staffId) {
+    public ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
@@ -108,7 +108,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveFalse(Long staffId) {
+    public ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND! s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
@@ -116,7 +116,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByStaffIdAll(Long staffId) {
+    public ResponseEntity<?> retrieveConsultationByStaffIdAll(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? ";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
@@ -124,7 +124,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllActiveServicesInIpd() {
+    public ResponseEntity<?> retrieveAllActiveConsultationsInIpd() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE  s.is_active = true AND s.is_admitted = true ";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
@@ -132,7 +132,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrialAllAllActiveServiceInOpd() {
+    public ResponseEntity<?> retrialAllAllActiveConsultationInOpd() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = true AND s.is_admitted =false";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
@@ -140,7 +140,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveTrue(Long patientId) {
+    public ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});

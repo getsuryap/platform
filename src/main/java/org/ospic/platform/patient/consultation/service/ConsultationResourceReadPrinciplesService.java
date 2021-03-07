@@ -28,17 +28,17 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface ConsultationResourceReadPrinciplesService {
-    ResponseEntity<?> retrieveAllServices();
-    ResponseEntity<?> retrialAllActiveServices();
-    ResponseEntity<?> retrieveAllInactiveServices();
-    ResponseEntity<?> retrieveAServiceById(Long serviceId);
-    ResponseEntity<?> retrieveServiceByPatientId(Long patientId);
-    ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveTrue(Long patientId);
-    ResponseEntity<?> retrieveServiceByPatientIdAndIsActiveFalse(Long patientId);
-    ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveTrue(Long staffId);
-    ResponseEntity<?> retrieveServiceByStaffIdAndIsActiveFalse(Long staffId);
-    ResponseEntity<?> retrieveServiceByStaffIdAll(Long staffId);
-    ResponseEntity<?> retrieveAllActiveServicesInIpd();
-    ResponseEntity<?> retrialAllAllActiveServiceInOpd();
+    ResponseEntity<?> retrieveAllConsultations();
+    ResponseEntity<?> retrialAllActiveConsultations();
+    ResponseEntity<?> retrieveAllInactiveConsultations();
+    ResponseEntity<?> retrieveAConsultationById(Long serviceId);
+    ResponseEntity<?> retrieveConsultationByPatientId(Long patientId);
+    ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId);
+    ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId);
+    ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId);
+    ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId);
+    ResponseEntity<?> retrieveConsultationByStaffIdAll(Long staffId);
+    ResponseEntity<?> retrieveAllActiveConsultationsInIpd();
+    ResponseEntity<?> retrialAllAllActiveConsultationInOpd();
 
 }
