@@ -68,7 +68,7 @@ public class User implements Serializable {
 	@Column(name = "is_self_service")
 	private Boolean isSelfService = false;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 
