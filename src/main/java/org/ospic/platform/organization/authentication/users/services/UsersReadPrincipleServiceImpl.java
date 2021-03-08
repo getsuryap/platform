@@ -85,10 +85,12 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
     @Override
     public ResponseEntity<?> retrieveAllApplicationUsersResponse() {
         List<User> users = userJpaRepository.findAll();
-        users.forEach(user -> {
-            user.setPassword(null);
-        });
         return ResponseEntity.ok(users);
+    }
+
+    @Override
+    public ResponseEntity<?> retrieveAllSelfServiceUsersResponse() {
+        return ResponseEntity.ok().body(this.userJpaRepository.findByIsSelfServiceTrue());
     }
 
     @Override

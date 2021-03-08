@@ -32,7 +32,7 @@ public interface UsersReadPrincipleService {
     ResponseEntity<?> authenticateUser(LoginRequest payload) throws Exception;
 
     ResponseEntity<?> retrieveAllApplicationUsersResponse();
-
+    ResponseEntity<?> retrieveAllSelfServiceUsersResponse();
     ResponseEntity<?> retrieveLoggerInUser();
 
     ResponseEntity<?> retrieveUserById(Long userId);
