@@ -3,8 +3,6 @@ package org.ospic.platform.patient.consultation.data;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 /**
  * This file was created by eli on 25/12/2020 for org.ospic.platform.patient.consultation.data
  * --
@@ -30,8 +28,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ConsultationPayload {
     private Long id;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    private String fromDate;
+    private String toDate;
     private Boolean isActive;
     private Boolean isAdmitted;
     private Long patientId;
@@ -40,13 +38,13 @@ public class ConsultationPayload {
     private String staffName;
 
     public static ConsultationPayload instance(
-            Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive,
+            Long id, String fromDate, String toDate, Boolean isActive,
            Boolean isAdmitted,
             Long patientId, String patientName, Long staffId, String staffName) {
         return new ConsultationPayload(id, fromDate, toDate, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 
-    public ConsultationPayload(Long id, LocalDate fromDate, LocalDate toDate, Boolean isActive, Boolean isAdmitted, Long patientId, String patientName, Long staffId, String staffName) {
+    public ConsultationPayload(Long id, String fromDate, String toDate, Boolean isActive, Boolean isAdmitted, Long patientId, String patientName, Long staffId, String staffName) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;

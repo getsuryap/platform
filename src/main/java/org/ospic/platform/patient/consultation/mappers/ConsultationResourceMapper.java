@@ -5,9 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * This file was created by eli on 25/12/2020 for org.ospic.platform.inventory.admission.wrappers
@@ -32,7 +29,7 @@ import java.util.Date;
  */
 public class ConsultationResourceMapper implements RowMapper<ConsultationPayload> {
     public String schema() {
-        return  " s.id as id, s.fromdate as fromDate, s.todate as toDate, s.is_active as isActive, " +
+        return  " s.id as id, DATE_FORMAT(s.fromdate, \"%W %M %e %Y %r\") as fromDate, DATE_FORMAT(s.todate, \"%W %M %e %Y %r\") as toDate,  s.is_active as isActive, " +
                 " s.patient_id as patientId, p.name as patientName, " +
                 " s.staff_id as staffId, st.fullName as staffName,  " +
                 " s.is_admitted as isAdmitted FROM m_consultations s " +
@@ -43,16 +40,14 @@ public class ConsultationResourceMapper implements RowMapper<ConsultationPayload
     @Override
     public ConsultationPayload mapRow(ResultSet rs, int i) throws SQLException {
         final Long id = rs.getLong("id");
-        final Date fromDate = rs.getDate("fromDate");
-        final Date toDate = rs.getDate("toDate");
+        final String fromDate = rs.getString("fromDate");
+        final String toDate = rs.getString("toDate");
         final Boolean isActive = rs.getBoolean("isActive");
         final Boolean  isAdmitted = rs.getBoolean("isAdmitted");
         final Long patientId = rs.getLong("patientId");
         final String patientName = rs.getString("patientName");
         final Long staffId = rs.getLong("staffId");
         final String staffName = rs.getString("staffName");
-        final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(fromDate));
-        final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(toDate));
-        return ConsultationPayload.instance(id, fromDateLocal, toDateLocal, isActive,isAdmitted, patientId, patientName, staffId, staffName);
+        return ConsultationPayload.instance(id, fromDate,toDate, isActive,isAdmitted, patientId, patientName, staffId, staffName);
     }
 }
