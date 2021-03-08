@@ -1,9 +1,11 @@
 package org.ospic.platform.organization.authentication.selfservice.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
+import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
@@ -11,12 +13,11 @@ import org.ospic.platform.patient.details.service.PatientInformationReadServices
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * This file was created by eli on 07/03/2021 for org.ospic.platform.organization.authentication.selfservice.api
@@ -41,7 +42,6 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@ApiIgnore
 @RequestMapping("/api/self")
 @Api(value = "/api/self", tags = "Self service user data's")
 public class SelfServiceApiResources {
@@ -53,12 +53,25 @@ public class SelfServiceApiResources {
 
 
 
+    @PostMapping("/login")
+    @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        return this.usersReadPrincipleService.authenticateUser(loginRequest);
+    }
+
+
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/users")
+    @ApiOperation(value = "GET self service user ", notes = "GET self service user")
     public ResponseEntity<?> getUser() throws Exception {
          UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.usersReadPrincipleService.retrieveUserById(ud.getId());
     }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/patients")
+    @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account")
     public ResponseEntity<?> getPatient() throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
