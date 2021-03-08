@@ -33,6 +33,7 @@ public interface UsersReadPrincipleService {
 
     ResponseEntity<?> retrieveAllApplicationUsersResponse();
     ResponseEntity<?> retrieveAllSelfServiceUsersResponse();
+    ResponseEntity<?> retrieveAllUsersWhoAreNotSelfService();
     ResponseEntity<?> retrieveLoggerInUser();
 
     ResponseEntity<?> retrieveUserById(Long userId);

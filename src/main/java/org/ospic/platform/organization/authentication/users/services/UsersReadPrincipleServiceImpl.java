@@ -94,6 +94,11 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
     }
 
     @Override
+    public ResponseEntity<?> retrieveAllUsersWhoAreNotSelfService() {
+        return ResponseEntity.ok().body(this.userJpaRepository.findByIsSelfServiceFalse());
+    }
+
+    @Override
     public ResponseEntity<?> retrieveLoggerInUser() {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> optional = userJpaRepository.findById(ud.getId());
