@@ -76,7 +76,15 @@ public class AuthenticationApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_USER')")
     @ApiOperation(value = "RETRIEVE List of all Application Users", notes = "RETRIEVE List of all Application Users")
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveAllApplicationUsersResponse() {
+    ResponseEntity<?> retrieveAllApplicationUsersResponse(@RequestParam(value = "command", required = false) String command) {
+        if (!(command == null || command.isEmpty())) {
+            if (command.equals("self")) {
+                return this.usersReadPrincipleService.retrieveAllSelfServiceUsersResponse();
+            }
+            if (command.equals("users")) {
+                return this.usersReadPrincipleService.retrieveAllUsersWhoAreNotSelfService();
+            }
+        }
         return this.usersReadPrincipleService.retrieveAllApplicationUsersResponse();
     }
 
