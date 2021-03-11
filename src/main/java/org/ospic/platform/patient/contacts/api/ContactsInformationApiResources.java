@@ -49,40 +49,27 @@ public class ContactsInformationApiResources {
         this.contactsInformationService = contactsInformationService;
     }
 
+    @ApiOperation(value = "GET all contacts", notes = "GET all contacts")
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @ResponseBody
-    List<ContactsInformation> all() {
-        return contactsInformationService.retrieveAllContactsInformation();
+    ResponseEntity<?> all() {
+        return ResponseEntity.ok().body(contactsInformationService.retrieveAllContactsInformation());
     }
 
-    @RequestMapping(
-            value = "/{id}",
-            method = RequestMethod.PATCH,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ContactsInformation createNew(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
-        return patientInformationWriteService.updatePatientContacts(id, contactsInformationRequest);
+    @ApiOperation(value = "UPDATE patient contacts", notes = "UPDATE patient contacts")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> createNew(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
+        return ResponseEntity.ok().body(patientInformationWriteService.updatePatientContacts(id, contactsInformationRequest));
     }
 
-    @ApiOperation(
-            value = "RETRIEVE patient contacts",
-            notes = "RETRIEVE patient contacts"
-    )
-    @RequestMapping(
-            value = "/{patientId}",
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
-    ResponseEntity retrievePatientContacts(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) {
+    @ApiOperation(value = "RETRIEVE patient contacts", notes = "RETRIEVE patient contacts")
+    @RequestMapping(value = "/{patientId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> retrievePatientContacts(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) {
         return contactsInformationService.retrievePatientContactByPatientId(patientId);
     }
 
+    @ApiOperation(value = "CREATE patient contact", notes = "CREATE patient contact")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @ResponseBody
-    List<ContactsInformation> createContacts(@Valid @RequestBody List<ContactsInformation> contactsInformationListRequest) {
-        return contactsInformationService.createNewContactsByIteration(contactsInformationListRequest);
+    ResponseEntity<?> createContacts(@Valid @RequestBody List<ContactsInformation> contactsInformationListRequest) {
+        return ResponseEntity.ok().body(contactsInformationService.createNewContactsByIteration(contactsInformationListRequest));
     }
 }
