@@ -80,6 +80,7 @@ test {
 }
 bootJar {
     archiveFileName = "${"ospic-"+archiveBaseName.get()}.${archiveExtension.get()}"
+    launchScript()
 }
 /**
 bootWar {

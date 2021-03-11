@@ -36,8 +36,8 @@ public class FlywayConfiguration {
                 .sqlMigrationPrefix("V")
                 .sqlMigrationSeparator("__")
                 .sqlMigrationSuffixes(".sql")
-
                 .connectRetries(10)
+                .validateOnMigrate(false)
                 .dataSource(dataSource).load().migrate();
     }
 }
