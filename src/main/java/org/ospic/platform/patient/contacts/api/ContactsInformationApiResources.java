@@ -62,7 +62,7 @@ public class ContactsInformationApiResources {
     }
 
     @ApiOperation(value = "UPDATE contacts information", notes = "UPDATE contacts information")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> updateContactsInformation(@RequestBody ContactsInformation payload, @PathVariable Long id) {
         return this.contactsInformationService.updateContactInformation(id, payload);
     }
