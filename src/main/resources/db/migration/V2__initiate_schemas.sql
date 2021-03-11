@@ -64,16 +64,16 @@ CREATE TABLE IF NOT EXISTS `m_medicines`(
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
 
-
 DROP TABLE IF EXISTS `m_admissions`;
 CREATE TABLE IF NOT EXISTS `m_admissions`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   is_active BOOLEAN NOT NULL DEFAULT true ,
-  start_date TIMESTAMP,
-  end_date TIMESTAMP,
+  start_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  `end_date` TIMESTAMP NULL  ,
   PRIMARY KEY (`id`),
- `cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
+`cid` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
+
 
 DROP TABLE IF EXISTS `m_visits`;
 CREATE TABLE IF NOT EXISTS `m_visits`(
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
   thumbnail VARCHAR (20) ,
   created_date TIMESTAMP,
   created_by VARCHAR (200),
-  last_modified_date TIMESTAMP,
+  last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
   last_modified_by VARCHAR (200),
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
@@ -133,8 +133,8 @@ CREATE TABLE IF NOT EXISTS `m_patients`(
 DROP TABLE IF EXISTS `m_consultations` ;
 CREATE TABLE IF NOT EXISTS `m_consultations`(
   id BIGINT NOT NULL AUTO_INCREMENT,
-  fromdate TIMESTAMP  NULL DEFAULT 0,
-  todate TIMESTAMP ,
+  fromdate TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  todate TIMESTAMP NULL,
   is_active BOOLEAN NOT NULL DEFAULT true ,
   constraint consultations_pk primary key  (`id`),
   staff_id BIGINT references `m_staff`(`id`) ,
