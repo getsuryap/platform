@@ -1,6 +1,7 @@
 package org.ospic.platform.patient.contacts.services;
 
 import org.ospic.platform.patient.contacts.domain.ContactsInformation;
+import org.ospic.platform.patient.contacts.exceptions.ContactNotFoundExceptions;
 import org.ospic.platform.patient.contacts.repository.ContactsInformationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.io.*;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -40,6 +40,15 @@ public class ContactsInformationServicesImpl implements ContactsInformationServi
     @Override
     public ContactsInformation createNewContact(Long patientId, ContactsInformation contactsInformation) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> updateContactInformation(Long contactId, ContactsInformation payload) {
+        return this.contactsInformationRepository.findById(contactId).map(contact->{
+            payload.setId(contactId);
+            ContactsInformation response = this.contactsInformationRepository.save(payload);
+            return ResponseEntity.ok().body(response);
+        }).orElseThrow(()->new ContactNotFoundExceptions(contactId));
     }
 
     @Override

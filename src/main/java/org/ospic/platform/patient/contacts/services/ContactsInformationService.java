@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.io.*;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
@@ -29,16 +28,9 @@ import java.io.*;
 @Component
 @Service
 public interface ContactsInformationService {
-    /**
-     * This method create new patient contacts.
-     * Identifies the specific patient by {@param patientId}
-     * @param patientId
-     * @param contactsInformation
-     * @return patient contactsInformation
-     * {@inheritDoc}
-     */
     public ContactsInformation createNewContact(Long patientId, ContactsInformation contactsInformation);
     public List<ContactsInformation> retrieveAllContactsInformation();
     public List<ContactsInformation> createNewContactsByIteration(List<ContactsInformation> contactsInformationList);
     public ResponseEntity retrievePatientContactByPatientId(Long patientId);
+    ResponseEntity<?> updateContactInformation(Long contactId, ContactsInformation payload);
 }
