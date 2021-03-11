@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class TransactionApiResource {
 
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction")
     @RequestMapping(value = "/{serviceId}/{type}", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
+    //@PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
     ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @PathVariable(name = "type") String type, @RequestBody List<Long> list) {
         if (type.equals("medicine")) {
 
