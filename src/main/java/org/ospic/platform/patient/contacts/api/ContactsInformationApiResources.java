@@ -51,14 +51,20 @@ public class ContactsInformationApiResources {
 
     @ApiOperation(value = "GET all contacts", notes = "GET all contacts")
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    ResponseEntity<?> all() {
+    ResponseEntity<?> listAllContacts() {
         return ResponseEntity.ok().body(contactsInformationService.retrieveAllContactsInformation());
     }
 
-    @ApiOperation(value = "UPDATE patient contacts", notes = "UPDATE patient contacts")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> createNew(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
+    @ApiOperation(value = "UPDATE patient add contacts", notes = "UPDATE patient add contacts")
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> updatePatientAddContactsInformation(@RequestBody ContactsInformation contactsInformationRequest, @PathVariable Long id) {
         return ResponseEntity.ok().body(patientInformationWriteService.updatePatientContacts(id, contactsInformationRequest));
+    }
+
+    @ApiOperation(value = "UPDATE contacts information", notes = "UPDATE contacts information")
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> updateContactsInformation(@RequestBody ContactsInformation payload, @PathVariable Long id) {
+        return this.contactsInformationService.updateContactInformation(id, payload);
     }
 
     @ApiOperation(value = "RETRIEVE patient contacts", notes = "RETRIEVE patient contacts")
