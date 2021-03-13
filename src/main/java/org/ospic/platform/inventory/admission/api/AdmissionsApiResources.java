@@ -2,6 +2,7 @@ package org.ospic.platform.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.ospic.platform.inventory.admission.data.EndAdmissionRequest;
@@ -9,9 +10,11 @@ import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.inventory.admission.service.AdmissionsWriteService;
 import org.ospic.platform.inventory.admission.visits.data.VisitPayload;
+import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.inventory.admission.visits.service.VisitsWritePrincipleService;
 import org.ospic.platform.inventory.admission.visits.service.VisitsWritePrincipleServiceImpl;
+import org.ospic.platform.patient.details.data.PatientAdmissionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -80,7 +83,7 @@ public class AdmissionsApiResources {
         return admissionsReadService.retrieveAllAdmissions();
     }
 
-    @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID")
+    @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = PatientAdmissionData.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    @ResponseBody
     ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
@@ -114,21 +117,21 @@ public class AdmissionsApiResources {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
-    @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed")
+    @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed", response = PatientAdmissionData.class)
     @RequestMapping(value = "/inbed/{bedId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
         return admissionsReadService.retrieveAdmissionInThisBed(bedId);
     }
 
-    @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits")
+    @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits",response = AdmissionVisit.class, responseContainer = "List")
     @RequestMapping(value = "/{admissionId}/visits", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
         return visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
     }
 
-    @ApiOperation(value = "CREATE Admission visits", notes = "CREATE Admission visits")
+    @ApiOperation(value = "CREATE Admission visits", notes = "CREATE Admission visits", response = CustomReponseMessage.class)
     @RequestMapping(value = "/visits", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> visitAdmission(@Valid @RequestBody VisitPayload visitPayload){
