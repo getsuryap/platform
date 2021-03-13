@@ -2,6 +2,7 @@ package org.ospic.platform.accounting.bills.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.data.PaymentPayload;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.bills.service.BillWritePrincipleService;
@@ -35,21 +36,21 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/bills")
-@Api(value = "/api/bills", tags = "Medical service transaction's")
+@Api(value = "/api/bills", tags="Bill's", description = "Medical consultation bills")
 public class BillsApiResources {
     @Autowired
     BillReadPrincipleService readService;
     @Autowired
     BillWritePrincipleService writeService;
 
-    @ApiOperation(value = "LIST bill's", notes = "LIST bill's")
+    @ApiOperation(value = "LIST bill's", notes = "LIST bill's", response = BillPayload.class, responseContainer = "List")
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> listBills() {
         return readService.readAllBills();
     }
 
-    @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID")
+    @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID", response = BillPayload.class)
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
@@ -57,7 +58,7 @@ public class BillsApiResources {
     }
 
 
-    @ApiOperation(value = "PAY Bill", notes = "PAY Bill")
+    @ApiOperation(value = "PAY Bill", notes = "PAY Bill", response = PaymentPayload.class)
     @PreAuthorize("hasAnyAuthority('UPDATE_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
