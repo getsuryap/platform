@@ -2,6 +2,7 @@ package org.ospic.platform.laboratory.tests.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.laboratory.tests.domain.LaboratoryService;
 import org.ospic.platform.laboratory.tests.services.LaboratoryServiceReadPrincipleService;
 import org.ospic.platform.laboratory.tests.services.LaboratoryServiceWritePrincipleService;
@@ -34,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController()
 @RequestMapping("/api/lab/services")
-@Api(value = "/api/lab/services", tags = "Laboratory services", description = "Laboratory services")
+@Api(value = "/api/lab/services", tags = "Laboratory", description = "Laboratory api services")
 public class LaboratoryTestsApiResource {
     private final LaboratoryServiceReadPrincipleService readPrincipleService;
     private final LaboratoryServiceWritePrincipleService writePrincipleService;
@@ -48,25 +49,25 @@ public class LaboratoryTestsApiResource {
     }
 
 
-    @ApiOperation(value = "CREATE laboratory service", notes = "CREATE laboratory service")
+    @ApiOperation(value = "CREATE laboratory service", notes = "CREATE laboratory service", response = LaboratoryService.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createLabServices(@RequestBody(required = true) LaboratoryService payload) {
         return this.writePrincipleService.createLaboratoryService(payload);
     }
 
-    @ApiOperation(value = "UPDATE laboratory service", notes = "UPDATE laboratory service")
+    @ApiOperation(value = "UPDATE laboratory service", notes = "UPDATE laboratory service", response = LaboratoryService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> updateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestBody(required = true) LaboratoryService payload) {
         return this.writePrincipleService.updateLaboratoryService(serviceId, payload);
     }
 
-    @ApiOperation(value = "DELETE laboratory service", notes = "DELETE laboratory service")
+    @ApiOperation(value = "DELETE laboratory service", notes = "DELETE laboratory service", response = CustomReponseMessage.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> deleteLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId) {
         return this.writePrincipleService.deleteLaboratoryService(serviceId);
     }
 
-    @ApiOperation(value = "DE/ACTIVATE laboratory service", notes = "DE/ACTIVATE laboratory service")
+    @ApiOperation(value = "DE/ACTIVATE laboratory service", notes = "DE/ACTIVATE laboratory service", response = LaboratoryService.class)
     @RequestMapping(value = "/{serviceId}/status", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> activateLabServices(@PathVariable(name = "serviceId", required = true) Long serviceId, @RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
         if (active) {
@@ -74,20 +75,20 @@ public class LaboratoryTestsApiResource {
         } else return this.writePrincipleService.deactivateLaboratoryService(serviceId);
     }
 
-    @ApiOperation(value = "GET laboratory service", notes = "GET laboratory service")
+    @ApiOperation(value = "GET laboratory services", notes = "GET laboratory services", response = LaboratoryService.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> readListOfLaboratoryServices() {
         return this.readPrincipleService.listLaboratoryServices();
     }
 
-    @ApiOperation(value = "GET laboratory service by ID", notes = "GET laboratory service by ID")
+    @ApiOperation(value = "GET laboratory service by ID", notes = "GET laboratory service by ID", response = LaboratoryService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> readLabServiceById(@PathVariable(name = "serviceId", required = true) Long serviceId) {
         return this.readPrincipleService.findLaboratoryServiceById(serviceId);
     }
 
 
-    @ApiOperation(value = "READ laboratory service by active status", notes = "READ laboratory service by active status")
+    @ApiOperation(value = "READ laboratory service by active status", notes = "READ laboratory service by active status", response = LaboratoryService.class, responseContainer = "List")
     @RequestMapping(value = "/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> findLabServicesByStatus(@RequestParam(name = "active", required = true, defaultValue = "true") boolean active) {
         return this.readPrincipleService.findLaboratoryServiceByActiveStatus(active);
