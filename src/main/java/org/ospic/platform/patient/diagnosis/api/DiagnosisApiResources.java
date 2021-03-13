@@ -1,6 +1,8 @@
 package org.ospic.platform.patient.diagnosis.api;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.patient.diagnosis.domains.Diagnosis;
 import org.ospic.platform.patient.diagnosis.repository.DiagnosisRepository;
 import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
@@ -51,7 +53,7 @@ public class DiagnosisApiResources {
         this.diagnosisRepository = diagnosisRepository;
     }
 
-    @ApiOperation(value = "LIST all available diagnosis", notes = "LIST all available diagnosis")
+    @ApiOperation(value = "LIST all available diagnosis", notes = "LIST all available diagnosis",response = Diagnosis.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports() {
@@ -59,7 +61,7 @@ public class DiagnosisApiResources {
     }
 
 
-    @ApiOperation(value = "LIST Patient diagnosis", notes = "LIST Patient diagnosis")
+    @ApiOperation(value = "LIST Patient diagnosis", notes = "LIST Patient diagnosis",response = Diagnosis.class, responseContainer = "List")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> retrieveAllDiagnosisReportsByServiceId(@PathVariable("serviceId") @NotNull Long serviceId) {
@@ -67,7 +69,7 @@ public class DiagnosisApiResources {
     }
 
 
-    @ApiOperation(value = "CREATE new diagnosis Report", notes = "CREATE new diagnosis Report")
+    @ApiOperation(value = "CREATE new diagnosis Report", notes = "CREATE new diagnosis Report",response = CustomReponseMessage.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createNewPatientDiagnosisReport( @PathVariable Long serviceId, @RequestBody Diagnosis diagnosticReport) {
