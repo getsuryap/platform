@@ -1,12 +1,11 @@
 package org.ospic.platform.configurations.smsconfigs.config.service;
 
 import org.ospic.platform.configurations.smsconfigs.config.domain.SmsConfig;
+import org.ospic.platform.configurations.smsconfigs.config.exceptions.SmsConfigurationNotFoundExceptions;
 import org.ospic.platform.configurations.smsconfigs.config.repository.SmsConfigurationsJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityNotFoundException;
 
 /**
  * This file was created by eli on 02/01/2021 for org.ospic.platform.configurations.smsconfigs.config.service
@@ -54,9 +53,8 @@ public class SmsConfigurationWriteServiceImpl implements SmsConfigurationWriteSe
                 return null;
             });
             config.setIsActive(true);
-            configurationsJpaRepository.save(config);
-            return ResponseEntity.ok().body("Activated successfully");
-        }).orElseThrow(EntityNotFoundException::new);
+            return ResponseEntity.ok().body(configurationsJpaRepository.save(config));
+        }).orElseThrow(SmsConfigurationNotFoundExceptions::new);
         return null;
     }
 
@@ -67,8 +65,7 @@ public class SmsConfigurationWriteServiceImpl implements SmsConfigurationWriteSe
             config.setPhoneNumber(cf.getPhoneNumber().isEmpty()  ? config.getPhoneNumber() : cf.getPhoneNumber());
             config.setSid(cf.getSid().isEmpty() ? config.getSid() : cf.getSid());
             config.setToken(cf.getToken().isEmpty() ?  config.getToken() :  cf.getToken());
-            configurationsJpaRepository.save(config);
-            return ResponseEntity.ok().body("Updated successfully");
-        }).orElseThrow(EntityNotFoundException::new);
+            return ResponseEntity.ok().body(configurationsJpaRepository.save(config));
+        }).orElseThrow(SmsConfigurationNotFoundExceptions::new);
     }
 }
