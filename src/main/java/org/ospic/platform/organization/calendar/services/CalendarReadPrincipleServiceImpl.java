@@ -1,7 +1,12 @@
 package org.ospic.platform.organization.calendar.services;
 
+import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.services
@@ -25,10 +30,17 @@ import org.springframework.stereotype.Repository;
  * under the License.
  */
 @Repository
-public class CalendarReadPrincipleServiceImpl {
+public class CalendarReadPrincipleServiceImpl implements CalendarReadPrincipleService {
+    private final CalendarJpaRepository calendarJpaRepository;
 
     @Autowired
-    CalendarReadPrincipleServiceImpl(){
+    CalendarReadPrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository) {
+        this.calendarJpaRepository = calendarJpaRepository;
+    }
 
+    @Override
+    public ResponseEntity<?> retrieveAllCalendarEvents() {
+        List<CalendarTimetable> response = this.calendarJpaRepository.findAll();
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -1,5 +1,17 @@
 package org.ospic.platform.organization.calendar.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.ospic.platform.organization.calendar.services.CalendarReadPrincipleService;
+import org.ospic.platform.organization.calendar.services.CalendarWritePrincipleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.api
  * --
@@ -21,5 +33,32 @@ package org.ospic.platform.organization.calendar.api;
  * specific language governing permissions and limitations
  * under the License.
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RestController()
+@RequestMapping("/api/calendar")
+@Api(value = "/api/calendar", tags = "Calendar", description = "Institution calendar events")
 public class CalendarApiResources {
+    private final CalendarWritePrincipleService writeService;
+    private final CalendarReadPrincipleService readService;
+
+    @Autowired
+    CalendarApiResources(
+            CalendarReadPrincipleService readService,
+            CalendarWritePrincipleService writeService) {
+        this.readService = readService;
+        this.writeService = writeService;
+    }
+
+    @ApiOperation(value = "CREATE new event", notes = "CREATE new event")
+    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> createNewEvent(@Valid @RequestBody CalendarTimetable payload) {
+        return this.writeService.createCalendarEvent(payload);
+    }
+
+    @ApiOperation(value = "RETRIEVE all institution events", notes = "RETRIEVE all institution events")
+    @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getAllEvents() {
+        return this.readService.retrieveAllCalendarEvents();
+    }
+
 }
