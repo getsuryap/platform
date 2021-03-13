@@ -14,7 +14,6 @@ import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.inventory.admission.visits.service.VisitsWritePrincipleService;
 import org.ospic.platform.inventory.admission.visits.service.VisitsWritePrincipleServiceImpl;
-import org.ospic.platform.patient.details.data.PatientAdmissionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,14 +75,14 @@ public class AdmissionsApiResources {
         this.visitsWritePrincipleService = visitsWritePrincipleService;
     }
 
-    @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions")
+    @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions", response = AdmissionResponseData.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllAdmissions() {
         return admissionsReadService.retrieveAllAdmissions();
     }
 
-    @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = PatientAdmissionData.class)
+    @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = AdmissionResponseData.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    @ResponseBody
     ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
@@ -117,7 +116,7 @@ public class AdmissionsApiResources {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
-    @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed", response = PatientAdmissionData.class)
+    @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed", response = AdmissionResponseData.class)
     @RequestMapping(value = "/inbed/{bedId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
