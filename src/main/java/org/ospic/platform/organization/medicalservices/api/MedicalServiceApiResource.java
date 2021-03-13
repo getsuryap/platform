@@ -2,6 +2,7 @@ package org.ospic.platform.organization.medicalservices.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceWritePrincipleService;
@@ -34,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/services")
-@Api(value = "/api/services", tags = "List of medical service's")
+@Api(value = "/api/services", tags = "Medical services")
 public class MedicalServiceApiResource {
     @Autowired
     MedicalServiceReadPrincipleService readService;
@@ -43,21 +44,21 @@ public class MedicalServiceApiResource {
 
     public MedicalServiceApiResource() { }
 
-    @ApiOperation(value = "LIST medical services",notes = "LIST medical services")
+    @ApiOperation(value = "LIST medical services",notes = "LIST medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalService() {
         return  readService.readServices();
     }
 
-    @ApiOperation(value = "LIST active medical services",notes = "LIST active medical services")
+    @ApiOperation(value = "LIST active medical services",notes = "LIST active medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/active", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveActiveMedicalService() {
         return  readService.readActiveServices();
     }
 
-    @ApiOperation(value = "RETURN medical services by ID",notes = "RETURN medical services by ID")
+    @ApiOperation(value = "RETURN medical services by ID",notes = "RETURN medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
@@ -65,21 +66,21 @@ public class MedicalServiceApiResource {
     }
 
 
-    @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name")
+    @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name", response =  MedicalService.class)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceByName(@PathVariable(name = "name") String name) {
         return  readService.readServiceByName(name);
     }
 
-    @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service")
+    @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service", response =  MedicalService.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> createMedicalService(@RequestBody MedicalService payload) {
         return writeService.createService(payload);
     }
 
-    @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID")
+    @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalService payload) {
@@ -87,14 +88,14 @@ public class MedicalServiceApiResource {
     }
 
 
-    @ApiOperation(value = "Enable medical service",notes = "Enable medical service")
+    @ApiOperation(value = "Enable medical service",notes = "Enable medical service", response = CustomReponseMessage.class)
     @RequestMapping(value = "/enable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<?> enableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
         return  writeService.enableService(serviceId);
     }
 
-    @ApiOperation(value = "Disable medical service",notes = "Disable medical service")
+    @ApiOperation(value = "Disable medical service",notes = "Disable medical service", response = CustomReponseMessage.class)
     @RequestMapping(value = "/disable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
     @ResponseBody
     ResponseEntity<?> disableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
