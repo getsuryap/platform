@@ -62,7 +62,7 @@ public class MedicineCategoryApiResources {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class)
+    @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class, responseContainer = "List")
     @RequestMapping(value = "", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllMedicineCategories() {
@@ -81,7 +81,7 @@ public class MedicineCategoryApiResources {
         return ResponseEntity.ok().body(String.format("Medicine Category with ID %2d not found", medicineCategoryId));
     }
 
-    @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category")
+    @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category", response = MedicineCategory.class)
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId, @Valid @RequestBody MedicineCategoryRequest request) {

@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -62,7 +61,7 @@ public class MedicineApiResource {
         this.medicineReadService = medicineReadService;
     }
 
-    @ApiOperation(value = "RETRIEVE list of available Medicines", notes = "RETRIEVE list of available Medicines", response = Medicine.class)
+    @ApiOperation(value = "RETRIEVE list of available Medicines", notes = "RETRIEVE list of available Medicines", response = Medicine.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllMedicineProductsOrTemplate() {
