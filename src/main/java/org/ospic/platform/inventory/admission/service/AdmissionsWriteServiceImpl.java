@@ -4,7 +4,9 @@ import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.data.EndAdmissionRequest;
 import org.ospic.platform.inventory.admission.domains.Admission;
+import org.ospic.platform.inventory.admission.exception.AdmissionEndDateException;
 import org.ospic.platform.inventory.admission.exception.AdmissionNotFoundExceptionPlatform;
+import org.ospic.platform.inventory.admission.exception.InactiveAdmissionPlatformException;
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.inventory.beds.exception.BedNotFoundExceptionPlatform;
@@ -124,21 +126,15 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
     @Transactional
     @Override
     public ResponseEntity<?> endPatientAdmission(EndAdmissionRequest request) {
-        CustomReponseMessage cm = new CustomReponseMessage();
-        HttpHeaders httpHeaders = new HttpHeaders();
         final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(request.getEndDateTime());
         return consultationResourceJpaRepository.findById(request.getServiceId()).map(service -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
               return bedRepository.findById(request.getBedId()).map(bed ->{
                   if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
-                      cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
-                      cm.setMessage("Can't end inactive admission or un-admitted service");
-                      return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+                      throw new InactiveAdmissionPlatformException(request.getAdmissionId());
                   }
                   if (endLocalDateTime.isBefore(admission.getFromDateTime())){
-                      cm.setHttpStatus(HttpStatus.BAD_REQUEST.value());
-                      cm.setMessage("Admission end date can not be before admission start date");
-                      return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+                      throw new AdmissionEndDateException();
                   }
 
                   /** Update this service set as no longer admitted
@@ -156,9 +152,8 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
                   bed.setIsOccupied(false);
                   bedRepository.save(bed);
 
-                  /**Return Message status back to user**/
-                  cm.setMessage(String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime()));
-                  return new ResponseEntity<>(cm, httpHeaders, HttpStatus.OK);
+                  String response = String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime());
+                  return ResponseEntity.ok().body(response);
               }).orElseThrow(()-> new BedNotFoundExceptionPlatform(request.getBedId()));
             }).orElseThrow(() -> new AdmissionNotFoundExceptionPlatform(request.getAdmissionId()));
         }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(request.getServiceId()));
