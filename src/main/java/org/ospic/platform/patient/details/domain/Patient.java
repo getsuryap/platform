@@ -49,10 +49,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Patient extends Auditable implements Serializable {
     private static final long serialVersionUID = -1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
 
     @NotBlank
     @Column(length = 100)
