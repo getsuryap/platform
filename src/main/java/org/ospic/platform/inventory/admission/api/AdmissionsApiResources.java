@@ -2,7 +2,6 @@ package org.ospic.platform.inventory.admission.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.ospic.platform.inventory.admission.data.EndAdmissionRequest;
@@ -16,9 +15,7 @@ import org.ospic.platform.inventory.admission.visits.service.VisitsWritePrincipl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -103,14 +100,14 @@ public class AdmissionsApiResources {
 
 
 
-    @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission")
+    @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission", response = Long.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
     }
 
-    @ApiOperation(value = "End patient admission", notes = "End patient admission admission")
+    @ApiOperation(value = "End patient admission", notes = "End patient admission admission", response = String.class)
     @RequestMapping(value = "/end", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> requestPatientUnAdmission( @Valid @RequestBody EndAdmissionRequest r) {
