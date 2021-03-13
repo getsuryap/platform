@@ -1,7 +1,9 @@
 package org.ospic.platform.configurations.audit;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
@@ -36,7 +38,8 @@ import java.time.LocalDate;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable extends AbstractPersistableCustom implements Serializable {
