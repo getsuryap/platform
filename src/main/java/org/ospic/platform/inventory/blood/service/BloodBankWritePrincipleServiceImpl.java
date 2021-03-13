@@ -1,12 +1,11 @@
 package org.ospic.platform.inventory.blood.service;
 
-import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.inventory.blood.data.BloodPayload;
 import org.ospic.platform.inventory.blood.domain.BloodGroup;
+import org.ospic.platform.inventory.blood.exceptions.BloodGroupNotFoundException;
 import org.ospic.platform.inventory.blood.repository.BloodBankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -59,9 +58,8 @@ public class BloodBankWritePrincipleServiceImpl implements BloodBankWritePrincip
     public ResponseEntity<?> addMoreBloodBagsForThisGroup(BloodPayload payload) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return bloodBankRepository.findById(payload.getGroupId()).map(group ->{
             group.setCounts(group.getCounts() + payload.getBagsCount());
-            bloodBankRepository.save(group);
-            return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),"Blood group updated successfully"));
-        }).orElseThrow(() -> new AbstractPlatformInactiveResourceException.ResourceNotFoundException("Blood group with such an ID os not found"));
+            return ResponseEntity.ok().body( bloodBankRepository.save(group));
+        }).orElseThrow(()->new BloodGroupNotFoundException(payload.getGroupId()));
     }
 
     @Override
@@ -69,10 +67,9 @@ public class BloodBankWritePrincipleServiceImpl implements BloodBankWritePrincip
         payloads.forEach(payload -> {
             bloodBankRepository.findById(payload.getGroupId()).map(group ->{
                group.setCounts(payload.getBagsCount() + payload.getBagsCount());
-               bloodBankRepository.save(group);
-               return null;
-            });
+                return ResponseEntity.ok().body( bloodBankRepository.save(group));
+            }).orElseThrow(()->new BloodGroupNotFoundException(payload.getGroupId()));
         });
-        return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.OK.value(),"Blood group updated successfully"));
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package org.ospic.platform.inventory.blood.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.inventory.blood.data.BloodPayload;
+import org.ospic.platform.inventory.blood.domain.BloodGroup;
 import org.ospic.platform.inventory.blood.service.BloodBankReadPrincipleService;
 import org.ospic.platform.inventory.blood.service.BloodBankWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -52,30 +54,27 @@ public class BloodBankApiResources {
         this.bloodBankWritePrincipleService = bloodBankWritePrincipleService;
     }
 
-    @ApiOperation(value = "RETRIEVE blood bank details", notes = "RETRIEVE blood bank details")
+    @ApiOperation(value = "RETRIEVE blood bank details", notes = "RETRIEVE blood bank details", response = BloodGroup.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveBloodBankData() {
         return bloodBankReadPrincipleService.fetchBloodBankList();
     }
 
-    @ApiOperation(value = "UPDATE blood ground", notes = "UPDATE blood ground")
+    @ApiOperation(value = "UPDATE blood ground", notes = "UPDATE blood ground",response = BloodGroup.class)
     @RequestMapping(value = "/", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> addMoreBagsForThisGroup(@RequestBody BloodPayload payload) throws Exception{
         return bloodBankWritePrincipleService.addMoreBloodBagsForThisGroup(payload);
     }
 
-    @ApiOperation(value = "UPDATE blood ground by list", notes = "UPDATE blood ground by list")
+    @ApiOperation(value = "UPDATE blood ground by list", notes = "UPDATE blood ground by list",response = BloodGroup.class)
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> addMoreBagsForThisGroupList(@RequestBody List<BloodPayload> payloads) throws Exception{
         return bloodBankWritePrincipleService.addMoreBloodBagsForListOfBloodGroups(payloads);
     }
 
     @ApiOperation(value = "Create blood groups", notes = "Create blood groups")
     @RequestMapping(value = "/initiate", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
-    @ResponseBody
+    @ApiIgnore
     ResponseEntity<?> initiateData() {
          bloodBankWritePrincipleService.initiateData();
         return  ResponseEntity.ok().body(null);
