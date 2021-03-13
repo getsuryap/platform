@@ -3,6 +3,7 @@ package org.ospic.platform.organization.departments.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
+import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.departments.services.DepartmentReadServicePrinciple;
 import org.ospic.platform.organization.departments.services.DepartmentWriteServicePrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class DepartmentApiResource {
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
-    @ApiOperation(value = "RETRIEVE Departments", notes = "RETRIEVE  Departments")
+    @ApiOperation(value = "RETRIEVE Departments", notes = "RETRIEVE  Departments", response = Department.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllDepartments() {
@@ -64,7 +65,7 @@ public class DepartmentApiResource {
 
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
-    @ApiOperation(value = "RETRIEVE Departments by id ", notes = "RETRIEVE  Departments by id")
+    @ApiOperation(value = "RETRIEVE Departments by id ", notes = "RETRIEVE  Departments by id",response = Department.class)
     @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveAllDepartments(@PathVariable(name = "departmentId") Long departmentId) {
@@ -73,7 +74,7 @@ public class DepartmentApiResource {
 
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_DEPARTMENT')")
-    @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments")
+    @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments",response = Department.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> createNameDepartment(@Valid @RequestBody DepartmentReqPayload payload) {
