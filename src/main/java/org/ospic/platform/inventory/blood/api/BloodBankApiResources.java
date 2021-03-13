@@ -39,7 +39,7 @@ import java.util.List;
 @RestController()
 @Component
 @RequestMapping("/api/bloods")
-@Api(value = "/api/bloods", tags = "Admissions", description = "Admissions API resources")
+@Api(value = "/api/bloods", tags = "Blood bank", description = "Blood bank API resources")
 public class BloodBankApiResources {
     @Autowired BloodBankReadPrincipleService bloodBankReadPrincipleService;
     @Autowired BloodBankWritePrincipleService bloodBankWritePrincipleService;
