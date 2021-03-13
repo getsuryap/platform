@@ -16,14 +16,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This file was created by eli on 10/10/2020 for org.ospic.platform.configurations.swagger
@@ -56,7 +52,7 @@ public class SwaggerApiDocumentationConfigurations {
                 .title("(Ospic) Hospital Management System")
                 .description("Ospic Spring platform is a spring boot API based for hospital management system")
                 .license("Apache License 2.0").licenseUrl("https://github.com/ospic/spring_platform/blob/master/LICENSE")
-                .contact(new Contact("Elirehem Paul", "https://app.ospicx.com/", "elirehemapaulo@gmail.com"))
+                .contact(new Contact("Elirehema Paul", "https://app.ospicx.com/", "elirehemapaulo@gmail.com"))
                 .version("1.0")
                 .build();
     }

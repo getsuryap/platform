@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.TABLE_CALENDAR)
 @Table(name = DatabaseConstants.TABLE_CALENDAR)
-@ApiModel(value = "Patient", description = "A Patient row containing specific patient information's")
+@ApiModel(value = "Calendar", description = "Calendar payload")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = false)
 public class CalendarTimetable extends Auditable implements Serializable {
@@ -55,4 +55,13 @@ public class CalendarTimetable extends Auditable implements Serializable {
     private Boolean timed;
     @Column(name = "department")
     private Long departmentId;
+
+    public CalendarTimetable(String name, LocalDateTime start, LocalDateTime end, String color, Boolean timed, Long departmentId) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
+        this.color = color;
+        this.timed = timed;
+        this.departmentId = departmentId;
+    }
 }

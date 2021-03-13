@@ -49,13 +49,14 @@ public class CalendarApiResources {
         this.writeService = writeService;
     }
 
-    @ApiOperation(value = "CREATE new event", notes = "CREATE new event")
+    @ApiOperation(value = "CREATE new event", notes = "CREATE new event", response = CalendarTimetable.class,
+    httpMethod = "POST", nickname = "Create new event")
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createNewEvent(@Valid @RequestBody CalendarTimetable payload) {
         return this.writeService.createCalendarEvent(payload);
     }
 
-    @ApiOperation(value = "RETRIEVE all institution events", notes = "RETRIEVE all institution events")
+    @ApiOperation(value = "RETRIEVE all institution events", notes = "RETRIEVE all institution events",response = CalendarTimetable.class,responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getAllEvents() {
         return this.readService.retrieveAllCalendarEvents();
