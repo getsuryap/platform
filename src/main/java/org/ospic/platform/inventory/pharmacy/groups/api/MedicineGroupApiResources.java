@@ -25,9 +25,9 @@ package org.ospic.platform.inventory.pharmacy.groups.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.groups.exception.DuplicateMedicineGroupNameException;
 import org.ospic.platform.inventory.pharmacy.groups.exception.MedicineGroupNotFoundExceptionPlatform;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,18 +40,14 @@ import java.util.List;
 @RequestMapping("/api/pharmacy/medicines/groups")
 @Api(value = "/api/pharmacy/medicines/groups", tags = "Medicine Groups")
 public class MedicineGroupApiResources {
-    @Autowired
-    MedicineGroupRepository medicineGroupRepository;
-
+    private final MedicineGroupRepository medicineGroupRepository;
     public MedicineGroupApiResources(MedicineGroupRepository medicineGroupRepository) {
         this.medicineGroupRepository = medicineGroupRepository;
     }
 
-    @ApiOperation(value = "RETRIEVE list of available Medicine groups available", notes = "RETRIEVE list of available Medicine groups available", response = MedicineGroup.class)
+    @ApiOperation(value = "RETRIEVE list of available Medicine groups available", notes = "RETRIEVE list of available Medicine groups available", response = MedicineGroup.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-
-    @ResponseBody
-    ResponseEntity<List<MedicineGroup>> retrieveAllMedicineGroups() {
+    ResponseEntity<?> retrieveAllMedicineGroups() {
         List<MedicineGroup> medicineGroupsResponse = medicineGroupRepository.findAll();
         return ResponseEntity.ok().body(medicineGroupsResponse);
     }
@@ -59,16 +55,14 @@ public class MedicineGroupApiResources {
 
     @ApiOperation(value = "ADD new Medicine group", notes = "ADD new Medicine group", response = MedicineGroup.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineGroup medicineGroup) {
+    ResponseEntity<?> addNewMedicineGroup(@Valid @RequestBody MedicineGroup medicineGroup) {
         if (medicineGroupRepository.existsByName(medicineGroup.getName())) {
-            return ResponseEntity.ok().body(String.format("Another Medicine Group with same name '%s' already exist", medicineGroup.getName()));
-        }
-        medicineGroupRepository.save(medicineGroup);
-        return ResponseEntity.ok().body("Medicine group added successfully");
+            throw new DuplicateMedicineGroupNameException(medicineGroup.getName());
+       }
+        return ResponseEntity.ok().body(medicineGroupRepository.save(medicineGroup));
     }
 
-    @ApiOperation(value = "RETRIEVE Medicine group by ID", notes = "RETRIEVE Medicine group by ID")
+    @ApiOperation(value = "RETRIEVE Medicine group by ID", notes = "RETRIEVE Medicine group by ID", response = MedicineGroup.class)
     @RequestMapping(value = "/{medicineGroupId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicineGroupById(@PathVariable Long medicineGroupId) {
@@ -79,7 +73,7 @@ public class MedicineGroupApiResources {
     }
 
 
-    @ApiOperation(value = "UPDATE Medicine group", notes = "UPDATE Medicine group")
+    @ApiOperation(value = "UPDATE Medicine group", notes = "UPDATE Medicine group", response = MedicineGroup.class)
     @RequestMapping(value = "/{medicineGroupId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> updateMedicineGroupById(@PathVariable Long medicineGroupId, @Valid @RequestBody MedicineGroup request) {

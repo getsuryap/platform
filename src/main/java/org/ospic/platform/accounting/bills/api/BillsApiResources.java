@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/bills")
-@Api(value = "/api/bills", tags="Bill's", description = "Medical consultation bills")
+@Api(value = "/api/bills", tags="Bills", description = "Medical consultation bills")
 public class BillsApiResources {
     @Autowired
     BillReadPrincipleService readService;
