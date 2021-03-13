@@ -7,9 +7,11 @@ import lombok.*;
 import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.domain
@@ -41,5 +43,16 @@ import java.io.Serializable;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(callSuper = false)
 public class CalendarTimetable extends Auditable implements Serializable {
-
+    @Column(name = "name")
+    private String name;
+    @Column(name = "start")
+    private LocalDateTime start;
+    @Column(name = "end")
+    private  LocalDateTime end;
+    @Column(name = "color")
+    private String color;
+    @Column(name = "timed")
+    private Boolean timed;
+    @Column(name = "department")
+    private Long departmentId;
 }

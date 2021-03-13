@@ -1,6 +1,9 @@
 package org.ospic.platform.organization.calendar.services;
 
+import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,11 +28,16 @@ import org.springframework.stereotype.Repository;
  * under the License.
  */
 @Repository
-public class CalendarWritePrincipleServiceImpl {
-
-
+public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipleService{
+    private final CalendarJpaRepository calendarJpaRepository;
     @Autowired
-    CalendarWritePrincipleServiceImpl(){
+    CalendarWritePrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository){
+        this.calendarJpaRepository = calendarJpaRepository;
+    }
 
+    @Override
+    public ResponseEntity<?> createCalendarEvent(CalendarTimetable payload) {
+        CalendarTimetable response = this.calendarJpaRepository.save(payload);
+        return ResponseEntity.ok().body(response);
     }
 }

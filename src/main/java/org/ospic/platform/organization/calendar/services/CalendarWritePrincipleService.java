@@ -1,5 +1,7 @@
 package org.ospic.platform.organization.calendar.services;
 
+import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +29,5 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface CalendarWritePrincipleService {
+    ResponseEntity<?> createCalendarEvent(CalendarTimetable payload);
 }
