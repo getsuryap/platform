@@ -39,7 +39,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/departments")
-@Api(value = "/api/departments", tags = "Department Api's")
+@Api(value = "/api/departments", tags = "Departments")
 @Transactional
 public class DepartmentApiResource {
     @Autowired
