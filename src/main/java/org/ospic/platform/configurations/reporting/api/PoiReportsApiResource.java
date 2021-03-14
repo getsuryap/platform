@@ -6,6 +6,7 @@ import org.ospic.platform.configurations.reporting.service.PatientReportingReadP
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import java.io.IOException;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@ApiIgnore
 @RequestMapping("/api/poi/reports")
 @Api(value = "/api/poi/reports", tags = "Patient Reports")
 public class PoiReportsApiResource {
