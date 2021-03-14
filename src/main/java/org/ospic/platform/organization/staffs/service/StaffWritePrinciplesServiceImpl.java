@@ -85,8 +85,7 @@ public class StaffWritePrinciplesServiceImpl implements StaffsWritePrinciplesSer
             stff.setFullName(staff.getFullName() == null ? stff.getFullName() : staff.getFullName());
             stff.setLevel(staff.getLevel() == null ? stff.getLevel() : staff.getLevel());
             return ResponseEntity.ok(staffsRepository.save(stff));
-        })
-                .orElseThrow(() -> new StaffNotFoundExceptionPlatform(id));
+        }).orElseThrow(() -> new StaffNotFoundExceptionPlatform(id));
     }
 
     @Override

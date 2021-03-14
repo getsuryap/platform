@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.inventory.pharmacy.measurements.domain.MeasurementUnit;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsReadPrincipleService;
 import org.ospic.platform.inventory.pharmacy.measurements.services.MeasurementUnitsWritePrincipleService;
-import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,10 +38,10 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/api/pharmacy/measures")
-@Api(value = "/api/pharmacy/measures", tags = "Medicines measurement units")
+@Api(value = "/api/pharmacy/measures",tags = "Measurements",description = "Medicines measurement units")
 public class MeasurementsUnitsApiResource {
-    public MeasurementUnitsReadPrincipleService readPrincipleService;
-    public MeasurementUnitsWritePrincipleService writePrincipleService;
+    private final  MeasurementUnitsReadPrincipleService readPrincipleService;
+    private final MeasurementUnitsWritePrincipleService writePrincipleService;
 
     @Autowired
     MeasurementsUnitsApiResource(MeasurementUnitsReadPrincipleService readPrincipleService, MeasurementUnitsWritePrincipleService writePrincipleService) {
@@ -50,31 +49,27 @@ public class MeasurementsUnitsApiResource {
         this.writePrincipleService = writePrincipleService;
     }
 
-    @ApiOperation(value = "RETRIEVE medicine measurement units", notes = "RETRIEVE medicine measurement units")
+    @ApiOperation(value = "RETRIEVE medicine measurement units", notes = "RETRIEVE medicine measurement units",response = MeasurementUnit.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveListOfMedicineMeasurementUnits() {
         return  readPrincipleService.fetchAllMedicineMeasurementUnit();
     }
 
-    @ApiOperation(value = "RETRIEVE medicine measurement unit by id", notes = "RETRIEVE medicine measurement unit by id")
+    @ApiOperation(value = "RETRIEVE medicine measurement unit by id", notes = "RETRIEVE medicine measurement unit by id",response = MeasurementUnit.class)
     @RequestMapping(value = "/{unitId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> getMedicineMeasurementUnitById(@PathVariable("unitId") Long  unitId) {
         return  readPrincipleService.fetchMeasurementUnitById(unitId);
     }
 
-    @ApiOperation(value = "CREATE new medicine measurement units", notes = "CREATE new  medicine measurement units")
+    @ApiOperation(value = "CREATE new medicine measurement units", notes = "CREATE new  medicine measurement units",response = MeasurementUnit.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> createNewMedicineMeasurementUnits( @Valid @RequestBody MeasurementUnit payload) {
         return  writePrincipleService.createMeasurementUnit(payload);
     }
 
 
-    @ApiOperation(value = "UPDATE medicine measurement units", notes = "UPDATE  medicine measurement units")
+    @ApiOperation(value = "UPDATE medicine measurement units", notes = "UPDATE  medicine measurement units",response = MeasurementUnit.class)
     @RequestMapping(value = "/{unitId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> updateMedicineMeasurementUnits(@PathVariable("unitId") Long  unitId,  @Valid @RequestBody MeasurementUnit payload) {
         return  writePrincipleService.updateMeasurementUnit(unitId, payload);
     }
