@@ -61,6 +61,14 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
     }
 
     @Override
+    public ResponseEntity<?> readBillsByPatientId(Long patientId) {
+        BillsRowMapper rm = new BillsRowMapper();
+        final String sql = rm.schema() + " where p.id = ? order by b.id DESC ";
+        List<BillPayload> bills = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
+        return ResponseEntity.ok().body(bills);
+    }
+
+    @Override
     public ResponseEntity<?> readBillById(Long id) {
 
         BillsRowMapper rm = new BillsRowMapper();

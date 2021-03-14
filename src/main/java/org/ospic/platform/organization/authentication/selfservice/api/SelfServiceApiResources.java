@@ -2,6 +2,8 @@ package org.ospic.platform.organization.authentication.selfservice.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.bills.data.BillPayload;
+import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
@@ -53,6 +55,8 @@ public class SelfServiceApiResources {
     @Autowired UserJpaRepository userJpaRepository;
     @Autowired
     ConsultationResourceReadPrinciplesService consultationReadService;
+    @Autowired
+    BillReadPrincipleService billReadPrincipleService;
 
 
 
@@ -70,6 +74,18 @@ public class SelfServiceApiResources {
     public ResponseEntity<?> getUser() throws Exception {
          UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.usersReadPrincipleService.retrieveUserById(ud.getId());
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/bills")
+    @ApiOperation(value = "GET list of bills", notes = "GET list of bills", response = BillPayload.class, responseContainer = "List")
+    public ResponseEntity<?> getUserBills() throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return this.billReadPrincipleService.readBillsByPatientId(u.getPatient().getId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")

@@ -30,4 +30,5 @@ import org.springframework.stereotype.Service;
 public interface BillReadPrincipleService {
     ResponseEntity<?> readAllBills();
     ResponseEntity<?> readBillById(Long id);
+    ResponseEntity<?> readBillsByPatientId(Long patientId);
 }
