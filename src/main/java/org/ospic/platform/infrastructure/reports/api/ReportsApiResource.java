@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
@@ -49,21 +50,22 @@ public class ReportsApiResource {
     private final ReportReadPrincipleService readPrincipleService;
     private final ReportWritePrincipleService writePrincipleService;
     private final PatientRepository patientRepository;
+
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
-            PatientRepository patientRepository){
+            PatientRepository patientRepository) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientRepository = patientRepository;
     }
 
-    @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report")
-    @RequestMapping(value = "/", method = RequestMethod.POST,consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadReportFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (file.isEmpty()){
+        if (file.isEmpty()) {
             throw new EmptyContentFileException();
         }
         try {
@@ -74,9 +76,9 @@ public class ReportsApiResource {
         }
     }
 
-    @ApiOperation(value = "GET reports", notes = "GET reports")
+    @ApiOperation(value = "GET reports", notes = "GET reports", response = Reports.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> readAllReports(){
+    ResponseEntity<?> readAllReports() {
         return readPrincipleService.readAllReports();
     }
 
@@ -84,10 +86,9 @@ public class ReportsApiResource {
     @ResponseBody
     public ResponseEntity<?> viewReport(@RequestParam(value = "reportName", required = true) String reportName,
                                         @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
-        if (entity.equals("client")){
-            return readPrincipleService.readReport(reportName,this.patientRepository.findAll());
-        }
-        else return null;
+        if (entity.equals("client")) {
+            return readPrincipleService.readReport(reportName, this.patientRepository.findAll());
+        } else return null;
     }
 
-    }
+}
