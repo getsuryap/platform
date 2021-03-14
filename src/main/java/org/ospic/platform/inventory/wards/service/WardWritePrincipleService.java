@@ -29,14 +29,14 @@ import java.util.List;
  * under the License.
  */
 public interface WardWritePrincipleService {
-    ResponseEntity<String> createNewWard(Ward ward);
+    ResponseEntity<?>createNewWard(Ward ward);
 
-    ResponseEntity<Ward> updateWard(Long id, Ward ward);
+    ResponseEntity<?> updateWard(Long id, Ward ward);
 
-    ResponseEntity<String> deleteWard(Long id);
+    ResponseEntity<?>deleteWard(Long id);
 
-    ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
+    ResponseEntity<?>addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
-    ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
+    ResponseEntity<?>addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException;
 
 }

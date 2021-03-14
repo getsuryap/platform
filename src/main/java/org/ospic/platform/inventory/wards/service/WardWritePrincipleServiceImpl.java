@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -52,20 +51,15 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<String> createNewWard(Ward ward) {
+    public ResponseEntity<?>createNewWard(Ward ward) {
         if (wardRepository.existsByName(ward.getName())) {
-            return ResponseEntity.badRequest().body(String.format("A ward with name `%s`is Already Exist", ward.getName()));
+            throw new DuplicateWardFoundExceptions( ward.getName());
         }
-        EntityManager entityManager = sessionFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(ward);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        return ResponseEntity.ok().body("Ward Created Successfully");
+        return ResponseEntity.ok().body(this.wardRepository.save(ward));
     }
 
     @Override
-    public ResponseEntity<Ward> updateWard(Long id, Ward payload) {
+    public ResponseEntity<?> updateWard(Long id, Ward payload) {
         return this.wardRepository.findById(id).map(ward -> {
             if (wardRepository.existsByName(payload.getName())) {
                 throw new DuplicateWardFoundExceptions(payload.getName());
@@ -76,12 +70,11 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<String> addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
+    public ResponseEntity<?>addBedInWard(Long wardId, Bed bed) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardRepository.findById(wardId).map(ward -> {
             if (bedRepository.existsByIdentifier(bed.getIdentifier())) {
                 return ResponseEntity.badRequest().body(String.format("Bed with the same Identifier %s is already exist", bed.getIdentifier()));
             }
-            //bed.setIdentifier(String.format("WD%03dB%03d", wardId,bed.getId()));
             ward.addBed(bed);
             wardRepository.save(ward);
             return ResponseEntity.ok().body("Bed added successfully...");
@@ -89,7 +82,7 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<String> addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
+    public ResponseEntity<?>addListOfBedsInWard(Long wardId, List<Bed> beds) throws AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return wardRepository.findById(wardId).map(ward -> {
             beds.forEach(bed -> {
                 if (!bedRepository.existsByIdentifier(bed.getIdentifier())) {
@@ -102,7 +95,7 @@ public class WardWritePrincipleServiceImpl implements WardWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<String> deleteWard(Long id) {
+    public ResponseEntity<?>deleteWard(Long id) {
         return this.wardRepository.findById(id).map(ward->{
             wardRepository.delete(ward);
             return ResponseEntity.ok().body("Deleted ");

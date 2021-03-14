@@ -6,9 +6,12 @@ import org.ospic.platform.organization.authentication.selfservice.exceptions.Not
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
+import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
+import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
+import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +46,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/self")
-@Api(value = "/api/self", tags = "Self service user data's")
+@Api(value = "/api/self", tags = "SelfService", description = "Self service user data's")
 public class SelfServiceApiResources {
     @Autowired UsersReadPrincipleService usersReadPrincipleService;
     @Autowired PatientInformationReadServices patientInformationReadServices;
@@ -54,7 +57,7 @@ public class SelfServiceApiResources {
 
 
     @PostMapping("/login")
-    @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user")
+    @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user", response = JwtResponse.class)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
         return this.usersReadPrincipleService.authenticateUser(loginRequest);
     }
@@ -63,7 +66,7 @@ public class SelfServiceApiResources {
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/users")
-    @ApiOperation(value = "GET self service user ", notes = "GET self service user")
+    @ApiOperation(value = "GET self service user ", notes = "GET self service user", response = User.class)
     public ResponseEntity<?> getUser() throws Exception {
          UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.usersReadPrincipleService.retrieveUserById(ud.getId());
@@ -71,7 +74,7 @@ public class SelfServiceApiResources {
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/patients")
-    @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account")
+    @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account", response = Patient.class)
     public ResponseEntity<?> getPatient() throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
@@ -81,7 +84,9 @@ public class SelfServiceApiResources {
         return this.patientInformationReadServices.retrievePatientById(u.getPatient().getId());
     }
 
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations")
+    @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultations() throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
