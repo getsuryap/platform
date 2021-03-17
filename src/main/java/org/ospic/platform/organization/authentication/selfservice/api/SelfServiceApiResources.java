@@ -15,6 +15,7 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
+import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,8 @@ public class SelfServiceApiResources {
     ConsultationResourceReadPrinciplesService consultationReadService;
     @Autowired
     BillReadPrincipleService billReadPrincipleService;
+    @Autowired
+    DiagnosisService diagnosisService;
 
 
 
@@ -114,7 +117,7 @@ public class SelfServiceApiResources {
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}")
-    @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
+    @ApiOperation(value = "GET self-service consultations by ID ", notes = "GET self-service consultations by ID", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
@@ -122,5 +125,17 @@ public class SelfServiceApiResources {
             throw new NotSelfServiceUserException(u.getUsername());
         }
         return this.consultationReadService.retrieveAConsultationById(consultationId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/diagnoses/{consultationId}")
+    @ApiOperation(value = "GET self-service diagnoses by consultations ID ", notes = "GET self-service diagnoses by consultations ID", response = ConsultationResource.class, responseContainer = "List")
+    public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return this.diagnosisService.retrieveAllDiagnosisReportsByServiceId(consultationId);
     }
 }
