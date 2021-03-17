@@ -84,7 +84,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByPatientId(Long patientId) {
+    public ResponseEntity<?> retrieveConsultationsByPatientId(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ?";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
