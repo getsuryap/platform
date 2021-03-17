@@ -121,6 +121,6 @@ public class SelfServiceApiResources {
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return this.consultationReadService.retrieveConsultationsByPatientId(u.getPatient().getId());
+        return this.consultationReadService.retrieveAConsultationById(consultationId);
     }
 }

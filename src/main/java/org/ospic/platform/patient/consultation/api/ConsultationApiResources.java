@@ -89,7 +89,7 @@ public class ConsultationApiResources {
                 return consultationRead.retrieveConsultationByPatientIdAndIsActiveFalse(patientId);
             }
         }
-        return consultationRead.retrieveConsultationByPatientId(patientId);
+        return consultationRead.retrieveConsultationsByPatientId(patientId);
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
