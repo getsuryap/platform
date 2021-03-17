@@ -32,7 +32,7 @@ public interface ConsultationResourceReadPrinciplesService {
     ResponseEntity<?> retrialAllActiveConsultations();
     ResponseEntity<?> retrieveAllInactiveConsultations();
     ResponseEntity<?> retrieveAConsultationById(Long serviceId);
-    ResponseEntity<?> retrieveConsultationByPatientId(Long patientId);
+    ResponseEntity<?> retrieveConsultationsByPatientId(Long patientId);
     ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId);
     ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId);
     ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId);
