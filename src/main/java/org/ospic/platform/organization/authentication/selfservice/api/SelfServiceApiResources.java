@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
+import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
+import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
@@ -18,6 +20,7 @@ import org.ospic.platform.patient.details.service.PatientInformationReadServices
 import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,6 +63,7 @@ public class SelfServiceApiResources {
     BillReadPrincipleService billReadPrincipleService;
     @Autowired
     DiagnosisService diagnosisService;
+    @Autowired TransactionReadPrincipleService transactionReadPrincipleService;
 
 
 
@@ -129,7 +133,7 @@ public class SelfServiceApiResources {
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/diagnoses/{consultationId}")
-    @ApiOperation(value = "GET self-service diagnoses by consultations ID ", notes = "GET self-service diagnoses by consultations ID", response = ConsultationResource.class, responseContainer = "List")
+    @ApiOperation(value = "GET self-service consultation diagnoses ", notes = "GET self-service consultations diagnoses", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
@@ -137,5 +141,20 @@ public class SelfServiceApiResources {
             throw new NotSelfServiceUserException(u.getUsername());
         }
         return this.diagnosisService.retrieveAllDiagnosisReportsByServiceId(consultationId);
+    }
+
+    @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
+    @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId, @RequestParam(value = "reversed", required = false) boolean reversed) {
+        int isReversed = reversed ? 1 : 0;
+        switch (isReversed) {
+            case 1:
+                return transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(trxId);
+            case 0:
+                return transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(trxId);
+            default:
+                return transactionReadPrincipleService.readTransactionsByConsultationId(trxId);
+        }
     }
 }
