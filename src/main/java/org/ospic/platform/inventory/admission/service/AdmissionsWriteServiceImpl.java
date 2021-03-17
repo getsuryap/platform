@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
@@ -76,21 +75,21 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         return consultationResourceJpaRepository.findById(admissionRequest.getServiceId()).map(consultation -> {
             CustomReponseMessage cm = new CustomReponseMessage();
             HttpHeaders httpHeaders = new HttpHeaders();
-            if (endLocalDateTime.isBefore(startLocalDateTime)){
-                return ResponseEntity.ok().body(new CustomReponseMessage(HttpStatus.BAD_REQUEST.value(), "Admission and date can not be day before it's start date"));
+            if (endLocalDateTime.isBefore(startLocalDateTime)) {
+                throw new AdmissionEndDateException();
             }
-            if (!consultation.getIsActive()){
-                 throw new InactiveMedicalConsultationsException(consultation.getId());
+            if (!consultation.getIsActive()) {
+                throw new InactiveMedicalConsultationsException(consultation.getId());
             }
             if (consultation.getPatient().getIsAdmitted()) {
                 String message = "Consultation already has active admission";
-                String code ="error.msg.consultation.have.active.admission";
+                String code = "error.msg.consultation.have.active.admission";
                 throw new InactiveMedicalConsultationsException(code, message);
             }
-        
-            Bed bed = bedRepository.findById(admissionRequest.getBedId()).orElseThrow(()->new BedNotFoundExceptionPlatform(admissionRequest.getBedId()));
-            if (bed.getIsOccupied()){
-               throw new OccupiedBedPlatformException(bed.getId());
+
+            Bed bed = bedRepository.findById(admissionRequest.getBedId()).orElseThrow(() -> new BedNotFoundExceptionPlatform(admissionRequest.getBedId()));
+            if (bed.getIsOccupied()) {
+                throw new OccupiedBedPlatformException(bed.getId());
             }
             /*
              * Create new admission
@@ -111,7 +110,7 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
              * Update patient set as admitted to prevent re-admission
              * **/
             consultation.setIsAdmitted(true);
-             consultation.getPatient().setIsAdmitted(true);
+            consultation.getPatient().setIsAdmitted(true);
             consultationResourceJpaRepository.save(consultation);
 
 
@@ -129,32 +128,32 @@ public class AdmissionsWriteServiceImpl implements AdmissionsWriteService {
         final LocalDateTime endLocalDateTime = new DateUtil().convertToLocalDateTimeViaInstant(request.getEndDateTime());
         return consultationResourceJpaRepository.findById(request.getServiceId()).map(service -> {
             return admissionRepository.findById(request.getAdmissionId()).map(admission -> {
-              return bedRepository.findById(request.getBedId()).map(bed ->{
-                  if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
-                      throw new InactiveAdmissionPlatformException(request.getAdmissionId());
-                  }
-                  if (endLocalDateTime.isBefore(admission.getFromDateTime())){
-                      throw new AdmissionEndDateException();
-                  }
+                return bedRepository.findById(request.getBedId()).map(bed -> {
+                    if (!(admission.getIsActive() || service.getPatient().getIsAdmitted())) {
+                        throw new InactiveAdmissionPlatformException(request.getAdmissionId());
+                    }
+                    if (endLocalDateTime.isBefore(admission.getFromDateTime())) {
+                        throw new AdmissionEndDateException();
+                    }
 
-                  /** Update this service set as no longer admitted
-                   * Update patient under this service set as no longer admitted **/
-                  service.setIsAdmitted(false);
-                  service.getPatient().setIsAdmitted(false);
-                  consultationResourceJpaRepository.save(service);
+                    /** Update this service set as no longer admitted
+                     * Update patient under this service set as no longer admitted **/
+                    service.setIsAdmitted(false);
+                    service.getPatient().setIsAdmitted(false);
+                    consultationResourceJpaRepository.save(service);
 
-                  /** Update Admission set as no longer active **/
-                  admission.setIsActive(false);
-                  admission.setToDateTime(endLocalDateTime);
-                  admissionRepository.save(admission);
+                    /** Update Admission set as no longer active **/
+                    admission.setIsActive(false);
+                    admission.setToDateTime(endLocalDateTime);
+                    admissionRepository.save(admission);
 
-                  /** Update bed set as active open for another admission **/
-                  bed.setIsOccupied(false);
-                  bedRepository.save(bed);
+                    /** Update bed set as active open for another admission **/
+                    bed.setIsOccupied(false);
+                    bedRepository.save(bed);
 
-                  String response = String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime());
-                  return ResponseEntity.ok().body(response);
-              }).orElseThrow(()-> new BedNotFoundExceptionPlatform(request.getBedId()));
+                    String response = String.format("Admission %2d for service %s has being ended on %s ", request.getAdmissionId(), service.getPatient().getName(), request.getEndDateTime());
+                    return ResponseEntity.ok().body(response);
+                }).orElseThrow(() -> new BedNotFoundExceptionPlatform(request.getBedId()));
             }).orElseThrow(() -> new AdmissionNotFoundExceptionPlatform(request.getAdmissionId()));
         }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(request.getServiceId()));
 
