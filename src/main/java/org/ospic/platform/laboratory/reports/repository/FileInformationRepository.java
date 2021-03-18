@@ -3,7 +3,7 @@ package org.ospic.platform.laboratory.reports.repository;
 import org.ospic.platform.laboratory.reports.domain.FileInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * This file was created by eli on 18/03/2021 for org.ospic.platform.laboratory.reports.repository
@@ -27,5 +27,5 @@ import java.util.Optional;
  * under the License.
  */
 public interface FileInformationRepository extends JpaRepository<FileInformation, Long> {
-    Optional<FileInformation> findByConsultationId(Long consultationId);
+   List<FileInformation> findByConsultationId(Long consultationId);
 }
