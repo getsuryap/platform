@@ -117,13 +117,12 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     }
 
     @Override
-    public ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId, MultipartFile file) {
+    public ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId,String fileLocation, MultipartFile file) {
         return resourceJpaRepository.findById(consultationId).map(consultation->{
-           String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),"laboratory");
-            FileInformation fileInfo = new FileInformation().fromFile(file, imageFile);
+           String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),fileLocation);
+            FileInformation fileInfo = new FileInformation().fromFile(file, imageFile,fileLocation);
             fileInfo.setConsultation(consultation);
-            this.fileInformationRepository.save(fileInfo);
-            return ResponseEntity.ok().body(imageFile);
+            return ResponseEntity.ok().body(this.fileInformationRepository.save(fileInfo));
         }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
     }
 

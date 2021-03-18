@@ -145,8 +145,8 @@ public class ConsultationApiResources {
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
-    @RequestMapping(value = "/{consultationId}/laboratory", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> uploadConsultationLaboratoryService(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
-       return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId, file);
+    @RequestMapping(value = "/{consultationId}/{fileLocation}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadConsultationLaboratoryService(@RequestParam("file") MultipartFile file, @PathVariable String fileLocation, @PathVariable(name = "consultationId") Long consultationId) {
+       return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId,fileLocation, file);
     }
 }
