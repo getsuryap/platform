@@ -40,5 +40,6 @@ public interface ConsultationResourceReadPrinciplesService {
     ResponseEntity<?> retrieveConsultationByStaffIdAll(Long staffId);
     ResponseEntity<?> retrieveAllActiveConsultationsInIpd();
     ResponseEntity<?> retrialAllAllActiveConsultationInOpd();
+    ResponseEntity<?> retrialAllConsultationLaboratoryReports();
 
 }
