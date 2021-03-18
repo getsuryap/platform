@@ -123,7 +123,11 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     }
 
     @Override
-    public ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId, String fileName) {
-        return null;
+    public ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,String locationName, String fileName) {
+        return resourceJpaRepository.findById(consultationId).map(consultation->{
+            filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+locationName,consultation.getPatient().getId(), fileName);
+
+            return ResponseEntity.ok().body("Deleted");
+        }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
     }
 }

@@ -134,20 +134,14 @@ public class ConsultationApiResources {
         return consultationWrite.endConsultationById(consultationId);
     }
 
-    /**@PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
-    @RequestMapping(value = "/{consultationId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
-        String message = "";
-        try {
-            String imageFile = filesystem.uploadPatientImage(consultationId, file, "consultations",String.valueOf(consultationId),"laboratory");
-            return ResponseEntity.ok().body(imageFile.trim());
-        } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-        }
+    @RequestMapping(value = "/{consultationId}/{location}/{fileName}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteConsultationLaboratoryReportFile(@PathVariable(name = "location") String location,
+            @PathVariable(name = "fileName") String  fileName, @PathVariable(name = "consultationId") Long consultationId) {
+      return this.consultationWrite.deleteConsultationLaboratoryReport(consultationId,location, fileName);
     }
-    **/
+
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
