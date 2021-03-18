@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
+import org.ospic.platform.laboratory.reports.domain.FileInformation;
+import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
@@ -44,14 +46,16 @@ public class ConsultationApiResources {
     private final ConsultationResourceReadPrinciplesService consultationRead;
     private final ConsultationResourceWritePrinciplesService consultationWrite;
     private final FilesStorageService filesystem;
+    private final FileInformationRepository fileInformationRepository;
 
     @Autowired
     public ConsultationApiResources(
             ConsultationResourceReadPrinciplesService consultationRead, ConsultationResourceWritePrinciplesService consultationWrite,
-            FilesStorageService filesystem) {
+            FilesStorageService filesystem,FileInformationRepository fileInformationRepository) {
         this.consultationRead = consultationRead;
         this.consultationWrite = consultationWrite;
         this.filesystem = filesystem;
+        this.fileInformationRepository = fileInformationRepository;
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
@@ -144,9 +148,16 @@ public class ConsultationApiResources {
 
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
-    @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
+    @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = FileInformation.class)
     @RequestMapping(value = "/{consultationId}/{fileLocation}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadConsultationLaboratoryService(@RequestParam("file") MultipartFile file, @PathVariable String fileLocation, @PathVariable(name = "consultationId") Long consultationId) {
        return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId,fileLocation, file);
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_CONSULTATION')")
+    @ApiOperation(value = "GET consultation report files", notes = "GET consultation report files", response = FileInformation.class, responseContainer = "List")
+    @RequestMapping(value = "/{consultationId}/files", method = RequestMethod.GET)
+    public ResponseEntity<?> getConsultationLaboratoryReportFiles( @PathVariable(name = "consultationId") Long consultationId) {
+        return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
     }
 }
