@@ -9,7 +9,6 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -135,7 +134,7 @@ public class ConsultationApiResources {
         return consultationWrite.endConsultationById(consultationId);
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    /**@PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
     @RequestMapping(value = "/{consultationId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
@@ -147,5 +146,13 @@ public class ConsultationApiResources {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
+    }
+    **/
+
+    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
+    @RequestMapping(value = "/{consultationId}/laboratory", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadConsultationLaboratoryService(@RequestParam("file") MultipartFile file, @PathVariable(name = "consultationId") Long consultationId) {
+       return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId, file);
     }
 }

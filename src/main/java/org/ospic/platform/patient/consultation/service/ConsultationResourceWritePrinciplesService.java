@@ -3,6 +3,7 @@ package org.ospic.platform.patient.consultation.service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.service
@@ -31,4 +32,6 @@ public interface ConsultationResourceWritePrinciplesService {
     ResponseEntity<?> createNewConsultation(Long patientId);
     ResponseEntity<?> assignConsultationToStaff(Long serviceId, Long staffId);
     ResponseEntity<?> endConsultationById(Long serviceId);
+    ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId,  MultipartFile file);
+    ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,  String fileName);
 }
