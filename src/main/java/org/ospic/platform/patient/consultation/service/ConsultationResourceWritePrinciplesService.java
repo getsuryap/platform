@@ -33,5 +33,5 @@ public interface ConsultationResourceWritePrinciplesService {
     ResponseEntity<?> assignConsultationToStaff(Long serviceId, Long staffId);
     ResponseEntity<?> endConsultationById(Long serviceId);
     ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId,  MultipartFile file);
-    ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,  String fileName);
+    ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,String locationName,  String fileName);
 }
