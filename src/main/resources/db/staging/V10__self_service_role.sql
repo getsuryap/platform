@@ -18,6 +18,7 @@ CREATE TABLE `m_files`(
             id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'file index id',
             name VARCHAR (200) NOT  NULL COMMENT 'file name',
             url VARCHAR (250) NULL COMMENT 'file http url',
+            `location` VARCHAR (250) NULL COMMENT 'file location',
             `type`  VARCHAR (250) NOT NULL COMMENT 'file type',
             `size`  VARCHAR (250) NOT NULL COMMENT 'file size',
             primary key (`id`),

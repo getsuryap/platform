@@ -56,6 +56,9 @@ public class FileInformation extends AbstractPersistableCustom implements Serial
     @Column(length = 250, name = "url",  nullable = false)
     private String url;
 
+    @NotBlank
+    @Column(length = 200, name = "location", nullable = false)
+    private String location;
 
     @NotBlank
     @Column(length = 20, name = "type",  nullable = false)
@@ -70,18 +73,19 @@ public class FileInformation extends AbstractPersistableCustom implements Serial
     @JsonIgnore
     private ConsultationResource consultation;
 
-    private FileInformation(String name, String url, String type, String size) {
+    private FileInformation(String name, String url,String location, String type, String size) {
         this.name = name;
         this.url = url;
         this.type = type;
         this.size = size;
+        this.location = location;
     }
 
-    public FileInformation fromFile(MultipartFile file, String fileUrl){
+    public FileInformation fromFile(MultipartFile file, String fileUrl,String location){
         String filename = file.getOriginalFilename();
         String size = String.valueOf(file.getSize()) + "KB";
         String fileType = file.getContentType();
-        return new FileInformation(filename, fileUrl,fileType, size);
+        return new FileInformation(filename, fileUrl,location,fileType, size);
     }
 
     private static String getFileSizeMegaBytes(File file) {
