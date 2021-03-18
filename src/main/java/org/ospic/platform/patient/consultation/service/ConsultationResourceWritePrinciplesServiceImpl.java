@@ -1,6 +1,7 @@
 package org.ospic.platform.patient.consultation.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     ConsultationResourceJpaRepository resourceJpaRepository;
     @Autowired
     StaffsRepository staffsRepository;
+    @Autowired
+    FilesStorageService filesStorageService;
 
     @Autowired
     public ConsultationResourceWritePrinciplesServiceImpl(
@@ -106,5 +110,20 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
             resourceJpaRepository.save(service);
             return ResponseEntity.ok().body("MedicalService de-activated successfully");
         }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(serviceId));
+    }
+
+    @Override
+    public ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId, MultipartFile file) {
+        return resourceJpaRepository.findById(consultationId).map(consultation->{
+          //  String imagePath = filesStorageService.uploadPatientImage(consultation.getPatient().getId(),  file,"images");
+            String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),"laboratory");
+
+            return ResponseEntity.ok().body(imageFile);
+        }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId, String fileName) {
+        return null;
     }
 }
