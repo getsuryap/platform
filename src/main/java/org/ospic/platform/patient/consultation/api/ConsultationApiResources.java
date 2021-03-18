@@ -136,10 +136,10 @@ public class ConsultationApiResources {
 
     @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = ResponseMessage.class)
-    @RequestMapping(value = "/{consultationId}/{location}/{fileName}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{consultationId}/{location}/{fileId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteConsultationLaboratoryReportFile(@PathVariable(name = "location") String location,
-            @PathVariable(name = "fileName") String  fileName, @PathVariable(name = "consultationId") Long consultationId) {
-      return this.consultationWrite.deleteConsultationLaboratoryReport(consultationId,location, fileName);
+            @PathVariable(name = "fileId") Long  fileId, @PathVariable(name = "consultationId") Long consultationId) {
+      return this.consultationWrite.deleteConsultationLaboratoryReport(consultationId,location, fileId);
     }
 
 

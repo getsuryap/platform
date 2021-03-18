@@ -11,3 +11,16 @@ INSERT INTO `role_privileges` (`role_id`,`privilege_id`) VALUES
 
 REPLACE INTO `m_privilege` ( `name`) VALUES
       ("CREATE_SELF_SERVICE"), ("READ_SELF_SERVICE"), ("UPDATE_SELF_SERVICE"), ("DELETE_SELF_SERVICE");
+
+
+DROP TABLE IF EXISTS `m_files`;
+CREATE TABLE `m_files`(
+            id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'file index id',
+            name VARCHAR (200) NOT  NULL COMMENT 'file name',
+            url VARCHAR (250) NULL COMMENT 'file http url',
+            `type`  VARCHAR (250) NOT NULL COMMENT 'file type',
+            `size`  VARCHAR (250) NOT NULL COMMENT 'file size',
+            primary key (`id`),
+            `consultation_id` BIGINT REFERENCES `m_consultations`(`id`) ON DELETE CASCADE,
+            constraint uc_name_consultation_url unique(`name`, `url`,`consultation_id`)
+) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;

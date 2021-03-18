@@ -1,8 +1,12 @@
 package org.ospic.platform.patient.consultation.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.fileuploads.exceptions.FileUploadException;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.inventory.admission.domains.Admission;
+import org.ospic.platform.laboratory.reports.domain.FileInformation;
+import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
@@ -16,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,22 +48,22 @@ import java.util.List;
  */
 @Repository
 public class ConsultationResourceWritePrinciplesServiceImpl implements ConsultationResourceWritePrinciplesService {
-    @Autowired
-    PatientRepository patientRepository;
-    @Autowired
-    ConsultationResourceJpaRepository resourceJpaRepository;
-    @Autowired
-    StaffsRepository staffsRepository;
-    @Autowired
-    FilesStorageService filesStorageService;
+    private final PatientRepository patientRepository;
+    private final ConsultationResourceJpaRepository resourceJpaRepository;
+    private final StaffsRepository staffsRepository;
+    private final FilesStorageService filesStorageService;
+    private final FileInformationRepository fileInformationRepository;
 
     @Autowired
     public ConsultationResourceWritePrinciplesServiceImpl(
             PatientRepository patientRepository, ConsultationResourceJpaRepository resourceJpaRepository,
-            StaffsRepository staffsRepository) {
+            StaffsRepository staffsRepository,  FilesStorageService filesStorageService,
+            FileInformationRepository fileInformationRepository) {
         this.patientRepository = patientRepository;
         this.resourceJpaRepository = resourceJpaRepository;
         this.staffsRepository = staffsRepository;
+        this.filesStorageService = filesStorageService;
+        this.fileInformationRepository = fileInformationRepository;
     }
 
     @Override
@@ -115,19 +120,27 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     @Override
     public ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId, MultipartFile file) {
         return resourceJpaRepository.findById(consultationId).map(consultation->{
-          //  String imagePath = filesStorageService.uploadPatientImage(consultation.getPatient().getId(),  file,"images");
-            String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),"laboratory");
-
+           String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),"laboratory");
+            FileInformation fileInfo = new FileInformation().fromFile(file, imageFile);
+            fileInfo.setConsultation(consultation);
+            this.fileInformationRepository.save(fileInfo);
             return ResponseEntity.ok().body(imageFile);
         }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
     }
 
     @Override
-    public ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,String locationName, String fileName) {
+    public ResponseEntity<?> deleteConsultationLaboratoryReport(Long consultationId,String locationName, Long fileId) {
         return resourceJpaRepository.findById(consultationId).map(consultation->{
-            filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+locationName,consultation.getPatient().getId(), fileName);
+            return this.fileInformationRepository.findById(fileId).map(file->{
+                if (!file.getConsultation().getId().equals(consultation.getId())){
+                    throw new FileUploadException("error.msg.invalid.request", "This file does not belong to this consultation");
+                }
 
-            return ResponseEntity.ok().body("Deleted");
+                filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+locationName,consultation.getPatient().getId(), file.getName());
+                //this.fileInformationRepository.deleteById(file.getId());
+                return ResponseEntity.ok().body(new ResponseMessage("File deleted successfully ..."));
+            }).orElseThrow(()->new FileSystemNotFoundException());
+
         }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
     }
 }
