@@ -189,14 +189,14 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
             Path targetLocation = this.createDirectoryIfNotExists(patientId, strings).resolve(fileName);
 
-            logger.info("ServeletUriComponent From Current Request : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
-            logger.info("ServeletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
+            logger.info("ServletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+            logger.info("ServletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
 
+            String servletUriComponentBuilderString = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();
 
-
-            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("/").concat(fileName));
+            logger.info(ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(servletUriComponentBuilderString.endsWith("/")?"":"/").concat(fileName));
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat("/"+fileName);
+            return ServletUriComponentsBuilder.fromCurrentRequest().toUriString().concat(servletUriComponentBuilderString.endsWith("/")?"":"/").concat(fileName);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
