@@ -106,7 +106,7 @@ public class ConsultationResource implements Serializable {
     @JsonIgnore
     private List<Transactions> transactions = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "consultation_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @LazyCollection(LazyCollectionOption.FALSE)

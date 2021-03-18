@@ -9,18 +9,17 @@ import org.ospic.platform.laboratory.reports.domain.FileInformation;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
-import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
-import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
+import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
+import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,9 +136,9 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
                 }
 
                 filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+locationName,consultation.getPatient().getId(), file.getName());
-                //this.fileInformationRepository.deleteById(file.getId());
+                this.fileInformationRepository.deleteById(file.getId());
                 return ResponseEntity.ok().body(new ResponseMessage("File deleted successfully ..."));
-            }).orElseThrow(()->new FileSystemNotFoundException());
+            }).orElseThrow(()->new FileUploadException("error.msg.file.not.found", "File was not found"));
 
         }).orElseThrow(()->new ConsultationNotFoundExceptionPlatform(consultationId));
     }
