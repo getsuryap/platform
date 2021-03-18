@@ -1,5 +1,6 @@
 package org.ospic.platform.patient.consultation.service;
 
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.patient.consultation.data.ConsultationPayload;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.mappers.ConsultationResourceMapper;
@@ -41,6 +42,7 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     @Autowired
     ConsultationResourceJpaRepository resourceJpaRepository;
     private final JdbcTemplate jdbcTemplate;
+    @Autowired FilesStorageService filesStorageService;
 
     @Autowired
     public ConsultationResourceReadPrinciplesServiceImpl(
@@ -149,5 +151,10 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
         return ResponseEntity.ok().body(payloads);
+    }
+
+    @Override
+    public ResponseEntity<?> retrialAllConsultationLaboratoryReports() {
+        return null;
     }
 }

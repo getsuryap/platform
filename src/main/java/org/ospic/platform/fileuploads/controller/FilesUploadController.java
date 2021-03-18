@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.fileuploads.exceptions.FileUploadException;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.model.FileInfo;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
@@ -65,7 +66,7 @@ public class FilesUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            throw new FileUploadException("error.msg.file.upload.error", message);
         }
     }
 
@@ -80,7 +81,7 @@ public class FilesUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            throw new FileUploadException("error.msg.file.upload.error", message);
         }
     }
 
@@ -94,7 +95,7 @@ public class FilesUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            throw new FileUploadException("error.msg.file.upload.error", message);
         }
     }
 
