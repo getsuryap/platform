@@ -1,6 +1,7 @@
 package org.ospic.platform.fileuploads.service;
 
 import lombok.NonNull;
+import org.ospic.platform.fileuploads.exceptions.InvalidFileNameException;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.exception.InvalidReportNameExtensionException;
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             // Check if the file's name contains invalid characters
             if (fileName.contains("..")) {
-                throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
+                throw new InvalidFileNameException(String.format("Sorry! Filename %s contains invalid characters sequence ", fileName));
             }
             if (!extension.equals("jrxml")){
                 throw new InvalidReportNameExtensionException();
@@ -182,10 +183,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             /** Check if the file's name contains invalid characters **/
             if (fileName.contains("..")) {
-                throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
+                throw new InvalidFileNameException(String.format("Sorry! Filename %s contains invalid characters sequence ", fileName));
             }
-            // Copy file to the target location (Replacing existing file with the same name)
-
 
             Path targetLocation = this.createDirectoryIfNotExists(patientId, strings).resolve(fileName);
 
