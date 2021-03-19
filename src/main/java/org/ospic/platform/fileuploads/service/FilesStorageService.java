@@ -44,9 +44,9 @@ public interface FilesStorageService {
 
     public String uploadReportFile(MultipartFile multipartFile);
 
-    public Resource loadImage(Long patientId,String filename);
+    public Resource loadImage(Long patientId,String filename, String... s);
 
-    public Resource loadDocument(Long patientId, String filename);
+    public Resource loadDocument(Long patientId, String filename,String... s);
 
     public void deleteAll();
 

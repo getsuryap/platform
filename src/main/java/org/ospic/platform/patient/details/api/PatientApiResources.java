@@ -168,7 +168,7 @@ public class PatientApiResources {
 
     @GetMapping("/{patientId}/images/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = filesStorageService.loadImage(patientId, filename);
+        Resource file = filesStorageService.loadImage(patientId, filename,"images");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
