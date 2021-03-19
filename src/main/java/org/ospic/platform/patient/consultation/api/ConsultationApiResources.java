@@ -8,14 +8,20 @@ import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.laboratory.reports.domain.FileInformation;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.activation.MimetypesFileTypeMap;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.api
@@ -47,15 +53,18 @@ public class ConsultationApiResources {
     private final ConsultationResourceWritePrinciplesService consultationWrite;
     private final FilesStorageService filesystem;
     private final FileInformationRepository fileInformationRepository;
+    private final ConsultationResourceJpaRepository consultationResourceJpaRepository;
 
     @Autowired
     public ConsultationApiResources(
             ConsultationResourceReadPrinciplesService consultationRead, ConsultationResourceWritePrinciplesService consultationWrite,
-            FilesStorageService filesystem,FileInformationRepository fileInformationRepository) {
+            FilesStorageService filesystem,FileInformationRepository fileInformationRepository,
+            ConsultationResourceJpaRepository consultationResourceJpaRepository) {
         this.consultationRead = consultationRead;
         this.consultationWrite = consultationWrite;
         this.filesystem = filesystem;
         this.fileInformationRepository = fileInformationRepository;
+        this.consultationResourceJpaRepository = consultationResourceJpaRepository;
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
@@ -159,5 +168,24 @@ public class ConsultationApiResources {
     @RequestMapping(value = "/{consultationId}/files", method = RequestMethod.GET)
     public ResponseEntity<?> getConsultationLaboratoryReportFiles( @PathVariable(name = "consultationId") Long consultationId) {
         return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
+    }
+
+    @ApiOperation(value = "GET consultation report files", notes = "GET consultation report files", response = FileInformation.class, responseContainer = "List")
+    @RequestMapping(value = "/{consultationId}/{fileLocation}/{filename:.+}", method = RequestMethod.GET)
+   @ResponseBody
+    public ResponseEntity<Resource> loadConsultationLaboratoryReportFile( @PathVariable(name = "consultationId") Long consultationId,@PathVariable String filename,  @PathVariable(name = "fileLocation") String fileLocation) {
+      return this.consultationResourceJpaRepository.findById(consultationId).map(consultation->{
+          HttpHeaders headers = new HttpHeaders();
+          headers.add("content-disposition", "inline;filename=" + filename);
+          headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+          MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+          Resource file = filesystem.loadDocument(consultation.getPatient().getId(), filename,"consultations", String.valueOf(consultationId),fileLocation);
+          return ResponseEntity.ok().headers(headers).body(file);
+      }).orElseThrow(()-> new ConsultationNotFoundExceptionPlatform(consultationId));
+
+    }
+
+    private final void getFileHeaderType(Resource resource, HttpHeaders headers){
+
     }
 }
