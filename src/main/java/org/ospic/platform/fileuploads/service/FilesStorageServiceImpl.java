@@ -118,9 +118,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource loadImage(Long patientId, String filename) {
+    public Resource loadImage(Long patientId, String filename, String...s) {
         try {
-            Path path = this.retrieveEntityImagePath("images", patientId);
+            Path path = this.retrieveEntityImagePath( patientId,s);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -135,9 +135,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource loadDocument(Long patientId, String filename) {
+    public Resource loadDocument(Long patientId, String filename,String... s) {
         try {
-            Path path = this.retrieveEntityImagePath("documents", patientId);
+            Path path = this.retrieveEntityImagePath( patientId,s);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -219,13 +219,16 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path retrieveEntityImagePath(String documentLocation, @NonNull Long patientId) {
+    private Path retrieveEntityImagePath( @NonNull Long patientId, String... paths) {
         StringBuilder sb = new StringBuilder();
         sb.append("files/");
         sb.append("patients/");
         sb.append(patientId);
         sb.append("/");
-        sb.append(documentLocation);
+        for(String str: paths){
+            sb.append(str);
+            sb.append("/");
+        }
         return Paths.get(sb.toString());
     }
 
