@@ -34,8 +34,7 @@ import java.util.Optional;
  */
 @Repository
 public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServicePrinciple {
-    @Autowired
-    DepartmentJpaRepository repository;
+   private final DepartmentJpaRepository repository;
 
 
     @Autowired

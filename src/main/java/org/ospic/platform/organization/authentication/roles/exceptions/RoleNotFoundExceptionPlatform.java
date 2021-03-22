@@ -1,7 +1,6 @@
 package org.ospic.platform.organization.authentication.roles.exceptions;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException;
 
 /**
  * This file was created by eli on 07/02/2021 for org.ospic.platform.organization.authentication.roles.exceptions
@@ -24,12 +23,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
  * specific language governing permissions and limitations
  * under the License.
  */
-public class RoleNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
-    public RoleNotFoundExceptionPlatform(Long id){
-        super("error.msg.role.with.id.not.found", String.format("Role  with Id %d not found", id), (Object) null);
+public class RoleNotFoundExceptionPlatform extends AbstractPlatformException {
+
+    protected RoleNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage) {
+        super(globalisationMessageCode, defaultUserMessage);
     }
 
-    public RoleNotFoundExceptionPlatform(Long id, EmptyResultDataAccessException e) {
-        super("error.msg.role.id.invalid", "Role with identifier " + id + " does not exist", id, e);
+    public RoleNotFoundExceptionPlatform(Long id){
+        super("error.msg.role.with.id.not.found", String.format("Role  with Id %d not found", id));
     }
 }

@@ -1,5 +1,8 @@
 package org.ospic.platform.organization.authentication.roles.services;
 
+import org.ospic.platform.organization.authentication.roles.data.RoleRequest;
+import org.ospic.platform.organization.authentication.roles.domain.Role;
+import org.ospic.platform.organization.authentication.roles.exceptions.RoleNotFoundExceptionPlatform;
 import org.ospic.platform.organization.authentication.roles.privileges.domains.Privilege;
 import org.ospic.platform.organization.authentication.roles.privileges.repository.PrivilegesRepository;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
@@ -7,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This file was created by eli on 28/12/2020 for org.ospic.platform.organization.authentication.roles.services
@@ -43,6 +48,19 @@ public class RoleWritePrincipleServiceImpl implements RoleWritePrincipleService 
     }
 
     @Override
+    public ResponseEntity<?> createNewRole(RoleRequest payload) {
+        List<Privilege> privileges = new ArrayList<>();
+        if(payload.getPrivileges().isEmpty()) {
+            payload.getPrivileges().forEach(id -> {
+                privileges.add(privilegeRepository.getOne(id));
+            });
+        }
+        Role role = new Role(payload.getName());
+        role.setPrivileges(privileges);
+        return ResponseEntity.ok().body(this.roleRepository.save(role));
+    }
+
+    @Override
     public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges) {
         List<Privilege> privilegeList = new ArrayList<>();
         return roleRepository.findById(roleId).map(role -> {
@@ -55,7 +73,7 @@ public class RoleWritePrincipleServiceImpl implements RoleWritePrincipleService 
              Map<String, Long> roleRep = new HashMap<>();
             roleRep.put("id", roleId );
             return ResponseEntity.ok().body(roleRep);
-        }).orElseThrow(()-> new EntityNotFoundException());
+        }).orElseThrow(()-> new RoleNotFoundExceptionPlatform(roleId));
 
     }
 }

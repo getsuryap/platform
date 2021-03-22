@@ -1,14 +1,11 @@
-package org.ospic.platform.organization.authentication.roles.services;
+package org.ospic.platform.organization.authentication.roles.data;
 
-import org.ospic.platform.organization.authentication.roles.data.RoleRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import lombok.*;
 
 import java.util.List;
 
 /**
- * This file was created by eli on 28/12/2020 for org.ospic.platform.organization.authentication.roles.services
+ * This file was created by eli on 22/03/2021 for org.ospic.platform.organization.authentication.roles.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,9 +25,11 @@ import java.util.List;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Service
-@Component
-public interface RoleWritePrincipleService {
-    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges);
-    ResponseEntity<?> createNewRole(RoleRequest payload);
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoleRequest {
+    private String name;
+    private List<Long> privileges;
 }
