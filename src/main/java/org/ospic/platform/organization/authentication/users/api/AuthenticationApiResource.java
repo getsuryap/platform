@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.organization.authentication.roles.data.RoleRequest;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
@@ -113,6 +114,14 @@ public class AuthenticationApiResource {
     public ResponseEntity<?> updateUserPassword(@Valid @RequestBody PasswordUpdatePayload payload) {
         return this.usersWritePrincipleService.updateUserPassword(payload);
     }
+
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_ROLE','CREATE_ROLE')")
+    @ApiOperation(value = "CREATE new role", notes = "CREATE new role")
+    @RequestMapping(value = "/roles", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> createNewRole(@Valid @RequestBody RoleRequest payload) {
+        return roleWriteService.createNewRole(payload);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_ROLE')")
     @ApiOperation(value = "RETRIEVE all roles", notes = "RETRIEVE all roles")

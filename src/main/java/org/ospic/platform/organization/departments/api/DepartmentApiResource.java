@@ -42,10 +42,8 @@ import javax.validation.Valid;
 @Api(value = "/api/departments", tags = "Departments")
 @Transactional
 public class DepartmentApiResource {
-    @Autowired
-    DepartmentReadServicePrinciple departmentRead;
-    @Autowired
-    DepartmentWriteServicePrinciple departmentWrite;
+   private final DepartmentReadServicePrinciple departmentRead;
+   private final DepartmentWriteServicePrinciple departmentWrite;
 
     @Autowired
     public DepartmentApiResource(
@@ -58,7 +56,6 @@ public class DepartmentApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
     @ApiOperation(value = "RETRIEVE Departments", notes = "RETRIEVE  Departments", response = Department.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveAllDepartments() {
         return departmentRead.retrieveAllDepartments();
     }
@@ -67,7 +64,6 @@ public class DepartmentApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_DEPARTMENT')")
     @ApiOperation(value = "RETRIEVE Departments by id ", notes = "RETRIEVE  Departments by id",response = Department.class)
     @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveAllDepartments(@PathVariable(name = "departmentId") Long departmentId) {
         return departmentRead.retrieveDepartmentsById(departmentId);
     }
@@ -76,7 +72,6 @@ public class DepartmentApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_DEPARTMENT')")
     @ApiOperation(value = "CREATE Departments", notes = "CREATE  Departments",response = Department.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> createNameDepartment(@Valid @RequestBody DepartmentReqPayload payload) {
         return departmentWrite.createDepartment(payload);
     }
