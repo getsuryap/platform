@@ -156,4 +156,10 @@ public class AuthenticationApiResource {
         return this.usersWritePrincipleService.refreshToken(request);
     }
 
+    @DeleteMapping("/self/{userId}")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_SELF_SERVICE','UPDATE_SELF_SERVICE','DELETE_SELF_SERVICE')")
+    public ResponseEntity<?> deleteSelfServiceUser(@PathVariable(name = "userId", required = true) Long userId) {
+        return this.usersWritePrincipleService.deleteSelfServiceUser(userId);
+    }
+
 }

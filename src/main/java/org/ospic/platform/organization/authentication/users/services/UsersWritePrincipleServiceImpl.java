@@ -8,6 +8,7 @@ import org.ospic.platform.organization.authentication.selfservice.data.SelfServi
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
+import org.ospic.platform.organization.authentication.users.exceptions.InvalidUserInformationException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
 import org.ospic.platform.organization.authentication.users.payload.request.SignupRequest;
@@ -247,6 +248,24 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             expectedMap.put(entry.getKey(), entry.getValue());
         }
         return expectedMap;
+    }
+
+    @Override
+    public ResponseEntity<?> deleteSelfServiceUser(Long id) {
+        return this.userJpaRepository.findById(id).map(user->{
+            if (!user.getIsSelfService()){
+                throw new InvalidUserInformationException("User is not self service");
+            }
+           Long patientId = user.getPatient().getId();
+            return this.patientRepository.findById(patientId).map(patient ->{
+                patient.setHasSelfServiceUserAccount(false);
+                this.patientRepository.save(patient);
+                
+                this.userJpaRepository.deleteById(id);
+                return ResponseEntity.ok().body("user deleted");
+            }).orElseThrow(()->new PatientNotFoundExceptionPlatform(patientId));
+
+        }).orElseThrow(()->new UserNotFoundPlatformException(id));
     }
 
     @Override
