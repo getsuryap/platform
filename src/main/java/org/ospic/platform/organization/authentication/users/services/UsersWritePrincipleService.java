@@ -40,5 +40,7 @@ public interface UsersWritePrincipleService {
     ResponseEntity<?> updateUserPassword(PasswordUpdatePayload payload);
     ResponseEntity<?> refreshToken(HttpServletRequest request);
     ResponseEntity<?> updateUserDetails(Long id, UpdateUserPayload payload);
-    public ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
+    ResponseEntity<?> deleteSelfServiceUser(Long id);
+     ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
+
 }
