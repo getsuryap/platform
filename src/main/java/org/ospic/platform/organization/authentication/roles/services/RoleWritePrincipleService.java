@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * This file was created by eli on 28/12/2020 for org.ospic.platform.organization.authentication.roles.services
  * --
@@ -31,6 +29,6 @@ import java.util.List;
 @Service
 @Component
 public interface RoleWritePrincipleService {
-    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges);
+    public ResponseEntity<?> updateRole(Long roleId, RoleRequest payload);
     ResponseEntity<?> createNewRole(RoleRequest payload);
 }

@@ -21,7 +21,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -140,8 +139,8 @@ public class AuthenticationApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'UPDATE_ROLE')")
     @ApiOperation(value = "UPDATE role privilege", notes = "UPDATE role privilege")
     @RequestMapping(value = "/roles/{roleId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody List<Long> privileges) {
-        return roleWriteService.updateRole(roleId, privileges);
+    ResponseEntity<?> updateRoleById(@PathVariable Long roleId, @RequestBody RoleRequest payload) {
+        return roleWriteService.updateRole(roleId, payload);
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_ROLE')")
@@ -153,7 +152,7 @@ public class AuthenticationApiResource {
 
 
     @RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
-    public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) throws Exception {
         return this.usersWritePrincipleService.refreshToken(request);
     }
 

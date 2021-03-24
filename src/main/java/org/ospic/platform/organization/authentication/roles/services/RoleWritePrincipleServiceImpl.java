@@ -11,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This file was created by eli on 28/12/2020 for org.ospic.platform.organization.authentication.roles.services
@@ -61,18 +59,16 @@ public class RoleWritePrincipleServiceImpl implements RoleWritePrincipleService 
     }
 
     @Override
-    public ResponseEntity<?> updateRole(Long roleId, List<Long> privileges) {
-        List<Privilege> privilegeList = new ArrayList<>();
+    public ResponseEntity<?> updateRole(Long roleId, RoleRequest payload) {
+        List<Privilege> privileges = new ArrayList<>();
         return roleRepository.findById(roleId).map(role -> {
-            privileges.forEach(id -> {
+            payload.getPrivileges().forEach(id -> {
                 Privilege privilege = privilegeRepository.getOne(id);
-                privilegeList.add(privilege);
+                privileges.add(privilege);
             });
-            role.setPrivileges(privilegeList);
-            this.roleRepository.save(role);
-             Map<String, Long> roleRep = new HashMap<>();
-            roleRep.put("id", roleId );
-            return ResponseEntity.ok().body(roleRep);
+            role.setName(payload.getName());
+            role.setPrivileges(privileges);
+            return ResponseEntity.ok().body(this.roleRepository.save(role));
         }).orElseThrow(()-> new RoleNotFoundExceptionPlatform(roleId));
 
     }
