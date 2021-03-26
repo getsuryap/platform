@@ -39,7 +39,7 @@ public class BillSummations {
     private BigDecimal totalBillsAmount;
     private BigDecimal totalBillsPaidAmount;
 
-    public BillSummations fromResultSet(ResultSet rs) throws SQLException {
+    public static BillSummations fromResultSet(ResultSet rs) throws SQLException {
         final Long totalNumberOfBills = rs.getLong("totalNumberOfBills");
         final Long totalNumberOfBillsToday = rs.getLong("totalNumberOfBillsToday");
         final BigDecimal totalBillsAmountToday = rs.getBigDecimal("totalBillsAmountToday");
