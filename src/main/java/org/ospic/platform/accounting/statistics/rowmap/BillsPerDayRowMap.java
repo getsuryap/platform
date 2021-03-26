@@ -29,9 +29,10 @@ import java.sql.SQLException;
  */
 public class BillsPerDayRowMap implements RowMapper<BillsPerDay> {
     public String schema() {
-        return "select date(transaction_date) as transactionDate," +
-                " count(*) as numberOfTransactions " +
-                " from m_transactions tx group by date(transaction_date) ";
+        return "    select date(b.created_date) as createdDate, count(*) as totalBills," +
+                "   sum(b.paid_amount) as totalPaidAmount," +
+                "   sum(b.total_amount) as totalAmount" +
+                "   from m_bills b group by date(b.created_date) ; ";
     };
     @Override
     public BillsPerDay mapRow(ResultSet rs, int rowNum) throws SQLException {
