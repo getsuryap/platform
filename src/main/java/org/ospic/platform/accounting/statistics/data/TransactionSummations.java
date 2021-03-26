@@ -37,10 +37,11 @@ public class TransactionSummations {
     private BigDecimal totalTransactionAmount;
     private BigDecimal totalTransactionAmountToday;
 
-    public TransactionSummations(ResultSet rs) throws SQLException{
+    public static TransactionSummations fromResultSet(ResultSet rs) throws SQLException{
         final Long totalNumberOfTransactions = rs.getLong("totalNumberOfTransactions");
         final Long totalNumberOfTransactionsToday = rs.getLong("totalNumberOfTransactionsToday");
         final BigDecimal totalTransactionAmount = rs.getBigDecimal("totalTransactionAmount");
         final BigDecimal totalTransactionAmountToday = rs.getBigDecimal("totalTransactionAmountToday");
+        return new TransactionSummations(totalNumberOfTransactions,totalNumberOfTransactionsToday,totalTransactionAmount,totalTransactionAmountToday);
     }
 }
