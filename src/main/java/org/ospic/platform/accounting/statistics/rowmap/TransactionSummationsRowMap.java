@@ -29,13 +29,11 @@ import java.sql.SQLException;
  */
 public class TransactionSummationsRowMap implements RowMapper<TransactionSummations> {
     public String schema() {
-        return "    select count(*) as totalNumberOfBills, " +
-                "   sum(case when date(b.created_date) = curdate()  then 1 else 0 end ) as totalNumberOfBillsToday, " +
-                "   sum(case when date(b.created_date) = curdate()  then b.total_amount else 0 end ) as totalBillsAmountToday, " +
-                "   sum(case when date(b.created_date) = curdate()  then b.paid_amount else 0 end ) as totalBillsPaidAmountToday, " +
-                "   sum(b.total_amount) as totalBillsAmount, " +
-                "   sum(b.paid_amount) as totalBillsPaidAmount " +
-                "   from m_bills b;";
+        return "  select count(*) as totalNumberOfTransactions, " +
+                "   sum(case when date(tx.transaction_date) =curdate() then 1 else 0 end ) as totalNumberOfTransactionsToday, " +
+                "   sum(tx.amount) as totalTransactionAmount, " +
+                "   sum(case when date(tx.transaction_date) = curdate()  then tx.amount else 0 end ) as totalTransactionAmountToday " +
+                "   from m_transactions tx ;";
     }
     @Override
     public TransactionSummations mapRow(ResultSet rs, int rowNum) throws SQLException {
