@@ -1,12 +1,13 @@
-package org.ospic.platform.accounting.statistics.data;
+package org.ospic.platform.accounting.statistics.rowmap;
 
-import lombok.*;
+import org.ospic.platform.accounting.statistics.data.TransactionsPerDay;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * This file was created by eli on 26/03/2021 for org.ospic.platform.accounting.statistics.data
+ * This file was created by eli on 27/03/2021 for org.ospic.platform.accounting.statistics.rowmap
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,17 +27,13 @@ import java.sql.SQLException;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Getter(AccessLevel.PUBLIC)
-@Setter(AccessLevel.PUBLIC)
-@NoArgsConstructor
-@AllArgsConstructor
-public class TransactionsPerDay {
-    private String  transactionDate;
-    private Long numberOfTransactions;
-
-    public static TransactionsPerDay fromResultSet(ResultSet rs)throws SQLException {
-        final String transactionDate = rs.getString("transactionDate");
-        final Long numberOfTransactions = rs.getLong("numberOfTransactions");
-        return new TransactionsPerDay(transactionDate, numberOfTransactions);
+public class TransactionsPerDayRowMap implements RowMapper<TransactionsPerDay> {
+    public String schema() {
+        return " select date(transaction_date) as transactionDate, count(*) as numberOfTransactions " +
+                " from m_transactions tx group by date(transaction_date) ;";
+    }
+    @Override
+    public TransactionsPerDay mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return TransactionsPerDay.fromResultSet(rs);
     }
 }
