@@ -36,12 +36,22 @@ public class TransactionSummations {
     private Long totalNumberOfTransactionsToday;
     private BigDecimal totalTransactionAmount;
     private BigDecimal totalTransactionAmountToday;
+    private BigDecimal totalNumberOfTransactionsLast7Days;
+    private BigDecimal totalTransactionAmountLast7Days;
+    private BigDecimal totalNumberOfTransactionsLast30Days;
+    private BigDecimal totalTransactionAmountLast30Days;
+
 
     public static TransactionSummations fromResultSet(ResultSet rs) throws SQLException{
         final Long totalNumberOfTransactions = rs.getLong("totalNumberOfTransactions");
         final Long totalNumberOfTransactionsToday = rs.getLong("totalNumberOfTransactionsToday");
         final BigDecimal totalTransactionAmount = rs.getBigDecimal("totalTransactionAmount");
         final BigDecimal totalTransactionAmountToday = rs.getBigDecimal("totalTransactionAmountToday");
-        return new TransactionSummations(totalNumberOfTransactions,totalNumberOfTransactionsToday,totalTransactionAmount,totalTransactionAmountToday);
+        final BigDecimal totalNumberOfTransactionsLast7Days = rs.getBigDecimal("totalNumberOfTransactionsLast7Days");
+        final BigDecimal totalTransactionAmountLast7Days =rs.getBigDecimal("totalTransactionAmountLast7Days");
+        final BigDecimal totalNumberOfTransactionsLast30Days = rs.getBigDecimal("totalNumberOfTransactionsLast30Days");
+        final BigDecimal totalTransactionAmountLast30Days = rs.getBigDecimal("totalTransactionAmountLast30Days");
+        return new TransactionSummations(totalNumberOfTransactions,totalNumberOfTransactionsToday,totalTransactionAmount,totalTransactionAmountToday,
+                totalNumberOfTransactionsLast7Days,totalTransactionAmountLast7Days,totalNumberOfTransactionsLast30Days,totalTransactionAmountLast30Days);
     }
 }
