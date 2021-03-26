@@ -38,10 +38,11 @@ public class BillsPerDay {
     private BigDecimal totalPaidAmount;
     private BigDecimal totalAmount;
 
-    public BillsPerDay(ResultSet rs) throws SQLException{
+    public static BillsPerDay fromResultSet(ResultSet rs) throws SQLException{
         final String createdDate = rs.getString("createdDate");
         final BigDecimal totalBills = rs.getBigDecimal("totalBills");
         final BigDecimal totalPaidAmount = rs.getBigDecimal("totalPaidAmount");
         final BigDecimal totalAmount = rs.getBigDecimal("totalAmount");
+        return new BillsPerDay(createdDate,totalBills, totalPaidAmount,totalAmount);
     }
 }
