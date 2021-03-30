@@ -34,5 +34,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUBTOKEN }}
           branch: master # The branch the action should deploy to.
-          repository-name: ospic/WJar
+          repository-name: ospic/deploys
+          target-folder: platform
           folder: build/libs # The folder the action should deploy.
