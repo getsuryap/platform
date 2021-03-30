@@ -25,7 +25,7 @@ jobs:
           java-version: 1.8
       - name: Re install dependencies
         run: gradle clean
-      - name: Build war
+      - name: Build bootWar
         run: gradle build
       - name: Build jar
         run: gradle bootJar
