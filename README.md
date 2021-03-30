@@ -6,7 +6,7 @@ Steps to install
 ---
 - Clone this repository
 - Run `gradle clean` 
-- Then run `gradle boorRun`
+- Then run `gradle bootRun`
 - Read the Api documentations from http://localhost:8080/swagger-ui.html#/
 
 ## Contribution Guidelines
