@@ -33,6 +33,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
           token: ${{ secrets.GITHUBTOKEN }}
-          branch: master # The branch the action should deploy to.
-          repository-name: ospic/WJar
+          branch: release # The branch the action should deploy to.
+          #repository-name: ospic/WJar
           folder: build/libs # The folder the action should deploy.
