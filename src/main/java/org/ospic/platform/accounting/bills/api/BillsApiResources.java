@@ -46,8 +46,16 @@ public class BillsApiResources {
     @ApiOperation(value = "LIST bill's", notes = "LIST bill's", response = BillPayload.class, responseContainer = "List")
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> listBills() {
-        return readService.readAllBills();
+    ResponseEntity<?> listBills(@RequestParam(value = "command", required = false) String command) {
+        if (!(command == null || command.isEmpty())) {
+            if ("all".equals(command)) {
+                readService.readAllBills();
+            }
+            if ("unpaid".equals(command)){
+                return readService.readUnpaidBillsBills();
+            }
+        }
+        return  readService.readAllBills();
     }
 
     @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID", response = BillPayload.class)
@@ -59,7 +67,7 @@ public class BillsApiResources {
 
 
     @ApiOperation(value = "PAY Bill", notes = "PAY Bill", response = PaymentPayload.class)
-    @PreAuthorize("hasAnyAuthority('UPDATE_BILL')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_BILL')")
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
         return writeService.payBill(payload);
