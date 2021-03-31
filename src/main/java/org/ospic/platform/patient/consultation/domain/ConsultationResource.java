@@ -106,14 +106,14 @@ public class ConsultationResource implements Serializable {
     @JsonIgnore
     private List<Transactions> transactions = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "consultation_id")
+    @JsonIgnore
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<FileInformation> fileInformation = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "consultation", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "consultation",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "consultation_id")
     private Bill bill;
 
