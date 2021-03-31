@@ -96,6 +96,18 @@ public class SelfServiceApiResources {
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/bills/{billId}")
+    @ApiOperation(value = "GET bill by Id", notes = "GET bill by Id", response = BillPayload.class)
+    public ResponseEntity<?> getUserBillsByBillId(@PathVariable("billId") Long billId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return this.billReadPrincipleService.readBillById(billId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/patients")
     @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account", response = Patient.class)
     public ResponseEntity<?> getPatient() throws Exception {
