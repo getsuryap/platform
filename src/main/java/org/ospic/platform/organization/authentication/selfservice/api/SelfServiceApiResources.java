@@ -6,6 +6,8 @@ import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
+import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
@@ -64,6 +66,8 @@ public class SelfServiceApiResources {
     @Autowired
     DiagnosisService diagnosisService;
     @Autowired TransactionReadPrincipleService transactionReadPrincipleService;
+    @Autowired
+    FileInformationRepository fileInformationRepository;
 
 
 
@@ -142,6 +146,20 @@ public class SelfServiceApiResources {
         }
         return this.consultationReadService.retrieveAConsultationById(consultationId);
     }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/{consultationId}/reports")
+    @ApiOperation(value = "GET consultation report by consultation ID ", notes = "GET consultation report by consultation ID", response = Reports.class, responseContainer = "List")
+    public ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
+    }
+
+
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/diagnoses/{consultationId}")
