@@ -156,17 +156,17 @@ public class SelfServiceApiResources {
     }
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
-    @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{consultationId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId, @RequestParam(value = "reversed", required = false) boolean reversed) {
+    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "consultationId") Long consultationId, @RequestParam(value = "reversed", required = false) boolean reversed) {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(trxId);
+                return transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(consultationId);
             case 0:
-                return transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(trxId);
+                return transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(consultationId);
             default:
-                return transactionReadPrincipleService.readTransactionsByConsultationId(trxId);
+                return transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
         }
     }
 }
