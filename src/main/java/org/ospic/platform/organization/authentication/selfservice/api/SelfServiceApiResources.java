@@ -144,6 +144,13 @@ public class SelfServiceApiResources {
         return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
     }
 
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/reports/{reportId}")
+    @ApiOperation(value = "GET report by  ID ", notes = "GET report by ID", response = Reports.class)
+    public ResponseEntity<?> readConsultationsReportsById(@PathVariable(name = "reportId") Long reportId) throws Exception {
+        return ResponseEntity.ok().body(this.fileInformationRepository.findById(reportId));
+    }
+
 
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
