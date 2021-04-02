@@ -1,13 +1,8 @@
 package org.ospic.platform.inventory.admission.service;
 
-import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
-import org.ospic.platform.inventory.admission.domains.Admission;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.platform.inventory.admission.service
@@ -33,20 +28,20 @@ import java.util.List;
 @Component
 @Service
 public interface AdmissionsReadService {
-    public ResponseEntity<List<Admission>> retrieveAllAdmissions();
+    public ResponseEntity<?> retrieveAllAdmissions();
 
-    public Collection<?> retrieveListOfServiceAdmission(Long patientId);
+    public ResponseEntity<?> retrieveListOfServiceAdmission(Long patientId);
 
-    public ResponseEntity<List<AdmissionResponseData>> retrieveListOfAdmissionInBedId(Long bedId);
+    public ResponseEntity<?> retrieveListOfAdmissionInBedId(Long bedId);
 
-    public Collection<AdmissionResponseData> retrieveAdmissionById(Long admissionId);
+    public ResponseEntity<?> retrieveAdmissionById(Long admissionId);
 
     public ResponseEntity<?> retrieveAdmissionInThisBed(Long bedId);
 
-    public ResponseEntity<List<Admission>> retrieveListOfAdmissionInWardId(Long wardId);
+    public ResponseEntity<?> retrieveListOfAdmissionInWardId(Long wardId);
 
-    public ResponseEntity<List<Admission>> retrieveListOfActiveAdmissions();
+    public ResponseEntity<?> retrieveListOfActiveAdmissions();
 
-    public ResponseEntity<List<Admission>> retrieveListOfInactiveAdmissions();
+    public ResponseEntity<?> retrieveListOfInactiveAdmissions();
 
 }

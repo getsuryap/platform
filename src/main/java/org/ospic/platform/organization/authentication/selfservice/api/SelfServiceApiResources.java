@@ -207,7 +207,7 @@ public class SelfServiceApiResources {
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return ResponseEntity.ok().body(this.admissionsReadService.retrieveListOfServiceAdmission(consultationId));
+        return this.admissionsReadService.retrieveListOfServiceAdmission(consultationId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -219,7 +219,7 @@ public class SelfServiceApiResources {
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return ResponseEntity.ok().body(this.admissionsReadService.retrieveAdmissionById(admissionId));
+        return this.admissionsReadService.retrieveAdmissionById(admissionId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -231,6 +231,6 @@ public class SelfServiceApiResources {
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return ResponseEntity.ok().body(this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId));
+        return this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
     }
 }
