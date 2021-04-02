@@ -79,6 +79,7 @@ public class SelfServiceApiResources {
 
 
 
+
     @PostMapping("/login")
     @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user", response = JwtResponse.class)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
@@ -91,20 +92,14 @@ public class SelfServiceApiResources {
     @GetMapping("/users")
     @ApiOperation(value = "GET self service user ", notes = "GET self service user", response = User.class)
     public ResponseEntity<?> getUser() throws Exception {
-         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.usersReadPrincipleService.retrieveUserById(ud.getId());
+        return this.usersReadPrincipleService.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/bills")
     @ApiOperation(value = "GET list of bills", notes = "GET list of bills", response = BillPayload.class, responseContainer = "List")
     public ResponseEntity<?> getUserBills() throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
-        return this.billReadPrincipleService.readBillsByPatientId(u.getPatient().getId());
+        return this.billReadPrincipleService.readBillsByPatientId(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -135,23 +130,14 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations")
     @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultations() throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
-        return this.consultationReadService.retrieveConsultationsByPatientId(u.getPatient().getId());
+        return this.consultationReadService.retrieveConsultationsByPatientId(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}")
     @ApiOperation(value = "GET self-service consultations by ID ", notes = "GET self-service consultations by ID", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
+       this.validateForUserIsSelfService();
         return this.consultationReadService.retrieveAConsultationById(consultationId);
     }
 
@@ -159,11 +145,7 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations/{consultationId}/reports")
     @ApiOperation(value = "GET consultation report by consultation ID ", notes = "GET consultation report by consultation ID", response = Reports.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
+        this.validateForUserIsSelfService();
         return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
     }
 
@@ -173,11 +155,7 @@ public class SelfServiceApiResources {
     @GetMapping("/diagnoses/{consultationId}")
     @ApiOperation(value = "GET self-service consultation diagnoses ", notes = "GET self-service consultations diagnoses", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
+       validateForUserIsSelfService();
         return this.diagnosisService.retrieveAllDiagnosisReportsByServiceId(consultationId);
     }
 
@@ -185,6 +163,7 @@ public class SelfServiceApiResources {
     @RequestMapping(value = "/{consultationId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "consultationId") Long consultationId, @RequestParam(value = "reversed", required = false) boolean reversed) {
+        validateForUserIsSelfService();
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
@@ -202,11 +181,7 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations/{consultationId}/admissions")
     @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
+       validateForUserIsSelfService();
         return this.admissionsReadService.retrieveListOfServiceAdmission(consultationId);
     }
 
@@ -214,11 +189,7 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations/admissions/{admissionId}")
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
     public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
-        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
-            throw new NotSelfServiceUserException(u.getUsername());
-        }
+        validateForUserIsSelfService();
         return this.admissionsReadService.retrieveAdmissionById(admissionId);
     }
 
@@ -226,11 +197,32 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations/admissions/{admissionId}/visits")
     @ApiOperation(value = "GET consultation admission visits by ID ", notes = "GET consultation admission visits by  ID", response = AdmissionVisit.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+        this.validateForUserIsSelfService();
+        return this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
+    }
+
+    private void validateForUserIsSelfService(){
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
+    }
+
+    private void validateForUserIsSelfServiceAndConsultationBelongsToHim(){
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+    }
+
+    private Long validateForUserIsSelfServiceReturnUserId(){
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return u.getId();
     }
 }
