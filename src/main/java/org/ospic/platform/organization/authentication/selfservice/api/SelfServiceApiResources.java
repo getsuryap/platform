@@ -232,6 +232,6 @@ public class SelfServiceApiResources {
         if (!u.getIsSelfService()){
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        return u.getId();
+        return u.getPatient().getId();
     }
 }
