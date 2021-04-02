@@ -6,9 +6,9 @@ import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.beds.repository.BedRepository;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.patient.details.data.PatientAdmissionData;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +19,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,8 +123,8 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     private static final class AdmissionResponseDataRowMapper implements RowMapper<AdmissionResponseData> {
 
         public String schema() {
-            return " a.id as id, a.is_active as isActive, a.start_date as startDate, " +
-                    " a.end_date as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
+            return " a.id as id, a.is_active as isActive, DATE_FORMAT(a.start_date, \"%W, %M %e %Y \")  as startDate, " +
+                    " DATE_FORMAT(a.end_date, \"%W, %M %e %Y \") as endDate, ab. bed_id as bedId, sa.id as serviceId, " +
                     " b.ward_id as wardId, b.identifier bedIdentifier, w.name as wardName from m_admissions a " +
                     " inner join  admission_bed  ab ON ab.admission_id = a.id " +
                     " inner join m_consultations sa ON sa.id = a.cid " +
@@ -139,18 +136,16 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
         @Override
         public AdmissionResponseData mapRow(final ResultSet rs, @SuppressWarnings("unused") final int rowNum) throws SQLException {
             final Long id = rs.getLong("id");
-            final Date startDate = rs.getDate("startDate");
-            final Date endDate = rs.getDate("endDate");
+            final String startDate = rs.getString("startDate");
+            final String endDate = rs.getString("endDate");
             final boolean isActive = rs.getBoolean("isActive");
             final Long bedId = rs.getLong("bedId");
             final Long wardId = rs.getLong("wardId");
             final Long serviceId = rs.getLong("serviceId");
             final String bedIdentifier = rs.getString("bedIdentifier");
             final String wardName = rs.getString("wardName");
-            final LocalDate fromDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(startDate));
-            final LocalDate toDateLocal = LocalDate.parse(new SimpleDateFormat("yyy-MM-dd").format(endDate));
 
-            return AdmissionResponseData.responseTemplate(id, fromDateLocal, toDateLocal, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
+            return AdmissionResponseData.responseTemplate(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
         }
     }
 

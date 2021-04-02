@@ -1,11 +1,10 @@
 package org.ospic.platform.inventory.admission.data;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * This file was created by eli on 22/11/2020 for org.ospic.platform.inventory.admission.data
@@ -32,10 +31,8 @@ import java.util.Date;
 @Getter(AccessLevel.PUBLIC)
 public class AdmissionResponseData implements Serializable {
     private final Long id;
-    @JsonFormat(pattern = "yy/MM/dd")
-    private final LocalDate startDate;
-    @JsonFormat(pattern = "yy/MM/dd")
-    private final LocalDate endDate;
+    private final String startDate;
+    private final String endDate;
     private final Boolean isActive;
     private final Long wardId;
     private final Long bedId;
@@ -43,12 +40,12 @@ public class AdmissionResponseData implements Serializable {
     private final String wardName;
     private final Long serviceId;
 
-    public static AdmissionResponseData responseTemplate(Long id, LocalDate startDate, LocalDate endDate, Boolean isActive, Long wardId,
+    public static AdmissionResponseData responseTemplate(Long id, String startDate, String endDate, Boolean isActive, Long wardId,
             Long bedId, String wardName, String bedIdentifier, Long serviceId){
         return new AdmissionResponseData(id, startDate, endDate, isActive, wardId, bedId, wardName, bedIdentifier, serviceId);
     }
 
-    public AdmissionResponseData(Long id, LocalDate startDate, LocalDate endDate, Boolean isActive,
+    public AdmissionResponseData(Long id, String startDate, String endDate, Boolean isActive,
             Long wardId, Long bedId,String wardName, String bedIdentifier, Long serviceId) {
         this.id = id;
         this.startDate = startDate;
