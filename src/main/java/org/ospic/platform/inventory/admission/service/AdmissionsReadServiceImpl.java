@@ -79,10 +79,11 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public Collection<AdmissionResponseData> retrieveAdmissionById(Long admissionId) {
+    public ResponseEntity<?> retrieveAdmissionById(Long admissionId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
         final String sql = "select distinct " + rm.schema() + " where a.id = ?  order by a.id DESC ";
-        return this.jdbcTemplate.query(sql, rm, new Object[]{admissionId});
+        final List<AdmissionResponseData> responseData = this.jdbcTemplate.query(sql, rm, new Object[]{admissionId});
+        return ResponseEntity.ok().body(responseData.get(0));
     }
 
     @Override
@@ -98,10 +99,11 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public Collection<?> retrieveListOfServiceAdmission(Long serviceId) {
+    public ResponseEntity<?> retrieveListOfServiceAdmission(Long serviceId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
         final String sql = "select distinct " + rm.schema() + "  where a.cid = ? order by a.id DESC; ";
-        return this.jdbcTemplate.query(sql, rm, new Object[]{serviceId});
+        Collection<AdmissionResponseData> responseData =  this.jdbcTemplate.query(sql, rm, new Object[]{serviceId});
+        return ResponseEntity.ok().body(responseData);
     }
 
     @Override
@@ -112,12 +114,12 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
     }
 
     @Override
-    public ResponseEntity<List<Admission>> retrieveListOfActiveAdmissions() {
+    public ResponseEntity<?> retrieveListOfActiveAdmissions() {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<Admission>> retrieveListOfInactiveAdmissions() {
+    public ResponseEntity<?> retrieveListOfInactiveAdmissions() {
         return null;
     }
 

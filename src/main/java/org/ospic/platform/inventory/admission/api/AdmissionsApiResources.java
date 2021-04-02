@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.platform.inventory.admission.api
@@ -91,12 +90,11 @@ public class AdmissionsApiResources {
                 return admissionsReadService.retrieveListOfAdmissionInBedId(id);
             }
             if (command.equals("service")){
-                return ResponseEntity.ok().body(admissionsReadService.retrieveListOfServiceAdmission(id));
+                return this.admissionsReadService.retrieveListOfServiceAdmission(id);
             }
 
         }
-        Collection<AdmissionResponseData> admission = admissionsReadService.retrieveAdmissionById(id);
-        return  ResponseEntity.ok().body(admission);
+        return admissionsReadService.retrieveAdmissionById(id);
     }
 
 
