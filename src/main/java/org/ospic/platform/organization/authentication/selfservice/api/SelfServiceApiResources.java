@@ -7,6 +7,10 @@ import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.inventory.admission.domains.Admission;
+import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
+import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
+import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.domain.User;
@@ -68,6 +72,10 @@ public class SelfServiceApiResources {
     @Autowired TransactionReadPrincipleService transactionReadPrincipleService;
     @Autowired
     FileInformationRepository fileInformationRepository;
+    @Autowired
+    AdmissionsReadService admissionsReadService;
+    @Autowired
+    VisitsReadPrincipleService visitsReadPrincipleService;
 
 
 
@@ -186,5 +194,43 @@ public class SelfServiceApiResources {
             default:
                 return transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
         }
+    }
+
+
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/{consultationId}/admissions")
+    @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
+    public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return ResponseEntity.ok().body(this.admissionsReadService.retrieveListOfServiceAdmission(consultationId));
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/admissions/{admissionId}")
+    @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
+    public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return ResponseEntity.ok().body(this.admissionsReadService.retrieveAdmissionById(admissionId));
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/admissions/{admissionId}/visits")
+    @ApiOperation(value = "GET consultation admission visits by ID ", notes = "GET consultation admission visits by  ID", response = AdmissionVisit.class, responseContainer = "List")
+    public ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        return ResponseEntity.ok().body(this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId));
     }
 }
