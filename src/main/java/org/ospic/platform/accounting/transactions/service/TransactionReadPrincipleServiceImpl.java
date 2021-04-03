@@ -79,7 +79,10 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
     @Override
     public ResponseEntity<?> readTransactionById(Long id) {
-        return null;
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where tr.id = ? ";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
+        return ResponseEntity.ok().body(transactions.get(0));
     }
 
     @Override

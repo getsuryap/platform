@@ -91,6 +91,11 @@ public class TransactionApiResource {
         return readService.readPageableTransaction(paging);
     }
 
+    @ApiOperation(value = "GET transaction by ID", notes = "GET transaction by ID", response = TransactionRowMap.class)
+    @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getMedicalTransactionById( @PathVariable("transactionId") Long transactionId) {
+        return readService.readTransactionById(transactionId);
+    }
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
     @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
