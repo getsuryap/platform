@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
+import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.inventory.admission.domains.Admission;
@@ -80,6 +81,8 @@ public class SelfServiceApiResources {
     VisitsReadPrincipleService visitsReadPrincipleService;
     @Autowired
     ConsultationResourceJpaRepository consultationResourceJpaRepository;
+    @Autowired
+    TransactionJpaRepository transactionJpaRepository;
 
 
 
@@ -177,6 +180,14 @@ public class SelfServiceApiResources {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/{consultationId}/transactions/{transactionId}")
+    @ApiOperation(value = "GET consultation transaction by transaction ID ", notes = "GET consultation transaction by transaction ID", response = TransactionRowMap.class)
+    public ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
+        this.validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(consultationId, transactionId);
+        return this.transactionReadPrincipleService.readTransactionById(transactionId);
+    }
+
 
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -223,6 +234,22 @@ public class SelfServiceApiResources {
                 throw new InsufficientRoleException(2L,"Insufficient role to access this resource");
             }
             return null;
+        });
+    }
+
+    private void validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(Long consultantId, Long transactionId){
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()){
+            throw new NotSelfServiceUserException(u.getUsername());
+        }
+        this.consultationResourceJpaRepository.findById(consultantId).map(consultation->{
+            return this.transactionJpaRepository.findById(transactionId).map(transaction ->{
+                if ((consultation.getPatient().getId() != u.getPatient().getId())||(transaction.getConsultation().getId() != consultation.getId())){
+                    throw new InsufficientRoleException(2L,"Insufficient role to access this resource");
+                }
+                return null;
+            });
         });
     }
 
