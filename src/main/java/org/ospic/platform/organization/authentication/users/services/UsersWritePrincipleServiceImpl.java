@@ -181,6 +181,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
                     }else {
                         staff.setIsActive(true);
                         staff.setIsAvailable(true);
+                        user.setIsStaff(true);
                     }
                     staff.setDepartment(department);
                     Set<Long> strRoles = payload.getRoles();
@@ -200,11 +201,12 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
                     }
                     user.setRoles(roles);
                     this.staffsRepository.save(staff);
+                    user.setIsStaff(payload.getIsStaff());
 
                     User u = userJpaRepository.save(user);
                     return ResponseEntity.ok().body(u);
                 }
-                return null;
+                return ResponseEntity.ok().body("Updated");
             }).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(payload.getDepartmentId()));
         }).orElseThrow(() -> new UserNotFoundPlatformException(id));
     }
