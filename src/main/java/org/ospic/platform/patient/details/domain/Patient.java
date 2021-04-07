@@ -98,8 +98,8 @@ public class Patient extends Auditable implements Serializable {
     private String note;
 
     @NotBlank
-    @Column(name = "symptoms", length = 550)
-    private String symptoms;
+    @Column(name = "allergies", length = 550)
+    private String allergies;
 
     @NotBlank
     @Column(name ="marital_status", length = 25)
@@ -137,7 +137,7 @@ public class Patient extends Auditable implements Serializable {
     public Patient(
             String name, String guardianName, String phone, String address, String emailAddress,
             String height, String weight, String bloodPressure, int age, Boolean isAdmitted, String patientPhoto,
-            String bloodGroup, String note, String symptoms, String marriageStatus, String gender,
+            String bloodGroup, String note, String allergies, String marriageStatus, String gender,
             ContactsInformation contactsInformation, Boolean isActive,Boolean hasSelfServiceUserAccount) {
         this.name = name;
         this.guardianName = guardianName;
@@ -152,7 +152,7 @@ public class Patient extends Auditable implements Serializable {
         this.patientPhoto = patientPhoto;
         this.bloodGroup = bloodGroup;
         this.note = note;
-        this.symptoms = symptoms;
+        this.allergies = allergies;
         this.marriageStatus = marriageStatus;
         this.gender = gender;
         this.contactsInformation = contactsInformation;
