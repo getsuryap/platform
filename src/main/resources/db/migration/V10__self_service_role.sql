@@ -26,4 +26,5 @@ CREATE TABLE `m_files`(
             constraint uc_name_consultation_url unique(`name`, `url`,`consultation_id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
-ALTER TABLE `m_patients` change column  `symptoms` `allergies` VARCHAR (250)
+ALTER TABLE `m_patients` change column `last_modified_date` `last_modified_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `m_patients` change column  `symptoms` `allergies` VARCHAR (250);
