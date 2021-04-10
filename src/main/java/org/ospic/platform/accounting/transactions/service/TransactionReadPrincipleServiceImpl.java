@@ -5,6 +5,8 @@ import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.accounting.transactions.service.mapper.TransactionDataRowMapper;
 import org.ospic.platform.domain.PageableResponse;
+import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
+import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,15 +41,17 @@ import java.util.List;
  */
 @Repository
 public class TransactionReadPrincipleServiceImpl implements TransactionReadPrincipleService {
-    @Autowired
-    TransactionJpaRepository repository;
+   private final TransactionJpaRepository repository;
+    private final ConsultationResourceJpaRepository consultationResourceJpaRepository;
     private final JdbcTemplate jdbcTemplate;
 
 
     @Autowired
     public TransactionReadPrincipleServiceImpl(
+            ConsultationResourceJpaRepository consultationResourceJpaRepository,
             TransactionJpaRepository repository, final DataSource dataSource) {
         this.repository = repository;
+        this.consultationResourceJpaRepository = consultationResourceJpaRepository;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -96,5 +100,12 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         final String sql = "select " + rm.schema() + " where bl.id = ? order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{billId});
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+    }
+
+    @Override
+    public ResponseEntity<?> readTransactionsByConsultationId(Long consultationId) {
+        return this.consultationResourceJpaRepository.findById(consultationId).map(consultation ->{
+            return this.readTransactionsByBillId(consultation.getBill().getId());
+        }).orElseThrow(()-> new ConsultationNotFoundExceptionPlatform(consultationId));
     }
 }

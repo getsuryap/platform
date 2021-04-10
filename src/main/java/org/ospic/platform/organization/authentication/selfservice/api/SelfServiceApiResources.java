@@ -172,11 +172,11 @@ public class SelfServiceApiResources {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return null;//transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(consultationId);
+                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
             case 0:
-                return null;//transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(consultationId);
+                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
             default:
-                return null;//transactionReadPrincipleService.readTransactionsBy(consultationId);
+                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
         }
     }
 
