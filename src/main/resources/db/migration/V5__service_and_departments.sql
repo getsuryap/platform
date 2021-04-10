@@ -2,14 +2,14 @@ ALTER TABLE `m_consultations` add `is_admitted` boolean  default false  after `i
 
 DROP TABLE IF EXISTS `m_department`;
 CREATE TABLE `m_department` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `parent_id` BIGINT DEFAULT NULL,
-  `hierarchy` varchar(100) DEFAULT NULL,
-  `extra_id` varchar(100) DEFAULT NULL,
-  `name` varchar(50) NOT NULL,
-  `descriptions` varchar (300),
-  `opening_date` TIMESTAMP NOT NULL,
-  CONSTRAINT `uc_department_name` UNIQUE (`name`),
+  `id` BIGINT NOT NULL AUTO_INCREMENT comment 'unit auto-increment id',
+  `parent_id` BIGINT  comment 'office parent id',
+  `hierarchy` varchar(100)  comment 'office number in hierachy',
+  `extra_id` varchar(100)  comment 'separate office id',
+  `name` varchar(50) NOT NULL comment 'office name',
+  `descriptions` varchar (300) comment 'descriptions',
+  `opening_date` TIMESTAMP NOT NULL comment 'date of starting',
+  constraint `uc_department_name` UNIQUE (`name`),
   KEY `FK2291C477E2551DCC` (`parent_id`),
   CONSTRAINT `FK2291C477E2551DCC` FOREIGN KEY (`parent_id`) REFERENCES `m_department` (`id`)  ON DELETE CASCADE ,
   PRIMARY KEY (`id`)
