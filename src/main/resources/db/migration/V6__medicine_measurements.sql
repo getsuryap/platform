@@ -2,10 +2,10 @@
 
 DROP TABLE IF EXISTS `m_units` ;
 CREATE TABLE IF NOT EXISTS `m_units`(
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  `unit` varchar  (100),
-  `symbol` varchar  (20),
-  quantity varchar  (80),
+  id BIGINT NOT NULL AUTO_INCREMENT comment 'unit auto-increment id',
+  `unit` varchar  (100) comment  'measure unit',
+  `symbol` varchar  (20) comment 'measurement unit',
+  quantity varchar  (80) comment 'quantity',
   PRIMARY KEY (`id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
