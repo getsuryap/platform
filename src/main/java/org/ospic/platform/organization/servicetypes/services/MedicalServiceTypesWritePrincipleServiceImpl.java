@@ -1,7 +1,7 @@
 package org.ospic.platform.organization.servicetypes.services;
 
 import org.ospic.platform.organization.servicetypes.domain.MedicalServiceTypes;
-import org.ospic.platform.organization.servicetypes.exceptions.MedicalServiceNotFoundExceptionPlatform;
+import org.ospic.platform.organization.servicetypes.exceptions.MedicalServiceTypeNotFoundExceptionPlatform;
 import org.ospic.platform.organization.servicetypes.repository.MedicalServiceTypesJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ public class MedicalServiceTypesWritePrincipleServiceImpl implements MedicalServ
         return repository.findById(id).map(medicalService -> {
             payload.setId(medicalService.getId());
             return ResponseEntity.ok().body(repository.save(payload));
-        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
+        }).orElseThrow(() -> new MedicalServiceTypeNotFoundExceptionPlatform(id));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class MedicalServiceTypesWritePrincipleServiceImpl implements MedicalServ
         return repository.findById(id).map(medicalService -> {
             repository.deleteById(id);
             return ResponseEntity.ok().body("Deleted successfully...");
-        }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
+        }).orElseThrow(() -> new MedicalServiceTypeNotFoundExceptionPlatform(id));
     }
 
 

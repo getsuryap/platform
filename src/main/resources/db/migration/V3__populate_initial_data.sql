@@ -41,5 +41,5 @@ REPLACE INTO `m_privilege` ( `name`) VALUES
 ("CREATE_STAFF"),("READ_STAFF"),("EDIT_STAFF"),( "DELETE_STAFF"),
 ("READ_PRIVILEGE"),("WRITE_PRIVILEGE"),("DELETE_PRIVILEGE");
 
-INSERT INTO `user_roles` (`user_id`,`role_id`) VALUES (1,3);
+INSERT INTO `user_roles` (`user_id`,`role_id`) VALUES (1,1);
 INSERT INTO `role_privileges` (`role_id`,`privilege_id`) VALUES (1,1),(1,2);

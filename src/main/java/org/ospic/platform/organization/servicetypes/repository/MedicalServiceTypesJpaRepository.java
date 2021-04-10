@@ -3,7 +3,6 @@ package org.ospic.platform.organization.servicetypes.repository;
 import org.ospic.platform.organization.servicetypes.domain.MedicalServiceTypes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,7 +27,6 @@ import java.util.Optional;
  * under the License.
  */
 public interface MedicalServiceTypesJpaRepository extends JpaRepository<MedicalServiceTypes, Long> {
-    List<MedicalServiceTypes> findByIsActiveTrue();
     Optional<MedicalServiceTypes> findByName(String name);
 
 }

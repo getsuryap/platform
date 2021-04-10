@@ -40,7 +40,8 @@ public final class TransactionDataRowMapper implements RowMapper<TransactionRowM
                 " s.id as medicalServiceId, s.name as medicalServiceName, " +
                 " md.name as medicineName, md.id as medicineId " +
                 " FROM m_transactions tr " +
-                " JOIN m_consultations co on co.id = tr.consultation_id " +
+                " JOIN m_bills bl on bl.id = tr.bill_id " +
+                " JOIN m_consultations co on co.id = bl.consultation_id " +
                 " JOIN m_department d on d.id = tr.department_id " +
                 " LEFT JOIN m_services s on s.id = tr.medical_service_id " +
                 " LEFT JOIN m_medicines md on md.id = tr.medicine_id ";

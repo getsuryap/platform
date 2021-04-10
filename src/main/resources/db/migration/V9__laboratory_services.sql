@@ -15,24 +15,6 @@ ALTER TABLE `m_staff`
       ADD COLUMN `is_active` boolean NOT NULL default true COMMENT 'check if this staff is active',
       ADD COLUMN `is_available` boolean NOT NULL default true COMMENT 'check if this staff is available';
 
-DROP TABLE IF EXISTS `m_bills`;
-CREATE TABLE `m_bills`(
-  id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Bill id',
-  is_paid boolean NOT NULL default false COMMENT 'check if this bill is paid',
-  extra_id VARCHAR (50) NOT NULL comment 'bill extra name',
-  total_amount DECIMAL(13,4) DEFAULT 0   COMMENT 'total expected amount ',
-  paid_amount DECIMAL(13,4) DEFAULT 0  COMMENT 'amount paid',
-  created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL comment 'bill date',
-  created_by VARCHAR (200) comment 'bill creator',
-  last_modified_date TIMESTAMP NULL comment 'bill modification date',
-  last_modified_by VARCHAR (200) comment 'bill modifier',
-  consultation_id bigint comment 'consultation bill id',
-  CONSTRAINT contact_pk primary key (`id`),
-  constraint consultation_bill_fk  foreign key (`consultation_id`) references `m_consultations`(`id`) ON DELETE CASCADE,
-  constraint bill_unique_key unique (`id`,`consultation_id`),
-  constraint consultation_bill_unique_key unique(`consultation_id`)
-) COLLATE = 'utf8_unicode_ci' ENGINE = InnoDB;
-
 
 DROP TABLE IF EXISTS `m_radiology`;
 CREATE TABLE `m_radiology`(

@@ -3,6 +3,7 @@ package org.ospic.platform.organization.medicalservices.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceWritePrincipleService;
@@ -44,21 +45,29 @@ public class MedicalServiceApiResource {
 
     public MedicalServiceApiResource() { }
 
-    @ApiOperation(value = "LIST medical services",notes = "LIST medical services", response =  MedicalService.class, responseContainer = "List")
+    @ApiOperation(value = "GET medical services",notes = "GET medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalService() {
         return  readService.readServices();
     }
 
-    @ApiOperation(value = "LIST active medical services",notes = "LIST active medical services", response =  MedicalService.class, responseContainer = "List")
+
+    @ApiOperation(value = "GET medical services by medical service type id",notes = "GET medical services by medical service type id", response =  MedicalService.class, responseContainer = "List")
+    @RequestMapping(value = "/type/{medicalServiceTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<?> retrieveMedicalServiceByMedicalServiceType(@PathVariable(name = "medicalServiceTypeId") Long medicalServiceTypeId) {
+        return  readService.readMedicalServicesByMedicalServiceType(medicalServiceTypeId);
+    }
+
+    @ApiOperation(value = "GET active medical services",notes = "GET active medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/active", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveActiveMedicalService() {
         return  readService.readActiveServices();
     }
 
-    @ApiOperation(value = "RETURN medical services by ID",notes = "RETURN medical services by ID", response =  MedicalService.class)
+    @ApiOperation(value = "GET medical services by ID",notes = "GET medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
@@ -66,24 +75,24 @@ public class MedicalServiceApiResource {
     }
 
 
-    @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name", response =  MedicalService.class)
+    @ApiOperation(value = "GET medical services by service type name",notes = "GET medical services by service type name", response =  MedicalService.class)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceByName(@PathVariable(name = "name") String name) {
-        return  readService.readServiceByName(name);
+        return  readService.readServiceByMedicalServiceTypeName(name);
     }
 
     @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service", response =  MedicalService.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> createMedicalService(@RequestBody MedicalService payload) {
+    ResponseEntity<?> createMedicalService(@RequestBody MedicalServicePayload payload) {
         return writeService.createService(payload);
     }
 
     @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalService payload) {
+    ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalServicePayload payload) {
         return  writeService.updateService(serviceId,payload);
     }
 

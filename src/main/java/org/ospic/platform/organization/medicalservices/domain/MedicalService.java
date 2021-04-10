@@ -4,12 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
+import org.ospic.platform.organization.servicetypes.domain.MedicalServiceTypes;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -54,6 +60,17 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default '0.00'")
     private BigDecimal price;
 
+    @Column(name = "is_measurable", nullable = false, columnDefinition = "boolean default  true")
+    private Boolean isMeasurable;
+
+    @NotNull
+    @Column(name = "units", length = 5)
+    private String units;
+
+    @ManyToOne
+    @JoinColumn(name = "service_type_id")
+    private MedicalServiceTypes medicalServiceType;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "medical_service_id")
     @JsonIgnore
@@ -61,14 +78,20 @@ public class MedicalService extends AbstractPersistableCustom implements Seriali
     private List<Transactions> transactions = new ArrayList<>();
 
 
-    public MedicalService instance(String name, Boolean isActive, BigDecimal price){
-        return new MedicalService(name, isActive, price);
+    public MedicalService instance(final MedicalServicePayload payload){
+        return new MedicalService(payload.getName(), payload.getIsActive(), payload.getPrice(), payload.getIsMeasurable(), payload.getUnits());
     }
 
-    public MedicalService(String name, Boolean isActive, BigDecimal price) {
+    public MedicalService(String name, Boolean isActive, BigDecimal price,Boolean isMeasurable, String units) {
         this.name = name;
         this.isActive = isActive;
         this.price = price;
+        this.isMeasurable = isMeasurable;
+        this.units = units;
+    }
+
+    public void setMedicalServiceType(MedicalServiceTypes medicalServiceType) {
+        this.medicalServiceType = medicalServiceType;
     }
 
     @Override
