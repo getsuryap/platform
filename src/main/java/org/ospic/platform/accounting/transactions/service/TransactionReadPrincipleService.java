@@ -34,4 +34,5 @@ public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactionsByBillId(Long billId);
     ResponseEntity<?> readTransactionById(Long id);
     ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate);
+    ResponseEntity<?> readTransactionsByConsultationId(Long consultationId);
 }
