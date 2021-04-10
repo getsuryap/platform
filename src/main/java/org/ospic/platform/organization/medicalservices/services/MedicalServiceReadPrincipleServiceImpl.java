@@ -1,13 +1,15 @@
 package org.ospic.platform.organization.medicalservices.services;
 
-import org.ospic.platform.organization.medicalservices.domain.MedicalService;
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
+import org.ospic.platform.organization.medicalservices.rowmap.MedicalServiceRowMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.services
@@ -32,24 +34,34 @@ import java.util.List;
  */
 @Repository
 public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceReadPrincipleService {
-    public MedicalServiceJpaRepository repository;
+    private final MedicalServiceJpaRepository repository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    MedicalServiceReadPrincipleServiceImpl(MedicalServiceJpaRepository repository) {
+    MedicalServiceReadPrincipleServiceImpl(MedicalServiceJpaRepository repository, final DataSource dataSource) {
         this.repository = repository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ResponseEntity<?> readServices() {
-
-        List<MedicalService> services = repository.findAll();
-        return ResponseEntity.ok().body(repository.findAll());
+        final MedicalServiceRowMap rm = new MedicalServiceRowMap();
+        final String sql = rm.schema();
+        Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok(services);
     }
 
     @Override
     public ResponseEntity<?> readActiveServices() {
-        Collection<MedicalService> services = repository.findByIsActiveTrue();
+        final MedicalServiceRowMap rm = new MedicalServiceRowMap();
+        final String sql = rm.schema() + " where  s.enabled ";
+        Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{});
         return ResponseEntity.ok(services);
+    }
+
+    @Override
+    public ResponseEntity<?> readMedicalServicesByMedicalServiceType(Long medicalServiceTypeId) {
+        return ResponseEntity.ok(repository.findByMedicalServiceTypeId(medicalServiceTypeId));
     }
 
     @Override
@@ -58,7 +70,10 @@ public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceRea
     }
 
     @Override
-    public ResponseEntity<?> readServiceByName(String name) {
-        return ResponseEntity.ok(repository.findByName(name));
+    public ResponseEntity<?> readServiceByMedicalServiceTypeName(String name) {
+        final MedicalServiceRowMap rm = new MedicalServiceRowMap();
+        final String sql = rm.schema()  +" where st.name = ? order by s.id DESC";
+        Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{name});
+        return ResponseEntity.ok(services);
     }
 }

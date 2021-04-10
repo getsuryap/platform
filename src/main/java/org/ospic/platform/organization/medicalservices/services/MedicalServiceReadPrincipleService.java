@@ -31,5 +31,6 @@ public interface MedicalServiceReadPrincipleService {
     ResponseEntity<?> readServices();
     ResponseEntity<?> readActiveServices();
     ResponseEntity<?> readServiceById(Long id);
-    ResponseEntity<?> readServiceByName(String name);
+    ResponseEntity<?> readServiceByMedicalServiceTypeName(String name);
+    ResponseEntity<?> readMedicalServicesByMedicalServiceType(Long medicalServiceTypeId);
 }

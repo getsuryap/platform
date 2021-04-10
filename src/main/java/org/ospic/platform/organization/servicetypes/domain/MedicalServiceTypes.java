@@ -1,19 +1,21 @@
 package org.ospic.platform.organization.servicetypes.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
+import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.domain
@@ -47,8 +49,13 @@ public class MedicalServiceTypes extends AbstractPersistableCustom implements Se
     @Column(length = 140, name = "name", unique = true)
     private String name;
 
-    @Column(length = 140, name = "descriptions")
+    @Column(length = 140, name = "description")
     private String descriptions;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @JoinColumn(name = "service_type_id")
+    private Set<MedicalService> medicalServices = new HashSet<>();
 
 
 

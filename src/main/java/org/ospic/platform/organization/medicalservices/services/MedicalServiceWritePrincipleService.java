@@ -1,6 +1,6 @@
 package org.ospic.platform.organization.medicalservices.services;
 
-import org.ospic.platform.organization.medicalservices.domain.MedicalService;
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,8 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface MedicalServiceWritePrincipleService {
-    ResponseEntity<?> createService(MedicalService payload);
-    ResponseEntity<?> updateService(Long id, MedicalService payload);
+    ResponseEntity<?> createService(MedicalServicePayload payload);
+    ResponseEntity<?> updateService(Long id, MedicalServicePayload payload);
     ResponseEntity<?> deleteService(Long id);
     ResponseEntity<?> enableService(Long id);
     ResponseEntity<?> disableService(Long id);

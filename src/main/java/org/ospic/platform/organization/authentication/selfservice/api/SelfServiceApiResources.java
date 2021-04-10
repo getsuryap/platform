@@ -172,11 +172,11 @@ public class SelfServiceApiResources {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(consultationId);
+                return null;//transactionReadPrincipleService.readTransactionsByConsultationIdAndReversed(consultationId);
             case 0:
-                return transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(consultationId);
+                return null;//transactionReadPrincipleService.readTransactionsByConsultationIdAndNotReversed(consultationId);
             default:
-                return transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return null;//transactionReadPrincipleService.readTransactionsBy(consultationId);
         }
     }
 
@@ -245,7 +245,7 @@ public class SelfServiceApiResources {
         }
         this.consultationResourceJpaRepository.findById(consultantId).map(consultation->{
             return this.transactionJpaRepository.findById(transactionId).map(transaction ->{
-                if ((consultation.getPatient().getId() != u.getPatient().getId())||(transaction.getConsultation().getId() != consultation.getId())){
+                if ((consultation.getPatient().getId() != u.getPatient().getId())||(transaction.getBill().getConsultation().getId() != consultation.getId())){
                     throw new InsufficientRoleException(2L,"Insufficient role to access this resource");
                 }
                 return null;

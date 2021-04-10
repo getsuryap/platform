@@ -1,8 +1,11 @@
 package org.ospic.platform.organization.medicalservices.services;
 
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.exceptions.MedicalServiceNotFoundExceptionPlatform;
 import org.ospic.platform.organization.medicalservices.repository.MedicalServiceJpaRepository;
+import org.ospic.platform.organization.servicetypes.exceptions.MedicalServiceTypeNotFoundExceptionPlatform;
+import org.ospic.platform.organization.servicetypes.repository.MedicalServiceTypesJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -30,24 +33,37 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWritePrincipleService {
-    public MedicalServiceJpaRepository repository;
+    private MedicalServiceJpaRepository repository;
+    private MedicalServiceTypesJpaRepository medicalServiceTypesJpaRepository;
 
     @Autowired
-    MedicalServiceWritePrincipleServiceImpl(MedicalServiceJpaRepository repository) {
+    MedicalServiceWritePrincipleServiceImpl(
+            MedicalServiceJpaRepository repository,
+            MedicalServiceTypesJpaRepository medicalServiceTypesJpaRepository) {
         this.repository = repository;
+        this.medicalServiceTypesJpaRepository = medicalServiceTypesJpaRepository;
     }
 
     @Override
-    public ResponseEntity<?> createService(MedicalService payload) {
-        payload.setIsActive(true);
-        return ResponseEntity.ok().body(repository.save(payload));
+    public ResponseEntity<?> createService(MedicalServicePayload payload) {
+        return this.medicalServiceTypesJpaRepository.findById(payload.getMedicalServiceType()).map(medicalServiceType->{
+            payload.setIsActive(true);
+            MedicalService medicalService = new MedicalService().instance(payload);
+            medicalService.setMedicalServiceType(medicalServiceType);
+            return ResponseEntity.ok().body(repository.save(medicalService));
+        }).orElseThrow(()->new MedicalServiceTypeNotFoundExceptionPlatform(payload.getMedicalServiceType()));
+
     }
 
     @Override
-    public ResponseEntity<?> updateService(Long id, MedicalService payload) {
-        return repository.findById(id).map(medicalService -> {
-            payload.setId(medicalService.getId());
-            return ResponseEntity.ok().body(repository.save(payload));
+    public ResponseEntity<?> updateService(Long id, MedicalServicePayload payload) {
+       return repository.findById(id).map(medicalService -> {
+           return this.medicalServiceTypesJpaRepository.findById(payload.getMedicalServiceType()).map(medicalServiceType->{
+               MedicalService ms = new MedicalService().instance(payload);
+            ms.setId(medicalService.getId());
+            ms.setMedicalServiceType(medicalServiceType);
+            return ResponseEntity.ok().body(repository.save(ms));
+            }).orElseThrow(()->new MedicalServiceTypeNotFoundExceptionPlatform(payload.getMedicalServiceType()));
         }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }
 

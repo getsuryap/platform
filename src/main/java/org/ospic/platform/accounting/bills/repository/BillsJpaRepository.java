@@ -3,6 +3,8 @@ package org.ospic.platform.accounting.bills.repository;
 import org.ospic.platform.accounting.bills.domain.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.repository
  * --
@@ -25,4 +27,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * under the License.
  */
 public interface BillsJpaRepository extends JpaRepository<Bill, Long> {
+    Optional<Bill> findByConsultationId(Long consulationId);
 }

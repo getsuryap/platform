@@ -6,6 +6,7 @@ import org.ospic.platform.accounting.bills.exceptions.InsufficientBillPaymentAmo
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
+import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -35,11 +36,16 @@ import org.springframework.stereotype.Repository;
 public class BillWritePrincipleServiceImpl implements BillWritePrincipleService {
     private final BillsJpaRepository repository;
     private final ConsultationResourceJpaRepository consultationRepository;
+    private final ConsultationResourceWritePrinciplesService consultationWriteService;
 
     @Autowired
-    public BillWritePrincipleServiceImpl(BillsJpaRepository repository,ConsultationResourceJpaRepository consultationRepository) {
+    public BillWritePrincipleServiceImpl(
+            BillsJpaRepository repository,
+            ConsultationResourceWritePrinciplesService consultationWriteService,
+            ConsultationResourceJpaRepository consultationRepository) {
         this.repository = repository;
         this.consultationRepository = consultationRepository;
+        this.consultationWriteService = consultationWriteService;
     }
 
     @Override
@@ -52,6 +58,7 @@ public class BillWritePrincipleServiceImpl implements BillWritePrincipleService 
                 throw  new InsufficientBillPaymentAmountException(payload.getAmount());
             }
             if (!consultation.getIsAdmitted()){
+                this.consultationWriteService.endConsultationById(consultation.getId());
                 consultation.setIsActive(false);
             }
             bill.setPaidAmount(payload.getAmount());

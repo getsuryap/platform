@@ -14,7 +14,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -72,10 +71,6 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
     }
 
-    @Override
-    public ResponseEntity<?> readReversedTransactions() {
-        return null;
-    }
 
     @Override
     public ResponseEntity<?> readTransactionById(Long id) {
@@ -85,54 +80,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         return ResponseEntity.ok().body(transactions.get(0));
     }
 
-    @Override
-    public ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime) {
-        return null;
-    }
 
-    @Override
-    public ResponseEntity<TransactionResponse> readTransactionsByConsultationId(Long id) {
-        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
-        final String sql = "select " + rm.schema() + " where co.id = ?  order by tr.id DESC ";
-        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, id);
-        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id) {
-        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
-        final String sql = "select " + rm.schema() + " where co.id = ? and tr.is_reversed = true order by tr.id DESC ";
-        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
-        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id) {
-        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
-        final String sql = "select " + rm.schema() + " where co.id = ? and tr.is_reversed = false  order by tr.id DESC ";
-        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{id});
-        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionByMedicalServiceId(Long id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionByMedicalServiceIdAndDate(Long id, LocalDateTime date) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionsByDepartmentId(Long id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> readTransactionByDepartmentIdAndDate(Long id, LocalDateTime date) {
-        return null;
-    }
 
     @Override
     public ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate) {
@@ -142,4 +90,11 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
 
+    @Override
+    public ResponseEntity<?> readTransactionsByBillId(Long billId) {
+        final TransactionDataRowMapper rm = new TransactionDataRowMapper();
+        final String sql = "select " + rm.schema() + " where bl.id = ? order by tr.id DESC ";
+        List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{billId});
+        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+    }
 }

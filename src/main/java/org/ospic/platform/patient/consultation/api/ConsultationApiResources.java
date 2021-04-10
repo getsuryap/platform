@@ -119,35 +119,35 @@ public class ConsultationApiResources {
         return consultationRead.retrieveConsultationByStaffIdAll(staffId);
     }
 
-    @PreAuthorize("hasAnyAuthority('CREATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','CREATE_CONSULTATION')")
     @ApiOperation(value = "CREATE new consultation consultation", notes = "CREATE new consultation consultation")
     @RequestMapping(value = "/{patientId}", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> createNewPatientConsultation(@PathVariable Long patientId) {
         return consultationWrite.createNewConsultation(patientId);
     }
 
-    @PreAuthorize("hasAnyAuthority('READ_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE patient consultation by ID", notes = "RETRIEVE  patient consultation by ID", response = ConsultationResource.class)
     @RequestMapping(value = "/{consultationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveConsultationById(@PathVariable Long consultationId) {
         return consultationRead.retrieveAConsultationById(consultationId);
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_CONSULTATION')")
     @ApiOperation(value = "ASSIGN consultation to staff", notes = "ASSIGN consultation to staff", response = CustomReponseMessage.class)
     @RequestMapping(value = "/{consultationId}/{staffId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     ResponseEntity<?> createNewPatientConsultation(@PathVariable Long consultationId, @PathVariable Long staffId) {
         return consultationWrite.assignConsultationToStaff(consultationId, staffId);
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_CONSULTATION')")
     @ApiOperation(value = "END patient consultation by ID", notes = "END  patient consultation by ID", response = CustomReponseMessage.class)
     @RequestMapping(value = "/{consultationId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
     ResponseEntity<?> endConsultationById(@PathVariable Long consultationId) {
         return consultationWrite.endConsultationById(consultationId);
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_CONSULTATION')")
     @ApiOperation(value = "DELETE consultation report file", notes = "DELETE consultation report file", response = ResponseMessage.class)
     @RequestMapping(value = "/{consultationId}/{location}/{fileId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteConsultationLaboratoryReportFile(
@@ -156,14 +156,14 @@ public class ConsultationApiResources {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_CONSULTATION')")
     @ApiOperation(value = "UPLOAD consultation report file", notes = "UPLOAD consultation report file", response = FileInformation.class)
     @RequestMapping(value = "/{consultationId}/{fileLocation}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadConsultationLaboratoryService(@RequestParam("file") MultipartFile file, @PathVariable String fileLocation, @PathVariable(name = "consultationId") Long consultationId) {
        return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId,fileLocation, file);
     }
 
-    @PreAuthorize("hasAnyAuthority('READ_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "GET consultation report files", notes = "GET consultation report files", response = FileInformation.class, responseContainer = "List")
     @RequestMapping(value = "/{consultationId}/files", method = RequestMethod.GET)
     public ResponseEntity<?> getConsultationLaboratoryReportFiles( @PathVariable(name = "consultationId") Long consultationId) {

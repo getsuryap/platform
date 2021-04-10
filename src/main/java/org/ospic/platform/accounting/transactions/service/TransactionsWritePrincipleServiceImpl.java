@@ -1,6 +1,8 @@
 package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.bills.domain.Bill;
+import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
+import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
@@ -20,6 +22,8 @@ import org.ospic.platform.patient.consultation.exception.InactiveMedicalConsulta
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.ospic.platform.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,12 +59,15 @@ import java.util.Optional;
  */
 @Repository
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
+    private static final Logger logger = LoggerFactory.getLogger(TransactionsWritePrincipleServiceImpl.class);
     private final TransactionJpaRepository repository;
     private final MedicalServiceJpaRepository medicalServiceRepository;
     private final ConsultationResourceJpaRepository consultationResourceRepository;
     private final DepartmentJpaRepository departmentRepository;
     private final MedicineRepository medicineRepository;
     private final UserJpaRepository userJpaRepository;
+    private final BillsJpaRepository billsJpaRepository;
+    private final BillReadPrincipleService billReadPrincipleService;
 
     @Autowired
     public TransactionsWritePrincipleServiceImpl(
@@ -68,13 +75,16 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             MedicalServiceJpaRepository medicalServiceRepository,
             ConsultationResourceJpaRepository consultationResourceRepository,
             DepartmentJpaRepository departmentRepository,
-            MedicineRepository medicineRepository, UserJpaRepository userJpaRepository) {
+            MedicineRepository medicineRepository, UserJpaRepository userJpaRepository,
+            BillsJpaRepository billsJpaRepository,BillReadPrincipleService billReadPrincipleService) {
         this.repository = repository;
         this.departmentRepository = departmentRepository;
         this.consultationResourceRepository = consultationResourceRepository;
         this.medicalServiceRepository = medicalServiceRepository;
         this.medicineRepository = medicineRepository;
         this.userJpaRepository = userJpaRepository;
+        this.billsJpaRepository = billsJpaRepository;
+        this.billReadPrincipleService = billReadPrincipleService;
     }
 
     @Override
@@ -102,26 +112,26 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             }
 
             services.forEach(servicesId -> {
+                logger.info(servicesId.toString());
                 Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
+                Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
                 if (serviceOptional.isPresent()) {
                     MedicalService service = serviceOptional.get();
                     Transactions trx = new Transactions();
                     trx.setDepartment(department);
                     trx.setTransactionDate(transactionDate);
-                    trx.setConsultation(consultation);
                     trx.setIsReversed(false);
+                    trx.setBill(billOptional.get());
                     trx.setAmount(service.getPrice());
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(service);
-                    trx.setAmount(service.getPrice());
-                    repository.save(trx);
-                    trxns.add(trx);
+                    this.repository.save(trx);
                 }
 
             });
         } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
-        return ResponseEntity.ok().body(new Object[]{trxns});
+        return null;//billReadPrincipleService.readBillById(consultation.getBill().getId());
     }
 
     @Override
@@ -148,13 +158,14 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             }
             medics.forEach(medicationId -> {
                 Optional<Medicine> medicsOptional = medicineRepository.findById(medicationId);
-                if (medicsOptional.isPresent()) {
+                Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
+                if (medicsOptional.isPresent() && billOptional.isPresent()) {
                     Medicine medicine = medicsOptional.get();
                     Transactions trx = new Transactions();
                     trx.setDepartment(department);
                     trx.setTransactionDate(transactionDate);
-                    trx.setConsultation(consultation);
                     trx.setIsReversed(false);
+                    trx.setBill(billOptional.get());
                     trx.setAmount(medicine.getPrice());
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(null);
@@ -166,7 +177,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             });
         } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
-        return ResponseEntity.ok().body(new Object[]{trxns});
+        return billReadPrincipleService.readBillById(consultation.getBill().getId());
     }
 
     @Override

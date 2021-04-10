@@ -104,11 +104,11 @@ public class TransactionApiResource {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return readService.readTransactionsByConsultationIdAndReversed(trxId);
+                return readService.readTransactionsByBillId(trxId);
             case 0:
-                return readService.readTransactionsByConsultationIdAndNotReversed(trxId);
+                return readService.readTransactionsByBillId(trxId);
             default:
-                return readService.readTransactionsByConsultationId(trxId);
+                return readService.readTransactionsByBillId(trxId);
         }
     }
 

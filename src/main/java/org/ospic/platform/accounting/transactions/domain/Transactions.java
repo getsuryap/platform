@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
-import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -74,9 +74,9 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     private Department department;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "consultation_id", nullable = false)
+    @JoinColumn(name = "bill_id", nullable = false)
     @JsonIgnore
-    private ConsultationResource consultation;
+    private Bill bill;
 
     @ManyToOne
     @JoinColumn(name = "medicine_id")
@@ -99,6 +99,10 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     public void addMedicalService(MedicalService medicalService) {
         this.medicalService = medicalService;
         medicalService.getTransactions().add(this);
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 
     /**

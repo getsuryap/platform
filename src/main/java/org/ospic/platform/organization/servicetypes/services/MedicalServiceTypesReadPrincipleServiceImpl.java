@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,12 +42,6 @@ public class MedicalServiceTypesReadPrincipleServiceImpl implements MedicalServi
     public ResponseEntity<?> readServicesTypes() {
         List<MedicalServiceTypes> services = repository.findAll();
         return ResponseEntity.ok().body(repository.findAll());
-    }
-
-    @Override
-    public ResponseEntity<?> readActiveServicesTypes() {
-        Collection<MedicalServiceTypes> services = repository.findByIsActiveTrue();
-        return ResponseEntity.ok(services);
     }
 
     @Override

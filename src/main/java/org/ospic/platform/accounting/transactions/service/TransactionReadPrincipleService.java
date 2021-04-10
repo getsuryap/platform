@@ -1,12 +1,9 @@
 package org.ospic.platform.accounting.transactions.service;
 
-import org.ospic.platform.accounting.transactions.data.TransactionResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -34,15 +31,7 @@ import java.time.LocalDateTime;
 public interface TransactionReadPrincipleService {
     ResponseEntity<?> readTransactions();
     ResponseEntity<?> readPageableTransaction(Pageable pageable);
-    ResponseEntity<?> readReversedTransactions();
+    ResponseEntity<?> readTransactionsByBillId(Long billId);
     ResponseEntity<?> readTransactionById(Long id);
-    ResponseEntity<?> readTransactionByDate(LocalDateTime dateTime);
-    ResponseEntity<TransactionResponse> readTransactionsByConsultationId(Long id);
-    ResponseEntity<?> readTransactionsByConsultationIdAndReversed(Long id);
-    ResponseEntity<?> readTransactionsByConsultationIdAndNotReversed(Long id);
-    ResponseEntity<?> readTransactionByMedicalServiceId(Long id);
-    ResponseEntity<?> readTransactionByMedicalServiceIdAndDate(Long id, LocalDateTime date);
-    ResponseEntity<?> readTransactionsByDepartmentId(Long id);
-    ResponseEntity<?> readTransactionByDepartmentIdAndDate(Long id, LocalDateTime date);
     ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate);
 }

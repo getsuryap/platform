@@ -1,18 +1,22 @@
 package org.ospic.platform.accounting.bills.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.domain
@@ -64,6 +68,12 @@ public class Bill extends Auditable {
     @MapsId
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bill_id")
+    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display department transactions")
+    @JsonIgnore
+    private List<Transactions> transactions = new ArrayList<>();
 
     public Bill(Long id, String extraId, Boolean isPaid, BigDecimal totalAmount, BigDecimal paidAmount) {
         this.id = id;

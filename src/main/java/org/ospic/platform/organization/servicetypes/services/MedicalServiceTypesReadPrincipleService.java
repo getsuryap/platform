@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MedicalServiceTypesReadPrincipleService {
     ResponseEntity<?> readServicesTypes();
-    ResponseEntity<?> readActiveServicesTypes();
     ResponseEntity<?> readServiceTypesById(Long id);
     ResponseEntity<?> readServiceTypeByName(String name);
 }

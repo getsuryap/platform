@@ -23,12 +23,12 @@ import org.ospic.platform.infrastructure.app.exception.AbstractPlatformResourceN
  * specific language governing permissions and limitations
  * under the License.
  */
-public class MedicalServiceNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
-    public MedicalServiceNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
+public class MedicalServiceTypeNotFoundExceptionPlatform extends AbstractPlatformResourceNotFoundException {
+    public MedicalServiceTypeNotFoundExceptionPlatform(String globalisationMessageCode, String defaultUserMessage, Object... defaultUserMessageArgs) {
         super(globalisationMessageCode, defaultUserMessage, defaultUserMessageArgs);
     }
 
-    public MedicalServiceNotFoundExceptionPlatform(Long id){
-        super("error.message.service.not.found", String.format("MedicalService with id %2d is not found ", id), id);
+    public MedicalServiceTypeNotFoundExceptionPlatform(Long id){
+        super("error.message.service.not.found", String.format("MedicalService type with id %2d is not found ", id), id);
     }
 }
