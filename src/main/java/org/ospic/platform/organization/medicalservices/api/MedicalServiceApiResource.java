@@ -7,7 +7,6 @@ import org.ospic.platform.organization.medicalservices.data.MedicalServicePayloa
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceWritePrincipleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +37,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/services")
 @Api(value = "/api/services", tags = "Medical services")
 public class MedicalServiceApiResource {
-    @Autowired
-    MedicalServiceReadPrincipleService readService;
-    @Autowired
-    MedicalServiceWritePrincipleService writeService;
+    private MedicalServiceReadPrincipleService readService;
+    private final MedicalServiceWritePrincipleService writeService;
 
-    public MedicalServiceApiResource() { }
+    public MedicalServiceApiResource(MedicalServiceReadPrincipleService readService, MedicalServiceWritePrincipleService writeService) {
+        this.readService = readService;
+        this.writeService = writeService;
+    }
 
     @ApiOperation(value = "GET medical services",notes = "GET medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
