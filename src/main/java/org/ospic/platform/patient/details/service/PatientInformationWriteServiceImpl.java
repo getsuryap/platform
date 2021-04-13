@@ -112,12 +112,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ContactsInformation updatePatientContacts(Long patientId, ContactsInformation contactsInformationRequest) {
         return patientRepository.findById(patientId).map(patientInformation -> {
-            ContactsInformation contactsInformation = new ContactsInformation(
-                    contactsInformationRequest.getIsReachable(), contactsInformationRequest.getEmail_address(),
-                    contactsInformationRequest.getZipcode(), contactsInformationRequest.getCity(),
-                    contactsInformationRequest.getState(), contactsInformationRequest.getPhysical_address(),
-                    contactsInformationRequest.getWork_phone(), contactsInformationRequest.getWork_phone(), patientInformation
-            );
+            ContactsInformation contactsInformation = new ContactsInformation().fromRequest(contactsInformationRequest);
             patientInformation.setContactsInformation(contactsInformation);
             contactsInformation.setPatient(patientInformation);
 

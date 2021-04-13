@@ -71,6 +71,13 @@ public class ContactsInformation {
     @MapsId
     @ApiModelProperty(position = 1, required = true, hidden=true, notes = "used to display user name")
     private Patient patient;
+    
+    public ContactsInformation fromRequest(ContactsInformation c){
+        return  new ContactsInformation(
+                c.getIsReachable(), c.getEmail_address(), c.getZipcode(), c.getCity(),
+                c.getState(), c.getPhysical_address(), c.getWork_phone(), c.getWork_phone(),null
+        );
+    }
 
     public ContactsInformation(
             Boolean isReachable,String email_address,
