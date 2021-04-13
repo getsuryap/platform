@@ -36,10 +36,8 @@ import java.util.List;
 @Api(value = "/api/contacts", tags = "Contacts")
 public class ContactsInformationApiResources {
 
-    @Autowired
-    ContactsInformationService contactsInformationService;
-    @Autowired
-    PatientInformationWriteService patientInformationWriteService;
+    private final ContactsInformationService contactsInformationService;
+    private final PatientInformationWriteService patientInformationWriteService;
 
     @Autowired
     public ContactsInformationApiResources(
