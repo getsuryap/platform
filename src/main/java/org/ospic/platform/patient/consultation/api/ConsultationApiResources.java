@@ -172,7 +172,6 @@ public class ConsultationApiResources {
 
     @ApiOperation(value = "GET consultation report files", notes = "GET consultation report files", response = FileInformation.class, responseContainer = "List")
     @RequestMapping(value = "/{consultationId}/{fileLocation}/{filename:.+}", method = RequestMethod.GET)
-   @ResponseBody
     public ResponseEntity<Resource> loadConsultationLaboratoryReportFile( @PathVariable(name = "consultationId") Long consultationId,@PathVariable String filename,  @PathVariable(name = "fileLocation") String fileLocation) {
       return this.consultationResourceJpaRepository.findById(consultationId).map(consultation->{
           HttpHeaders headers = new HttpHeaders();

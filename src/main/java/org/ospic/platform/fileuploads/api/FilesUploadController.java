@@ -1,4 +1,4 @@
-package org.ospic.platform.fileuploads.controller;
+package org.ospic.platform.fileuploads.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
