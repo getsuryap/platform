@@ -64,7 +64,7 @@ public class MedicineCategoryApiResources {
 
     @ApiOperation(value = "RETRIEVE list of available Medicine categories ", notes = "RETRIEVE list of available Medicine categories", response = MedicineCategory.class, responseContainer = "List")
     @RequestMapping(value = "", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> retrieveAllMedicineCategories() {
         final MedicineCategoryRowMapper rm = new MedicineCategoryRowMapper();
         final String sql = rm.schema();
@@ -73,7 +73,7 @@ public class MedicineCategoryApiResources {
 
     @ApiOperation(value = "RETRIEVE Medicine category by ID", notes = "RETRIEVE  Medicine category by ID", response = MedicineCategory.class)
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> retrieveMedicineCategoryById(@PathVariable Long medicineCategoryId) {
         if (medicineCategoryRepository.findById(medicineCategoryId).isPresent()) {
             return ResponseEntity.ok().body(medicineCategoryRepository.findById(medicineCategoryId).get());
@@ -83,7 +83,7 @@ public class MedicineCategoryApiResources {
 
     @ApiOperation(value = "UPDATE Medicine category", notes = "UPDATE Medicine category", response = MedicineCategory.class)
     @RequestMapping(value = "/{medicineCategoryId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> updateMedicineCategoryById(@PathVariable Long medicineCategoryId, @Valid @RequestBody MedicineCategoryRequest request) {
         return medicineCategoryRepository.findById(medicineCategoryId).map(md -> {
             return measurementUnitRepository.findById(request.getMeasurementId()).map(unit -> {
@@ -97,7 +97,7 @@ public class MedicineCategoryApiResources {
 
     @ApiOperation(value = "ADD new Medicine category", notes = "ADD new Medicine category", response = MedicineCategory.class)
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<String> addNewMedicineGroup(@Valid @RequestBody MedicineCategoryRequest payload) throws SQLIntegrityConstraintViolationException {
         try {
             MedicineCategory category = new MedicineCategory().instance(payload.getName(), payload.getDescriptions());
@@ -114,7 +114,7 @@ public class MedicineCategoryApiResources {
 
     @ApiOperation(value = "ADD new Medicine categories", notes = "ADD new Medicine categories", response = MedicineCategory.class)
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<String> addNewMedicineCategories(@Valid @RequestBody List<MedicineCategory> medicineCategories) {
         StringBuilder sb = new StringBuilder();
         medicineCategories.forEach(category -> {
