@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.servicetypes.domain.MedicalServiceTypes;
 import org.ospic.platform.organization.servicetypes.services.MedicalServiceTypesReadPrincipleService;
 import org.ospic.platform.organization.servicetypes.services.MedicalServiceTypesWritePrincipleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +35,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/mdservice/types")
 @Api(value = "/api/mdservice/types", tags = "Medical services types")
 public class MedicalServiceTypesApiResource {
-    @Autowired
-    MedicalServiceTypesReadPrincipleService readService;
-    @Autowired
-    MedicalServiceTypesWritePrincipleService writeService;
+    private final MedicalServiceTypesReadPrincipleService readService;
+    private final MedicalServiceTypesWritePrincipleService writeService;
 
-    public MedicalServiceTypesApiResource() { }
+    public MedicalServiceTypesApiResource(MedicalServiceTypesReadPrincipleService readService,MedicalServiceTypesWritePrincipleService writeService) {
+        this.readService = readService;
+        this.writeService = writeService;
+    }
 
     @ApiOperation(value = "LIST medical services",notes = "LIST medical services", response =  MedicalServiceTypes.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
