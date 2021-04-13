@@ -1,6 +1,7 @@
 package org.ospic.platform.organization.authentication.users.services;
 
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.infrastructure.tenants.ThreadLocalStorage;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
@@ -75,6 +76,7 @@ public class UsersReadPrincipleServiceImpl implements UsersReadPrincipleService 
         List<String> permissions = userDetails.getRoles().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+        ThreadLocalStorage.setTenantName(payload.getTenantId());
 
 
 
