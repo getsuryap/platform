@@ -38,10 +38,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/configurations")
 @Api(value = "/api/configurations", tags = "Configurations")
 public class ConfigurationApiResource {
-    @Autowired
-    SmsConfigurationReadService readService;
-    @Autowired
-    SmsConfigurationWriteService writeService;
+    private final SmsConfigurationReadService readService;
+    private final SmsConfigurationWriteService writeService;
 
     @Autowired
     public ConfigurationApiResource(SmsConfigurationReadService readService, SmsConfigurationWriteService writeService){
