@@ -76,14 +76,12 @@ public class AdmissionsApiResources {
 
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions", response = AdmissionResponseData.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveAllAdmissions() {
         return admissionsReadService.retrieveAllAdmissions();
     }
 
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = AdmissionResponseData.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-   @ResponseBody
     ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
         if (null != command){
             if (command.equals("bed")){
@@ -102,35 +100,30 @@ public class AdmissionsApiResources {
 
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission", response = Long.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
     }
 
     @ApiOperation(value = "End patient admission", notes = "End patient admission admission", response = String.class)
     @RequestMapping(value = "/end", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> requestPatientUnAdmission( @Valid @RequestBody EndAdmissionRequest r) {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
     @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed", response = AdmissionResponseData.class)
     @RequestMapping(value = "/inbed/{bedId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
         return admissionsReadService.retrieveAdmissionInThisBed(bedId);
     }
 
     @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits",response = AdmissionVisit.class, responseContainer = "List")
     @RequestMapping(value = "/{admissionId}/visits", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
         return visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
     }
 
     @ApiOperation(value = "CREATE Admission visits", notes = "CREATE Admission visits", response = CustomReponseMessage.class)
     @RequestMapping(value = "/visits", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> visitAdmission(@Valid @RequestBody VisitPayload visitPayload){
         return visitsWritePrincipleService.createVisits(visitPayload);
     }
