@@ -1,6 +1,8 @@
 package org.ospic.platform.inventory.beds.api;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.beds.data.BedData;
 import org.ospic.platform.inventory.beds.domains.Bed;
@@ -13,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -59,21 +60,21 @@ public class BedsApiResource {
 
     @ApiOperation(value = "CREATE Bed", notes = "CREATE bed")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<String> createBed(@Valid  @ApiParam(name = "Bed Entity", required = true)  @RequestBody  Bed bedData){
         return bedWriteService.createNewBed(bedData);
     }
 
     @ApiOperation(value = "ASSIGN bed to ward", notes = "ASSIGN bed to ward")
     @RequestMapping(value = "/{bedId}/{wardId}/{action}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<String> updateBedInWard(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId, @ApiParam(name = "Ward ID", required = true) @PathVariable Long wardId, @ApiParam(name = "Action", required = true) @PathVariable String action){
         return bedWriteService.updateBedInWardByAction(bedId, wardId, action);
     }
 
     @ApiOperation(value = "CREATE beds by array", notes = "CREATE beds by an array")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<?> createBedsInThisWard(@Valid @RequestBody BedData bedData){
        return bedWriteService.addBedsInWard(bedData);
     }
@@ -81,7 +82,7 @@ public class BedsApiResource {
 
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{wardId}/ward", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<List<Bed>> retrieveListOfBedsByInWard(@ApiParam(name = "wardId", required = true) @PathVariable Long wardId){
         return bedReadService.retrieveBedListByWard(wardId);
     }
@@ -90,7 +91,7 @@ public class BedsApiResource {
 
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{bedId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<Bed> retrieveBedById(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId){
         return ResponseEntity.ok().body(bedRepository.findById(bedId).get());
     }
@@ -99,7 +100,7 @@ public class BedsApiResource {
 
     @ApiOperation(value = "GET Bed by IDentifier", notes = "GET Bed by IDentifier")
     @RequestMapping(value = "/identifier/{Identifier}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<List<Bed>> retrieveBedByIdentifier(@ApiParam(name = "Bed Identifier", required = true) @PathVariable String Identifier){
         return ResponseEntity.ok().body(bedRepository.findByIdentifierEquals(Identifier).get());
     }
@@ -108,7 +109,7 @@ public class BedsApiResource {
 
     @ApiOperation(value = "RETRIEVE list of occupied beds", notes = "RETRIEVE list of occupied beds")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+ 
     ResponseEntity<?> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
         if (!(command == null || command.isEmpty())) {
             if (command.equals("occupied")){
