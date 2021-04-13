@@ -51,35 +51,35 @@ public class ConfigurationApiResource {
 
     @ApiOperation(value = "RETRIEVE all sms configurations", notes = "RETRIEVE all sms configurations", response = SmsConfig.class, responseContainer = "List")
     @RequestMapping(value = "/sms", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> retrieveSmsConfigurations() {
         return readService.retrieveSmsConfigurations();
     }
 
     @ApiOperation(value = "RETRIEVE active sms configurations", notes = "RETRIEVE active sms configurations", response = SmsConfig.class, responseContainer = "List")
     @RequestMapping(value = "/sms/active", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> retrieveActiveSmsConfigurations() {
         return readService.retrieveActiveSmsConfiguration();
     }
 
     @ApiOperation(value = "CREATE sms configurations", notes = "CREATE sms configurations", response = SmsConfig.class)
     @RequestMapping(value = "/sms", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> createSmsConfiguration(@Valid @RequestBody  SmsConfig config) {
         return writeService.createSmsConfiguration(config);
     }
 
     @ApiOperation(value = "ACTIVATE sms configurations", notes = "ACTIVATE sms configurations", response = SmsConfig.class)
     @RequestMapping(value = "/sms/{Id}/activate", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> retrieveSmsConfigurations(@PathVariable Long Id) {
         return writeService.activateSmsConfiguration(Id);
     }
 
     @ApiOperation(value = "ACTIVATE sms configurations", notes = "ACTIVATE sms configurations", response = SmsConfig.class)
     @RequestMapping(value = "/sms/{Id}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    
     ResponseEntity<?> updateSmsConfiguration(@PathVariable Long Id, @Valid @RequestBody  SmsConfig config) {
         return writeService.updateSmsConfiguration(Id, config);
     }
