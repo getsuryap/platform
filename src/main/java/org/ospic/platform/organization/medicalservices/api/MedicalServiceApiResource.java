@@ -47,7 +47,6 @@ public class MedicalServiceApiResource {
 
     @ApiOperation(value = "GET medical services",notes = "GET medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalService() {
         return  readService.readServices();
     }
@@ -55,21 +54,18 @@ public class MedicalServiceApiResource {
 
     @ApiOperation(value = "GET medical services by medical service type id",notes = "GET medical services by medical service type id", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/type/{medicalServiceTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceByMedicalServiceType(@PathVariable(name = "medicalServiceTypeId") Long medicalServiceTypeId) {
         return  readService.readMedicalServicesByMedicalServiceType(medicalServiceTypeId);
     }
 
     @ApiOperation(value = "GET active medical services",notes = "GET active medical services", response =  MedicalService.class, responseContainer = "List")
     @RequestMapping(value = "/active", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveActiveMedicalService() {
         return  readService.readActiveServices();
     }
 
     @ApiOperation(value = "GET medical services by ID",notes = "GET medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
         return  readService.readServiceById(serviceId);
     }
@@ -77,21 +73,18 @@ public class MedicalServiceApiResource {
 
     @ApiOperation(value = "GET medical services by service type name",notes = "GET medical services by service type name", response =  MedicalService.class)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceByName(@PathVariable(name = "name") String name) {
         return  readService.readServiceByMedicalServiceTypeName(name);
     }
 
     @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service", response =  MedicalService.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> createMedicalService(@RequestBody MedicalServicePayload payload) {
         return writeService.createService(payload);
     }
 
     @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID", response =  MedicalService.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalServicePayload payload) {
         return  writeService.updateService(serviceId,payload);
     }
@@ -99,14 +92,12 @@ public class MedicalServiceApiResource {
 
     @ApiOperation(value = "Enable medical service",notes = "Enable medical service", response = CustomReponseMessage.class)
     @RequestMapping(value = "/enable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
-    @ResponseBody
     ResponseEntity<?> enableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
         return  writeService.enableService(serviceId);
     }
 
     @ApiOperation(value = "Disable medical service",notes = "Disable medical service", response = CustomReponseMessage.class)
     @RequestMapping(value = "/disable/{serviceId}", method = RequestMethod.PUT, produces = MediaType.ALL_VALUE)
-    @ResponseBody
     ResponseEntity<?> disableMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
         return  writeService.disableService(serviceId);
     }
