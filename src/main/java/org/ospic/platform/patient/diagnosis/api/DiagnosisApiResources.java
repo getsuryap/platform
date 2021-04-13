@@ -43,9 +43,8 @@ import java.util.List;
 @Validated
 public class DiagnosisApiResources {
 
-    @Autowired DiagnosisService diagnosisService;
-    @Autowired
-    DiagnosisRepository diagnosisRepository;
+    private final DiagnosisService diagnosisService;
+    private final DiagnosisRepository diagnosisRepository;
 
     @Autowired
     public DiagnosisApiResources(DiagnosisService diagnosisService, DiagnosisRepository diagnosisRepository) {
@@ -55,7 +54,6 @@ public class DiagnosisApiResources {
 
     @ApiOperation(value = "LIST all available diagnosis", notes = "LIST all available diagnosis",response = Diagnosis.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<List<Diagnosis>> retrieveAllDiagnosisReports() {
         return diagnosisService.retrieveAllDiagnosisReports();
     }
@@ -63,7 +61,6 @@ public class DiagnosisApiResources {
 
     @ApiOperation(value = "LIST Patient diagnosis", notes = "LIST Patient diagnosis",response = Diagnosis.class, responseContainer = "List")
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<?> retrieveAllDiagnosisReportsByServiceId(@PathVariable("serviceId") @NotNull Long serviceId) {
         return diagnosisService.retrieveAllDiagnosisReportsByServiceId(serviceId);
     }
@@ -71,7 +68,6 @@ public class DiagnosisApiResources {
 
     @ApiOperation(value = "CREATE new diagnosis Report", notes = "CREATE new diagnosis Report",response = CustomReponseMessage.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<?> createNewPatientDiagnosisReport( @PathVariable Long serviceId, @RequestBody Diagnosis diagnosticReport) {
 
         return diagnosisService.saveDiagnosisReport(serviceId, diagnosticReport);
