@@ -45,7 +45,6 @@ public class MedicalServiceTypesApiResource {
 
     @ApiOperation(value = "LIST medical services",notes = "LIST medical services", response =  MedicalServiceTypes.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalService() {
         return  readService.readServicesTypes();
     }
@@ -53,7 +52,6 @@ public class MedicalServiceTypesApiResource {
 
     @ApiOperation(value = "RETURN medical services by ID",notes = "RETURN medical services by ID", response =  MedicalServiceTypes.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId) {
         return  readService.readServiceTypesById(serviceId);
     }
@@ -61,21 +59,18 @@ public class MedicalServiceTypesApiResource {
 
     @ApiOperation(value = "RETURN medical services by name",notes = "RETURN medical services by name", response =  MedicalServiceTypes.class)
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> retrieveMedicalServiceByName(@PathVariable(name = "name") String name) {
         return  readService.readServiceTypeByName(name);
     }
 
     @ApiOperation(value = "CREATE new medical service",notes = "CREATE new medical service", response =  MedicalServiceTypes.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> createMedicalService(@RequestBody MedicalServiceTypes payload) {
         return writeService.createServiceTypes(payload);
     }
 
     @ApiOperation(value = "UPDATE medical services by ID",notes = "UPDATE medical services by ID", response =  MedicalServiceTypes.class)
     @RequestMapping(value = "/{serviceId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     ResponseEntity<?> updateMedicalServiceById(@PathVariable(name = "serviceId") Long serviceId, @RequestBody MedicalServiceTypes payload) {
         return  writeService.updateServiceType(serviceId,payload);
     }
