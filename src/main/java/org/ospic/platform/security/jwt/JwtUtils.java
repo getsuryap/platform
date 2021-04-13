@@ -1,6 +1,8 @@
 package org.ospic.platform.security.jwt;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.TextCodec;
+import org.ospic.platform.infrastructure.tenants.ThreadLocalStorage;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +59,7 @@ public class JwtUtils {
         if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
             claims.put("isUser", true);
         }
+        claims.put("tenant", ThreadLocalStorage.getTenantName().get());
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -66,7 +69,7 @@ public class JwtUtils {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.decode(jwtSecret))
                 .compact();
 
     }
@@ -77,18 +80,22 @@ public class JwtUtils {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512,  TextCodec.BASE64.decode(jwtSecret))
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey( TextCodec.BASE64.decode(jwtSecret)).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getTokenUserNameFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey( TextCodec.BASE64.decode(jwtSecret)).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
             // Jwt token has not been tampered with
-            Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(TextCodec.BASE64.decode(jwtSecret)).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
             throw new BadCredentialsException("INVALID_CREDENTIALS", ex);
@@ -98,7 +105,7 @@ public class JwtUtils {
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey( TextCodec.BASE64.decode(jwtSecret)).parseClaimsJws(token).getBody();
 
         return claims.getSubject();
     }
