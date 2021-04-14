@@ -3,6 +3,7 @@ package org.ospic.platform.infrastructure.reports.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
+import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
@@ -55,18 +56,21 @@ public class ReportsApiResource {
     private final PatientInformationReadServices patientReadService;
     private final AdmissionsReadService admissionsReadService;
     private final TransactionReadPrincipleService transactionReadService;
+    private final BillReadPrincipleService billReadPrincipleService;
 
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
             PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
-            PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService) {
+            PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
+            BillReadPrincipleService billReadPrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
         this.admissionsReadService = admissionsReadService;
         this.transactionReadService = transactionReadService;
+        this.billReadPrincipleService = billReadPrincipleService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -102,6 +106,9 @@ public class ReportsApiResource {
         }
         if (entity.equals("transactions")){
             return readPrincipleService.readReport(reportName, this.transactionReadService.readTransactions());
+        }
+        if (entity.equals("bills")){
+            return readPrincipleService.readReport(reportName, this.billReadPrincipleService.readAllBills());
         }
         else return null;
     }
