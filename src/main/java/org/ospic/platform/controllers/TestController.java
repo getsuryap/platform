@@ -97,16 +97,12 @@ public class TestController {
 		String filename = "pdf1.pdf";
 
 		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.add("content-disposition", "inline;filename=" + filename);
+
+		headers.add("Content-Disposition", "inline; filename=" + filename);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-
-
-		//response.setContentType("application/pdf");
-		//response.setHeader("Content-Disposition", "inline; filename=" +  filename);
-		//response.addHeader();
 		byte[] bytes = this.exportPdfReport(repository.findAll());
+		headers.setContentLength(bytes.length);
 		ResponseEntity<byte[]> responseEntity = new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
-
 		return responseEntity;
 	}
 

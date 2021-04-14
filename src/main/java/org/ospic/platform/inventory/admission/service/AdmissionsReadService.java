@@ -1,8 +1,11 @@
 package org.ospic.platform.inventory.admission.service;
 
+import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 09/11/2020 for org.ospic.platform.inventory.admission.service
@@ -28,13 +31,13 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface AdmissionsReadService {
-    public ResponseEntity<?> retrieveAllAdmissions();
+    public Collection<AdmissionResponseData> retrieveAllAdmissions();
 
     public ResponseEntity<?> retrieveListOfServiceAdmission(Long patientId);
 
     public ResponseEntity<?> retrieveListOfAdmissionInBedId(Long bedId);
 
-    public ResponseEntity<?> retrieveAdmissionById(Long admissionId);
+    public AdmissionResponseData retrieveAdmissionById(Long admissionId);
 
     public ResponseEntity<?> retrieveAdmissionInThisBed(Long bedId);
 

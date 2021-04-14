@@ -79,7 +79,7 @@ public class AdmissionsApiResources {
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions", response = AdmissionResponseData.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveAllAdmissions() {
-        return admissionsReadService.retrieveAllAdmissions();
+        return ResponseEntity.ok().body(admissionsReadService.retrieveAllAdmissions());
     }
 
 
@@ -96,7 +96,7 @@ public class AdmissionsApiResources {
             }
 
         }
-        return admissionsReadService.retrieveAdmissionById(id);
+        return ResponseEntity.ok().body(admissionsReadService.retrieveAdmissionById(id));
     }
 
 

@@ -8,6 +8,7 @@ import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
+import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,15 +51,17 @@ public class ReportsApiResource {
     private final ReportReadPrincipleService readPrincipleService;
     private final ReportWritePrincipleService writePrincipleService;
     private final PatientRepository patientRepository;
+    private final AdmissionRepository admissionRepository;
 
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
-            PatientRepository patientRepository) {
+            PatientRepository patientRepository, AdmissionRepository admissionRepository) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientRepository = patientRepository;
+        this.admissionRepository = admissionRepository;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -88,7 +91,11 @@ public class ReportsApiResource {
                                         @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
         if (entity.equals("client")) {
             return readPrincipleService.readReport(reportName, this.patientRepository.findAll());
-        } else return null;
+        }
+        if (entity.equals("admissions")){
+            return readPrincipleService.readReport(reportName, this.admissionRepository.findAll());
+        }
+        else return null;
     }
 
 }
