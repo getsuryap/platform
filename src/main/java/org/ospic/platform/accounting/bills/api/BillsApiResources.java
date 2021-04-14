@@ -38,10 +38,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/bills")
 @Api(value = "/api/bills", tags="Bills", description = "Medical consultation bills")
 public class BillsApiResources {
+    private final BillReadPrincipleService readService;
+    private final BillWritePrincipleService writeService;
+
     @Autowired
-    BillReadPrincipleService readService;
-    @Autowired
-    BillWritePrincipleService writeService;
+    BillsApiResources(BillReadPrincipleService readService,BillWritePrincipleService writeService){
+        this.readService = readService;
+        this.writeService = writeService;
+    }
 
     @ApiOperation(value = "LIST bill's", notes = "LIST bill's", response = BillPayload.class, responseContainer = "List")
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
