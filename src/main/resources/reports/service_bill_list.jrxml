@@ -16,15 +16,19 @@
     </style>
 
     <field name="id" class="java.lang.Long"/>
-    <field name="isReversed" class="java.lang.Boolean"/>
-    <field name="amount" class="java.math.BigDecimal"/>
-    <field name="transactionDate" class="java.lang.String"/>
+    <field name="isPaid" class="java.lang.Boolean"/>
+    <field name="totalAmount" class="java.math.BigDecimal"/>
+    <field name="paidAmount" class="java.math.BigDecimal"/>
+    <field name="createdDate" class="java.lang.String"/>
     <field name="consultationId" class="java.lang.Long"/>
-    <field name="departmentName" class="java.lang.String"/>
-    <field name="medicalServiceName" class="java.lang.String"/>
-    <field name="medicalServiceId" class="java.lang.Long"/>
-    <field name="currencyCode" class="java.lang.String"/>
-    <field name="medicineName" class="java.lang.String"/>
+    <field name="lastUpdatedDate" class="java.lang.String"/>
+    <field name="lastUpdatedBy" class="java.lang.String"/>
+    <field name="createdBy" class="java.lang.String"/>
+    <field name="patientId" class="java.lang.Long"/>
+    <field name="address" class="java.lang.String"/>
+    <field name="patientName" class="java.lang.String"/>
+    <field name="phoneNumber" class="java.lang.String"/>
+    <field name="emailAddress" class="java.lang.String"/>
 
     <background>
         <band splitType="Stretch"/>
@@ -43,7 +47,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[SERVICE TRANSACTIONS]]></text>
+                <text><![CDATA[SERVICE BILLS]]></text>
             </staticText>
             <staticText>
                 <reportElement x="426" y="70" width="44" height="20" uuid="0c7e056c-ce6d-41f2-ab7d-3ca4db5f0311"/>
@@ -79,7 +83,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Service]]></text>
+                <text><![CDATA[Patient]]></text>
             </staticText>
 
 
@@ -99,7 +103,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Department]]></text>
+                <text><![CDATA[Updated]]></text>
             </staticText>
             <staticText>
                 <reportElement x="353" y="0" width="80" height="20" uuid="ee6ac3e1-09c9-46aa-925d-6c44369f16f1">
@@ -111,7 +115,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Reversed]]></text>
+                <text><![CDATA[IsPaid]]></text>
             </staticText>
             <staticText>
                 <reportElement x="413" y="0" width="80" height="20" uuid="ee6ac3e1-09b9-46aa-925d-6c44369f16f1">
@@ -123,7 +127,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Date]]></text>
+                <text><![CDATA[Total Amount]]></text>
             </staticText>
             <staticText>
                 <reportElement x="503" y="0" width="80" height="20" uuid="ee6ac3e1-09d9-46aa-925d-6c44369f16f1">
@@ -135,7 +139,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Amount]]></text>
+                <text><![CDATA[Paid Amount]]></text>
             </staticText>
         </band>
     </columnHeader>
@@ -156,15 +160,9 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1a8db6d-426a-4ab9-afd4-2103c5ad3e61"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{medicalServiceName}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
                 </textField>
-                <textField isBlankWhenNull="true">
-                    <reportElement   style="Detail" positionType="Float"  x="80" y="2" width="100" height="15" uuid="2c3ae8e5-b677-40d9-ab6c-b1d2a80d5273">
-                        <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1a8db6d-426a-4ab9-afd4-2103c5ad3e61"/>
-                    </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{medicineName}]]></textFieldExpression>
-                </textField>
                 <textField>
                     <reportElement   style="Detail" positionType="Float"  x="200" y="-1" width="80" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ae660e9-1cd7-4eec-83ae-6b6badeb1b54"/>
@@ -178,22 +176,22 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92a750f8-e605-4dc7-a8af-d0962acfcfac"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{departmentName}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{lastUpdatedDate}]]></textFieldExpression>
                 </textField>
                 <textField>
                     <reportElement   style="Detail" positionType="Float"  x="353" y="0" width="100" height="15" uuid="532c9575-feeb-4687-aed2-abff0cff601d">
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0efc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{isReversed}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{isPaid}]]></textFieldExpression>
                 </textField>
 
                 <textField>
-                    <reportElement   style="Detail" positionType="Float"  x="393" y="0" width="100" height="15" uuid="532c9575-febb-4687-aed2-abff0cff601d">
+                    <reportElement   style="Detail" positionType="Float"  x="413" y="0" width="100" height="15" uuid="532c9575-febb-4687-aed2-abff0cff601d">
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0bfc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{transactionDate}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{totalAmount}]]></textFieldExpression>
                 </textField>
 
                 <textField>
@@ -201,7 +199,7 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0dfc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{amount} +" " + $F{currencyCode}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[ $F{paidAmount}]]></textFieldExpression>
                 </textField>
 
             </frame>
