@@ -35,13 +35,13 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class ReadPrincipleServiceImpl implements ReadPrincipleService {
+public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincipleService {
     JdbcTemplate jdbcTemplate;
     @Autowired
     SessionFactory sessionFactory;
 
     @Autowired
-    public ReadPrincipleServiceImpl(DataSource dataSource) {
+    public StatisticsReadPrincipleServiceImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 

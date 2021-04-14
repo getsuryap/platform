@@ -23,6 +23,6 @@ import org.springframework.http.ResponseEntity;
  * specific language governing permissions and limitations
  * under the License.
  */
-public interface ReadPrincipleService {
+public interface StatisticsReadPrincipleService {
     ResponseEntity<?> retrieveStatistic();
 }
