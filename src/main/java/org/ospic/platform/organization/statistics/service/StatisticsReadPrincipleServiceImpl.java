@@ -67,12 +67,9 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
 
 
     private Collection<PatientTrendStatistics> retrievePatientTrend() {
-        String queryString = "SELECT date(created_date) as date, count(*) as total," +
-                "count(case when gender = 'male' then 1 else null end) as male, " +
-                "count(case when gender = 'female' then 1 else null end) as female, " +
-                "count(case when gender = 'unspecified' then 1 else null end) as other FROM m_patients group by date(created_date)";
+        PatientTrendsDataRowMapper rm = new PatientTrendsDataRowMapper();
         Session session = this.sessionFactory.openSession();
-        List<PatientTrendStatistics> patientTrendStatisticst = jdbcTemplate.query(queryString, new PatientTrendsDataRowMapper());
+        List<PatientTrendStatistics> patientTrendStatisticst = jdbcTemplate.query(rm.schema(),rm );
         session.close();
         return patientTrendStatisticst;
     }

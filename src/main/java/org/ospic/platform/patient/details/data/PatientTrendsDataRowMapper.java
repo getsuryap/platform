@@ -28,6 +28,14 @@ import java.sql.SQLException;
  * under the License.
  */
 public class PatientTrendsDataRowMapper implements RowMapper<PatientTrendStatistics> {
+
+    String queryString = "SELECT date(created_date) as date, count(*) as total," +
+            "count(case when gender = 'male' then 1 else null end) as male, " +
+            "count(case when gender = 'female' then 1 else null end) as female, " +
+            "count(case when gender = 'unspecified' then 1 else null end) as other FROM m_patients group by date(created_date)";
+    public String schema(){
+        return queryString;
+    };
     @Override
     public PatientTrendStatistics mapRow(ResultSet resultSet, int i) throws SQLException {
         PatientTrendStatistics pt = new PatientTrendStatistics();
