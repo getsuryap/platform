@@ -2,7 +2,6 @@ package org.ospic.platform.organization.statistics.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ospic.platform.inventory.wards.domain.Ward;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -43,7 +42,14 @@ public class WardStatistics {
     }
 
     public static class WardStatisticsRowMapper implements RowMapper<WardStatistics> {
-
+        String queryString =
+                "  SELECT COUNT(*) AS total, " +
+                        "  COUNT(IF(is_occupied, 1,NULL))'occupied', " +
+                        "  SUM(case when is_occupied = 0 then 1 else 0 end)'unoccupied' " +
+                        "  FROM m_beds;";
+        public String schema(){
+            return queryString;
+        };
         @Override
         public WardStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
             WardStatistics ws = new WardStatistics();

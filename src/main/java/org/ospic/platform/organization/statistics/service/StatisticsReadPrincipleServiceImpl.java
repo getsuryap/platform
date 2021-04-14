@@ -94,13 +94,9 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
     }
 
     private WardStatistics retrieveWardStatistics(){
-        String queryString =
-                        "  SELECT COUNT(*) AS total, " +
-                        "  COUNT(IF(is_occupied, 1,NULL))'occupied', " +
-                        "  SUM(case when is_occupied = 0 then 1 else 0 end)'unoccupied' " +
-                        "  FROM m_beds;";
+        WardStatistics.WardStatisticsRowMapper rm = new WardStatistics.WardStatisticsRowMapper();
         Session session = this.sessionFactory.openSession();
-        List<WardStatistics> wardStatistics = jdbcTemplate.query(queryString, new WardStatistics.WardStatisticsRowMapper());
+        List<WardStatistics> wardStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
         return wardStatistics.get(0);
     }
