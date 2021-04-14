@@ -3,6 +3,7 @@ package org.ospic.platform.infrastructure.reports.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.jasperreports.engine.JRException;
+import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
@@ -53,17 +54,19 @@ public class ReportsApiResource {
     private final ReportWritePrincipleService writePrincipleService;
     private final PatientInformationReadServices patientReadService;
     private final AdmissionsReadService admissionsReadService;
+    private final TransactionReadPrincipleService transactionReadService;
 
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
             PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
-            PatientInformationReadServices patientReadService) {
+            PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
         this.admissionsReadService = admissionsReadService;
+        this.transactionReadService = transactionReadService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -96,6 +99,9 @@ public class ReportsApiResource {
         }
         if (entity.equals("admissions")){
             return readPrincipleService.readReport(reportName, this.admissionsReadService.retrieveAllAdmissions());
+        }
+        if (entity.equals("transactions")){
+            return readPrincipleService.readReport(reportName, this.transactionReadService.readTransactions());
         }
         else return null;
     }

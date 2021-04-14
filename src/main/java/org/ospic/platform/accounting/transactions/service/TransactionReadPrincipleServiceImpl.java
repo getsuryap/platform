@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -56,11 +57,11 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     }
 
     @Override
-    public ResponseEntity<?> readTransactions() {
+    public  Collection<TransactionRowMap> readTransactions() {
         final TransactionDataRowMapper rm = new TransactionDataRowMapper();
         final String sql = "select " + rm.schema() + "  order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+        return transactions;
     }
 
     @Override
@@ -87,11 +88,11 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
 
 
     @Override
-    public ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate) {
+    public List <TransactionRowMap> readTransactionsByDateRange(String fromDate, String toDate) {
         final TransactionDataRowMapper rm = new TransactionDataRowMapper();
         final String sql = "select " + rm.schema() + " where tr.transaction_date between ? and  ?  order by tr.transaction_date desc";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{fromDate, toDate});
-        return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
+        return transactions;
     }
 
     @Override

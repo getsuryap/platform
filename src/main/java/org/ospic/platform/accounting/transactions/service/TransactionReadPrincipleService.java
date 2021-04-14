@@ -1,9 +1,12 @@
 package org.ospic.platform.accounting.transactions.service;
 
+import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -29,10 +32,10 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface TransactionReadPrincipleService {
-    ResponseEntity<?> readTransactions();
+    Collection<TransactionRowMap> readTransactions();
     ResponseEntity<?> readPageableTransaction(Pageable pageable);
     ResponseEntity<?> readTransactionsByBillId(Long billId);
     ResponseEntity<?> readTransactionById(Long id);
-    ResponseEntity<?> readTransactionsByDateRange(String fromDate, String toDate);
+    Collection<TransactionRowMap> readTransactionsByDateRange(String fromDate, String toDate);
     ResponseEntity<?> readTransactionsByConsultationId(Long consultationId);
 }
