@@ -79,9 +79,9 @@ public class TransactionApiResource {
     @ResponseBody
     ResponseEntity<?> listMedicalService(@RequestParam(value = "from", required = false) Optional<String> from, @RequestParam(value = "to", required = false) Optional<String> to) {
        if (from.isPresent() && to.isPresent()){
-           return readService.readTransactionsByDateRange(from.get(), to.get());
+           return ResponseEntity.ok().body(readService.readTransactionsByDateRange(from.get(), to.get()));
        }else
-        return readService.readTransactions();
+        return ResponseEntity.ok().body(readService.readTransactions());
     }
 
     @ApiOperation(value = "LIST all medical service transaction's", notes = "LIST all medical service transaction's", response = TransactionRowMap.class, responseContainer = "List")

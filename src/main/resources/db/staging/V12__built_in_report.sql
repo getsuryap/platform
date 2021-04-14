@@ -13,4 +13,5 @@ unique key(`name`)
 
 replace into `m_reports` (`name`, `filename`, `descriptions`, `type`) VALUES
 ("All patients", "patient_list", "List of all registered patients", 1),
-("Admissions ","admissions_list", "List all available admissions", 1);
+("Admissions ","admissions_list", "List all available admissions", 1),
+("Transactions", "transactions_list", "List of all organization service transaactions", 1);
