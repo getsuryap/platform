@@ -54,6 +54,10 @@ public class Reports extends AbstractPersistableCustom implements Serializable {
     @Column(length = 200, name = "filename", unique = true, nullable = false)
     private String filename;
 
+    @NotBlank
+    @Column(length = 200, name = "entity",  nullable = false)
+    private String entity;
+
     @Column(length = 200, name = "descriptions")
     @NotBlank
     private String  descriptions;
@@ -67,13 +71,14 @@ public class Reports extends AbstractPersistableCustom implements Serializable {
         if (fileExtPos >= 0 )
             filename= filename.substring(0, fileExtPos);
         String reportName = filename.replaceAll("_", " ");
-        return new Reports(reportName.substring(0, 1).toUpperCase() + reportName.substring(1),filename,reportName + " Report",1L);
+        return new Reports(reportName.substring(0, 1).toUpperCase() + reportName.substring(1),filename,"report",reportName + " Report",1L);
     }
 
-    public Reports(String name, String filename,  String descriptions, Long type) {
+    public Reports(String name, String filename,String entity,  String descriptions, Long type) {
         this.name = name;
         this.filename = filename;
         this.descriptions = descriptions;
         this.type = type;
+        this.entity = entity;
     }
 }

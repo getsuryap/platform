@@ -91,7 +91,7 @@ public class ReportsApiResource {
     @ApiOperation(value = "GET reports", notes = "GET reports", response = Reports.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> readAllReports() {
-        return readPrincipleService.readAllReports();
+        return ResponseEntity.ok().body(this.readPrincipleService.readAllReports());
     }
 
     @GetMapping("/view")
