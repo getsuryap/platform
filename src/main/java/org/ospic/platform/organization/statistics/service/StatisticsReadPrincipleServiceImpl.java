@@ -80,13 +80,11 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
         Session session = this.sessionFactory.openSession();
         List<PatientStatistics> patientStatisticsData = jdbcTemplate.query(rm.schema(), rm );
         session.close();
-
         return patientStatisticsData.get(0);
     }
 
     private ServiceStatistics retrieveServiceStatistics() {
         ServiceStatistics.ServiceStatisticsRowMapper rm = new ServiceStatistics.ServiceStatisticsRowMapper();
-
         Session session = this.sessionFactory.openSession();
         List<ServiceStatistics> serviceStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
@@ -103,7 +101,6 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
 
     private Collection<ServiceTrendStatistics> retrieveServiceTrendStatistics(){
         ServiceTrendStatistics.ServiceTrendStatisticsRowMapper rm = new  ServiceTrendStatistics.ServiceTrendStatisticsRowMapper();
-
         Session session = this.sessionFactory.openSession();
         List<ServiceTrendStatistics> serviceTrendStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
@@ -111,9 +108,9 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
         return serviceTrendStatistics;
     }
     private UserStatistics retrieveUserStatistics(){
-        String queryString = "SELECT COUNT(*) as users, COUNT(IF(isStaff,1,NULL))'staff' FROM users; ";
+        UserStatistics.UserStatisticsRowMapper rm = new UserStatistics.UserStatisticsRowMapper();
         Session session = this.sessionFactory.openSession();
-        List<UserStatistics> serviceTrendStatistics = jdbcTemplate.query(queryString, new UserStatistics.UserStatisticsRowMapper());
+        List<UserStatistics> serviceTrendStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
         return serviceTrendStatistics.get(0);
     }

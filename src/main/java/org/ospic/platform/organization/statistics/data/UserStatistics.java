@@ -41,6 +41,11 @@ public class UserStatistics {
 
     public static class  UserStatisticsRowMapper implements RowMapper< UserStatistics>{
 
+        String queryString = "SELECT COUNT(*) as users, COUNT(IF(isStaff,1,NULL))'staff' FROM users; ";
+
+        public String schema(){
+            return  queryString;
+        }
         @Override
         public UserStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
             UserStatistics us = new  UserStatistics();
