@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -53,27 +54,27 @@ public class BillReadPrincipleServiceImpl implements BillReadPrincipleService {
     }
 
     @Override
-    public ResponseEntity<?> readAllBills() {
+    public Collection<BillPayload>  readAllBills() {
         BillsRowMapper rm = new BillsRowMapper();
         final String sql = rm.schema() + "  order by b.id DESC ";
         List<BillPayload> bills = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(bills);
+        return bills;
     }
 
     @Override
-    public ResponseEntity<?> readUnpaidBillsBills() {
+    public Collection<BillPayload>  readUnpaidBillsBills() {
         BillsRowMapper rm = new BillsRowMapper();
         final String sql = rm.schema() + " where b.is_paid = 0 order by b.id DESC ";
         List<BillPayload> bills = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(bills);
+        return bills;
     }
 
     @Override
-    public ResponseEntity<?> readBillsByPatientId(Long patientId) {
+    public Collection<BillPayload>  readBillsByPatientId(Long patientId) {
         BillsRowMapper rm = new BillsRowMapper();
         final String sql = rm.schema() + " where p.id = ? order by b.id DESC ";
         List<BillPayload> bills = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
-        return ResponseEntity.ok().body(bills);
+        return bills;
     }
 
     @Override

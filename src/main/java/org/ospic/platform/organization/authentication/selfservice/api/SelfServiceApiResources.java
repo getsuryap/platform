@@ -106,7 +106,7 @@ public class SelfServiceApiResources {
     @GetMapping("/bills")
     @ApiOperation(value = "GET list of bills", notes = "GET list of bills", response = BillPayload.class, responseContainer = "List")
     public ResponseEntity<?> getUserBills() throws Exception {
-        return this.billReadPrincipleService.readBillsByPatientId(this.validateForUserIsSelfServiceReturnUserId());
+        return ResponseEntity.ok().body(this.billReadPrincipleService.readBillsByPatientId(this.validateForUserIsSelfServiceReturnUserId()));
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
