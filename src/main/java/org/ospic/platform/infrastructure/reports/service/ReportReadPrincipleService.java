@@ -1,6 +1,7 @@
 package org.ospic.platform.infrastructure.reports.service;
 
 import net.sf.jasperreports.engine.JRException;
+import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ import java.util.Collection;
 @Component
 @Service
 public interface ReportReadPrincipleService {
-    ResponseEntity<?> readAllReports();
+     Collection<Reports> readAllReports();
     ResponseEntity<?> readReportsByType(String type);
     ResponseEntity<?> readReport(String reportName,final Collection<?> collection) throws ServletException, IOException, JRException;
 }

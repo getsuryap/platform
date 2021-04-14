@@ -55,9 +55,9 @@ public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleServic
         this.repository = repository;
     }
     @Override
-    public ResponseEntity<?> readAllReports() {
+    public Collection<Reports> readAllReports() {
         List<Reports> reports = repository.findAll();
-        return ResponseEntity.ok().body(reports);
+        return reports;
     }
 
     @Override
