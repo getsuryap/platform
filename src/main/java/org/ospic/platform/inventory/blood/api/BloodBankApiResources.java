@@ -9,6 +9,7 @@ import org.ospic.platform.inventory.blood.service.BloodBankWritePrincipleService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -54,24 +55,28 @@ public class BloodBankApiResources {
         this.bloodBankWritePrincipleService = bloodBankWritePrincipleService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "RETRIEVE blood bank details", notes = "RETRIEVE blood bank details", response = BloodGroup.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveBloodBankData() {
         return bloodBankReadPrincipleService.fetchBloodBankList();
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "UPDATE blood ground", notes = "UPDATE blood ground",response = BloodGroup.class)
     @RequestMapping(value = "/", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> addMoreBagsForThisGroup(@RequestBody BloodPayload payload) throws Exception{
         return bloodBankWritePrincipleService.addMoreBloodBagsForThisGroup(payload);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "UPDATE blood ground by list", notes = "UPDATE blood ground by list",response = BloodGroup.class)
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> addMoreBagsForThisGroupList(@RequestBody List<BloodPayload> payloads) throws Exception{
         return bloodBankWritePrincipleService.addMoreBloodBagsForListOfBloodGroups(payloads);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "Create blood groups", notes = "Create blood groups")
     @RequestMapping(value = "/initiate", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     @ApiIgnore
