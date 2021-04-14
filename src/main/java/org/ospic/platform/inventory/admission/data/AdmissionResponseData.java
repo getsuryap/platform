@@ -3,6 +3,7 @@ package org.ospic.platform.inventory.admission.data;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -29,6 +30,7 @@ import java.io.Serializable;
  */
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
+@ToString
 public class AdmissionResponseData implements Serializable {
     private final Long id;
     private final String startDate;

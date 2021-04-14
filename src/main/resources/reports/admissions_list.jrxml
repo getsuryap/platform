@@ -5,12 +5,23 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ospicdb"/>
 
 	<field name="id" class="java.lang.Long"/>
-	<field name="is_active" class="java.lang.Boolean"/>
-	<field name="start_date" class="java.sql.Timestamp"/>
-	<field name="end_date" class="java.sql.Timestamp"/>
-	<field name="cid" class="java.lang.Long"/>
-	<group name="start_date">
-		<groupExpression><![CDATA[$F{start_date}]]></groupExpression>
+	<field name="isActive" class="java.lang.Boolean"/>
+	<field name="startDate" class="java.lang.String"/>
+	<field name="endDate" class="java.lang.String"/>
+	<field name="serviceId" class="java.lang.Long"/>
+	<field name="wardName" class="java.lang.String"/>
+	<field name="wardId" class="java.lang.Long"/>
+	<field name="bedId" class="java.lang.Long"/>
+	<field name="bedIdentifier" class="java.lang.String"/>
+	<group name="startDate">
+		<groupExpression><![CDATA[$F{startDate}]]></groupExpression>
+		<groupFooter>
+			<band height="2">
+				<rectangle>
+					<reportElement x="0" y="0" width="600" height="1" forecolor="#F5F5F5" backcolor="#F5F5F5" uuid="6564e743-2a45-4b51-89a5-e3ec6aee291f"/>
+				</rectangle>
+			</band>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
@@ -122,7 +133,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{end_date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="340" y="0" width="100" height="15" uuid="575dc27d-a1a1-4ae4-a007-c7fd9720ddfa">
@@ -131,7 +142,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{start_date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="180" y="-1" width="80" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
@@ -140,7 +151,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cid}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{serviceId}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

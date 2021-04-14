@@ -5,8 +5,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
 import org.ospic.platform.patient.details.repository.PatientRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -47,7 +45,6 @@ import java.util.Map;
  */
 @Repository
 public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleService{
-    private final Logger logger = LoggerFactory.getLogger(ReportReadPrincipleServiceImpl.class);
     private final ReportsJpaRepository repository;
     @Autowired
     ApplicationContext context;
@@ -81,7 +78,7 @@ public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleServic
     }
 
     private byte[]  exportPdfReport(final String reportName, final Collection<?> collection) throws ServletException, JRException, IOException {
-        logger.info(new com.google.gson.Gson().toJson(collection));
+
         try {
             // Fetching the .jrxml file from the resources folder.
             Resource resource = context.getResource("classpath:reports/" +reportName+".jrxml");
