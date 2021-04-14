@@ -1,6 +1,5 @@
 package org.ospic.platform.inventory.admission.service;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.ospic.platform.inventory.admission.domains.Admission;
@@ -9,7 +8,6 @@ import org.ospic.platform.inventory.beds.repository.BedRepository;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.patient.details.data.PatientAdmissionData;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,20 +65,20 @@ public class AdmissionsReadServiceImpl implements AdmissionsReadService {
 
 
     @Override
-    public ResponseEntity<List<Admission>> retrieveAllAdmissions() {
-        Session session = this.sessionFactory.openSession();
-        List<Admission> admissions = session.createQuery(String.format("from %s", DatabaseConstants.TABLE_ADMISSION_INFO)).list();
-        session.close();
+    public Collection<AdmissionResponseData>  retrieveAllAdmissions() {
+        final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
+        final String sql = "select distinct " + rm.schema() + " order by a.id DESC ";
+        final List<AdmissionResponseData> response = this.jdbcTemplate.query(sql, rm, new Object[]{});
 
-        return ResponseEntity.ok(admissions);
+        return response;
     }
 
     @Override
-    public ResponseEntity<?> retrieveAdmissionById(Long admissionId) {
+    public AdmissionResponseData  retrieveAdmissionById(Long admissionId) {
         final AdmissionResponseDataRowMapper rm = new AdmissionsReadServiceImpl.AdmissionResponseDataRowMapper();
         final String sql = "select distinct " + rm.schema() + " where a.id = ?  order by a.id DESC ";
         final List<AdmissionResponseData> responseData = this.jdbcTemplate.query(sql, rm, new Object[]{admissionId});
-        return ResponseEntity.ok().body(responseData.get(0));
+        return  responseData.get(0);
     }
 
     @Override
