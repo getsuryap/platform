@@ -2,12 +2,12 @@ package org.ospic.platform.patient.details.service;
 
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -30,7 +30,7 @@ import java.util.List;
 @Component
 @Service
  public  interface PatientInformationReadServices {
-     ResponseEntity<List<Patient>> retrieveAllPatients();
+     Collection<Patient> retrieveAllPatients();
 
      ResponseEntity<?> retrieveAllAssignedPatients();
 

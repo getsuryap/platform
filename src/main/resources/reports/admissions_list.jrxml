@@ -4,6 +4,17 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ospicdb"/>
 
+	<style name="Title" forecolor="#474AFF" fontName="fira-sans" fontSize="30" isBold="true"/>
+	<style name="SubTitle" forecolor="#474AFF" fontName="fira-sans" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="fira-sans" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="fira-sans" fontSize="8" isBold="false"/>
+	<style name="Row" mode="Transparent" fontName="fira-sans" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 != 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#eaeaea" />
+		</conditionalStyle>
+	</style>
+
 	<field name="id" class="java.lang.Long"/>
 	<field name="isActive" class="java.lang.Boolean"/>
 	<field name="startDate" class="java.lang.String"/>
@@ -13,16 +24,7 @@
 	<field name="wardId" class="java.lang.Long"/>
 	<field name="bedId" class="java.lang.Long"/>
 	<field name="bedIdentifier" class="java.lang.String"/>
-	<group name="startDate">
-		<groupExpression><![CDATA[$F{startDate}]]></groupExpression>
-		<groupFooter>
-			<band height="2">
-				<rectangle>
-					<reportElement x="0" y="0" width="600" height="1" forecolor="#F5F5F5" backcolor="#F5F5F5" uuid="6564e743-2a45-4b51-89a5-e3ec6aee291f"/>
-				</rectangle>
-			</band>
-		</groupFooter>
-	</group>
+
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -49,6 +51,10 @@
 				</textElement>
 				<text><![CDATA[Date:]]></text>
 			</staticText>
+			<image>
+				<reportElement x="503" y="0" width="50" height="50" uuid="c605a10c-bfd9-467b-b21a-02557d88dd6d"/>
+				<imageExpression><![CDATA["report.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -72,7 +78,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<text><![CDATA[ACTIVE ?]]></text>
+				<text><![CDATA[Active?]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="473" y="0" width="80" height="20" uuid="ee6ac3e1-09c9-46aa-925d-6c44369f16f1">
@@ -84,7 +90,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<text><![CDATA[END DATE]]></text>
+				<text><![CDATA[To]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="340" y="0" width="70" height="20" uuid="d81b175a-4a06-4592-8d67-2c9075c0bdee">
@@ -93,7 +99,7 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<text><![CDATA[START DATE]]></text>
+				<text><![CDATA[From]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="180" y="0" width="100" height="20" uuid="087f595d-7d19-47b7-a876-9f043df73a01">
@@ -102,57 +108,52 @@
 				<textElement>
 					<font fontName="fira-sans"/>
 				</textElement>
-				<text><![CDATA[CONSULTATION ID]]></text>
+				<text><![CDATA[Consultation]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="18" splitType="Stretch">
+			<frame>
+			<reportElement style="Row" mode="Opaque" x="0" y="0" width="605" height="18" uuid="b50221b5-8254-440b-8c6f-1f0b138c9259"/>
+
 			<textField>
-				<reportElement x="0" y="2" width="60" height="15" forecolor="#0F084A" uuid="6ade041c-84a9-44ea-bf5c-3720876c0455">
+				<reportElement   style="Detail" positionType="Float"  x="0" y="2" width="60" height="15" forecolor="#0F084A" uuid="6ade041c-84a9-44ea-bf5c-3720876c0455">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b0132efe-65f1-4fd5-b3aa-9f1c04b9d006"/>
 				</reportElement>
-				<textElement>
-					<font fontName="fira-sans"/>
-				</textElement>
+
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="2" width="100" height="15" uuid="2c3ae8e5-b677-40d9-ab6c-b1d2a80d5273">
+				<reportElement   style="Detail" positionType="Float"  x="80" y="2" width="100" height="15" uuid="2c3ae8e5-b677-40d9-ab6c-b1d2a80d5273">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1a8db6d-426a-4ab9-afd4-2103c5ad3e61"/>
 				</reportElement>
-				<textElement>
-					<font fontName="fira-sans"/>
-				</textElement>
+
 				<textFieldExpression><![CDATA[$F{isActive}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="473" y="0" width="100" height="15" uuid="532c9575-feeb-4687-aed2-abff0cff601d">
+				<reportElement   style="Detail" positionType="Float"  x="473" y="0" width="100" height="15" uuid="532c9575-feeb-4687-aed2-abff0cff601d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0efc-4ba5-9950-a251bdc731f2"/>
 				</reportElement>
-				<textElement>
-					<font fontName="fira-sans"/>
-				</textElement>
+
 				<textFieldExpression><![CDATA[$F{endDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="340" y="0" width="100" height="15" uuid="575dc27d-a1a1-4ae4-a007-c7fd9720ddfa">
+				<reportElement   style="Detail" positionType="Float"  x="340" y="0" width="100" height="15" uuid="575dc27d-a1a1-4ae4-a007-c7fd9720ddfa">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92a750f8-e605-4dc7-a8af-d0962acfcfac"/>
 				</reportElement>
-				<textElement>
-					<font fontName="fira-sans"/>
-				</textElement>
+
 				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="180" y="-1" width="80" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
+				<reportElement   style="Detail" positionType="Float"  x="180" y="-1" width="80" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ae660e9-1cd7-4eec-83ae-6b6badeb1b54"/>
 				</reportElement>
-				<textElement>
-					<font fontName="fira-sans"/>
-				</textElement>
+
 				<textFieldExpression><![CDATA[$F{serviceId}]]></textFieldExpression>
 			</textField>
+			</frame>
+
 		</band>
 	</detail>
 	<columnFooter>

@@ -10,6 +10,7 @@ import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleServ
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.patient.details.repository.PatientRepository;
+import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,17 +51,18 @@ import java.sql.SQLException;
 public class ReportsApiResource {
     private final ReportReadPrincipleService readPrincipleService;
     private final ReportWritePrincipleService writePrincipleService;
-    private final PatientRepository patientRepository;
+    private final PatientInformationReadServices patientReadService;
     private final AdmissionsReadService admissionsReadService;
 
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
-            PatientRepository patientRepository, AdmissionsReadService admissionsReadService) {
+            PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
+            PatientInformationReadServices patientReadService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
-        this.patientRepository = patientRepository;
+        this.patientReadService = patientReadService;
         this.admissionsReadService = admissionsReadService;
     }
 
@@ -90,7 +92,7 @@ public class ReportsApiResource {
     public ResponseEntity<?> viewReport(@RequestParam(value = "reportName", required = true) String reportName,
                                         @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
         if (entity.equals("client")) {
-            return readPrincipleService.readReport(reportName, this.patientRepository.findAll());
+            return readPrincipleService.readReport(reportName, this.patientReadService.retrieveAllPatients());
         }
         if (entity.equals("admissions")){
             return readPrincipleService.readReport(reportName, this.admissionsReadService.retrieveAllAdmissions());

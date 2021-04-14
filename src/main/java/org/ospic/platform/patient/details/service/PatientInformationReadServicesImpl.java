@@ -70,9 +70,9 @@ public class PatientInformationReadServicesImpl implements PatientInformationRea
     }
 
     @Override
-    public ResponseEntity<List<Patient>> retrieveAllPatients() {
-        List<Patient> patientList = patientRepository.findAll();
-        return ResponseEntity.ok(patientList);
+    public List<Patient> retrieveAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        return  patients;
     }
 
     @Override
