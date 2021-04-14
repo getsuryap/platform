@@ -44,6 +44,7 @@ dependencies {
             'io.springfox:springfox-swagger2:2.6.1',
             'io.springfox:springfox-swagger-ui:2.6.1',
             'io.springfox:springfox-bean-validators:2.6.1',
+            'com.google.code.gson:gson:2.8.6',
             'org.springframework.boot:spring-boot-starter-thymeleaf',
             [group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'],
             [group: 'org.hibernate', name: 'hibernate-envers', version: '5.3.11.Final'],

@@ -203,7 +203,8 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
     public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         validateForUserIsSelfService();
-        return this.admissionsReadService.retrieveAdmissionById(admissionId);
+
+        return ResponseEntity.ok().body(this.admissionsReadService.retrieveAdmissionById(admissionId));
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
