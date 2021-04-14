@@ -50,6 +50,16 @@ public class ServiceTrendStatistics {
     }
 
     public static class ServiceTrendStatisticsRowMapper implements RowMapper<ServiceTrendStatistics>{
+        String queryString = " "+
+                "  SELECT date(fromdate) as date, count(*) as total," +
+                "  COUNT(IF(is_active, 1, NULL))'active', " +
+                "  COUNT(IF(is_active = 0, 1, NULL))'inactive'," +
+                "  COUNT(IF(is_admitted, 1, NULL))'admitted'," +
+                "  COUNT(IF(is_admitted = 0, 1, NULL))'unadmitted'" +
+                "  FROM m_consultations group by date(fromdate)";
+        public String schema(){
+            return  queryString;
+        }
 
         @Override
         public ServiceTrendStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {

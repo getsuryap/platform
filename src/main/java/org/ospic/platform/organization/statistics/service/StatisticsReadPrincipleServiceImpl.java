@@ -102,15 +102,10 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
     }
 
     private Collection<ServiceTrendStatistics> retrieveServiceTrendStatistics(){
-        String queryString = " "+
-                "  SELECT date(fromdate) as date, count(*) as total," +
-                "  COUNT(IF(is_active, 1, NULL))'active', " +
-                "  COUNT(IF(is_active = 0, 1, NULL))'inactive'," +
-                "  COUNT(IF(is_admitted, 1, NULL))'admitted'," +
-                "  COUNT(IF(is_admitted = 0, 1, NULL))'unadmitted'" +
-                "  FROM m_consultations group by date(fromdate)";
+        ServiceTrendStatistics.ServiceTrendStatisticsRowMapper rm = new  ServiceTrendStatistics.ServiceTrendStatisticsRowMapper();
+
         Session session = this.sessionFactory.openSession();
-        List<ServiceTrendStatistics> serviceTrendStatistics = jdbcTemplate.query(queryString, new ServiceTrendStatistics.ServiceTrendStatisticsRowMapper());
+        List<ServiceTrendStatistics> serviceTrendStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
 
         return serviceTrendStatistics;
