@@ -56,10 +56,10 @@ public class BillsApiResources {
                 readService.readAllBills();
             }
             if ("unpaid".equals(command)){
-                return readService.readUnpaidBillsBills();
+                return ResponseEntity.ok().body(readService.readUnpaidBillsBills());
             }
         }
-        return  readService.readAllBills();
+        return  ResponseEntity.ok().body(readService.readAllBills());
     }
 
     @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID", response = BillPayload.class)

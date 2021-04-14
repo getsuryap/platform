@@ -1,8 +1,11 @@
 package org.ospic.platform.accounting.bills.service;
 
+import org.ospic.platform.accounting.bills.data.BillPayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.service
@@ -28,8 +31,8 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface BillReadPrincipleService {
-    ResponseEntity<?> readAllBills();
+    Collection<BillPayload> readAllBills();
     ResponseEntity<?> readBillById(Long id);
-    ResponseEntity<?> readBillsByPatientId(Long patientId);
-    ResponseEntity<?> readUnpaidBillsBills();
+    Collection<BillPayload>  readBillsByPatientId(Long patientId);
+    Collection<BillPayload>  readUnpaidBillsBills();
 }
