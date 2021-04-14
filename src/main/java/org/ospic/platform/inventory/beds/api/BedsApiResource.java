@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,59 +58,58 @@ public class BedsApiResource {
         this.bedRepository = bedRepository;
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "CREATE Bed", notes = "CREATE bed")
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.ALL_VALUE)
- 
     ResponseEntity<String> createBed(@Valid  @ApiParam(name = "Bed Entity", required = true)  @RequestBody  Bed bedData){
         return bedWriteService.createNewBed(bedData);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "ASSIGN bed to ward", notes = "ASSIGN bed to ward")
     @RequestMapping(value = "/{bedId}/{wardId}/{action}", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
- 
     ResponseEntity<String> updateBedInWard(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId, @ApiParam(name = "Ward ID", required = true) @PathVariable Long wardId, @ApiParam(name = "Action", required = true) @PathVariable String action){
         return bedWriteService.updateBedInWardByAction(bedId, wardId, action);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "CREATE beds by array", notes = "CREATE beds by an array")
     @RequestMapping(value = "/list", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
- 
     ResponseEntity<?> createBedsInThisWard(@Valid @RequestBody BedData bedData){
        return bedWriteService.addBedsInWard(bedData);
     }
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{wardId}/ward", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
- 
     ResponseEntity<List<Bed>> retrieveListOfBedsByInWard(@ApiParam(name = "wardId", required = true) @PathVariable Long wardId){
         return bedReadService.retrieveBedListByWard(wardId);
     }
 
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "GET Bed by ID", notes = "GET Bed by ID")
     @RequestMapping(value = "/{bedId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
- 
     ResponseEntity<Bed> retrieveBedById(@ApiParam(name = "Bed ID", required = true) @PathVariable Long bedId){
         return ResponseEntity.ok().body(bedRepository.findById(bedId).get());
     }
 
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "GET Bed by IDentifier", notes = "GET Bed by IDentifier")
     @RequestMapping(value = "/identifier/{Identifier}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
- 
     ResponseEntity<List<Bed>> retrieveBedByIdentifier(@ApiParam(name = "Bed Identifier", required = true) @PathVariable String Identifier){
         return ResponseEntity.ok().body(bedRepository.findByIdentifierEquals(Identifier).get());
     }
 
 
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "RETRIEVE list of occupied beds", notes = "RETRIEVE list of occupied beds")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
- 
     ResponseEntity<?> retrieveBedByCommand(@RequestParam(value = "command", required = false) String command){
         if (!(command == null || command.isEmpty())) {
             if (command.equals("occupied")){
