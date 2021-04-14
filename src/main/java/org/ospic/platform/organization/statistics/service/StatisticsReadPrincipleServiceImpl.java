@@ -69,22 +69,16 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
     private Collection<PatientTrendStatistics> retrievePatientTrend() {
         PatientTrendsDataRowMapper rm = new PatientTrendsDataRowMapper();
         Session session = this.sessionFactory.openSession();
-        List<PatientTrendStatistics> patientTrendStatisticst = jdbcTemplate.query(rm.schema(),rm );
+        List<PatientTrendStatistics> patientTrendStatistics = jdbcTemplate.query(rm.schema(),rm );
         session.close();
-        return patientTrendStatisticst;
+        return patientTrendStatistics;
     }
 
 
     private PatientStatistics retrieveStatisticalData() {
-        String queryString = " SELECT " +
-                " COUNT(*) as total,  " +
-                " COUNT(IF(gender = 'male' ,1, NULL))'male', " +
-                " COUNT(IF(gender = 'female' ,1, NULL))'female', " +
-                " SUM(case when gender like 'male' then 1 else 0 end) 'males', " +
-                " COUNT(IF(gender = 'unspecified' ,1, NULL))'unspecified' " +
-                " FROM m_patients; ";
+        PatientStatistics.StatisticsDataRowMapper rm = new PatientStatistics.StatisticsDataRowMapper();
         Session session = this.sessionFactory.openSession();
-        List<PatientStatistics> patientStatisticsData = jdbcTemplate.query(queryString, new PatientStatistics.StatisticsDataRowMapper());
+        List<PatientStatistics> patientStatisticsData = jdbcTemplate.query(rm.schema(), rm );
         session.close();
 
         return patientStatisticsData.get(0);

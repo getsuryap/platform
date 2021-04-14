@@ -48,6 +48,17 @@ public class PatientStatistics {
     }
 
     public static class StatisticsDataRowMapper implements RowMapper<PatientStatistics>{
+        String queryString = " SELECT " +
+                " COUNT(*) as total,  " +
+                " COUNT(IF(gender = 'male' ,1, NULL))'male', " +
+                " COUNT(IF(gender = 'female' ,1, NULL))'female', " +
+                " SUM(case when gender like 'male' then 1 else 0 end) 'males', " +
+                " COUNT(IF(gender = 'unspecified' ,1, NULL))'unspecified' " +
+                " FROM m_patients; ";
+
+        public String schema(){
+            return queryString;
+        };
 
         @Override
         public PatientStatistics mapRow(ResultSet rs, int i) throws SQLException {
