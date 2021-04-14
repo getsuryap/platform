@@ -85,16 +85,10 @@ public class StatisticsReadPrincipleServiceImpl implements StatisticsReadPrincip
     }
 
     private ServiceStatistics retrieveServiceStatistics() {
-        String queryString = "  SELECT COUNT(*) as total, " +
-                "  COUNT(IF(is_active,1,NULL))'totalActive', " +
-                "  COUNT(IF(is_active = 0,1,NULL))'totalInActive', " +
-                "  COUNT(IF(staff_id,1,NULL))'totalAssigned', " +
-                "  SUM(case WHEN staff_id IS NULL then 1 else 0 end)'totalUnAssigned', "+
-                "  COUNT(IF(is_admitted,1,NULL))'totalIpd', " +
-                "  COUNT(IF(is_admitted = 0,1,NULL))'totalOpd'  " +
-                "  FROM m_consultations; ";
+        ServiceStatistics.ServiceStatisticsRowMapper rm = new ServiceStatistics.ServiceStatisticsRowMapper();
+
         Session session = this.sessionFactory.openSession();
-        List<ServiceStatistics> serviceStatistics = jdbcTemplate.query(queryString, new ServiceStatistics.ServiceStatisticsRowMapper());
+        List<ServiceStatistics> serviceStatistics = jdbcTemplate.query(rm.schema(), rm);
         session.close();
         return serviceStatistics.get(0);
     }

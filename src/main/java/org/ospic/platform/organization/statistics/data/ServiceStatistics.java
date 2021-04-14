@@ -52,6 +52,17 @@ public class ServiceStatistics {
     }
 
     public static class ServiceStatisticsRowMapper implements RowMapper<ServiceStatistics>{
+        String queryString = "  SELECT COUNT(*) as total, " +
+                "  COUNT(IF(is_active,1,NULL))'totalActive', " +
+                "  COUNT(IF(is_active = 0,1,NULL))'totalInActive', " +
+                "  COUNT(IF(staff_id,1,NULL))'totalAssigned', " +
+                "  SUM(case WHEN staff_id IS NULL then 1 else 0 end)'totalUnAssigned', "+
+                "  COUNT(IF(is_admitted,1,NULL))'totalIpd', " +
+                "  COUNT(IF(is_admitted = 0,1,NULL))'totalOpd'  " +
+                "  FROM m_consultations; ";
+        public String schema(){
+            return queryString;
+        };
 
         @Override
         public ServiceStatistics mapRow(ResultSet rs, int rowNum) throws SQLException {
