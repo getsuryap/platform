@@ -99,7 +99,7 @@ public class PatientApiResources {
                 return patientInformationReadServices.retrievePatientCreationDataTemplate();
             }
         }
-        return patientInformationReadServices.retrieveAllPatients();
+        return ResponseEntity.ok().body(patientInformationReadServices.retrieveAllPatients());
     }
 
 
