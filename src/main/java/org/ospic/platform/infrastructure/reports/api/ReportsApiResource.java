@@ -8,7 +8,7 @@ import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
-import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
+import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,17 +51,17 @@ public class ReportsApiResource {
     private final ReportReadPrincipleService readPrincipleService;
     private final ReportWritePrincipleService writePrincipleService;
     private final PatientRepository patientRepository;
-    private final AdmissionRepository admissionRepository;
+    private final AdmissionsReadService admissionsReadService;
 
     @Autowired
     public ReportsApiResource(
             ReportReadPrincipleService readPrincipleService,
             ReportWritePrincipleService writePrincipleService,
-            PatientRepository patientRepository, AdmissionRepository admissionRepository) {
+            PatientRepository patientRepository, AdmissionsReadService admissionsReadService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientRepository = patientRepository;
-        this.admissionRepository = admissionRepository;
+        this.admissionsReadService = admissionsReadService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -93,7 +93,7 @@ public class ReportsApiResource {
             return readPrincipleService.readReport(reportName, this.patientRepository.findAll());
         }
         if (entity.equals("admissions")){
-            return readPrincipleService.readReport(reportName, this.admissionRepository.findAll());
+            return readPrincipleService.readReport(reportName, this.admissionsReadService.retrieveAllAdmissions());
         }
         else return null;
     }
