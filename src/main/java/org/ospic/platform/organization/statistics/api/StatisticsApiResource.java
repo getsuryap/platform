@@ -3,7 +3,7 @@ package org.ospic.platform.organization.statistics.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.organization.statistics.data.StatisticResponseData;
-import org.ospic.platform.organization.statistics.service.ReadPrincipleService;
+import org.ospic.platform.organization.statistics.service.StatisticsReadPrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/statistics")
 @Api(value = "/api/statistics", tags = "Statistics", description = "Statistics Api's")
 public class StatisticsApiResource {
-    private final ReadPrincipleService readPrincipleService;
+    private final StatisticsReadPrincipleService readPrincipleService;
     @Autowired
-    public StatisticsApiResource(ReadPrincipleService readPrincipleService){
+    public StatisticsApiResource(StatisticsReadPrincipleService readPrincipleService){
         this.readPrincipleService = readPrincipleService;
     }
 
