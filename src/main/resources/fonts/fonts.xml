@@ -20,5 +20,11 @@
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
     </fontFamily>
+
+    <fontFamily name="fira-sans">
+        <normal>fonts/fira-sans/firasans.ttf</normal>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+    </fontFamily>
  
 </fontFamilies>

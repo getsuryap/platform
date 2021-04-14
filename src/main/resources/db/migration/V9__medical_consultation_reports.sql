@@ -5,17 +5,6 @@ ALTER TABLE `m_staff`
       ADD COLUMN `is_available` boolean NOT NULL default true COMMENT 'check if this staff is available';
 
 
-DROP TABLE IF EXISTS `m_reports`;
-CREATE TABLE `m_reports`(
-  id BIGINT NOT NULL AUTO_INCREMENT COMMENT 'report id',
-  name VARCHAR (50) NOT  NULL COMMENT 'report name',
-  filename VARCHAR (50) NOT  NULL COMMENT 'fiport file name',
-  descriptions VARCHAR (250) NULL COMMENT 'extra descriptions',
-  `type` BIGINT  NOT NULL COMMENT 'report type',
-  primary key (`id`),
-  unique key(`name`)
-) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
-
 
 
 ALTER TABLE `users`
