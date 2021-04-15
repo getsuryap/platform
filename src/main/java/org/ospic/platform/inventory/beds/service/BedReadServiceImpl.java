@@ -36,8 +36,7 @@ import java.util.List;
  */
 @Repository
 public class BedReadServiceImpl implements BedReadService {
-    @Autowired
-    BedRepository bedRepository;
+    private final BedRepository bedRepository;
     @Autowired
     SessionFactory sessionFactory;
     public BedReadServiceImpl(BedRepository bedRepository){
