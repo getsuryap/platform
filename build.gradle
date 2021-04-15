@@ -29,8 +29,7 @@ repositories {
     jcenter()
     google()
     maven{url "http://jasperreports.sourceforge.net/maven2/"}
-    maven{url = uri("http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/")
-        isAllowInsecureProtocol = true}
+    maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
 }
 
 dependencies {
@@ -58,12 +57,11 @@ dependencies {
             ['org.projectreactor:reactor-spring:1.0.1.RELEASE'],
 
     )
-    implementation ('net.sf.jasperreports:jasperreports:6.16.0')
-    /** Removed itexpdf {
-       exclude group: 'com.itextpdf'
-    }**/
-    //runtime 'com.itextpdf:itextpdf:5.5.5'
-    ///runtime 'com.itextpdf:itext-pdfa:5.5.5'
+    implementation ('net.sf.jasperreports:jasperreports:6.16.0') {
+        exclude group: 'com.itextpdf'
+    }
+    runtime 'com.itextpdf:itextpdf:5.5.0'
+    runtime 'com.itextpdf:itext-pdfa:5.5.0'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
