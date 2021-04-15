@@ -11,6 +11,7 @@ import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileExcep
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
+import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,7 @@ public class ReportsApiResource {
     private final AdmissionsReadService admissionsReadService;
     private final TransactionReadPrincipleService transactionReadService;
     private final BillReadPrincipleService billReadPrincipleService;
+    private final ConsultationReadPrinciplesService consultationReadPrinciplesService;
 
     @Autowired
     public ReportsApiResource(
@@ -64,13 +66,14 @@ public class ReportsApiResource {
             ReportWritePrincipleService writePrincipleService,
             PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
             PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
-            BillReadPrincipleService billReadPrincipleService) {
+            BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
         this.admissionsReadService = admissionsReadService;
         this.transactionReadService = transactionReadService;
         this.billReadPrincipleService = billReadPrincipleService;
+        this.consultationReadPrinciplesService = consultationReadPrinciplesService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -109,6 +112,9 @@ public class ReportsApiResource {
         }
         if (entity.equals("bills")){
             return readPrincipleService.readReport(reportName, this.billReadPrincipleService.readAllBills());
+        }
+        if (entity.equals("consultations")){
+            return readPrincipleService.readReport(reportName, this.consultationReadPrinciplesService.retrieveAllConsultations());
         }
         else return null;
     }

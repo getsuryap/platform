@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,16 +37,14 @@ import java.util.List;
  * under the License.
  */
 @Repository
-public class ConsultationResourceReadPrinciplesServiceImpl implements ConsultationResourceReadPrinciplesService {
-    @Autowired
-    PatientRepository patientRepository;
-    @Autowired
-    ConsultationResourceJpaRepository resourceJpaRepository;
+public class ConsultationReadPrinciplesServiceImpl implements ConsultationReadPrinciplesService {
+    private final PatientRepository patientRepository;
+    private final ConsultationResourceJpaRepository resourceJpaRepository;
     private final JdbcTemplate jdbcTemplate;
     @Autowired FilesStorageService filesStorageService;
 
     @Autowired
-    public ConsultationResourceReadPrinciplesServiceImpl(
+    public ConsultationReadPrinciplesServiceImpl(
             PatientRepository patientRepository, ConsultationResourceJpaRepository resourceJpaRepository,
             final DataSource dataSource) {
         this.patientRepository = patientRepository;
@@ -54,27 +53,27 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllConsultations() {
+    public List<ConsultationPayload> retrieveAllConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + "";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrialAllActiveConsultations() {
+    public Collection<ConsultationPayload> retrialAllActiveConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = true";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllInactiveConsultations() {
+    public Collection<ConsultationPayload>  retrieveAllInactiveConsultations() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = false";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok(payloads);
+        return payloads;
     }
 
     @Override
@@ -90,67 +89,67 @@ public class ConsultationResourceReadPrinciplesServiceImpl implements Consultati
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationsByPatientId(Long patientId) {
+    public Collection<ConsultationPayload>  retrieveConsultationsByPatientId(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ?";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId) {
+    public Collection<ConsultationPayload>  retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND !s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId) {
+    public Collection<ConsultationPayload>  retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId) {
+    public Collection<ConsultationPayload>  retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? AND! s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByStaffIdAll(Long staffId) {
+    public Collection<ConsultationPayload>  retrieveConsultationByStaffIdAll(Long staffId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.staff_id = ? ";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{staffId});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllActiveConsultationsInIpd() {
+    public Collection<ConsultationPayload>  retrieveAllActiveConsultationsInIpd() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE  s.is_active = true AND s.is_admitted = true ";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrialAllAllActiveConsultationInOpd() {
+    public Collection<ConsultationPayload>  retrialAllAllActiveConsultationInOpd() {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.is_active = true AND s.is_admitted =false";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok().body(payloads);
+        return payloads;
     }
 
     @Override
-    public ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId) {
+    public Collection<ConsultationPayload>  retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId) {
         ConsultationResourceMapper rm = new ConsultationResourceMapper();
         final String sql = "select  " + rm.schema() + " WHERE s.patient_id = ? AND s.is_active";
         List<ConsultationPayload> payloads = this.jdbcTemplate.query(sql, rm, new Object[]{patientId});
-        return ResponseEntity.ok().body(payloads);
+        return  payloads;
     }
 
     @Override

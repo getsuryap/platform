@@ -23,7 +23,7 @@ import org.ospic.platform.organization.authentication.users.repository.UserJpaRe
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
+import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
 import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
@@ -67,7 +67,7 @@ public class SelfServiceApiResources {
     @Autowired PatientInformationReadServices patientInformationReadServices;
     @Autowired UserJpaRepository userJpaRepository;
     @Autowired
-    ConsultationResourceReadPrinciplesService consultationReadService;
+    ConsultationReadPrinciplesService consultationReadService;
     @Autowired
     BillReadPrincipleService billReadPrincipleService;
     @Autowired
@@ -128,7 +128,7 @@ public class SelfServiceApiResources {
     @GetMapping("/consultations")
     @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultations() throws Exception {
-        return this.consultationReadService.retrieveConsultationsByPatientId(this.validateForUserIsSelfServiceReturnUserId());
+        return ResponseEntity.ok().body(this.consultationReadService.retrieveConsultationsByPatientId(this.validateForUserIsSelfServiceReturnUserId()));
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")

@@ -10,7 +10,7 @@ import org.ospic.platform.laboratory.reports.repository.FileInformationRepositor
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.exception.ConsultationNotFoundExceptionPlatform;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.patient.consultation.service.ConsultationResourceReadPrinciplesService;
+import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
 import org.ospic.platform.patient.consultation.service.ConsultationResourceWritePrinciplesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -49,7 +49,7 @@ import javax.activation.MimetypesFileTypeMap;
 @RequestMapping("/api/consultations")
 @Api(value = "/api/consultations", tags = "Consultations", description = "Patient consultation instances")
 public class ConsultationApiResources {
-    private final ConsultationResourceReadPrinciplesService consultationRead;
+    private final ConsultationReadPrinciplesService consultationRead;
     private final ConsultationResourceWritePrinciplesService consultationWrite;
     private final FilesStorageService filesystem;
     private final FileInformationRepository fileInformationRepository;
@@ -57,7 +57,7 @@ public class ConsultationApiResources {
 
     @Autowired
     public ConsultationApiResources(
-            ConsultationResourceReadPrinciplesService consultationRead, ConsultationResourceWritePrinciplesService consultationWrite,
+            ConsultationReadPrinciplesService consultationRead, ConsultationResourceWritePrinciplesService consultationWrite,
             FilesStorageService filesystem,FileInformationRepository fileInformationRepository,
             ConsultationResourceJpaRepository consultationResourceJpaRepository) {
         this.consultationRead = consultationRead;
@@ -73,19 +73,19 @@ public class ConsultationApiResources {
     ResponseEntity<?> retrieveServices(@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return consultationRead.retrialAllActiveConsultations();
+                return ResponseEntity.ok().body(consultationRead.retrialAllActiveConsultations());
             }
             if (command.equals("false")) {
-                return consultationRead.retrieveAllInactiveConsultations();
+                return ResponseEntity.ok().body(consultationRead.retrieveAllInactiveConsultations());
             }
             if(command.equals("activeipd")){
-                return consultationRead.retrieveAllActiveConsultationsInIpd();
+                return ResponseEntity.ok().body(consultationRead.retrieveAllActiveConsultationsInIpd());
             }
             if (command.equals("activeopd")){
-                return consultationRead.retrialAllAllActiveConsultationInOpd();
+                return ResponseEntity.ok().body(consultationRead.retrialAllAllActiveConsultationInOpd());
             }
         }
-        return consultationRead.retrieveAllConsultations();
+        return ResponseEntity.ok().body(consultationRead.retrieveAllConsultations());
     }
 
 
@@ -95,13 +95,13 @@ public class ConsultationApiResources {
     ResponseEntity<?> retrieveConsultationByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return consultationRead.retrieveConsultationByPatientIdAndIsActiveTrue(patientId);
+                return ResponseEntity.ok().body(consultationRead.retrieveConsultationByPatientIdAndIsActiveTrue(patientId));
             }
             if (command.equals("false")) {
-                return consultationRead.retrieveConsultationByPatientIdAndIsActiveFalse(patientId);
+                return ResponseEntity.ok().body(consultationRead.retrieveConsultationByPatientIdAndIsActiveFalse(patientId));
             }
         }
-        return consultationRead.retrieveConsultationsByPatientId(patientId);
+        return ResponseEntity.ok().body(consultationRead.retrieveConsultationsByPatientId(patientId));
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
@@ -110,13 +110,13 @@ public class ConsultationApiResources {
     ResponseEntity<?> retrieveConsultationByStaffId(@PathVariable Long staffId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
-                return consultationRead.retrieveConsultationByStaffIdAndIsActiveTrue(staffId);
+                return ResponseEntity.ok().body(consultationRead.retrieveConsultationByStaffIdAndIsActiveTrue(staffId));
             }
             if (command.equals("false")) {
-                return consultationRead.retrieveConsultationByStaffIdAndIsActiveFalse(staffId);
+                return ResponseEntity.ok().body(consultationRead.retrieveConsultationByStaffIdAndIsActiveFalse(staffId));
             }
         }
-        return consultationRead.retrieveConsultationByStaffIdAll(staffId);
+        return ResponseEntity.ok().body(consultationRead.retrieveConsultationByStaffIdAll(staffId));
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','CREATE_CONSULTATION')")

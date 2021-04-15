@@ -1,8 +1,11 @@
 package org.ospic.platform.patient.consultation.service;
 
+import org.ospic.platform.patient.consultation.data.ConsultationPayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 23/12/2020 for org.ospic.platform.patient.consultation.service
@@ -27,19 +30,19 @@ import org.springframework.stereotype.Service;
  */
 @Component
 @Service
-public interface ConsultationResourceReadPrinciplesService {
-    ResponseEntity<?> retrieveAllConsultations();
-    ResponseEntity<?> retrialAllActiveConsultations();
-    ResponseEntity<?> retrieveAllInactiveConsultations();
+public interface ConsultationReadPrinciplesService {
+    Collection<ConsultationPayload> retrieveAllConsultations();
+    Collection<ConsultationPayload>  retrialAllActiveConsultations();
+    Collection<ConsultationPayload>  retrieveAllInactiveConsultations();
     ResponseEntity<?> retrieveAConsultationById(Long serviceId);
-    ResponseEntity<?> retrieveConsultationsByPatientId(Long patientId);
-    ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId);
-    ResponseEntity<?> retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId);
-    ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId);
-    ResponseEntity<?> retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId);
-    ResponseEntity<?> retrieveConsultationByStaffIdAll(Long staffId);
-    ResponseEntity<?> retrieveAllActiveConsultationsInIpd();
-    ResponseEntity<?> retrialAllAllActiveConsultationInOpd();
+    Collection<ConsultationPayload>  retrieveConsultationsByPatientId(Long patientId);
+    Collection<ConsultationPayload>  retrieveConsultationByPatientIdAndIsActiveTrue(Long patientId);
+    Collection<ConsultationPayload>  retrieveConsultationByPatientIdAndIsActiveFalse(Long patientId);
+    Collection<ConsultationPayload>  retrieveConsultationByStaffIdAndIsActiveTrue(Long staffId);
+    Collection<ConsultationPayload>  retrieveConsultationByStaffIdAndIsActiveFalse(Long staffId);
+    Collection<ConsultationPayload>  retrieveConsultationByStaffIdAll(Long staffId);
+    Collection<ConsultationPayload>  retrieveAllActiveConsultationsInIpd();
+    Collection<ConsultationPayload>  retrialAllAllActiveConsultationInOpd();
     ResponseEntity<?> retrialAllConsultationLaboratoryReports();
 
 }
