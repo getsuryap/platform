@@ -24,11 +24,11 @@ jobs:
         with:
           java-version: 1.8
       - name: Re install dependencies
-        run: gradle clean
+        run: ./gradlew clean
       - name: Build
-        run: gradle build
+        run: ./gradlew build
       - name: Build jar
-        run: gradle bootJar
+        run: ./gradlew bootJar
       - name: Deploy to gihub pages 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
