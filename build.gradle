@@ -29,7 +29,7 @@ repositories {
     jcenter()
     google()
     maven{url "https://jasperreports.sourceforge.net/maven2/"}
-    maven{url "https://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
+    maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
 }
 
 dependencies {
