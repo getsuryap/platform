@@ -11,6 +11,7 @@ import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileExcep
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
+import org.ospic.platform.inventory.wards.service.WardReadPrincipleService;
 import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
@@ -59,6 +60,7 @@ public class ReportsApiResource {
     private final TransactionReadPrincipleService transactionReadService;
     private final BillReadPrincipleService billReadPrincipleService;
     private final ConsultationReadPrinciplesService consultationReadPrinciplesService;
+    private final WardReadPrincipleService wardReadPrincipleService;
 
     @Autowired
     public ReportsApiResource(
@@ -66,7 +68,8 @@ public class ReportsApiResource {
             ReportWritePrincipleService writePrincipleService,
             PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
             PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
-            BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService) {
+            BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService,
+            WardReadPrincipleService wardReadPrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
@@ -74,6 +77,7 @@ public class ReportsApiResource {
         this.transactionReadService = transactionReadService;
         this.billReadPrincipleService = billReadPrincipleService;
         this.consultationReadPrinciplesService = consultationReadPrinciplesService;
+        this.wardReadPrincipleService = wardReadPrincipleService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -115,6 +119,9 @@ public class ReportsApiResource {
         }
         if (entity.equals("consultations")){
             return readPrincipleService.readReport(reportName, this.consultationReadPrinciplesService.retrieveAllConsultations());
+        }
+        if (entity.equals("wards")){
+            return readPrincipleService.readReport(reportName, this.wardReadPrincipleService.retrieveAllWardsWithBedsCounts());
         }
         else return null;
     }

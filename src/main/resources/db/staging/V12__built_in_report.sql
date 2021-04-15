@@ -18,4 +18,6 @@ replace into `m_reports` (`name`, `filename`,`entity`, `descriptions`, `type`) V
 ("Admissions ","admissions_list","admissions", "List all available admissions", 1),
 ("Transactions", "transactions_list","transactions", "List of all organization service transaactions", 1),
 ("Service bills","service_bill_list","bills", "List all available  service bills", 1),
-("Consultations","consultations_list","consultations", "List all consultations", 1);
+("Consultations","consultations_list","consultations", "List all consultations", 1),
+("Wards list","wards_list","wards", "List of wards and number of beds", 1);
+

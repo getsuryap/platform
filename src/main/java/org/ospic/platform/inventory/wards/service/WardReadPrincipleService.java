@@ -28,7 +28,7 @@ import java.util.List;
  * under the License.
  */
 public interface WardReadPrincipleService {
-    public ResponseEntity<List<Ward>> retrieveListOfWards();
-    public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts();
+    List<Ward> retrieveListOfWards();
+    List<WardResponseData> retrieveAllWardsWithBedsCounts();
     public ResponseEntity<?> findById(Long id);
 }

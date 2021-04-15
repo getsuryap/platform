@@ -66,14 +66,14 @@ public class WardApiResources {
     @ApiOperation(value = "RETRIEVE Wards", notes = "RETRIEVE Wards",response = Ward.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<Ward>> retrieveAllWards() {
-        return wardReadPrincipleService.retrieveListOfWards();
+        return ResponseEntity.ok(this.wardReadPrincipleService.retrieveListOfWards());
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "RETRIEVE Wards with beds count", notes = "RETRIEVE Wards with beds count",response = WardResponseData.class, responseContainer = "List")
     @RequestMapping(value = "/beds", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
-        return wardReadPrincipleService.retrieveAllWardsWithBedsCounts();
+        return ResponseEntity.ok(this.wardReadPrincipleService.retrieveAllWardsWithBedsCounts());
     }
 
 

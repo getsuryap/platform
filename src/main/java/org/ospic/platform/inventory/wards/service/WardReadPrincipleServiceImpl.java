@@ -61,24 +61,24 @@ public class WardReadPrincipleServiceImpl implements WardReadPrincipleService {
     }
 
     @Override
-    public ResponseEntity<List<Ward>> retrieveListOfWards() {
+    public List<Ward> retrieveListOfWards() {
         EntityManager entityManager = sessionFactory.createEntityManager();
         entityManager.getTransaction().begin();
         List<Ward> wards = entityManager.createQuery("from "+ DatabaseConstants.WARDS_TABLE, Ward.class).getResultList();
         entityManager.getTransaction().commit();
         entityManager.close();
-        return ResponseEntity.ok().body(wards);
+        return wards;
     }
 
     @Override
-    public ResponseEntity<List<WardResponseData>> retrieveAllWardsWithBedsCounts() {
+    public List<WardResponseData> retrieveAllWardsWithBedsCounts() {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT w.*, (SELECT COUNT(*) FROM m_beds b WHERE b.ward_id = w.id) as counts FROM m_wards w");
         String queryString = sb.toString();
         Session session = this.sessionFactory.openSession();
         List<WardResponseData> wardResponseData = jdbcTemplate.query(queryString, new WardResponseDataRowMapper());
         session.close();
-        return ResponseEntity.ok().body(wardResponseData);
+        return wardResponseData;
     }
 
     @Override
