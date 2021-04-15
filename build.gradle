@@ -57,11 +57,12 @@ dependencies {
             ['org.projectreactor:reactor-spring:1.0.1.RELEASE'],
 
     )
-    implementation ('net.sf.jasperreports:jasperreports:6.16.0') {
-        exclude group: 'com.itextpdf'
-    }
-    runtime 'com.itextpdf:itextpdf:5.5.5'
-    runtime 'com.itextpdf:itext-pdfa:5.5.5'
+    implementation ('net.sf.jasperreports:jasperreports:6.16.0')
+    /** Removed itexpdf {
+       exclude group: 'com.itextpdf'
+    }**/
+    //runtime 'com.itextpdf:itextpdf:5.5.5'
+    ///runtime 'com.itextpdf:itext-pdfa:5.5.5'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
