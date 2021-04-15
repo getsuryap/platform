@@ -13,11 +13,11 @@ CREATE TABLE `m_reports`(
 unique key(`name`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
-replace into `m_reports` (`name`, `filename`,`entity`, `descriptions`, `type`) VALUES
-("All patients", "patient_list","client","List of all registered patients", 1),
-("Admissions ","admissions_list","admissions", "List all available admissions", 1),
-("Transactions", "transactions_list","transactions", "List of all organization service transaactions", 1),
-("Service bills","service_bill_list","bills", "List all available  service bills", 1),
-("Consultations","consultations_list","consultations", "List all consultations", 1),
-("Wards list","wards_list","wards", "List of wards and number of beds", 1);
+replace into `m_reports` (`id`,`name`, `filename`,`entity`, `descriptions`, `type`) VALUES
+(1, "All patients", "patient_list","client","List of all registered patients", 1),
+(2, "Admissions ","admissions_list","admissions", "List all available admissions", 1),
+(3, "Transactions", "transactions_list","transactions", "List of all organization service transaactions", 1),
+(4, "Service bills","service_bill_list","bills", "List all available  service bills", 1),
+(5, "Consultations","consultations_list","consultations", "List all consultations", 1),
+(6, "Wards list","wards_list","wards", "List of wards and number of beds", 1);
 
