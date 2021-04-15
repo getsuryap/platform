@@ -29,7 +29,8 @@ repositories {
     jcenter()
     google()
     maven{url "https://jasperreports.sourceforge.net/maven2/"}
-    maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
+    maven{url = uri("http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"),
+        isAllowInsecureProtocol = true}
 }
 
 dependencies {
