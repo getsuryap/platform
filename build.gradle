@@ -60,7 +60,7 @@ dependencies {
     implementation ('net.sf.jasperreports:jasperreports:6.16.0') {
         exclude group: 'com.itextpdf'
     }
-    runtime 'com.itextpdf:itextpdf:5.5.0'
+    runtime 'com.itextpdf:itextpdf:5.5.5'
     runtime 'com.itextpdf:itext-pdfa:5.5.0'
 
     compileOnly 'org.projectlombok:lombok'
