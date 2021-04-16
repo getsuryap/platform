@@ -11,7 +11,6 @@ import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
 import org.ospic.platform.util.constants.DatabaseConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class MedicineReadServiceImpl implements MedicineReadService {
     }
 
     @Override
-    public ResponseEntity<?> retrieveAllMedicines() {
+    public List<Medicine> retrieveAllMedicines() {
         Session session = this.sessionFactory.openSession();
         List<Medicine> medicines = session.createQuery(String.format("from %s", DatabaseConstants.TABLE_PHARMACY_MEDICINES)).list();
         medicines.forEach(medicine -> {
@@ -74,7 +73,7 @@ public class MedicineReadServiceImpl implements MedicineReadService {
         });
 
         session.close();
-        return ResponseEntity.ok().body(medicines);
+        return medicines;
     }
 
     @Override
