@@ -63,9 +63,8 @@ public class ReportsApiResource {
     private final BillReadPrincipleService billReadPrincipleService;
     private final ConsultationReadPrinciplesService consultationReadPrinciplesService;
     private final WardReadPrincipleService wardReadPrincipleService;
-    @Autowired BloodBankReadPrincipleService bloodBankReadPrincipleService;
-    @Autowired
-    MedicalServiceReadPrincipleService medicalServiceReadPrincipleService;
+    private final BloodBankReadPrincipleService bloodBankReadPrincipleService;
+    private final MedicalServiceReadPrincipleService medicalServiceReadPrincipleService;
 
 
 
@@ -76,7 +75,8 @@ public class ReportsApiResource {
             PatientRepository patientRepository, AdmissionsReadService admissionsReadService,
             PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
             BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService,
-            WardReadPrincipleService wardReadPrincipleService) {
+            WardReadPrincipleService wardReadPrincipleService,BloodBankReadPrincipleService bloodBankReadPrincipleService,
+            MedicalServiceReadPrincipleService medicalServiceReadPrincipleService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
@@ -85,6 +85,8 @@ public class ReportsApiResource {
         this.billReadPrincipleService = billReadPrincipleService;
         this.consultationReadPrinciplesService = consultationReadPrinciplesService;
         this.wardReadPrincipleService = wardReadPrincipleService;
+        this.medicalServiceReadPrincipleService = medicalServiceReadPrincipleService;
+        this.bloodBankReadPrincipleService = bloodBankReadPrincipleService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
