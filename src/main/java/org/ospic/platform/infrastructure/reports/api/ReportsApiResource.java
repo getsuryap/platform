@@ -11,7 +11,9 @@ import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileExcep
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
+import org.ospic.platform.inventory.blood.service.BloodBankReadPrincipleService;
 import org.ospic.platform.inventory.wards.service.WardReadPrincipleService;
+import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.details.service.PatientInformationReadServices;
@@ -61,6 +63,11 @@ public class ReportsApiResource {
     private final BillReadPrincipleService billReadPrincipleService;
     private final ConsultationReadPrinciplesService consultationReadPrinciplesService;
     private final WardReadPrincipleService wardReadPrincipleService;
+    @Autowired BloodBankReadPrincipleService bloodBankReadPrincipleService;
+    @Autowired
+    MedicalServiceReadPrincipleService medicalServiceReadPrincipleService;
+
+
 
     @Autowired
     public ReportsApiResource(
@@ -121,6 +128,12 @@ public class ReportsApiResource {
         }
         if (entity.equals("wards")){
             return readPrincipleService.readReport(reportName, this.wardReadPrincipleService.retrieveAllWardsWithBedsCounts());
+        }
+        if (entity.equals("bloods")){
+            return readPrincipleService.readReport(reportName, this.bloodBankReadPrincipleService.fetchBloodBankList());
+        }
+        if (entity.equals("services")){
+            return readPrincipleService.readReport(reportName, this.medicalServiceReadPrincipleService.readServices());
         }
         else return null;
     }

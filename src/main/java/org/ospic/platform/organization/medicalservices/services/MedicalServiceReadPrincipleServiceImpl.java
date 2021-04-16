@@ -44,24 +44,24 @@ public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceRea
     }
 
     @Override
-    public ResponseEntity<?> readServices() {
+    public Collection<MedicalServicePayload> readServices() {
         final MedicalServiceRowMap rm = new MedicalServiceRowMap();
         final String sql = rm.schema();
         Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok(services);
+        return services;
     }
 
     @Override
-    public ResponseEntity<?> readActiveServices() {
+    public Collection<MedicalServicePayload> readActiveServices() {
         final MedicalServiceRowMap rm = new MedicalServiceRowMap();
         final String sql = rm.schema() + " where  s.enabled ";
         Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{});
-        return ResponseEntity.ok(services);
+        return services;
     }
 
     @Override
     public ResponseEntity<?> readMedicalServicesByMedicalServiceType(Long medicalServiceTypeId) {
-        return ResponseEntity.ok(repository.findByMedicalServiceTypeId(medicalServiceTypeId));
+        return ResponseEntity.ok().body(this.repository.findByMedicalServiceTypeId(medicalServiceTypeId));
     }
 
     @Override
@@ -70,10 +70,10 @@ public class MedicalServiceReadPrincipleServiceImpl implements MedicalServiceRea
     }
 
     @Override
-    public ResponseEntity<?> readServiceByMedicalServiceTypeName(String name) {
+    public Collection<MedicalServicePayload> readServiceByMedicalServiceTypeName(String name) {
         final MedicalServiceRowMap rm = new MedicalServiceRowMap();
         final String sql = rm.schema()  +" where st.name = ? order by s.id DESC";
         Collection<MedicalServicePayload> services = this.jdbcTemplate.query(sql, rm, new Object[]{name});
-        return ResponseEntity.ok(services);
+        return services;
     }
 }

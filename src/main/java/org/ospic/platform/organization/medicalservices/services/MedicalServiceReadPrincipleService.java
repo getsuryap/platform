@@ -1,8 +1,11 @@
 package org.ospic.platform.organization.medicalservices.services;
 
+import org.ospic.platform.organization.medicalservices.data.MedicalServicePayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.services
@@ -28,9 +31,9 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface MedicalServiceReadPrincipleService {
-    ResponseEntity<?> readServices();
-    ResponseEntity<?> readActiveServices();
+    Collection<MedicalServicePayload> readServices();
+    Collection<MedicalServicePayload> readActiveServices();
     ResponseEntity<?> readServiceById(Long id);
-    ResponseEntity<?> readServiceByMedicalServiceTypeName(String name);
+    Collection<MedicalServicePayload> readServiceByMedicalServiceTypeName(String name);
     ResponseEntity<?> readMedicalServicesByMedicalServiceType(Long medicalServiceTypeId);
 }
