@@ -19,5 +19,8 @@ replace into `m_reports` (`id`,`name`, `filename`,`entity`, `descriptions`, `typ
 (3, "Transactions", "transactions_list","transactions", "List of all organization service transaactions", 1),
 (4, "Service bills","service_bill_list","bills", "List all available  service bills", 1),
 (5, "Consultations","consultations_list","consultations", "List all consultations", 1),
-(6, "Wards list","wards_list","wards", "List of wards and number of beds", 1);
+(6, "Wards list","wards_list","wards", "List of wards and number of beds", 1),
+(7, "Blood bank list","blood_bank_list","bloods", "Blood bank quntities report", 1)
+(8, "Medical services","medicalservices_list","services", "List of medical services provided", 1),
+(9, "Medicines","medicines_list","medicines", "List of all medicines", 1);
 

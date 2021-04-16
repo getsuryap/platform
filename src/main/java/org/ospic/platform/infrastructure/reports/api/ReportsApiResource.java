@@ -101,8 +101,7 @@ public class ReportsApiResource {
         return ResponseEntity.ok().body(this.readPrincipleService.readAllReports());
     }
 
-    @GetMapping("/view")
-    @ResponseBody
+    @GetMapping(path="/view", produces = "application/pdf")
     public ResponseEntity<?> viewReport(@RequestParam(value = "reportName", required = true) String reportName,
                                         @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
         if (entity.equals("client")) {
