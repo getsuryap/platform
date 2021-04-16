@@ -12,6 +12,7 @@ import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleServ
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.inventory.blood.service.BloodBankReadPrincipleService;
+import org.ospic.platform.inventory.pharmacy.medicine.service.MedicineReadService;
 import org.ospic.platform.inventory.wards.service.WardReadPrincipleService;
 import org.ospic.platform.organization.medicalservices.services.MedicalServiceReadPrincipleService;
 import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
@@ -65,6 +66,7 @@ public class ReportsApiResource {
     private final WardReadPrincipleService wardReadPrincipleService;
     private final BloodBankReadPrincipleService bloodBankReadPrincipleService;
     private final MedicalServiceReadPrincipleService medicalServiceReadPrincipleService;
+    private final MedicineReadService medicineReadService;
 
 
 
@@ -76,7 +78,7 @@ public class ReportsApiResource {
             PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
             BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService,
             WardReadPrincipleService wardReadPrincipleService,BloodBankReadPrincipleService bloodBankReadPrincipleService,
-            MedicalServiceReadPrincipleService medicalServiceReadPrincipleService) {
+            MedicalServiceReadPrincipleService medicalServiceReadPrincipleService,MedicineReadService medicineReadService) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
@@ -87,6 +89,7 @@ public class ReportsApiResource {
         this.wardReadPrincipleService = wardReadPrincipleService;
         this.medicalServiceReadPrincipleService = medicalServiceReadPrincipleService;
         this.bloodBankReadPrincipleService = bloodBankReadPrincipleService;
+        this.medicineReadService = medicineReadService;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -137,6 +140,10 @@ public class ReportsApiResource {
         if (entity.equals("services")){
             return readPrincipleService.readReport(reportName, this.medicalServiceReadPrincipleService.readServices());
         }
+        if (entity.equals("medicines")){
+            return readPrincipleService.readReport(reportName, this.medicineReadService.retrieveAllMedicines());
+        }
+
         else return null;
     }
 

@@ -15,7 +15,7 @@
         </conditionalStyle>
     </style>
 
-    <field name="id" class="java.lang.String"/>
+    <field name="id" class="java.lang.Long"/>
     <field name="name" class="java.lang.String"/>
     <field name="price" class="java.math.BigDecimal"/>
     <field name="isActive" class="java.lang.Boolean"/>

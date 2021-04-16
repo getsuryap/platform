@@ -76,7 +76,7 @@ public class Medicine implements Serializable {
 
     @NotNull
     @Column(name = "units", length = 5)
-    private int units;
+    private Integer units;
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
     private BigDecimal price;

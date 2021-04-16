@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
-import org.ospic.platform.inventory.beds.domains.Bed;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -56,9 +55,9 @@ public class BloodGroup implements Serializable {
 
     @NotNull
     @Column(name = "bags_count",unique = false, length = 15, nullable = false)
-    private int counts;
+    private Integer counts;
 
-    public BloodGroup(String group, int counts) {
+    public BloodGroup(String group, Integer counts) {
         this.group = group;
         this.counts = counts;
     }

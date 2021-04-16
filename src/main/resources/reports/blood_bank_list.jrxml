@@ -15,9 +15,9 @@
         </conditionalStyle>
     </style>
 
-    <field name="id" class="java.lang.String"/>
+    <field name="id" class="java.lang.Long"/>
     <field name="group" class="java.lang.String"/>
-    <field name="counts" class="java.lang.Long"/>
+    <field name="counts" class="java.lang.Integer"/>
 
     <background>
         <band splitType="Stretch"/>
