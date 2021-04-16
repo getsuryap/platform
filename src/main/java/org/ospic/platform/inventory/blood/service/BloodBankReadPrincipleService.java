@@ -1,8 +1,10 @@
 package org.ospic.platform.inventory.blood.service;
 
-import org.springframework.http.ResponseEntity;
+import org.ospic.platform.inventory.blood.domain.BloodGroup;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * This file was created by eli on 18/12/2020 for org.ospic.platform.inventory.blood.repository
@@ -28,5 +30,5 @@ import org.springframework.stereotype.Service;
 @Component
 @Service
 public interface BloodBankReadPrincipleService {
-    ResponseEntity<?> fetchBloodBankList();
+    Collection<BloodGroup> fetchBloodBankList();
 }

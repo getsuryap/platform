@@ -3,9 +3,9 @@ package org.ospic.platform.inventory.blood.service;
 import org.ospic.platform.inventory.blood.domain.BloodGroup;
 import org.ospic.platform.inventory.blood.repository.BloodBankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,8 +41,8 @@ public class BloodBankReadPrincipleServiceImpl implements BloodBankReadPrinciple
 
 
     @Override
-    public ResponseEntity<?> fetchBloodBankList() {
-        List<BloodGroup> bloodGroupList = bloodBankRepository.findAll();
-        return ResponseEntity.ok().body(bloodGroupList);
+    public Collection<BloodGroup> fetchBloodBankList() {
+        List<BloodGroup> payload = bloodBankRepository.findAll();
+        return payload;
     }
 }
