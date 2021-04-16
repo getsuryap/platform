@@ -59,7 +59,7 @@ public class BloodBankApiResources {
     @ApiOperation(value = "RETRIEVE blood bank details", notes = "RETRIEVE blood bank details", response = BloodGroup.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveBloodBankData() {
-        return bloodBankReadPrincipleService.fetchBloodBankList();
+        return ResponseEntity.ok().body(this.bloodBankReadPrincipleService.fetchBloodBankList());
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
