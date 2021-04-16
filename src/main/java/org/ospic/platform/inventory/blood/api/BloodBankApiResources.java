@@ -44,8 +44,8 @@ import java.util.List;
 @RequestMapping("/api/bloods")
 @Api(value = "/api/bloods", tags = "Blood bank", description = "Blood bank API resources")
 public class BloodBankApiResources {
-    @Autowired BloodBankReadPrincipleService bloodBankReadPrincipleService;
-    @Autowired BloodBankWritePrincipleService bloodBankWritePrincipleService;
+    private final BloodBankReadPrincipleService bloodBankReadPrincipleService;
+    private final BloodBankWritePrincipleService bloodBankWritePrincipleService;
 
     @Autowired
     public BloodBankApiResources(
