@@ -16,8 +16,8 @@
     </style>
 
     <field name="id" class="java.lang.String"/>
-    <field name="name" class="java.lang.String"/>
-    <field name="numberOfBeds" class="java.lang.String"/>
+    <field name="group" class="java.lang.String"/>
+    <field name="counts" class="java.lang.Long"/>
 
     <background>
         <band splitType="Stretch"/>
@@ -36,7 +36,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[WARDS ]]></text>
+                <text><![CDATA[BLOOD BANK STOCK ]]></text>
             </staticText>
             <staticText>
                 <reportElement x="426" y="70" width="44" height="20" uuid="0c7e056c-ce6d-41f2-ab7d-3ca4db5f0311"/>
@@ -72,7 +72,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Ward Name]]></text>
+                <text><![CDATA[Group]]></text>
             </staticText>
             <staticText>
                 <reportElement x="373" y="0" width="80" height="20" uuid="ee6ac3e1-09c9-46aa-925d-6c44369f16f1">
@@ -84,7 +84,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Number of beds]]></text>
+                <text><![CDATA[Count]]></text>
             </staticText>
 
         </band>
@@ -107,7 +107,7 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ae660e9-1cd7-4eec-83ae-6b6badeb1b54"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{group}]]></textFieldExpression>
                 </textField>
 
                 <textField>
@@ -115,7 +115,7 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0efc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{numberOfBeds}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{counts}]]></textFieldExpression>
                 </textField>
 
 
