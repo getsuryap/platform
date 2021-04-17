@@ -47,7 +47,7 @@ public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServi
     @Override
     public ResponseEntity<?> createDepartment(DepartmentReqPayload payload) {
         Optional<Department> parent = repository.findById(payload.getParent());
-        Department dp = Department.withoutParentDepartment(payload.getName(), LocalDate.now(), payload.getDescription(), payload.getExtraId());
+        Department dp = Department.withoutParentDepartment(payload.getName(), LocalDate.now(), payload.getDescriptions(), payload.getExtraId());
         dp.setParent(parent.orElse(null));
         Department response  = repository.save(dp);
         return ResponseEntity.ok().body(response);
@@ -62,7 +62,7 @@ public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServi
                 department.setParent(parent);
             }
             department.setName(payload.getName());
-            department.setDescriptions(payload.getDescription());
+            department.setDescriptions(payload.getDescriptions());
             department.setHierarchy(payload.getHierarchy());
             department.setExtraId(payload.getExtraId());
             return this.repository.save(department);

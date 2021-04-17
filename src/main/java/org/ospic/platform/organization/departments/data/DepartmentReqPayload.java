@@ -2,10 +2,6 @@ package org.ospic.platform.organization.departments.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ospic.platform.organization.departments.domain.Department;
-
-import javax.persistence.*;
-import java.util.Date;
 
 /**
  * This file was created by eli on 09/01/2021 for org.ospic.platform.organization.departments.data
@@ -34,18 +30,18 @@ public class DepartmentReqPayload {
     private Long parent;
     private String name;
     private String hierarchy;
-    private String description;
+    private String descriptions;
     private String extraId;
 
     public static DepartmentReqPayload fromJson(final Long parent, final String name, final String hierarchy, final String description, final String extraId){
         return new DepartmentReqPayload(parent, name, hierarchy, description, extraId);
     }
 
-    private DepartmentReqPayload(final Long parent, final String name, final String hierarchy, final String description, final String extraId) {
+    private DepartmentReqPayload(final Long parent, final String name, final String hierarchy, final String descriptions, final String extraId) {
         this.parent = parent;
         this.name = name;
         this.hierarchy = hierarchy;
-        this.description = description;
+        this.descriptions = descriptions;
         this.extraId = extraId;
     }
 }
