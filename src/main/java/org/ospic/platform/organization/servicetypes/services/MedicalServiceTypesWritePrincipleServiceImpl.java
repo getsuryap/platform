@@ -45,8 +45,9 @@ public class MedicalServiceTypesWritePrincipleServiceImpl implements MedicalServ
     @Override
     public ResponseEntity<?> updateServiceType(Long id, MedicalServiceTypes payload) {
         return repository.findById(id).map(medicalService -> {
-            payload.setId(medicalService.getId());
-            return ResponseEntity.ok().body(repository.save(payload));
+            medicalService.setName(payload.getName());
+            medicalService.setDescriptions(payload.getDescriptions());
+            return ResponseEntity.ok().body(repository.save(medicalService));
         }).orElseThrow(() -> new MedicalServiceTypeNotFoundExceptionPlatform(id));
     }
 
