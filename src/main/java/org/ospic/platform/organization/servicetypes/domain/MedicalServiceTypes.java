@@ -13,6 +13,7 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +55,7 @@ public class MedicalServiceTypes extends AbstractPersistableCustom implements Se
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JoinColumn(name = "service_type_id")
-    private List<MedicalService> medicalServices;
+    private List<MedicalService> medicalServices = new ArrayList<>();
 
 
 
@@ -71,12 +72,12 @@ public class MedicalServiceTypes extends AbstractPersistableCustom implements Se
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MedicalServiceTypes)) return false;
-        MedicalServiceTypes medicalService = (MedicalServiceTypes) o;
-        return getName().equals(medicalService.getName()) && getDescriptions().equals(medicalService.getDescriptions());
+        MedicalServiceTypes that = (MedicalServiceTypes) o;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getDescriptions(), that.getDescriptions()) && Objects.equals(getMedicalServices(), that.getMedicalServices());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescriptions());
+        return Objects.hash(getName(), getDescriptions(), getMedicalServices());
     }
 }

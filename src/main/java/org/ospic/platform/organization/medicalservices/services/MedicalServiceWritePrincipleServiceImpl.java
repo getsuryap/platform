@@ -59,7 +59,11 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
     public ResponseEntity<?> updateService(Long id, MedicalServicePayload payload) {
        return repository.findById(id).map(medicalService -> {
            return this.medicalServiceTypesJpaRepository.findById(payload.getMedicalServiceType()).map(medicalServiceType->{
-               medicalService.instance(payload);
+               medicalService.setIsMeasurable(payload.getIsMeasurable());
+               medicalService.setIsActive(payload.getIsActive());
+               medicalService.setPrice(payload.getPrice());
+               medicalService.setName(payload.getName());
+               medicalService.setUnits(payload.getUnits());
                medicalService.setMedicalServiceType(medicalServiceType);
 
             return ResponseEntity.ok().body(repository.save(medicalService));
