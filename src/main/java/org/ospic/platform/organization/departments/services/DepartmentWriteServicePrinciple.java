@@ -31,4 +31,5 @@ import org.springframework.stereotype.Service;
 @Component
 public interface DepartmentWriteServicePrinciple {
     public ResponseEntity<?> createDepartment(DepartmentReqPayload payload);
+    Department updateDepartment(Long departmentId, DepartmentReqPayload payload);
 }
