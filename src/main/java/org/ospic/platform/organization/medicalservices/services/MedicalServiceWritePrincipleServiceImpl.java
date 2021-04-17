@@ -59,10 +59,10 @@ public class MedicalServiceWritePrincipleServiceImpl implements MedicalServiceWr
     public ResponseEntity<?> updateService(Long id, MedicalServicePayload payload) {
        return repository.findById(id).map(medicalService -> {
            return this.medicalServiceTypesJpaRepository.findById(payload.getMedicalServiceType()).map(medicalServiceType->{
-               MedicalService ms = new MedicalService().instance(payload);
-            ms.setId(medicalService.getId());
-            ms.setMedicalServiceType(medicalServiceType);
-            return ResponseEntity.ok().body(repository.save(ms));
+               medicalService.instance(payload);
+               medicalService.setMedicalServiceType(medicalServiceType);
+
+            return ResponseEntity.ok().body(repository.save(medicalService));
             }).orElseThrow(()->new MedicalServiceTypeNotFoundExceptionPlatform(payload.getMedicalServiceType()));
         }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(id));
     }

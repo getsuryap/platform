@@ -13,9 +13,8 @@ import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.organization.medicalservices.domain
@@ -55,7 +54,7 @@ public class MedicalServiceTypes extends AbstractPersistableCustom implements Se
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JoinColumn(name = "service_type_id")
-    private Set<MedicalService> medicalServices = new HashSet<>();
+    private List<MedicalService> medicalServices;
 
 
 
