@@ -76,4 +76,11 @@ public class DepartmentApiResource {
         return departmentWrite.createDepartment(payload);
     }
 
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_DEPARTMENT')")
+    @ApiOperation(value = "UPDATE Department", notes = "UPDATE Department",response = Department.class)
+    @RequestMapping(value = "/{departmentId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> updateDepartment(@PathVariable(name = "departmentId") Long departmentId, @Valid @RequestBody DepartmentReqPayload payload) {
+        return ResponseEntity.ok().body(this.departmentWrite.updateDepartment(departmentId, payload));
+    }
+
 }

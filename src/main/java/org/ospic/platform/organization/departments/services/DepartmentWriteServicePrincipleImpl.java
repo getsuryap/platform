@@ -2,6 +2,7 @@ package org.ospic.platform.organization.departments.services;
 
 import org.ospic.platform.organization.departments.data.DepartmentReqPayload;
 import org.ospic.platform.organization.departments.domain.Department;
+import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,21 @@ public class DepartmentWriteServicePrincipleImpl implements DepartmentWriteServi
         dp.setParent(parent.orElse(null));
         Department response  = repository.save(dp);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    public Department updateDepartment(Long departmentId, DepartmentReqPayload payload) {
+
+        return this.repository.findById(departmentId).map(department -> {
+            if (null != payload.getParent()) {
+                Department parent= this.repository.findById(payload.getParent()).orElseThrow(() -> new DepartmentNotFoundExceptionsPlatform(departmentId));
+                department.setParent(parent);
+            }
+            department.setName(payload.getName());
+            department.setDescriptions(payload.getDescription());
+            department.setHierarchy(payload.getHierarchy());
+            department.setExtraId(payload.getExtraId());
+            return this.repository.save(department);
+        }).orElseThrow(()->new DepartmentNotFoundExceptionsPlatform(departmentId));
     }
 }
