@@ -45,12 +45,9 @@ import java.util.Optional;
 @RequestMapping("/api/pharmacy/medicines")
 @Api(value = "/api/pharmacy/medicines", tags = "Medicines")
 public class MedicineApiResource {
-    @Autowired
-    MedicineRepository medicineRepository;
-    @Autowired
-    MedicineWriteService medicineWriteService;
-    @Autowired
-    MedicineReadService medicineReadService;
+    private final MedicineRepository medicineRepository;
+    private final MedicineWriteService medicineWriteService;
+    private final MedicineReadService medicineReadService;
 
     @Autowired
     public MedicineApiResource(MedicineRepository medicineRepository,
@@ -88,13 +85,13 @@ public class MedicineApiResource {
     @ApiOperation(value = "UPDATE medicine product", notes = "UPDATE  medicine product", response = Medicine.class)
     @RequestMapping(value = "/{medicinalId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<Medicine> updateMedicineProductByItsId(@PathVariable Long medicinalId, @Valid @RequestBody MedicineRequest medicine){
+    ResponseEntity<?> updateMedicineProductByItsId(@PathVariable Long medicinalId, @Valid @RequestBody MedicineRequest medicine){
         return ResponseEntity.ok().body(medicineWriteService.updateMedicineProduct(medicinalId, medicine));
     }
 
     @ApiOperation(value = "ADD new Medicine", notes = "ADD new Medicine", response = Medicine.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> addNewMedicineProduct(@Valid @RequestBody MedicineRequest medicine) {
+    ResponseEntity<?> addNewMedicineProduct(@Valid @RequestBody MedicineRequest medicine) {
         return medicineWriteService.createNewMedicineProduct(medicine);
     }
 

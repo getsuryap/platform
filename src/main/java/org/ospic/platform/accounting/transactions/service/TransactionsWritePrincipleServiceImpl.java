@@ -166,7 +166,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setTransactionDate(transactionDate);
                     trx.setIsReversed(false);
                     trx.setBill(billOptional.get());
-                    trx.setAmount(medicine.getPrice());
+                    trx.setAmount(medicine.getSellingPrice());
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(null);
                     trx.setMedicine(medicine);

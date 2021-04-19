@@ -1,23 +1,22 @@
 package org.ospic.platform.inventory.pharmacy.medicine.domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
+import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +44,7 @@ import java.util.List;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
+@ToString
 @Entity(name = DatabaseConstants.TABLE_PHARMACY_MEDICINES)
 @Table(name = DatabaseConstants.TABLE_PHARMACY_MEDICINES,
         uniqueConstraints = {
@@ -66,6 +66,20 @@ public class Medicine implements Serializable {
     private String name;
 
     @NotBlank
+    @Column(name = "generic_name", length = 200, nullable = false)
+    private String genericName;
+
+    @NotBlank
+    @Column(name = "effects", length = 250, nullable = false)
+    private String effects;
+
+    @Column(name = "expire_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Basic(optional = false)
+    private LocalDateTime expireDateTime;
+
+
+    @NotBlank
     @Column(name = "company", length = 200, nullable = false)
     private String company;
 
@@ -73,13 +87,18 @@ public class Medicine implements Serializable {
     @Column(name = "compositions", length = 200, nullable = false)
     private String compositions;
 
-
-    @NotNull
     @Column(name = "units", length = 5)
-    private Integer units;
+    private String unit;
 
-    @Column(name = "price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
-    private BigDecimal price;
+
+    @Column(name = "quantity", length = 5)
+    private int quantity;
+
+    @Column(name = "buying_price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
+    private BigDecimal buyingPrice;
+
+    @Column(name = "selling_price", nullable = false, columnDefinition="Decimal(19,2) default '0.00'")
+    private BigDecimal sellingPrice;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -94,15 +113,21 @@ public class Medicine implements Serializable {
     @JsonIgnore
     private List<Transactions> transactions = new ArrayList<>();
 
-    public Medicine(
-            String name, String company, String compositions, int units) {
-        this.name = name;
-        this.company = company;
-        this.compositions = compositions;
-        this.units = units;
+    public Medicine fromJson(MedicineRequest rq){
+        return new Medicine(rq.getName(), rq.getGenericName(), rq.getEffects(), rq.getCompany(),rq.getCompositions(),
+                rq.getUnits(),rq.getQuantity(), rq.getBuyingPrice(),rq.getSellingPrice());
     }
 
-
-
+    private Medicine(String name, String genericName, String effects,  String company, String compositions, String units,int quantity, BigDecimal buyingPrice, BigDecimal sellingPrice) {
+        this.name = name;
+        this.genericName = genericName;
+        this.effects = effects;
+        this.company = company;
+        this.compositions = compositions;
+        this.unit = units;
+        this.quantity = quantity;
+        this.buyingPrice = buyingPrice;
+        this.sellingPrice = sellingPrice;
+    }
 
 }

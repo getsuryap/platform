@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.data
@@ -30,23 +31,20 @@ import java.math.BigDecimal;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
+@AllArgsConstructor
 public class MedicineRequest {
     private String name;
     private String company;
     private String compositions;
-    @Min(1)
-    private int units;
+    private String genericName;
+    private String effects;
+    private String units;
+    @Min(0)
+    private Integer quantity;
     private Long group;
     private Long category;
-    private BigDecimal price;
+    private BigDecimal buyingPrice;
+    private BigDecimal sellingPrice;
+    private Date expireDateTime;
 
-    public MedicineRequest(String name, String company, String compositions, int units, Long group, Long category, BigDecimal price) {
-        this.name = name;
-        this.company = company;
-        this.compositions = compositions;
-        this.units = units;
-        this.group = group;
-        this.category = category;
-        this.price = price;
-    }
 }
