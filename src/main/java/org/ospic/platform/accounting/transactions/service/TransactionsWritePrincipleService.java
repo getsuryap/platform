@@ -1,12 +1,10 @@
 package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
+import org.ospic.platform.accounting.transactions.data.TransactionRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * This file was created by eli on 03/02/2021 for org.ospic.platform.accounting.transactions.service
@@ -32,8 +30,8 @@ import java.util.List;
 @Component
 @Service
 public interface TransactionsWritePrincipleService {
-    ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services);
-    ResponseEntity<?> createMedicineServiceTransaction(Long id, List<Long> medics);
+    ResponseEntity<?> createMedicalServiceTransaction(Long id, TransactionRequest payload);
+    ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload);
     ResponseEntity<?> updateTransaction(Long id, TransactionPayload payload);
     ResponseEntity<?> undoTransaction(Long id);
 }
