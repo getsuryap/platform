@@ -54,13 +54,19 @@ DROP TABLE IF EXISTS `m_medicines`;
 CREATE TABLE IF NOT EXISTS `m_medicines`(
   id BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR (200) NOT NULL,
-  company VARCHAR (200) NOT NULL,
-  compositions VARCHAR (250) NOT NULL,
-  units INT NOT NULL DEFAULT 0,
-  group_id BIGINT REFERENCES `m_mdc_groups`(`id`),
+  `generic_name` varchar (200) null ,
+  company varchar (200) NOT NULL,
+  compositions varchar(250) NOT NULL,
+  units varchar (50) NOT NULL,
+  quantity int NOT NULL,
+  `expire_date` TIMESTAMP NULL,
+  `effects` varchar (250) null ,
+  `buying_price`  DECIMAL(19,2)  not null,
+  `selling_price`  DECIMAL(19,2) not null,
+  constraint medicine_pk primary key  (`id`),
+  `group_id` bigint references `m_mdc_groups`(`id`),
   category_id BIGINT REFERENCES `m_mdc_categories`(`id`),
-  CONSTRAINT uc_name_company_group_category UNIQUE(`name`,`company`, `group_id`, `category_id`),
-  PRIMARY KEY (`id`)
+  CONSTRAINT uc_name_company_group_category UNIQUE(`name`,`company`, `group_id`, `category_id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
 
