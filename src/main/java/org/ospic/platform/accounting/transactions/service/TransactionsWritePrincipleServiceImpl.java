@@ -4,6 +4,7 @@ import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
+import org.ospic.platform.accounting.transactions.data.TransactionRequest;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
@@ -30,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,7 +90,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
     @Override
-    public ResponseEntity<?> createMedicalServiceTransaction(Long id, List<Long> services) {
+    public ResponseEntity<?> createMedicalServiceTransaction(Long id,  TransactionRequest payload) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         if (!consultation.getIsActive()) {
@@ -111,9 +113,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 createServiceBillIfNotExists(consultation);
             }
 
-            services.forEach(servicesId -> {
-                logger.info(servicesId.toString());
-                Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(servicesId);
+                Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(payload.getId());
                 Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
                 if (serviceOptional.isPresent()) {
                     MedicalService service = serviceOptional.get();
@@ -128,14 +128,14 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     this.repository.save(trx);
                 }
 
-            });
+
         } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
         return null;//billReadPrincipleService.readBillById(consultation.getBill().getId());
     }
 
     @Override
-    public ResponseEntity<?> createMedicineServiceTransaction(Long id, List<Long> medics) {
+    public ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
@@ -156,8 +156,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             if (consultation.getBill() == null) {
                 createServiceBillIfNotExists(consultation);
             }
-            medics.forEach(medicationId -> {
-                Optional<Medicine> medicsOptional = medicineRepository.findById(medicationId);
+                Optional<Medicine> medicsOptional = medicineRepository.findById(payload.getId());
                 Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
                 if (medicsOptional.isPresent() && billOptional.isPresent()) {
                     Medicine medicine = medicsOptional.get();
@@ -166,7 +165,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setTransactionDate(transactionDate);
                     trx.setIsReversed(false);
                     trx.setBill(billOptional.get());
-                    trx.setAmount(medicine.getSellingPrice());
+                    final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
+                    trx.setAmount(amount);
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(null);
                     trx.setMedicine(medicine);
@@ -174,7 +174,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trxns.add(trx);
                 }
 
-            });
+
         } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
         return billReadPrincipleService.readBillById(consultation.getBill().getId());

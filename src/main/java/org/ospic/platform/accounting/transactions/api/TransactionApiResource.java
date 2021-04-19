@@ -2,6 +2,7 @@ package org.ospic.platform.accounting.transactions.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.transactions.data.TransactionRequest;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,13 +56,13 @@ public class TransactionApiResource {
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction", response = Transactions.class, responseContainer = "List")
     @RequestMapping(value = "/{serviceId}/{type}", method = RequestMethod.POST)
     //@PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
-    ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @PathVariable(name = "type") String type, @RequestBody List<Long> list) {
+    ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @PathVariable(name = "type") String type, @RequestBody TransactionRequest payload) {
         if (type.equals("medicine")) {
 
-            return writeService.createMedicineServiceTransaction(serviceId, list);
+            return writeService.createMedicineServiceTransaction(serviceId, payload);
         }
         if (type.equals("service")) {
-            return writeService.createMedicalServiceTransaction(serviceId, list);
+            return writeService.createMedicalServiceTransaction(serviceId, payload);
         } else return null;
     }
 
