@@ -8,7 +8,7 @@ import org.ospic.platform.accounting.transactions.data.TransactionRequest;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
-import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
+import org.ospic.platform.inventory.pharmacy.medicine.exceptions.MedicineNotFoundExceptions;
 import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
@@ -136,6 +136,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     @Override
     public ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload) {
+        return this.medicineRepository.findById(payload.getId()).map(medicine -> {
+
+
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
@@ -145,6 +148,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
         if (!consultation.getIsActive()) {
             throw new InactiveMedicalConsultationsException(consultation.getId());
+        }
+        if(medicine.getQuantity() < payload.getQuantity()){
+            throw new MedicineNotFoundExceptions("");
         }
 
         List<Transactions> trxns = new ArrayList<>();
@@ -156,10 +162,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
             if (consultation.getBill() == null) {
                 createServiceBillIfNotExists(consultation);
             }
-                Optional<Medicine> medicsOptional = medicineRepository.findById(payload.getId());
                 Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
-                if (medicsOptional.isPresent() && billOptional.isPresent()) {
-                    Medicine medicine = medicsOptional.get();
+                if ( billOptional.isPresent()) {
                     Transactions trx = new Transactions();
                     trx.setDepartment(department);
                     trx.setTransactionDate(transactionDate);
@@ -174,10 +178,12 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trxns.add(trx);
                 }
 
-
+                medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
+                this.medicineRepository.save(medicine);
         } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
 
         return billReadPrincipleService.readBillById(consultation.getBill().getId());
+        }).orElseThrow(()->new MedicineNotFoundExceptions(payload.getId()));
     }
 
     @Override
