@@ -81,12 +81,19 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
             return this.medicineCategoryRepository.findById(req.getCategory()).map(category -> {
                 Session session = this.sessionFactory.openSession();
                 Transaction transaction = session.beginTransaction();
+                final LocalDateTime expireDateTime = new DateUtil().convertToLocalDateTimeViaInstant(req.getExpireDateTime());
 
                 Medicine medicine = (Medicine) session.load(Medicine.class, medicationId);
                 medicine.setName(req.getName());
                 medicine.setCompany(req.getCompany());
                 medicine.setUnit(req.getUnits());
                 medicine.setCompositions(req.getCompositions());
+                medicine.setQuantity(req.getQuantity());
+                medicine.setEffects(req.getEffects());
+                medicine.setExpireDateTime(expireDateTime);
+                medicine.setBuyingPrice(req.getBuyingPrice());
+                medicine.setSellingPrice(req.getSellingPrice());
+                medicine.setStoreBox(req.getStoreBox());
 
                 medicine.setCategory(category);
                 medicine.setGroup(group);
