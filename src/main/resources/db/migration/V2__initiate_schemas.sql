@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `m_medicines`(
   `effects` varchar (250) null ,
   `buying_price`  DECIMAL(19,2)  not null,
   `selling_price`  DECIMAL(19,2) not null,
+  `store_box` varchar (10),
   constraint medicine_pk primary key  (`id`),
   `group_id` bigint references `m_mdc_groups`(`id`),
   category_id BIGINT REFERENCES `m_mdc_categories`(`id`),

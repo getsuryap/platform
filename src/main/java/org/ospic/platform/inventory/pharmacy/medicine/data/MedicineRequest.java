@@ -46,5 +46,6 @@ public class MedicineRequest {
     private BigDecimal buyingPrice;
     private BigDecimal sellingPrice;
     private Date expireDateTime;
+    private String storeBox;
 
 }
