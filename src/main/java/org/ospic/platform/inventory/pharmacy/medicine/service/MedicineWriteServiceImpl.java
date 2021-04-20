@@ -50,7 +50,7 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
     SessionFactory sessionFactory;
 
     public MedicineWriteServiceImpl(MedicineRepository medicineRepository, MedicineGroupRepository medicineGroupRepository,
-            MedicineCategoryRepository medicineCategoryRepository) {
+                                    MedicineCategoryRepository medicineCategoryRepository) {
         this.medicineCategoryRepository = medicineCategoryRepository;
         this.medicineGroupRepository = medicineGroupRepository;
         this.medicineRepository = medicineRepository;
@@ -59,8 +59,8 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
 
     @Override
     public ResponseEntity<?> createNewMedicineProduct(MedicineRequest payload) {
-        return this.medicineGroupRepository.findById(payload.getGroup()).map(group->{
-            return this.medicineCategoryRepository.findById(payload.getCategory()).map(category->{
+        return this.medicineGroupRepository.findById(payload.getGroup()).map(group -> {
+            return this.medicineCategoryRepository.findById(payload.getCategory()).map(category -> {
 
                 final LocalDateTime expireDateTime = new DateUtil().convertToLocalDateTimeViaInstant(payload.getExpireDateTime());
 
@@ -70,32 +70,32 @@ public class MedicineWriteServiceImpl implements MedicineWriteService {
                 medicine.setGroup(group);
                 group.getMedicines().add(medicine);
                 return ResponseEntity.ok().body(this.medicineRepository.save(medicine));
-            }).orElseThrow(()->new MedicineCategoryNotFoundException(payload.getGroup()));
-        }).orElseThrow(()->new MedicineGroupNotFoundExceptionPlatform(payload.getGroup()));
+            }).orElseThrow(() -> new MedicineCategoryNotFoundException(payload.getGroup()));
+        }).orElseThrow(() -> new MedicineGroupNotFoundExceptionPlatform(payload.getGroup()));
 
     }
 
     @Override
     public Medicine updateMedicineProduct(Long medicationId, MedicineRequest req) {
-        return this.medicineGroupRepository.findById(req.getGroup()).map(group->{
-            return this.medicineCategoryRepository.findById(req.getCategory()).map(category->{
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        return this.medicineGroupRepository.findById(req.getGroup()).map(group -> {
+            return this.medicineCategoryRepository.findById(req.getCategory()).map(category -> {
+                Session session = this.sessionFactory.openSession();
+                Transaction transaction = session.beginTransaction();
 
-        Medicine medicine = (Medicine)session.load(Medicine.class , medicationId);
-        medicine.setName(req.getName());
-        medicine.setCompany(req.getCompany());
-        medicine.setUnit(req.getUnits());
-        medicine.setCompositions(req.getCompositions());
+                Medicine medicine = (Medicine) session.load(Medicine.class, medicationId);
+                medicine.setName(req.getName());
+                medicine.setCompany(req.getCompany());
+                medicine.setUnit(req.getUnits());
+                medicine.setCompositions(req.getCompositions());
 
-        medicine.setCategory(category);
-        medicine.setGroup(group);
-        session.persist(medicine);
+                medicine.setCategory(category);
+                medicine.setGroup(group);
+                session.persist(medicine);
 
-        transaction.commit();
-        session.close();
-        return medicine;
-            }).orElseThrow(()->new MedicineCategoryNotFoundException(req.getGroup()));
-        }).orElseThrow(()->new MedicineGroupNotFoundExceptionPlatform(req.getGroup()));
+                transaction.commit();
+                session.close();
+                return medicine;
+            }).orElseThrow(() -> new MedicineCategoryNotFoundException(req.getGroup()));
+        }).orElseThrow(() -> new MedicineGroupNotFoundExceptionPlatform(req.getGroup()));
     }
 }

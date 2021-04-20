@@ -90,6 +90,9 @@ public class Medicine implements Serializable {
     @Column(name = "units", length = 5)
     private String unit;
 
+    @Column(name = "store_box", length = 5)
+    private String storeBox;
+
 
     @Column(name = "quantity", length = 5)
     private int quantity;
@@ -115,10 +118,11 @@ public class Medicine implements Serializable {
 
     public Medicine fromJson(MedicineRequest rq){
         return new Medicine(rq.getName(), rq.getGenericName(), rq.getEffects(), rq.getCompany(),rq.getCompositions(),
-                rq.getUnits(),rq.getQuantity(), rq.getBuyingPrice(),rq.getSellingPrice());
+                rq.getUnits(),rq.getQuantity(), rq.getBuyingPrice(),rq.getSellingPrice(), rq.getStoreBox());
     }
 
-    private Medicine(String name, String genericName, String effects,  String company, String compositions, String units,int quantity, BigDecimal buyingPrice, BigDecimal sellingPrice) {
+    private Medicine(String name, String genericName, String effects,  String company, String compositions,
+                     String units,int quantity, BigDecimal buyingPrice, BigDecimal sellingPrice, final String storeBox) {
         this.name = name;
         this.genericName = genericName;
         this.effects = effects;
@@ -128,6 +132,7 @@ public class Medicine implements Serializable {
         this.quantity = quantity;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
+        this.storeBox = storeBox;
     }
 
 }
