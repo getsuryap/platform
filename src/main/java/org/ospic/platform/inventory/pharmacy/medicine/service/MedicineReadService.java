@@ -1,7 +1,6 @@
 package org.ospic.platform.inventory.pharmacy.medicine.service;
 
 import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineDataTemplate;
-import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ import java.util.Collection;
 @Component
 @Service
 public interface MedicineReadService {
-    Collection<Medicine> retrieveAllMedicines();
+    Collection<?> retrieveAllMedicines();
 
     public MedicineDataTemplate readMedicineDataTemplate();
 }

@@ -1,19 +1,20 @@
 package org.ospic.platform.inventory.pharmacy.medicine.service;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.categories.repository.MedicineCategoryRepository;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.ospic.platform.inventory.pharmacy.groups.repository.MedicineGroupRepository;
 import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineDataTemplate;
-import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.inventory.pharmacy.medicine.repository.MedicineRepository;
-import org.ospic.platform.util.constants.DatabaseConstants;
+import org.ospic.platform.inventory.pharmacy.medicine.rowmap.MedicineRowMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This file was created by eli on 14/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.service
@@ -47,19 +48,34 @@ public class MedicineReadServiceImpl implements MedicineReadService {
     MedicineGroupRepository medicineGroupRepository;
     @Autowired
     MedicineCategoryRepository medicineCategoryRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public MedicineReadServiceImpl(MedicineRepository medicineRepository,
                                    MedicineGroupRepository medicineGroupRepository,
-                                   MedicineCategoryRepository medicineCategoryRepository){
+                                   MedicineCategoryRepository medicineCategoryRepository,
+                                   final DataSource dataSource){
         this.medicineRepository = medicineRepository;
         this.medicineGroupRepository = medicineGroupRepository;
         this.medicineCategoryRepository = medicineCategoryRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public List<Medicine> retrieveAllMedicines() {
-        Session session = this.sessionFactory.openSession();
+    public List<?> retrieveAllMedicines() {
+        final MedicineRowMap rm = new MedicineRowMap();
+        final String sql = "select " + rm.schema() ;
+        List <Map<String, Object>> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{});
+        transactions.forEach(it->{
+            Long groupId =(Long) it.get("groupId");
+            Long categoryId = (Long)it.get("categoryId");
+            MedicineGroup medicineGroup = medicineGroupRepository.findById(groupId).get();
+            MedicineCategory medicineCategory = medicineCategoryRepository.findById(categoryId).get();
+            it.put("group", medicineGroup);
+            it.put("category", medicineCategory);
+        });
+        return transactions;
+        /**Session session = this.sessionFactory.openSession();
         List<Medicine> medicines = session.createQuery(String.format("from %s", DatabaseConstants.TABLE_PHARMACY_MEDICINES)).list();
         medicines.forEach(medicine -> {
             if(medicine.getGroup() != null){
@@ -74,6 +90,8 @@ public class MedicineReadServiceImpl implements MedicineReadService {
 
         session.close();
         return medicines;
+        **/
+
     }
 
     @Override
