@@ -19,12 +19,12 @@
         </conditionalStyle>
     </style>
 
-    <field name="id" class="java.lang.Long"/>
+    <field name="Id" class="java.lang.Long"/>
     <field name="name" class="java.lang.String"/>
     <field name="company" class="java.lang.String"/>
     <field name="compositions" class="java.lang.String"/>
-    <field name="units" class="java.lang.Integer"/>
-    <field name="price" class="java.math.BigDecimal"/>
+    <field name="quantity" class="java.lang.String"/>
+    <field name="sellingPrice" class="java.lang.String"/>
     <field name="group" class="org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup"/>
     <field name="category" class="org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory"/>
 
@@ -66,7 +66,7 @@
     <columnHeader>
         <band height="30" splitType="Stretch">
             <staticText>
-                <reportElement x="0" y="0" width="60" height="20" uuid="1bde8a34-9f64-4196-9a41-30f6bf55cbce">
+                <reportElement x="0" y="0" width="20" height="20" uuid="1bde8a34-9f64-4196-9a41-30f6bf55cbce">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b0132efe-65f1-4fd5-b3aa-9f1c04b9d006"/>
                 </reportElement>
                 <textElement>
@@ -105,7 +105,7 @@
                 <textElement>
                     <font fontName="fira-sans"/>
                 </textElement>
-                <text><![CDATA[Price]]></text>
+                <text><![CDATA[S. Price]]></text>
             </staticText>
             <staticText>
                 <reportElement x="350" y="0" width="80" height="20" uuid="ee6ac3e1-09c9-46aa-925d-6c44369f16f1">
@@ -158,11 +158,11 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b0132efe-65f1-4fd5-b3aa-9f1c04b9d006"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{Id}]]></textFieldExpression>
                 </textField>
 
                 <textField>
-                    <reportElement   style="Detail" positionType="Float"  x="63" y="-1" width="80" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
+                    <reportElement   style="Detail" positionType="Float"  x="63" y="-1" width="120" height="15" uuid="15cfc591-2bec-47c0-870c-ad2ddaa7a552">
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ae660e9-1cd7-4eec-83ae-6b6badeb1b54"/>
                     </reportElement>
 
@@ -182,7 +182,7 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0ffc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{sellingPrice}]]></textFieldExpression>
                 </textField>
 
                 <textField>
@@ -190,7 +190,7 @@
                         <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fb18edc7-0gfc-4ba5-9950-a251bdc731f2"/>
                     </reportElement>
 
-                    <textFieldExpression><![CDATA[$F{units}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
                 </textField>
 
                 <textField>
