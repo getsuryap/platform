@@ -8,6 +8,8 @@ import org.ospic.platform.accounting.transactions.service.TransactionReadPrincip
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
+import org.ospic.platform.infrastructure.reports.exception.ReportNotFoundException;
+import org.ospic.platform.infrastructure.reports.repository.ReportsJpaRepository;
 import org.ospic.platform.infrastructure.reports.service.ReportReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.service.ReportWritePrincipleService;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
@@ -67,6 +69,7 @@ public class ReportsApiResource {
     private final BloodBankReadPrincipleService bloodBankReadPrincipleService;
     private final MedicalServiceReadPrincipleService medicalServiceReadPrincipleService;
     private final MedicineReadService medicineReadService;
+    private final ReportsJpaRepository reportsJpaRepository;
 
 
 
@@ -78,7 +81,8 @@ public class ReportsApiResource {
             PatientInformationReadServices patientReadService,TransactionReadPrincipleService transactionReadService,
             BillReadPrincipleService billReadPrincipleService,ConsultationReadPrinciplesService consultationReadPrinciplesService,
             WardReadPrincipleService wardReadPrincipleService,BloodBankReadPrincipleService bloodBankReadPrincipleService,
-            MedicalServiceReadPrincipleService medicalServiceReadPrincipleService,MedicineReadService medicineReadService) {
+            MedicalServiceReadPrincipleService medicalServiceReadPrincipleService,MedicineReadService medicineReadService,
+            ReportsJpaRepository reportsJpaRepository) {
         this.readPrincipleService = readPrincipleService;
         this.writePrincipleService = writePrincipleService;
         this.patientReadService = patientReadService;
@@ -90,6 +94,7 @@ public class ReportsApiResource {
         this.medicalServiceReadPrincipleService = medicalServiceReadPrincipleService;
         this.bloodBankReadPrincipleService = bloodBankReadPrincipleService;
         this.medicineReadService = medicineReadService;
+        this.reportsJpaRepository = reportsJpaRepository;
     }
 
     @ApiOperation(value = "UPLOAD new report", notes = "UPLOAD new report", response = Reports.class)
@@ -113,9 +118,13 @@ public class ReportsApiResource {
         return ResponseEntity.ok().body(this.readPrincipleService.readAllReports());
     }
 
-    @GetMapping(path="/view", produces = "application/pdf")
-    public ResponseEntity<?> viewReport(@RequestParam(value = "reportName", required = true) String reportName,
-                                        @RequestParam(value = "entity", required = true) String entity) throws IOException, JRException, ServletException, SQLException {
+    @GetMapping(path="/view/{reportId}", produces = "application/pdf")
+    public ResponseEntity<?> viewReport(@PathVariable(name = "reportId", required = true) Long reportId) throws IOException, JRException, ServletException, SQLException {
+       Reports report = this.reportsJpaRepository.findById(reportId).orElseThrow(()->new ReportNotFoundException(reportId));
+       final String entity = report.getEntity();
+       final String reportName = report.getFilename();
+
+
         if (entity.equals("client")) {
             return readPrincipleService.readReport(reportName, this.patientReadService.retrieveAllPatients());
         }
