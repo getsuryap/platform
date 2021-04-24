@@ -30,7 +30,7 @@ public class InactiveMedicalConsultationsException extends AbstractPlatformResou
     }
 
     public InactiveMedicalConsultationsException(Long id){
-        super("error.msg.inactive.service", String.format("Medical service %2d is inactive", id));
+        super("error.msg.inactive.service", String.format("Consultation with ID %2d is inactive", id));
     }
     public InactiveMedicalConsultationsException(String code, String message){
         super(code, message);
