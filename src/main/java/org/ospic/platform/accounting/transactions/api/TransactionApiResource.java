@@ -57,13 +57,7 @@ public class TransactionApiResource {
     @RequestMapping(value = "/{consultationId}", method = RequestMethod.POST)
     //@PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
     ResponseEntity<?> createMedicalService(@PathVariable(name = "consultationId") Long consultationId, @RequestBody TransactionRequest payload) {
-        final String type = payload.getType();
-        if (type.equals("medicine")) {
-            return writeService.createMedicineServiceTransaction(consultationId, payload);
-        }
-        if (type.equals("service")) {
-            return writeService.createMedicalServiceTransaction(consultationId, payload);
-        } else return null;
+       return this.writeService.initiateMedicalTransaction(consultationId, payload);
     }
 
 
