@@ -90,7 +90,19 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
     @Override
-    public ResponseEntity<?> createMedicalServiceTransaction(Long id,  TransactionRequest payload) {
+    public ResponseEntity<?> initiateMedicalTransaction(Long consultationId, TransactionRequest payload) {
+        final String type = payload.getType();
+        if (type.equals("medicine")) {
+            return this.createMedicineServiceTransaction(consultationId, payload);
+        }
+        if (type.equals("service")) {
+            return this.createMedicalServiceTransaction(consultationId, payload);
+        } else return null;
+
+    }
+
+
+    private ResponseEntity<?> createMedicalServiceTransaction(Long id,  TransactionRequest payload) {
         ConsultationResource consultation = consultationResourceRepository.findById(id)
                 .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
         if (!consultation.getIsActive()) {
@@ -134,8 +146,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
         return null;//billReadPrincipleService.readBillById(consultation.getBill().getId());
     }
 
-    @Override
-    public ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload) {
+
+    private ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload) {
         return this.medicineRepository.findById(payload.getId()).map(medicine -> {
 
 
