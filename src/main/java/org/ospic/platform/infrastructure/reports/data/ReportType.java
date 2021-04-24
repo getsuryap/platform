@@ -1,17 +1,7 @@
-package org.ospic.platform.infrastructure.reports.service;
-
-import net.sf.jasperreports.engine.JRException;
-import org.ospic.platform.infrastructure.reports.domain.Reports;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import javax.servlet.ServletException;
-import java.io.IOException;
-import java.util.Collection;
+package org.ospic.platform.infrastructure.reports.data;
 
 /**
- * This file was created by eli on 02/03/2021 for org.ospic.platform.infrastructure.reports.service
+ * This file was created by eli on 23/04/2021 for org.ospic.platform.infrastructure.reports.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -31,10 +21,13 @@ import java.util.Collection;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface ReportReadPrincipleService {
-     Collection<Reports> readAllReports();
-    Collection<?> readReportsByType(Long type);
-    ResponseEntity<?> readReport(String reportName,final Collection<?> collection) throws ServletException, IOException, JRException;
+public enum ReportType {
+    GENERAL_REPORT(1),
+    FINANCIAL_REPORT(2),
+    PHARMACEUTICAL_REPORT(3);
+
+    public final Integer reportType;
+    private ReportType(Integer reportType){
+        this.reportType = reportType;
+    }
 }

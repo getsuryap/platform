@@ -3,6 +3,7 @@ package org.ospic.platform.infrastructure.reports.repository;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -28,4 +29,5 @@ import java.util.Optional;
  */
 public interface ReportsJpaRepository extends JpaRepository<Reports, Long> {
     Optional<Reports> findByfilename(String fileName);
+    Collection<Reports> findByType(Long reportType);
 }
