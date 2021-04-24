@@ -39,16 +39,16 @@ public class MedicineRowMap implements RowMapper<Map<String, Object>> {
     @Override
     public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
         final Map<String, Object> map = new HashMap<>();
-        map.put("Id", rs.getLong("id"));
+        map.put("id", rs.getLong("id"));
         map.put("name", rs.getString("name"));
         map.put("genericName", rs.getString("generic_name"));
         map.put("company", rs.getString("company"));
         map.put("compositions", rs.getString("compositions"));
-        map.put("units", rs.getString("units"));
+        map.put("unit", rs.getString("units"));
         map.put("quantity", rs.getString("quantity"));
         map.put("effects", rs.getString("effects"));
-        map.put("buyingPrice", rs.getString("buying_price"));
-        map.put("sellingPrice", rs.getString("selling_price"));
+        map.put("buyingPrice", rs.getBigDecimal("buying_price"));
+        map.put("sellingPrice", rs.getBigDecimal("selling_price"));
         map.put("categoryId", rs.getLong("category_id"));
         map.put("groupId", rs.getLong("group_id"));
         map.put("storeBox", rs.getString("store_box"));
