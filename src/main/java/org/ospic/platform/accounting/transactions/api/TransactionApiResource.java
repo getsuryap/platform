@@ -54,15 +54,15 @@ public class TransactionApiResource {
 
 
     @ApiOperation(value = "CREATE new medical service transaction", notes = "CREATE new medical service transaction", response = Transactions.class, responseContainer = "List")
-    @RequestMapping(value = "/{serviceId}/{type}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{consultationId}", method = RequestMethod.POST)
     //@PreAuthorize("hasAnyAuthority('LAB_TECHNICIAN')")
-    ResponseEntity<?> createMedicalService(@PathVariable(name = "serviceId") Long serviceId, @PathVariable(name = "type") String type, @RequestBody TransactionRequest payload) {
+    ResponseEntity<?> createMedicalService(@PathVariable(name = "consultationId") Long consultationId, @RequestBody TransactionRequest payload) {
+        final String type = payload.getType();
         if (type.equals("medicine")) {
-
-            return writeService.createMedicineServiceTransaction(serviceId, payload);
+            return writeService.createMedicineServiceTransaction(consultationId, payload);
         }
         if (type.equals("service")) {
-            return writeService.createMedicalServiceTransaction(serviceId, payload);
+            return writeService.createMedicalServiceTransaction(consultationId, payload);
         } else return null;
     }
 
