@@ -112,6 +112,12 @@ public class ReportsApiResource {
         }
     }
 
+    @ApiOperation(value = "GET reports by type id ", notes = "GET reports by type", response = Reports.class, responseContainer = "List")
+    @RequestMapping(value = "/{reportTypeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> readAllReportsByType(@PathVariable(name = "reportTypeId") Long reportTypeId) {
+        return ResponseEntity.ok().body(this.readPrincipleService.readReportsByType(reportTypeId));
+    }
+
     @ApiOperation(value = "GET reports", notes = "GET reports", response = Reports.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> readAllReports() {

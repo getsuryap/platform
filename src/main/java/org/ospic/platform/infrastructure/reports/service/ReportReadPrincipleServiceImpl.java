@@ -61,8 +61,9 @@ public class ReportReadPrincipleServiceImpl implements ReportReadPrincipleServic
     }
 
     @Override
-    public ResponseEntity<?> readReportsByType(String type) {
-        return null;
+    public Collection<Reports> readReportsByType(Long type) {
+       Collection<Reports> reports = repository.findByType(type);
+        return reports;
     }
 
     @Override
