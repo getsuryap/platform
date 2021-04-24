@@ -29,6 +29,6 @@ import lombok.*;
 @AllArgsConstructor
 public class TransactionRequest {
     private Long id;
-    private int quantity;
+    private Integer quantity;
     private String type;
 }

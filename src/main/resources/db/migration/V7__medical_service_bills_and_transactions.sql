@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS `m_transactions`(
   amount decimal (13,4) COMMENT 'transaction amount' ,
   is_reversed boolean default false COMMENT 'check if transaction was reversed' ,
   transaction_date DATETIME NOT NULL COMMENT 'transactio date',
-  bill_id bigint  references `m_bills`(`id`) ON DELETE NO ACTION,
+   constraint transactions_primary_key primary key  (`id`),
+  bill_id BIGINT null references `m_bills`(`id`) ON DELETE NO ACTION,
   department_id BIGINT references `m_department`(`id`) ON DELETE NO ACTION,
   medical_service_id BIGINT  references `m_services`(`id`) ON DELETE NO ACTION,
   CONSTRAINT fk_m_transactions_services FOREIGN KEY(`medical_service_id`) REFERENCES `m_services`(`id`),
   CONSTRAINT fk_consultation_transactions_bill FOREIGN KEY(`bill_id`) REFERENCES `m_bills`(`id`),
-  CONSTRAINT fk_medical_service_departments FOREIGN KEY(`department_id`) REFERENCES `m_department`(`id`),
-  constraint transactions_primary_key primary key  (`id`)
+  CONSTRAINT fk_medical_service_departments FOREIGN KEY(`department_id`) REFERENCES `m_department`(`id`)
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;

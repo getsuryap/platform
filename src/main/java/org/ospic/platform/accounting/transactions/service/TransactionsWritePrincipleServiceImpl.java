@@ -1,6 +1,7 @@
 package org.ospic.platform.accounting.transactions.service;
 
 import org.ospic.platform.accounting.bills.domain.Bill;
+import org.ospic.platform.accounting.bills.exceptions.BillNotFoundException;
 import org.ospic.platform.accounting.bills.repository.BillsJpaRepository;
 import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
@@ -127,16 +128,17 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
                 Optional<MedicalService> serviceOptional = medicalServiceRepository.findById(payload.getId());
                 Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
-                if (serviceOptional.isPresent()) {
+                if (serviceOptional.isPresent() && billOptional.isPresent()) {
                     MedicalService service = serviceOptional.get();
+                    Bill bill = billOptional.get();
                     Transactions trx = new Transactions();
                     trx.setDepartment(department);
                     trx.setTransactionDate(transactionDate);
                     trx.setIsReversed(false);
-                    trx.setBill(billOptional.get());
                     trx.setAmount(service.getPrice());
                     trx.setCurrencyCode("USD");
                     trx.setMedicalService(service);
+                    trx.setBill(bill);
                     this.repository.save(trx);
                 }
 
@@ -147,54 +149,45 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
 
-    private ResponseEntity<?> createMedicineServiceTransaction(Long id, TransactionRequest payload) {
+    private ResponseEntity<?> createMedicineServiceTransaction(Long consultationId, TransactionRequest payload) {
         return this.medicineRepository.findById(payload.getId()).map(medicine -> {
-
-
-        ConsultationResource consultation = consultationResourceRepository.findById(id)
-                .orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(id));
+        ConsultationResource consultation = consultationResourceRepository.findById(consultationId
+        ).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(consultationId));
         final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userJpaRepository.findById(ud.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
-
+        User user = userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UsernameNotFoundException("User with is " + ud.getId() + " is not found"));
         if (!consultation.getIsActive()) {
             throw new InactiveMedicalConsultationsException(consultation.getId());
         }
+
         if(medicine.getQuantity() < payload.getQuantity()){
             throw new MedicineNotFoundExceptions("");
         }
 
-        List<Transactions> trxns = new ArrayList<>();
         if (!user.getIsStaff()) {
             String message = "Insufficient role to perform this operation";
             throw new InsufficientRoleException(user.getId(), message);
-        } else if (user.getIsStaff() && user.getStaff().getDepartment() != null) {
-            Department department = (Department) user.getStaff().getDepartment();
-            if (consultation.getBill() == null) {
-                createServiceBillIfNotExists(consultation);
-            }
-                Optional<Bill> billOptional = this.billsJpaRepository.findByConsultationId(consultation.getId());
-                if ( billOptional.isPresent()) {
-                    Transactions trx = new Transactions();
-                    trx.setDepartment(department);
-                    trx.setTransactionDate(transactionDate);
-                    trx.setIsReversed(false);
-                    trx.setBill(billOptional.get());
-                    final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
-                    trx.setAmount(amount);
-                    trx.setCurrencyCode("USD");
-                    trx.setMedicalService(null);
-                    trx.setMedicine(medicine);
-                    repository.save(trx);
-                    trxns.add(trx);
-                }
+        } else if (user.getIsStaff() && user.getStaff().getDepartment() == null) {
+            throw new InsufficientRoleException(user.getId(), "You are no member of any department");
+        }
+        Department department = (Department) user.getStaff().getDepartment();
 
-                medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
-                this.medicineRepository.save(medicine);
-        } else throw new InsufficientRoleException(user.getId(), "You are no member of any department");
-
-        return billReadPrincipleService.readBillById(consultation.getBill().getId());
+        if (consultation.getBill() == null) { createServiceBillIfNotExists(consultation);}
+         return this.billsJpaRepository.findByConsultationId(consultationId).map(bill ->{
+             Transactions trx = new Transactions();
+             trx.setDepartment(department);
+             trx.setTransactionDate(transactionDate);
+             trx.setIsReversed(false);
+             final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
+             trx.setAmount(amount);
+             trx.setCurrencyCode("USD");
+             trx.setMedicalService(null);
+             trx.setMedicine(medicine);
+             trx.setBill(bill);
+             medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
+             this.medicineRepository.save(medicine );
+             return ResponseEntity.ok().body(this.repository.save(trx));
+         }).orElseThrow(()->new BillNotFoundException(consultation.getBill().getId()));
         }).orElseThrow(()->new MedicineNotFoundExceptions(payload.getId()));
     }
 

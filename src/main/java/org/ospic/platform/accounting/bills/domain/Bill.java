@@ -46,9 +46,10 @@ import java.util.List;
 @Table(name = DatabaseConstants.TABLE_BILLS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
-public class Bill extends Auditable {
+public class Bill extends  Auditable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
 

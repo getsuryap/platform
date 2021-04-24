@@ -32,5 +32,5 @@ import org.springframework.stereotype.Service;
 public interface TransactionsWritePrincipleService {
     ResponseEntity<?> updateTransaction(Long id, TransactionPayload payload);
     ResponseEntity<?> initiateMedicalTransaction(Long consultationId, TransactionRequest payload);
-    ResponseEntity<?> undoTransaction(Long id);
+    ResponseEntity<?> undoTransaction(Long transactionId);
 }

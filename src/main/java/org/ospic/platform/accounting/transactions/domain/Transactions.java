@@ -19,6 +19,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * This file was created by eli on 02/02/2021 for org.ospic.platform.accounting.transactions.domain
@@ -101,22 +102,20 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
         medicalService.getTransactions().add(this);
     }
 
-    public void setBill(Bill bill) {
-        this.bill = bill;
-    }
+    //public void setBill(Bill bill) {this.bill = bill;}
 
-    /**
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Transactions)) return false;
         Transactions that = (Transactions) o;
-        return getCurrencyCode().equals(that.getCurrencyCode()) && getAmount().equals(that.getAmount()) && getTransactionDate().equals(that.getTransactionDate()) && getMedicalService().equals(that.getMedicalService()) && getDepartment().equals(that.getDepartment()) && getConsultation().equals(that.getConsultation());
+        return getCurrencyCode().equals(that.getCurrencyCode()) && getAmount().equals(that.getAmount()) && getTransactionDate().equals(that.getTransactionDate()) && getMedicalService().equals(that.getMedicalService()) && getDepartment().equals(that.getDepartment()) && getBill().equals(that.getBill());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMedicalService(), getDepartment(), getConsultation());
+        return Objects.hash(getMedicalService(), getDepartment(), getBill());
     }
-    **/
+
 }
