@@ -56,6 +56,7 @@ public class MedicineRowMap implements RowMapper<Map<String, Object>> {
         map.put("isExpiring", rs.getBoolean("isExpiring"));
         map.put("expireOn", rs.getString("expireOn"));
         map.put("daysToExpire", rs.getLong("daysToExpire"));
+        map.put("expireDate",rs.getString("expire_date"));
 
         return map;
     }
