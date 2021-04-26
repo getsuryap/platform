@@ -32,7 +32,7 @@ public class BillsPerDayRowMap implements RowMapper<BillsPerDay> {
         return "    select date(b.created_date) as createdDate, count(*) as totalBills, " +
                 "   ifnull(sum(b.paid_amount), 0) as totalPaidAmount,  " +
                 "   ifnull(sum(b.total_amount),0) as totalAmount  " +
-                "   from m_bills b group by date(b.created_date) ASC ";
+                "   from m_bills b group by date(b.created_date)";
     };
     @Override
     public BillsPerDay mapRow(ResultSet rs, int rowNum) throws SQLException {
