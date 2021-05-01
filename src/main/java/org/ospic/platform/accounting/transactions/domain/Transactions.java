@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
-import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
@@ -42,13 +42,19 @@ import java.util.Objects;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @Table(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@EqualsAndHashCode(callSuper = false)
-public class Transactions  extends AbstractPersistableCustom implements Serializable {
+@ToString
+public class Transactions   implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
+    private Long id;
 
     @Column(length = 140, name = "currency_code", nullable = false)
     private String currencyCode;
@@ -64,8 +70,8 @@ public class Transactions  extends AbstractPersistableCustom implements Serializ
     @Basic(optional = false)
     private LocalDateTime transactionDate;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "medical_service_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "medical_service_id")
     @JsonIgnore
     private MedicalService medicalService;
 
