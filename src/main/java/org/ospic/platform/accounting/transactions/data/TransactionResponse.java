@@ -3,11 +3,9 @@ package org.ospic.platform.accounting.transactions.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -41,7 +39,7 @@ public class TransactionResponse implements Serializable {
     public TransactionResponse transactionResponse(List<TransactionRowMap> transactions) {
         BigDecimal sum = new BigDecimal(0);
         for (TransactionRowMap transaction : transactions) {
-            sum = sum.add(transaction.getAmount());
+            sum = sum.add(transaction.getIsReversed() ? BigDecimal.ZERO : transaction.getAmount());
         }
         return new TransactionResponse(sum, transactions);
     }
