@@ -131,10 +131,11 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setIsReversed(false);
                     trx.setAmount(service.getPrice());
                     trx.setCurrencyCode("USD");
+                    trx.setMedicine(null);
                     trx.setMedicalService(service);
                     trx.setBill(bill);
-                    this.repository.save(trx);
-                    return ResponseEntity.ok().body(this.repository.save(trx));
+                    bill.getTransactions().add(trx);
+                    return ResponseEntity.ok().body(this.billsJpaRepository.save(bill));
                 }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
             }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(consultationId));
         }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(payload.getId()));
@@ -178,9 +179,10 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 trx.setMedicalService(null);
                 trx.setMedicine(medicine);
                 trx.setBill(bill);
+                bill.getTransactions().add(trx);
                 medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
                 this.medicineRepository.save(medicine);
-                return ResponseEntity.ok().body(this.repository.save(trx));
+                return ResponseEntity.ok().body(this.billsJpaRepository.save(bill));
             }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
         }).orElseThrow(() -> new MedicineNotFoundExceptions(payload.getId()));
     }
