@@ -70,7 +70,7 @@ public class Bill extends  Auditable {
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "bill_id")
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display department transactions")
     @JsonIgnore
