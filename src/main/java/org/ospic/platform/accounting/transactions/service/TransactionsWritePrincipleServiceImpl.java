@@ -7,6 +7,7 @@ import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
 import org.ospic.platform.accounting.transactions.data.TransactionRequest;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
+import org.ospic.platform.accounting.transactions.exceptions.PaidBillTransactionException;
 import org.ospic.platform.accounting.transactions.exceptions.TransactionNotFoundExceptionPlatform;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.inventory.pharmacy.medicine.exceptions.MedicineNotFoundExceptions;
@@ -199,6 +200,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     @Override
     public ResponseEntity<?> undoTransaction(Long id) {
         return this.repository.findById(id).map(trx -> {
+            if (trx.getBill().getIsPaid()){
+                throw new PaidBillTransactionException(trx.getBill().getId());
+            }
             trx.setIsReversed(!trx.getIsReversed());
             return ResponseEntity.ok().body(this.repository.save(trx));
         }).orElseThrow(() -> new TransactionNotFoundExceptionPlatform(id));
