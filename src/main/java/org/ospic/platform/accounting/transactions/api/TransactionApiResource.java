@@ -62,10 +62,9 @@ public class TransactionApiResource {
 
 
     @ApiOperation(value = "UNDO  service transaction", notes = "UNDO service transaction", response = CustomReponseMessage.class)
-    @RequestMapping(value = "/undo/{trxId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<?> undoTransaction(@PathVariable("trxId") Long trxId) {
-        return writeService.undoTransaction(trxId);
+    @RequestMapping(value = "/undo/{transactionId}", method = RequestMethod.PUT)
+    ResponseEntity<?> undoTransaction(@PathVariable("transactionId") Long transactionId) {
+        return writeService.undoTransaction(transactionId);
     }
 
     @ApiOperation(value = "LIST medical service transaction's", notes = "LIST medical service transaction's", response = TransactionRowMap.class, responseContainer = "List")

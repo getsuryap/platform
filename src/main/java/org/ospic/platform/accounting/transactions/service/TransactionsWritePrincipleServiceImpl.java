@@ -198,10 +198,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     @Override
     public ResponseEntity<?> undoTransaction(Long id) {
-        return repository.findById(id).map(trx -> {
+        return this.repository.findById(id).map(trx -> {
             trx.setIsReversed(true);
-            repository.save(trx);
-            return ResponseEntity.ok().body("Transaction reversed");
+            return ResponseEntity.ok().body(trx);
         }).orElseThrow(() -> new TransactionNotFoundExceptionPlatform(id));
     }
 
