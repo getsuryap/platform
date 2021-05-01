@@ -29,7 +29,7 @@ import java.sql.SQLException;
  */
 public class ConsultationResourceMapper implements RowMapper<ConsultationPayload> {
     public String schema() {
-        return  " s.id as id, DATE_FORMAT(s.fromdate, \"%W %M %e %Y %r\") as fromDate, DATE_FORMAT(s.todate, \"%W %M %e %Y %r\") as toDate,  s.is_active as isActive, " +
+        return  " s.id as id, DATE_FORMAT(s.fromdate, \"%W %M %e %Y \") as fromDate, DATE_FORMAT(s.todate, \"%W %M %e %Y \") as toDate,  s.is_active as isActive, " +
                 " s.patient_id as patientId, p.name as patientName, " +
                 " s.staff_id as staffId, st.fullName as staffName,  " +
                 " s.is_admitted as isAdmitted FROM m_consultations s " +
