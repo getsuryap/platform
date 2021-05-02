@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +40,12 @@ import java.util.List;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
+@ToString
 @Entity(name = DatabaseConstants.TABLE_BILLS)
 @Table(name = DatabaseConstants.TABLE_BILLS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
-public class Bill extends  Auditable {
+public class Bill extends  Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,7 +65,7 @@ public class Bill extends  Auditable {
     private BigDecimal paidAmount;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @MapsId
+    //@MapsId
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "Consultation respective id")
     private ConsultationResource consultation;
 

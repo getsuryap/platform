@@ -27,5 +27,5 @@ import java.util.Optional;
  * under the License.
  */
 public interface BillsJpaRepository extends JpaRepository<Bill, Long> {
-    Optional<Bill> findByConsultationId(Long consulationId);
+    Optional<Bill> findByConsultationId(Long consultationId);
 }

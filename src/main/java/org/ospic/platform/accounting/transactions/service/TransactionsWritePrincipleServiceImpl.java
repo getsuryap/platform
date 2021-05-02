@@ -124,7 +124,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 if (consultation.getBill() == null) {
                     createServiceBillIfNotExists(consultation);
                 }
-                return this.billsJpaRepository.findByConsultationId(consultationId).map(bill -> {
+                return this.billsJpaRepository.findByConsultationId(consultationId).map(b -> {
+                    Bill bill = consultation.getBill();
                     Transactions trx = new Transactions();
                     trx.setDepartment(department);
                     trx.setTransactionDate(transactionDate);
@@ -133,9 +134,8 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setCurrencyCode("USD");
                     trx.setMedicine(null);
                     trx.setMedicalService(service);
-                    trx.setBill(bill);
-                    bill.getTransactions().add(trx);
-                    return ResponseEntity.ok().body(this.billsJpaRepository.save(bill));
+                    trx.setBill(b);
+                    return ResponseEntity.ok().body(this.repository.save(trx));
                 }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
             }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(consultationId));
         }).orElseThrow(() -> new MedicalServiceNotFoundExceptionPlatform(payload.getId()));
