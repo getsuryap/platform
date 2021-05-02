@@ -179,10 +179,9 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                 trx.setMedicalService(null);
                 trx.setMedicine(medicine);
                 trx.setBill(bill);
-                bill.getTransactions().add(trx);
                 medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
                 this.medicineRepository.save(medicine);
-                return ResponseEntity.ok().body(this.billsJpaRepository.save(bill));
+                return ResponseEntity.ok().body(this.repository.save(trx));
             }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
         }).orElseThrow(() -> new MedicineNotFoundExceptions(payload.getId()));
     }
