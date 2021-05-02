@@ -98,7 +98,7 @@ public class TransactionReadPrincipleServiceImpl implements TransactionReadPrinc
     @Override
     public ResponseEntity<?> readTransactionsByBillId(Long billId) {
         final TransactionDataRowMapper rm = new TransactionDataRowMapper();
-        final String sql = "select " + rm.schema() + " where bl.id = ? order by tr.id DESC ";
+        final String sql = "select " + rm.schema() + " where bl.consultation_id = ? order by tr.id DESC ";
         List <TransactionRowMap> transactions =  this.jdbcTemplate.query(sql, rm, new Object[]{billId});
         return ResponseEntity.ok().body(new TransactionResponse().transactionResponse(transactions));
     }
