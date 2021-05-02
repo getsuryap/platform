@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.ospic.platform.accounting.bills.domain.Bill;
 import org.ospic.platform.accounting.transactions.data.TransactionPayload;
+import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.pharmacy.medicine.domains.Medicine;
 import org.ospic.platform.organization.departments.domain.Department;
 import org.ospic.platform.organization.medicalservices.domain.MedicalService;
@@ -49,12 +50,8 @@ import java.util.Objects;
 @Table(name = DatabaseConstants.TABLE_TRANSACTIONS)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @ToString
-public class Transactions   implements Serializable {
+public class Transactions extends AbstractPersistableCustom implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
 
     @Column(length = 140, name = "currency_code", nullable = false)
     private String currencyCode;
