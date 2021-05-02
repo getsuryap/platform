@@ -13,7 +13,6 @@ import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.accounting.bills.domain.Bill;
-import org.ospic.platform.accounting.transactions.domain.Transactions;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.laboratory.reports.domain.FileInformation;
 import org.ospic.platform.organization.staffs.domains.Staff;
@@ -99,12 +98,6 @@ public class ConsultationResource implements Serializable {
     @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display user name")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Admission> admissions = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "consultation_id")
-    @ApiModelProperty(position = 1, required = true, hidden = true, notes = "used to display medical consultation transactions")
-    @JsonIgnore
-    private List<Transactions> transactions = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "consultation_id")
