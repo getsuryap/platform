@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.ospic.platform.accounting.transactions.domain.Transactions;
+import org.ospic.platform.infrastructure.app.domain.AbstractPersistableCustom;
 import org.ospic.platform.inventory.pharmacy.categories.domains.MedicineCategory;
 import org.ospic.platform.inventory.pharmacy.groups.domains.MedicineGroup;
 import org.ospic.platform.inventory.pharmacy.medicine.data.MedicineRequest;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This file was created by eli on 12/11/2020 for org.ospic.platform.inventory.pharmacy.medicine.domains
@@ -52,14 +54,7 @@ import java.util.List;
         })
 @ApiModel(value = "Medicine", description = "Contain all medicine's available")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Medicine implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
-    private Long id;
-
+public class Medicine extends AbstractPersistableCustom implements Serializable {
 
     @NotBlank
     @Column(name = "name", length = 200, nullable = false)
@@ -135,4 +130,16 @@ public class Medicine implements Serializable {
         this.storeBox = storeBox;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Medicine)) return false;
+        Medicine medicine = (Medicine) o;
+        return getId().equals(medicine.getId()) && getName().equals(medicine.getName()) && Objects.equals(getExpireDateTime(), medicine.getExpireDateTime()) && getCompany().equals(medicine.getCompany()) && Objects.equals(getUnit(), medicine.getUnit()) && Objects.equals(getStoreBox(), medicine.getStoreBox()) && getGroup().equals(medicine.getGroup()) && getCategory().equals(medicine.getCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getExpireDateTime(), getCompany(), getUnit(), getStoreBox(), getGroup(), getCategory());
+    }
 }
