@@ -144,45 +144,39 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
 
     private ResponseEntity<?> createMedicineServiceTransaction(Long consultationId, TransactionRequest payload) {
         return this.medicineRepository.findById(payload.getId()).map(medicine -> {
-            ConsultationResource consultation = consultationResourceRepository.findById(consultationId
-            ).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(consultationId));
-            final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
-            UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user = userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UsernameNotFoundException(String.format("User with ID: %s is not found/exist",ud.getId().toString()) ));
-            if (!consultation.getIsActive()) {
-                throw new InactiveMedicalConsultationsException(consultation.getId());
-            }
+            return  this.consultationResourceRepository.findById(consultationId).map(consultation -> {
 
-            if (medicine.getQuantity() < payload.getQuantity()) {
-                throw new MedicineNotFoundExceptions("");
-            }
+                final LocalDateTime transactionDate = new DateUtil().convertToLocalDateTimeViaInstant(new Date());
+                UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UsernameNotFoundException(String.format("User with ID: %s is not found/exist", ud.getId().toString())));
 
-            if (!user.getIsStaff()) {
-                String message = "Insufficient role to perform this operation";
-                throw new InsufficientRoleException(user.getId(), message);
-            } else if (user.getIsStaff() && user.getStaff().getDepartment() == null) {
-                throw new InsufficientRoleException(user.getId(), "You are no member of any department");
-            }
-            Department department = (Department) user.getStaff().getDepartment();
+                if (!consultation.getIsActive()) { throw new InactiveMedicalConsultationsException(consultation.getId()); }
 
-            if (consultation.getBill() == null) {
-                createServiceBillIfNotExists(consultation);
-            }
-            return this.billsJpaRepository.findByConsultationId(consultationId).map(bill -> {
-                Transactions trx = new Transactions();
-                trx.setDepartment(department);
-                trx.setTransactionDate(transactionDate);
-                trx.setIsReversed(false);
-                final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
-                trx.setAmount(amount);
-                trx.setCurrencyCode("USD");
-                trx.setMedicalService(null);
-                trx.setMedicine(medicine);
-                trx.setBill(bill);
-                medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
-                this.medicineRepository.save(medicine);
-                return ResponseEntity.ok().body(this.repository.save(trx));
-            }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
+                if (medicine.getQuantity() < payload.getQuantity()) { throw new MedicineNotFoundExceptions(""); }
+
+                if (!user.getIsStaff()) { throw new InsufficientRoleException(user.getId(),  "Insufficient role to perform this operation"); }
+                if (user.getIsStaff() && user.getStaff().getDepartment() == null) { throw new InsufficientRoleException(user.getId(), "You are no member of any department"); }
+
+                Department department = (Department) user.getStaff().getDepartment();
+
+                if (consultation.getBill() == null) { createServiceBillIfNotExists(consultation); }
+
+                return this.billsJpaRepository.findByConsultationId(consultationId).map(bill -> {
+                    Transactions trx = new Transactions();
+                    trx.setDepartment(department);
+                    trx.setTransactionDate(transactionDate);
+                    trx.setIsReversed(false);
+                    final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
+                    trx.setAmount(amount);
+                    trx.setCurrencyCode("USD");
+                    trx.setMedicalService(null);
+                    trx.setMedicine(medicine);
+                    trx.setBill(bill);
+                    medicine.setQuantity(medicine.getQuantity() - payload.getQuantity());
+                    this.medicineRepository.save(medicine);
+                    return ResponseEntity.ok().body(this.repository.save(trx));
+                }).orElseThrow(() -> new BillNotFoundException(consultation.getBill().getId()));
+            }).orElseThrow(() -> new ConsultationNotFoundExceptionPlatform(consultationId));
         }).orElseThrow(() -> new MedicineNotFoundExceptions(payload.getId()));
     }
 
