@@ -1,12 +1,15 @@
 package org.ospic.platform.organization.calendar.services;
 
-import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
 import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
+import org.ospic.platform.organization.calendar.rowmap.CalendarRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.services
@@ -32,15 +35,19 @@ import java.util.List;
 @Repository
 public class CalendarReadPrincipleServiceImpl implements CalendarReadPrincipleService {
     private final CalendarJpaRepository calendarJpaRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    CalendarReadPrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository) {
+    CalendarReadPrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository,final DataSource dataSource) {
         this.calendarJpaRepository = calendarJpaRepository;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ResponseEntity<?> retrieveAllCalendarEvents() {
-        List<CalendarTimetable> response = this.calendarJpaRepository.findAll();
-        return ResponseEntity.ok().body(response);
+        final CalendarRowMapper rm = new CalendarRowMapper();
+        final String sql = "select  " + rm.schema();
+        Collection<Map<String, Object>> services = this.jdbcTemplate.query(sql, rm, new Object[]{});
+        return ResponseEntity.ok().body(services);
     }
 }
