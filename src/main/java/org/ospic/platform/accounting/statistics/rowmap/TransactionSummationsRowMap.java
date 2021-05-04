@@ -37,7 +37,7 @@ public class TransactionSummationsRowMap implements RowMapper<TransactionSummati
                 "   sum(case when date(tx.transaction_date) >= curdate() - interval 6 day  then tx.amount else 0 end ) as totalTransactionAmountLast7Days, " +
                 "   sum(case when date(tx.transaction_date) >= curdate() - interval 29 day  then 1 else 0 end ) as totalNumberOfTransactionsLast30Days, " +
                 "   sum(case when date(tx.transaction_date) >= curdate() - interval 29 day  then tx.amount else 0 end ) as totalTransactionAmountLast30Days"+
-                "   from m_transactions tx ;";
+                "   from m_transactions tx where tx.is_reversed is false;";
     }
     @Override
     public TransactionSummations mapRow(ResultSet rs, int rowNum) throws SQLException {
