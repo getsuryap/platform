@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.ospic.platform.configurations.audit.Auditable;
+import org.ospic.platform.organization.calendar.data.EventRequest;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.domain
@@ -56,7 +56,13 @@ public class CalendarTimetable extends Auditable implements Serializable {
     @Column(name = "department")
     private Long departmentId;
 
-    public CalendarTimetable(String name, LocalDateTime start, LocalDateTime end, String color, Boolean timed, Long departmentId) {
+    public CalendarTimetable getTimetableEvent(EventRequest r){
+        LocalDateTime startDateTime = LocalDateTime.of(r.getStartDate(), r.getStartTime() == null ? LocalTime.MIDNIGHT :  r.getStartTime());
+        LocalDateTime endDateTime = LocalDateTime.of(r.getEndDate(), r.getEndTime() == null ? LocalTime.MIDNIGHT : r.getEndTime());
+        return new CalendarTimetable(r.getName(),startDateTime, endDateTime, r.getColor(), r.getTimed(), r.getDepartmentId());
+    }
+
+    private CalendarTimetable(String name, LocalDateTime start, LocalDateTime end, String color, Boolean timed, Long departmentId) {
         this.name = name;
         this.start = start;
         this.end = end;

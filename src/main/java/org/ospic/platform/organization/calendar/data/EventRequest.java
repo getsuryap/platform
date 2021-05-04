@@ -1,11 +1,12 @@
-package org.ospic.platform.organization.calendar.repository;
+package org.ospic.platform.organization.calendar.data;
 
-import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
- * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.repository
+ * This file was created by eli on 04/05/2021 for org.ospic.platform.organization.calendar.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -25,6 +26,19 @@ import org.springframework.stereotype.Repository;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Repository
-public interface CalendarJpaRepository extends JpaRepository<CalendarTimetable,Long> {
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class EventRequest {
+    private String name;
+    private LocalDate startDate;
+    private LocalTime startTime;
+    private LocalDate endDate;
+    private LocalTime endTime;
+    private Boolean timed;
+    private String color;
+    private Long departmentId;
+
 }
