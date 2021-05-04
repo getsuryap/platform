@@ -49,8 +49,6 @@ public class CalendarTimetable extends Auditable implements Serializable {
     private LocalDateTime start;
     @Column(name = "end")
     private  LocalDateTime end;
-    @Column(name = "color")
-    private String color;
     @Column(name = "timed")
     private Boolean timed;
     @Column(name = "department")
@@ -59,14 +57,13 @@ public class CalendarTimetable extends Auditable implements Serializable {
     public CalendarTimetable getTimetableEvent(EventRequest r){
         LocalDateTime startDateTime = LocalDateTime.of(r.getStartDate(), r.getStartTime() == null ? LocalTime.MIDNIGHT :  r.getStartTime());
         LocalDateTime endDateTime = LocalDateTime.of(r.getEndDate(), r.getEndTime() == null ? LocalTime.MIDNIGHT : r.getEndTime());
-        return new CalendarTimetable(r.getName(),startDateTime, endDateTime, r.getColor(), r.getTimed(), r.getDepartmentId());
+        return new CalendarTimetable(r.getName(),startDateTime, endDateTime, r.getTimed(), r.getDepartmentId());
     }
 
-    private CalendarTimetable(String name, LocalDateTime start, LocalDateTime end, String color, Boolean timed, Long departmentId) {
+    private CalendarTimetable(String name, LocalDateTime start, LocalDateTime end,  Boolean timed, Long departmentId) {
         this.name = name;
         this.start = start;
         this.end = end;
-        this.color = color;
         this.timed = timed;
         this.departmentId = departmentId;
     }
