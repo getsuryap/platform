@@ -2,6 +2,7 @@ package org.ospic.platform.organization.calendar.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.organization.calendar.data.EventRequest;
 import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
 import org.ospic.platform.organization.calendar.services.CalendarReadPrincipleService;
 import org.ospic.platform.organization.calendar.services.CalendarWritePrincipleService;
@@ -49,10 +50,9 @@ public class CalendarApiResources {
         this.writeService = writeService;
     }
 
-    @ApiOperation(value = "CREATE new event", notes = "CREATE new event", response = CalendarTimetable.class,
-    httpMethod = "POST", nickname = "Create new event")
+    @ApiOperation(value = "CREATE new event", notes = "CREATE new event", response = CalendarTimetable.class, nickname = "Create new event")
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> createNewEvent(@Valid @RequestBody CalendarTimetable payload) {
+    ResponseEntity<?> createNewEvent(@Valid @RequestBody EventRequest payload) {
         return this.writeService.createCalendarEvent(payload);
     }
 

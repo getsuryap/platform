@@ -1,6 +1,8 @@
 package org.ospic.platform.organization.calendar.services;
 
+import org.ospic.platform.organization.calendar.data.EventRequest;
 import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.ospic.platform.organization.calendar.exceptions.InvalidStartOrEndDateException;
 import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,10 @@ public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipl
     }
 
     @Override
-    public ResponseEntity<?> createCalendarEvent(CalendarTimetable payload) {
-        CalendarTimetable response = this.calendarJpaRepository.save(payload);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> createCalendarEvent(EventRequest request) {
+        if ( request.getStartDate() ==null || request.getEndDate()==null){ throw new InvalidStartOrEndDateException(); }
+
+        CalendarTimetable calendarTimetable = new CalendarTimetable().getTimetableEvent(request);
+        return ResponseEntity.ok().body(this.calendarJpaRepository.save(calendarTimetable));
     }
 }
