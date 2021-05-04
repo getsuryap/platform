@@ -8,6 +8,7 @@ import org.ospic.platform.organization.authentication.selfservice.data.SelfServi
 import org.ospic.platform.organization.authentication.users.data.RefreshTokenResponse;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.DuplicateUsernameException;
+import org.ospic.platform.organization.authentication.users.exceptions.InvalidOldPasswordException;
 import org.ospic.platform.organization.authentication.users.exceptions.InvalidUserInformationException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.PasswordUpdatePayload;
@@ -26,7 +27,6 @@ import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.security.jwt.JwtUtils;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -214,22 +214,17 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     @Override
     public ResponseEntity<?> updateUserPassword(PasswordUpdatePayload payload) {
         CustomReponseMessage cm = new CustomReponseMessage();
-        HttpHeaders httpHeaders = new HttpHeaders();
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userJpaRepository.findById(ud.getId()).map(user -> {
             String userPassword = user.getPassword();
             if (!(encoder.matches(payload.getOldPassword(), userPassword))) {
-                cm.setMessage("Invalid old Password");
-                cm.setHttpStatus(HttpStatus.FORBIDDEN.value());
-                return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.BAD_REQUEST);
+              throw new InvalidOldPasswordException();
             }
             user.setPassword(encoder.encode(payload.getNewPassword()));
             userJpaRepository.save(user);
             cm.setMessage("Password Updated Successfully ...");
             cm.setHttpStatus(HttpStatus.OK.value());
-            return new ResponseEntity<CustomReponseMessage>(cm, httpHeaders, HttpStatus.OK);
-
-
+            return  ResponseEntity.ok().body(cm);
         }).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
     }
 
