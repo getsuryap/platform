@@ -1,5 +1,6 @@
 package org.ospic.platform.organization.calendar.rowmap;
 
+import org.ospic.platform.organization.calendar.data.EventColor;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -30,17 +31,19 @@ import java.util.Map;
  */
 public class CalendarRowMapper implements RowMapper<Map<String, Object>> {
     public String schema(){
-        return " c.*, date_format(c.start, \"%W %M %Y %r\") as startDate, " +
+        String schema =" c.*, date_format(c.start, \"%W %M %Y %r\") as startDate, " +
                 "date_format(c.end, \"%W %M %Y %r\") as endDate from m_calendar c;";
+
+        return " c.*, c.start as startDate, c.end as endDate from m_calendar c;";
     }
     @Override
     public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
         final Map<String, Object> map = new HashMap<>();
         map.put("id", rs.getLong("id"));
         map.put("name", rs.getString("name"));
-        map.put("startDate", rs.getString("startDate"));
-        map.put("endDate", rs.getString("endDate"));
-        map.put("createdBy", rs.getString("created_by"));
+        map.put("start", rs.getString("startDate"));
+        map.put("end", rs.getString("endDate"));
+        map.put("color", EventColor.randomColors().color);
         map.put("timed", rs.getBoolean("timed"));
         return map;
     }
