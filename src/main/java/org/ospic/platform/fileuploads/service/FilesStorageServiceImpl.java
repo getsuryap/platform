@@ -177,7 +177,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public String uploadPatientImage(@NonNull Long patientId, MultipartFile file, @NonNull String...strings) {
+    public String uploadPatientImage(@NonNull Long patientId,EntityType entityType, MultipartFile file, @NonNull String...strings) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
@@ -187,7 +187,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 throw new InvalidFileNameException(String.format("Sorry! Filename %s contains invalid characters sequence ", fileName));
             }
 
-            Path targetLocation = this.createDirectoryIfNotExists(patientId, strings).resolve(fileName);
+            Path targetLocation = this.createDirectoryIfNotExists(patientId, entityType, strings).resolve(fileName);
 
             logger.info("ServletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
             logger.info("ServletUriComponent From Current Request Uri : " + ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
@@ -205,11 +205,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path createDirectoryIfNotExists(Long patientId, String...strings) {
+    private Path createDirectoryIfNotExists(Long patientId, EntityType entityType, String...strings) {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("files/");
-            sb.append("patients/");
+            sb.append(entityType.name);
             sb.append(patientId);
             sb.append("/");
             for(String str: strings){
@@ -226,7 +226,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     private Path retrieveEntityImagePath(@NonNull Long patientId, EntityType entityType, String... paths) {
         StringBuilder sb = new StringBuilder();
         sb.append("files/");
-        sb.append(entityType.color);
+        sb.append(entityType.name);
         sb.append(patientId);
         sb.append("/");
         for(String str: paths){

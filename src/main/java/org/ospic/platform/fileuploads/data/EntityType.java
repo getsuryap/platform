@@ -27,6 +27,6 @@ public enum EntityType {
     ENTITY_PATIENTS("patients/"),
     ENTITY_TYPE("type/");
 
-    public final String color;
-    private EntityType(String color) { this.color = color; }
+    public final String name;
+    private EntityType(String name) { this.name = name; }
 }
