@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.exceptions.FileUploadException;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.model.FileInfo;
@@ -117,7 +118,7 @@ public class FilesUploadController {
     @ApiOperation(value = "GET patient file from his/her file", notes = "GET patient file from his/her file")
     @RequestMapping(value = "/{patientId}/images/{filename:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = storageService.loadImage(patientId, filename);
+        Resource file = storageService.loadImage(patientId,EntityType.ENTITY_PATIENTS, filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
@@ -126,7 +127,8 @@ public class FilesUploadController {
     @ApiOperation(value = "GET patient document by document/file name", notes = "GET patient document by document/file name")
     @RequestMapping(value = "/{patientId}/documents/{filename:.+}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = storageService.loadDocument(patientId, filename);
+
+        Resource file = storageService.loadDocument(patientId, EntityType.ENTITY_PATIENTS, filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }

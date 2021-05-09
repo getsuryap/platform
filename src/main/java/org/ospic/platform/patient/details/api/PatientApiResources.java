@@ -1,5 +1,6 @@
 package org.ospic.platform.patient.details.api;
 
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
@@ -168,14 +169,14 @@ public class PatientApiResources {
 
     @GetMapping("/{patientId}/images/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = filesStorageService.loadImage(patientId, filename,"images");
+        Resource file = filesStorageService.loadImage(patientId,EntityType.ENTITY_PATIENTS, filename,"images");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @RequestMapping(value = "/{patientId}/documents/{filename:.+}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = filesStorageService.loadDocument(patientId, filename);
+        Resource file = filesStorageService.loadDocument(patientId, EntityType.ENTITY_PATIENTS, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 

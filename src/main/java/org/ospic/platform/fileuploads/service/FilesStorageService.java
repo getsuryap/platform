@@ -1,6 +1,7 @@
 package org.ospic.platform.fileuploads.service;
 
 import lombok.NonNull;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,9 @@ public interface FilesStorageService {
 
     public String uploadReportFile(MultipartFile multipartFile);
 
-    public Resource loadImage(Long patientId,String filename, String... s);
+    public Resource loadImage(Long patientId, EntityType entityType, String filename, String... s);
 
-    public Resource loadDocument(Long patientId, String filename,String... s);
+    public Resource loadDocument(Long patientId,EntityType entityType, String filename,String... s);
 
     public void deleteAll();
 
