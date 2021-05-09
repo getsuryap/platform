@@ -275,7 +275,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     public ResponseEntity<?> updateProfileImage(Long userId, MultipartFile file) {
         return this.userJpaRepository.findById(userId).map(user -> {
             String imagePath = filesStorageService.uploadPatientImage(userId, EntityType.ENTITY_USER,  file,"images");
-           if(user.getIsStaff()|| user.getStaff()==null){
+           if(!user.getIsStaff() || user.getStaff()==null){
                throw new StaffNotFoundExceptionPlatform(userId);
            }
            user.getStaff().setImageUrl(imagePath);
