@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -89,6 +90,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> initiateMedicalTransaction(Long consultationId, TransactionRequest payload) {
         final String type = payload.getType();
         if (type.equals("medicine")) {
@@ -101,6 +103,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
 
+    @Transactional
     private ResponseEntity<?> createMedicalServiceTransaction(Long consultationId, TransactionRequest payload) {
         return this.consultationResourceRepository.findById(consultationId).map(consultation -> {
             return this.medicalServiceRepository.findById(payload.getId()).map(service -> {
@@ -142,6 +145,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
 
+    @Transactional
     private ResponseEntity<?> createMedicineServiceTransaction(Long consultationId, TransactionRequest payload) {
         return this.medicineRepository.findById(payload.getId()).map(medicine -> {
             return  this.consultationResourceRepository.findById(consultationId).map(consultation -> {
@@ -186,6 +190,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> undoTransaction(Long id) {
         return this.repository.findById(id).map(trx -> {
             if (trx.getBill().getIsPaid()) {
