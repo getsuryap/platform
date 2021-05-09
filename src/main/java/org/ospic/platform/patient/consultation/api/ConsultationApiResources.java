@@ -3,6 +3,7 @@ package org.ospic.platform.patient.consultation.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.laboratory.reports.domain.FileInformation;
@@ -178,7 +179,7 @@ public class ConsultationApiResources {
           headers.add("content-disposition", "inline;filename=" + filename);
           headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
           MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
-          Resource file = filesystem.loadDocument(consultation.getPatient().getId(), filename,"consultations", String.valueOf(consultationId),fileLocation);
+          Resource file = filesystem.loadDocument(consultation.getPatient().getId(), EntityType.ENTITY_PATIENTS, filename,"consultations", String.valueOf(consultationId),fileLocation);
           return ResponseEntity.ok().headers(headers).body(file);
       }).orElseThrow(()-> new ConsultationNotFoundExceptionPlatform(consultationId));
 

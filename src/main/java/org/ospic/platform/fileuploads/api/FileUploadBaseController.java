@@ -1,15 +1,12 @@
 package org.ospic.platform.fileuploads.controller;
 
-import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This file was created by eli on 16/10/2020 for org.ospic.platform.fileuploads.controller
@@ -44,7 +41,7 @@ public class FileUploadBaseController {
     @GetMapping("/{patientId}/images/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = storageService.loadImage(patientId, filename);
+        Resource file = storageService.loadImage(patientId, EntityType.ENTITY_PATIENTS, filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
@@ -52,7 +49,7 @@ public class FileUploadBaseController {
     @RequestMapping(value = "/{patientId}/documents/{filename:.+}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> getDocument(@PathVariable String filename, @PathVariable Long patientId) {
-        Resource file = storageService.loadDocument(patientId, filename);
+        Resource file = storageService.loadDocument(patientId,EntityType.ENTITY_PATIENTS, filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 

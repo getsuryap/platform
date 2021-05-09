@@ -1,6 +1,7 @@
 package org.ospic.platform.fileuploads.service;
 
 import lombok.NonNull;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.exceptions.InvalidFileNameException;
 import org.ospic.platform.infrastructure.reports.exception.EmptyContentFileException;
 import org.ospic.platform.infrastructure.reports.exception.InvalidReportNameExtensionException;
@@ -118,9 +119,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource loadImage(Long patientId, String filename, String...s) {
+    public Resource loadImage(Long patientId, EntityType entityType,String filename, String...s) {
         try {
-            Path path = this.retrieveEntityImagePath( patientId,s);
+            Path path = this.retrieveEntityImagePath( patientId, entityType,s);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -135,9 +136,9 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public Resource loadDocument(Long patientId, String filename,String... s) {
+    public Resource loadDocument(Long patientId, EntityType entityType, String filename,String... s) {
         try {
-            Path path = this.retrieveEntityImagePath( patientId,s);
+            Path path = this.retrieveEntityImagePath( patientId,entityType,s);
             Path file = path.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
@@ -222,10 +223,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    private Path retrieveEntityImagePath( @NonNull Long patientId, String... paths) {
+    private Path retrieveEntityImagePath(@NonNull Long patientId, EntityType entityType, String... paths) {
         StringBuilder sb = new StringBuilder();
         sb.append("files/");
-        sb.append("patients/");
+        sb.append(entityType.color);
         sb.append(patientId);
         sb.append("/");
         for(String str: paths){
