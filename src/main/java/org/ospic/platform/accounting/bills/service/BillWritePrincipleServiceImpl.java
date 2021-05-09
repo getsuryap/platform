@@ -10,6 +10,7 @@ import org.ospic.platform.patient.consultation.service.ConsultationResourceWrite
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.service
@@ -49,6 +50,7 @@ public class BillWritePrincipleServiceImpl implements BillWritePrincipleService 
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> payBill(PaymentPayload payload) {
         return consultationRepository.findById(payload.getConsultationId()).map(consultation -> {
             Bill bill = consultation.getBill();
