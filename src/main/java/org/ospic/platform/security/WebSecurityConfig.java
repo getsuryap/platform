@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/signin",
             "/api/patients/**/documents/**",
             "/api/patients/**/images/**",
+            "/api/auth/**/images/**",
             "/api/consultations/**/laboratory/**",
             "/api/consultations/**/radiology/**",
             "/api/test/**",

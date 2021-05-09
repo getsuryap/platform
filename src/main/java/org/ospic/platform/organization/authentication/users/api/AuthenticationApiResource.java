@@ -4,7 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.organization.authentication.roles.data.RoleRequest;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
@@ -14,6 +16,8 @@ import org.ospic.platform.organization.authentication.users.payload.request.*;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,17 +41,20 @@ public class AuthenticationApiResource {
    private final UsersWritePrincipleService usersWritePrincipleService;
    private final RoleReadPrincipleServices roleReadPrincipleServices;
    private final RoleWritePrincipleService roleWriteService;
+   private final FilesStorageService filesStorageService;
 
     @Autowired
     AuthenticationApiResource(
             UsersReadPrincipleService usersReadPrincipleService,
                     UsersWritePrincipleService usersWritePrincipleService,
                     RoleReadPrincipleServices roleReadPrincipleServices,
-                    RoleWritePrincipleService roleWriteService){
+                    RoleWritePrincipleService roleWriteService,
+            FilesStorageService filesStorageService){
         this.roleWriteService = roleWriteService;
         this.roleReadPrincipleServices = roleReadPrincipleServices;
         this.usersWritePrincipleService = usersWritePrincipleService;
         this.usersReadPrincipleService = usersReadPrincipleService;
+        this.filesStorageService = filesStorageService;
 
     }
 
@@ -176,6 +183,13 @@ public class AuthenticationApiResource {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
+    }
+
+    @GetMapping("/{userId}/images/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename, @PathVariable Long userId) {
+        Resource file = filesStorageService.loadImage(userId, EntityType.ENTITY_USER, filename,"images");
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
 }
