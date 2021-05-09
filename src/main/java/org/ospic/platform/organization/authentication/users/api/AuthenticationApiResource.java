@@ -4,18 +4,22 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.organization.authentication.roles.data.RoleRequest;
 import org.ospic.platform.organization.authentication.roles.services.RoleReadPrincipleServices;
 import org.ospic.platform.organization.authentication.roles.services.RoleWritePrincipleService;
 import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
+import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.payload.request.*;
 import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.organization.authentication.users.services.UsersWritePrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -160,6 +164,18 @@ public class AuthenticationApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'CREATE_SELF_SERVICE','UPDATE_SELF_SERVICE','DELETE_SELF_SERVICE')")
     public ResponseEntity<?> deleteSelfServiceUser(@PathVariable(name = "userId", required = true) Long userId) {
         return this.usersWritePrincipleService.deleteSelfServiceUser(userId);
+    }
+
+    @ApiOperation(value = "UPDATE user thumbnail image", notes = "UPDATE user thumbnail image", response = User.class)
+    @RequestMapping(value = "/{userId}/images", method = RequestMethod.PATCH, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserProfileImage(@RequestParam("file") MultipartFile file, @PathVariable(name = "userId") Long userId) {
+        String message = "";
+        try {
+            return this.usersWritePrincipleService.updateProfileImage(userId, file);
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
     }
 
 }

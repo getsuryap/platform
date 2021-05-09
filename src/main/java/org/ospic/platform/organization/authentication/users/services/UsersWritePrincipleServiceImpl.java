@@ -2,6 +2,8 @@ package org.ospic.platform.organization.authentication.users.services;
 
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.fileuploads.data.EntityType;
+import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.organization.authentication.roles.domain.Role;
 import org.ospic.platform.organization.authentication.roles.repository.RoleRepository;
 import org.ospic.platform.organization.authentication.selfservice.data.SelfServicePayload;
@@ -19,6 +21,7 @@ import org.ospic.platform.organization.authentication.users.repository.UserJpaRe
 import org.ospic.platform.organization.departments.exceptions.DepartmentNotFoundExceptionsPlatform;
 import org.ospic.platform.organization.departments.repository.DepartmentJpaRepository;
 import org.ospic.platform.organization.staffs.domains.Staff;
+import org.ospic.platform.organization.staffs.exceptions.StaffNotFoundExceptionPlatform;
 import org.ospic.platform.organization.staffs.repository.StaffsRepository;
 import org.ospic.platform.organization.staffs.service.StaffsWritePrinciplesService;
 import org.ospic.platform.patient.details.domain.Patient;
@@ -34,6 +37,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,6 +71,7 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
     private final RoleRepository roleRepository;
     private final DepartmentJpaRepository departmentRepository;
     private final StaffsRepository staffsRepository;
+    private final FilesStorageService filesStorageService;
     @Autowired
     PatientRepository patientRepository;
 
@@ -78,13 +83,14 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             StaffsWritePrinciplesService staffsWritePrinciplesService,
             RoleRepository roleRepository,
             DepartmentJpaRepository departmentRepository,
-            StaffsRepository staffsRepository) {
+            StaffsRepository staffsRepository,FilesStorageService filesStorageService) {
 
         this.userJpaRepository = userJpaRepository;
         this.staffsWritePrinciplesService = staffsWritePrinciplesService;
         this.roleRepository = roleRepository;
         this.departmentRepository = departmentRepository;
         this.staffsRepository = staffsRepository;
+        this.filesStorageService = filesStorageService;
     }
 
     @Autowired
@@ -263,6 +269,18 @@ public class UsersWritePrincipleServiceImpl implements UsersWritePrincipleServic
             }).orElseThrow(()->new PatientNotFoundExceptionPlatform(patientId));
 
         }).orElseThrow(()->new UserNotFoundPlatformException(id));
+    }
+
+    @Override
+    public ResponseEntity<?> updateProfileImage(Long userId, MultipartFile file) {
+        return this.userJpaRepository.findById(userId).map(user -> {
+            String imagePath = filesStorageService.uploadPatientImage(userId, EntityType.ENTITY_USER,  file,"images");
+           if(user.getIsStaff()|| user.getStaff()==null){
+               throw new StaffNotFoundExceptionPlatform(userId);
+           }
+           user.getStaff().setImageUrl(imagePath);
+            return ResponseEntity.ok().body(this.userJpaRepository.save(user));
+        }).orElseThrow(() -> new UserNotFoundPlatformException(userId));
     }
 
     @Override

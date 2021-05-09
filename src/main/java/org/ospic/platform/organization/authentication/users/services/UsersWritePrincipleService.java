@@ -7,6 +7,7 @@ import org.ospic.platform.organization.authentication.users.payload.request.Upda
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,7 @@ public interface UsersWritePrincipleService {
     ResponseEntity<?> refreshToken(HttpServletRequest request);
     ResponseEntity<?> updateUserDetails(Long id, UpdateUserPayload payload);
     ResponseEntity<?> deleteSelfServiceUser(Long id);
+    ResponseEntity<?> updateProfileImage(Long userId,  MultipartFile file);
      ResponseEntity<String> logoutSession(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 
 }
