@@ -153,10 +153,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public void deletePatientFileOrDocument(String documentLocation,  Long patientId, String filename) {
+    public void deletePatientFileOrDocument(String documentLocation, EntityType entityType, Long patientId, String filename) {
 
         try{
-            FileSystemUtils.deleteRecursively(retrieveDocumentOrImagePath(documentLocation,patientId,filename));
+            FileSystemUtils.deleteRecursively(retrieveDocumentOrImagePath(documentLocation,entityType, patientId,filename));
         }catch (IOException e){
             throw new RuntimeException("Couldn't delete this document. Error: "+e.getMessage());
         }
@@ -236,10 +236,10 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         return Paths.get(sb.toString());
     }
 
-    private Path retrieveDocumentOrImagePath(String documentLocation, @NonNull Long patientId, @NonNull String fileName) {
+    private Path retrieveDocumentOrImagePath(String documentLocation, EntityType entityType, @NonNull Long patientId, @NonNull String fileName) {
         StringBuilder sb = new StringBuilder();
         sb.append("files/");
-        sb.append("patients/");
+        sb.append(entityType.name);
         sb.append(patientId);
         sb.append("/");
         sb.append(documentLocation);

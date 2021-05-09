@@ -135,7 +135,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
                     throw new FileUploadException("error.msg.invalid.request", "This file does not belong to this consultation");
                 }
 
-                filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+file.getLocation(),consultation.getPatient().getId(), file.getName());
+                filesStorageService.deletePatientFileOrDocument("consultations/"+String.valueOf(consultationId)+"/"+file.getLocation(),EntityType.ENTITY_PATIENTS, consultation.getPatient().getId(), file.getName());
                 this.fileInformationRepository.deleteById(file.getId());
                 return ResponseEntity.ok().body(new ResponseMessage("File deleted successfully ..."));
             }).orElseThrow(()->new FileUploadException("error.msg.file.not.found", "File was not found"));

@@ -51,7 +51,7 @@ public interface FilesStorageService {
 
     public void deleteAll();
 
-    public void deletePatientFileOrDocument(String documentLocation, Long patientId, String filename);
+    public void deletePatientFileOrDocument(String documentLocation, EntityType entityType, Long patientId, String filename);
 
     public Stream<Path> loadAll();
 

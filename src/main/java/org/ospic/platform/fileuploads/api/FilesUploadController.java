@@ -137,7 +137,7 @@ public class FilesUploadController {
     @ApiOperation(value = "DELETE patient image by file name", notes = "DELETE patient image by file name")
     @RequestMapping(value="/{patientId}/images/{filename:.+}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     public ResponseEntity<String> deletePatientImageFile(@PathVariable String filename, @PathVariable Long patientId) {
-         storageService.deletePatientFileOrDocument("images",patientId, filename);
+         storageService.deletePatientFileOrDocument("images",EntityType.ENTITY_PATIENTS,patientId, filename);
         return ResponseEntity.ok().body("Done");
     }
 
@@ -146,7 +146,7 @@ public class FilesUploadController {
     @RequestMapping(value ="/{patientId}/documents/{filename:.+}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.ALL_VALUE)
     @ResponseBody
     public ResponseEntity<String> deletePatientDocument(@PathVariable String filename, @PathVariable Long patientId) {
-         storageService.deletePatientFileOrDocument("documents",patientId, filename);
+         storageService.deletePatientFileOrDocument("documents",EntityType.ENTITY_PATIENTS,patientId, filename);
         return ResponseEntity.ok().body("Done");
     }
 }

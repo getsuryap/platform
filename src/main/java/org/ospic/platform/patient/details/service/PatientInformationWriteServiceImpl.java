@@ -148,7 +148,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity<?> deletePatientImage(Long patientId, String fileName) {
         return patientRepository.findById(patientId).map(patient -> {
-            filesStorageService.deletePatientFileOrDocument("images", patientId, fileName);
+            filesStorageService.deletePatientFileOrDocument("images",EntityType.ENTITY_PATIENTS, patientId, fileName);
             patient.setPatientPhoto(null);
             patientRepository.save(patient);
             return ResponseEntity.ok().body(patientRepository.findById(patientId));
