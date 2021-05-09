@@ -1,6 +1,7 @@
 package org.ospic.platform.patient.details.service;
 
 import org.hibernate.SessionFactory;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
 import org.ospic.platform.infrastructure.app.exception.AbstractPlatformInactiveResourceException;
 import org.ospic.platform.organization.authentication.users.payload.response.MessageResponse;
@@ -137,7 +138,7 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     @Override
     public ResponseEntity<?> uploadPatientImage(Long patientId, MultipartFile file) {
         return patientRepository.findById(patientId).map(patient -> {
-            String imagePath = filesStorageService.uploadPatientImage(patientId,  file,"images");
+            String imagePath = filesStorageService.uploadPatientImage(patientId, EntityType.ENTITY_PATIENTS,  file,"images");
             patient.setPatientPhoto(imagePath);
             return ResponseEntity.ok().body(patientRepository.save(patient));
         }).orElseThrow(() -> new PatientNotFoundExceptionPlatform(patientId));

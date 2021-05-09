@@ -77,7 +77,7 @@ public class FilesUploadController {
     public ResponseEntity<ResponseMessage> uploadPatientImage(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
-            String response = storageService.uploadPatientImage(patientId, file,"images");
+            String response = storageService.uploadPatientImage(patientId,EntityType.ENTITY_PATIENTS, file,"images");
             message = "Uploaded the file successfully: " + response;
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class FilesUploadController {
     public ResponseEntity<ResponseMessage> uploadPatientFileDocument(@RequestParam("file") MultipartFile file, @PathVariable Long patientId) {
         String message = "";
         try {
-            String response = storageService.uploadPatientImage(patientId, file,"documents");
+            String response = storageService.uploadPatientImage(patientId,EntityType.ENTITY_PATIENTS, file,"documents");
             message = "Uploaded the file successfully: " + response;
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {

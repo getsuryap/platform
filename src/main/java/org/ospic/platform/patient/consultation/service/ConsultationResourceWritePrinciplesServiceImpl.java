@@ -1,6 +1,7 @@
 package org.ospic.platform.patient.consultation.service;
 
 import org.ospic.platform.domain.CustomReponseMessage;
+import org.ospic.platform.fileuploads.data.EntityType;
 import org.ospic.platform.fileuploads.exceptions.FileUploadException;
 import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.fileuploads.service.FilesStorageService;
@@ -119,7 +120,7 @@ public class ConsultationResourceWritePrinciplesServiceImpl implements Consultat
     @Override
     public ResponseEntity<?> uploadConsultationLaboratoryReport(Long consultationId,String fileLocation, MultipartFile file) {
         return resourceJpaRepository.findById(consultationId).map(consultation->{
-           String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), file, "consultations",String.valueOf(consultationId),fileLocation);
+           String imageFile = filesStorageService.uploadPatientImage(consultation.getPatient().getId(), EntityType.ENTITY_PATIENTS, file, "consultations",String.valueOf(consultationId),fileLocation);
             FileInformation fileInfo = new FileInformation().fromFile(file, imageFile,fileLocation);
             fileInfo.setConsultation(consultation);
             return ResponseEntity.ok().body(this.fileInformationRepository.save(fileInfo));
