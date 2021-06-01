@@ -1,12 +1,9 @@
-package org.ospic.platform.organization.calendar.services;
+package org.ospic.platform.organization.calendar.exceptions;
 
-import org.ospic.platform.organization.calendar.data.EventRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException;
 
 /**
- * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.services
+ * This file was created by eli on 02/06/2021 for org.ospic.platform.organization.calendar.exceptions
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,9 +23,12 @@ import org.springframework.stereotype.Service;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Component
-@Service
-public interface CalendarWritePrincipleService {
-    ResponseEntity<?> createCalendarEvent(EventRequest payload);
-    ResponseEntity<?> updateCalendarEvent(Long eventId, EventRequest payload);
+public class CalendarEventNotFoundException extends AbstractPlatformException {
+    protected CalendarEventNotFoundException(String globalisationMessageCode, String defaultUserMessage) {
+        super(globalisationMessageCode, defaultUserMessage);
+    }
+
+    public CalendarEventNotFoundException(){
+        super("error.msg.calendar.event.not.found","Calendar event not found");
+    }
 }
