@@ -1,7 +1,9 @@
 package org.ospic.platform.organization.calendar.rowmap;
 
 import org.ospic.platform.organization.calendar.data.EventColor;
+import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +32,8 @@ import java.util.Map;
  * under the License.
  */
 public class CalendarRowMapper implements RowMapper<Map<String, Object>> {
+    UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private String username = ud.getUsername();
     public String schema(){
         String schema =" c.*, date_format(c.start, \"%W %M %Y %r\") as startDate, " +
                 "date_format(c.end, \"%W %M %Y %r\") as endDate from m_calendar c;";
@@ -45,6 +49,11 @@ public class CalendarRowMapper implements RowMapper<Map<String, Object>> {
         map.put("end", rs.getString("endDate"));
         map.put("color", EventColor.randomColors().color);
         map.put("timed", rs.getBoolean("timed"));
+        map.put("createdBy", rs.getString("created_by"));
+        map.put("createdDate", rs.getString("created_date"));
+        map.put("lastModifiedDate", rs.getString("last_modified_date"));
+        map.put("lastModifiedBy", rs.getString("last_modified_by"));
+        map.put("editable",rs.getString("created_by").equals(username) );
         return map;
     }
 }
