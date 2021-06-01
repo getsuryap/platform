@@ -2,11 +2,15 @@ package org.ospic.platform.organization.calendar.services;
 
 import org.ospic.platform.organization.calendar.data.EventRequest;
 import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
+import org.ospic.platform.organization.calendar.exceptions.CalendarEventNotFoundException;
 import org.ospic.platform.organization.calendar.exceptions.InvalidStartOrEndDateException;
 import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.services
@@ -43,5 +47,17 @@ public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipl
 
         CalendarTimetable calendarTimetable = new CalendarTimetable().getTimetableEvent(request);
         return ResponseEntity.ok().body(this.calendarJpaRepository.save(calendarTimetable));
+    }
+
+    @Override
+    public ResponseEntity<?> updateCalendarEvent(Long eventId, EventRequest payload) {
+        return this.calendarJpaRepository.findById(eventId).map(event->{
+            LocalDateTime startDateTime = LocalDateTime.of(payload.getStartDate(), payload.getStartTime() == null ? LocalTime.MIDNIGHT :  payload.getStartTime());
+            LocalDateTime endDateTime = LocalDateTime.of(payload.getEndDate(), payload.getEndTime() == null ? LocalTime.MIDNIGHT : payload.getEndTime());
+            event.setName(payload.getName());
+            event.setStart(startDateTime);
+            event.setEnd(endDateTime);
+            return ResponseEntity.ok().body(this.calendarJpaRepository.save(event));
+        }).orElseThrow(()-> new CalendarEventNotFoundException());
     }
 }
