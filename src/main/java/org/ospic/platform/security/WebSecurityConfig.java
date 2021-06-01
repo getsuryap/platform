@@ -131,7 +131,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().permitAll()
                 .and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(unauthorizedHandler)
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
