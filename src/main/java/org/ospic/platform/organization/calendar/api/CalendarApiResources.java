@@ -68,4 +68,10 @@ public class CalendarApiResources {
         return this.writeService.updateCalendarEvent(eventId,payload);
     }
 
+    @ApiOperation(value = "DELETE calendar event", notes = "DELETE calendar event",  nickname = "Delete event")
+    @RequestMapping(value = "/{eventId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> deleteCalendarEvent(@PathVariable("eventId") Long eventId) {
+        return this.writeService.deleteCalendarEvent(eventId);
+    }
+
 }
