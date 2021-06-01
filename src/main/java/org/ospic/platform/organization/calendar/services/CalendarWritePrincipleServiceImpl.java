@@ -57,6 +57,7 @@ public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipl
             event.setName(payload.getName());
             event.setStart(startDateTime);
             event.setEnd(endDateTime);
+            event.setTimed(payload.getTimed());
             return ResponseEntity.ok().body(this.calendarJpaRepository.save(event));
         }).orElseThrow(()-> new CalendarEventNotFoundException());
     }
