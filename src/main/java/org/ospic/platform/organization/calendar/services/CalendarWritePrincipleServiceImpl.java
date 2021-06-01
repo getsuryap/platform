@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This file was created by eli on 13/03/2021 for org.ospic.platform.organization.calendar.services
@@ -70,5 +72,19 @@ public class CalendarWritePrincipleServiceImpl implements CalendarWritePrinciple
             event.setTimed(payload.getTimed());
             return ResponseEntity.ok().body(this.calendarJpaRepository.save(event));
         }).orElseThrow(() -> new CalendarEventNotFoundException());
+    }
+
+    @Override
+    public ResponseEntity<?> deleteCalendarEvent(Long eventId) {
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.calendarJpaRepository.findById(eventId).map(event -> {
+            if (!event.getCreatedBy().equals(ud.getUsername())) {
+                throw new InvalidCalendarEventEntity();
+            }
+            Map<String, String> rep = new HashMap<>();
+            rep.put("message","Event deleted successfully");
+            return ResponseEntity.ok().body(rep);
+            }).orElseThrow(() -> new CalendarEventNotFoundException());
+
     }
 }

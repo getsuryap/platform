@@ -29,6 +29,6 @@ public class InvalidCalendarEventEntity  extends AbstractPlatformException {
     }
 
     public InvalidCalendarEventEntity(){
-        super("error.msg.calendar.event.not.bong.to.you","Event can only be updated by the same person who created");
+        super("error.msg.calendar.event.not.bong.to.you","Event can only be updated/deleted by the same person who created it");
     }
 }

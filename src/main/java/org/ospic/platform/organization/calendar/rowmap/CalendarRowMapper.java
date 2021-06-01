@@ -53,7 +53,7 @@ public class CalendarRowMapper implements RowMapper<Map<String, Object>> {
         map.put("createdDate", rs.getString("created_date"));
         map.put("lastModifiedDate", rs.getString("last_modified_date"));
         map.put("lastModifiedBy", rs.getString("last_modified_by"));
-        map.put("editable",rs.getString("created_by").equals(username) );
+        map.put("ownedByMe",rs.getString("created_by").equals(username) );
         return map;
     }
 }

@@ -31,4 +31,5 @@ import org.springframework.stereotype.Service;
 public interface CalendarWritePrincipleService {
     ResponseEntity<?> createCalendarEvent(EventRequest payload);
     ResponseEntity<?> updateCalendarEvent(Long eventId, EventRequest payload);
+    ResponseEntity<?> deleteCalendarEvent(Long eventId);
 }
