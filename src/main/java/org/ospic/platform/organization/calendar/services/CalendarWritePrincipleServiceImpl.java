@@ -3,10 +3,13 @@ package org.ospic.platform.organization.calendar.services;
 import org.ospic.platform.organization.calendar.data.EventRequest;
 import org.ospic.platform.organization.calendar.domain.CalendarTimetable;
 import org.ospic.platform.organization.calendar.exceptions.CalendarEventNotFoundException;
+import org.ospic.platform.organization.calendar.exceptions.InvalidCalendarEventEntity;
 import org.ospic.platform.organization.calendar.exceptions.InvalidStartOrEndDateException;
 import org.ospic.platform.organization.calendar.repository.CalendarJpaRepository;
+import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -34,16 +37,19 @@ import java.time.LocalTime;
  * under the License.
  */
 @Repository
-public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipleService{
+public class CalendarWritePrincipleServiceImpl implements CalendarWritePrincipleService {
     private final CalendarJpaRepository calendarJpaRepository;
+
     @Autowired
-    CalendarWritePrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository){
+    CalendarWritePrincipleServiceImpl(CalendarJpaRepository calendarJpaRepository) {
         this.calendarJpaRepository = calendarJpaRepository;
     }
 
     @Override
     public ResponseEntity<?> createCalendarEvent(EventRequest request) {
-        if ( request.getStartDate() ==null || request.getEndDate()==null){ throw new InvalidStartOrEndDateException(); }
+        if (request.getStartDate() == null || request.getEndDate() == null) {
+            throw new InvalidStartOrEndDateException();
+        }
 
         CalendarTimetable calendarTimetable = new CalendarTimetable().getTimetableEvent(request);
         return ResponseEntity.ok().body(this.calendarJpaRepository.save(calendarTimetable));
@@ -51,14 +57,18 @@ public class CalendarWritePrincipleServiceImpl  implements CalendarWritePrincipl
 
     @Override
     public ResponseEntity<?> updateCalendarEvent(Long eventId, EventRequest payload) {
-        return this.calendarJpaRepository.findById(eventId).map(event->{
-            LocalDateTime startDateTime = LocalDateTime.of(payload.getStartDate(), payload.getStartTime() == null ? LocalTime.MIDNIGHT :  payload.getStartTime());
+        UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.calendarJpaRepository.findById(eventId).map(event -> {
+            if (!event.getCreatedBy().equals(ud.getUsername())) {
+                throw new InvalidCalendarEventEntity();
+            }
+            LocalDateTime startDateTime = LocalDateTime.of(payload.getStartDate(), payload.getStartTime() == null ? LocalTime.MIDNIGHT : payload.getStartTime());
             LocalDateTime endDateTime = LocalDateTime.of(payload.getEndDate(), payload.getEndTime() == null ? LocalTime.MIDNIGHT : payload.getEndTime());
             event.setName(payload.getName());
             event.setStart(startDateTime);
             event.setEnd(endDateTime);
             event.setTimed(payload.getTimed());
             return ResponseEntity.ok().body(this.calendarJpaRepository.save(event));
-        }).orElseThrow(()-> new CalendarEventNotFoundException());
+        }).orElseThrow(() -> new CalendarEventNotFoundException());
     }
 }
