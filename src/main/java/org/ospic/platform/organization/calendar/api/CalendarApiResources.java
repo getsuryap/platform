@@ -62,4 +62,10 @@ public class CalendarApiResources {
         return this.readService.retrieveAllCalendarEvents();
     }
 
+    @ApiOperation(value = "UPDATE calendar event", notes = "UPDATE calendar event", response = CalendarTimetable.class, nickname = "Update event")
+    @RequestMapping(value = "/{eventId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> createNewEvent(@PathVariable("eventId") Long eventId,@Valid @RequestBody EventRequest payload) {
+        return this.writeService.updateCalendarEvent(eventId,payload);
+    }
+
 }
