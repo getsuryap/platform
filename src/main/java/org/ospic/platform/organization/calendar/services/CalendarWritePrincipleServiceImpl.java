@@ -81,7 +81,9 @@ public class CalendarWritePrincipleServiceImpl implements CalendarWritePrinciple
             if (!event.getCreatedBy().equals(ud.getUsername())) {
                 throw new InvalidCalendarEventEntity();
             }
+            this.calendarJpaRepository.deleteById(eventId);
             Map<String, String> rep = new HashMap<>();
+            rep.put("status","OK");
             rep.put("message","Event deleted successfully");
             return ResponseEntity.ok().body(rep);
             }).orElseThrow(() -> new CalendarEventNotFoundException());

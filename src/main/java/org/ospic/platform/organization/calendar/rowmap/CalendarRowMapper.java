@@ -54,6 +54,7 @@ public class CalendarRowMapper implements RowMapper<Map<String, Object>> {
         map.put("lastModifiedDate", rs.getString("last_modified_date"));
         map.put("lastModifiedBy", rs.getString("last_modified_by"));
         map.put("ownedByMe",rs.getString("created_by").equals(username) );
+        map.put("description","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ");
         return map;
     }
 }
