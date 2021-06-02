@@ -8,6 +8,7 @@ CREATE TABLE `m_calendar` (
   `timed` tinyint(1) NOT NULL DEFAULT '0',
   `start` timestamp NULL DEFAULT NULL,
   `end` timestamp NULL DEFAULT NULL,
+  `description` varchar (250) default null,
   `department` int(11) DEFAULT '0',
   `created_date` varchar(100) DEFAULT NULL,
   `created_by` varchar(200) DEFAULT NULL,
