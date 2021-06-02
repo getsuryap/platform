@@ -39,6 +39,7 @@ public class EventRequest {
     private LocalTime endTime;
     private Boolean timed;
     private String color;
+    private String description;
     private Long departmentId;
 
 }

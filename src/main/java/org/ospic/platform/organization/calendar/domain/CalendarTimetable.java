@@ -51,20 +51,23 @@ public class CalendarTimetable extends Auditable implements Serializable {
     private  LocalDateTime end;
     @Column(name = "timed")
     private Boolean timed;
+    @Column(name = "description")
+    private String description;
     @Column(name = "department")
     private Long departmentId;
 
     public CalendarTimetable getTimetableEvent(EventRequest r){
         LocalDateTime startDateTime = LocalDateTime.of(r.getStartDate(), r.getStartTime() == null ? LocalTime.MIDNIGHT :  r.getStartTime());
         LocalDateTime endDateTime = LocalDateTime.of(r.getEndDate(), r.getEndTime() == null ? LocalTime.MIDNIGHT : r.getEndTime());
-        return new CalendarTimetable(r.getName(),startDateTime, endDateTime, r.getTimed(), r.getDepartmentId());
+        return new CalendarTimetable(r.getName(),startDateTime, endDateTime, r.getTimed(),r.getDescription(), r.getDepartmentId());
     }
 
-    private CalendarTimetable(String name, LocalDateTime start, LocalDateTime end,  Boolean timed, Long departmentId) {
+    private CalendarTimetable(String name, LocalDateTime start, LocalDateTime end,  Boolean timed,  final String description, Long departmentId) {
         this.name = name;
         this.start = start;
         this.end = end;
         this.timed = timed;
+        this.description = description;
         this.departmentId = departmentId;
     }
 }
