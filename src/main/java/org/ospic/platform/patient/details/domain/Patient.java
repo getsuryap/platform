@@ -10,8 +10,9 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.ospic.platform.configurations.audit.Auditable;
 import org.ospic.platform.organization.authentication.users.domain.User;
-import org.ospic.platform.patient.contacts.domain.ContactsInformation;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
+import org.ospic.platform.patient.contacts.domain.ContactsInformation;
+import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
 import org.ospic.platform.util.constants.DatabaseConstants;
 
 import javax.persistence.*;
@@ -131,6 +132,11 @@ public class Patient extends Auditable implements Serializable {
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> selfServiceUsers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @JoinColumn(name = "patient_id")
+    private List<InsuranceCard> insuranceCards = new ArrayList<>();
 
 
 

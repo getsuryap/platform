@@ -15,4 +15,4 @@ CREATE TABLE `m_calendar` (
   `last_modified_date` timestamp NOT NULL,
   `last_modified_by` varchar(200) DEFAULT NULL,
 PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;

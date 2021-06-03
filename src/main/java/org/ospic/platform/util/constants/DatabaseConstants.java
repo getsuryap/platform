@@ -48,4 +48,6 @@ public class DatabaseConstants {
     public static final String TABLE_BILLS = TI+"bills";
     public static final String TABLE_CALENDAR = TI+"calendar";
     public static final String TABLE_FILE_INFORMATION =TI+"files";
+    public static final String TABLE_INSURANCE =TI+"insurances";
+    public static final String TABLE_CLIENT_INSURANCE =TI+"client_insurances";
 }
