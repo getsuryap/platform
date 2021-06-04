@@ -4,6 +4,7 @@ import org.ospic.platform.organization.insurances.domain.Insurance;
 import org.ospic.platform.organization.insurances.exceptions.InsuranceNotFoundException;
 import org.ospic.platform.organization.insurances.repository.InsuranceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -54,7 +55,10 @@ public class InsuranceWriteServicePrincipleImpl implements InsuranceWriteService
     }
 
     @Override
-    public Insurance deleteInsuranceCompany(Long id) {
-        return null;
+    public ResponseEntity<?> deleteInsuranceCompany(Long id) {
+        return this.insuranceRepository.findById(id).map(insurance -> {
+            this.insuranceRepository.deleteById(id);
+            return ResponseEntity.ok().body("Insurance deleted successfully");
+        }).orElseThrow(()-> new InsuranceNotFoundException(id));
     }
 }

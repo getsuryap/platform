@@ -63,14 +63,14 @@ public class InsuranceApiResources {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INSURANCE_COMPANY')")
     @ApiOperation(value = "UPDATE insurance company", notes = "UPDATE insurance company info")
     @RequestMapping(value = "/{insuranceId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> getListOfInsuranceCompanies(@PathVariable Long insuranceId, @RequestBody Insurance insurance ) {
+    ResponseEntity<?> updateInsuranceCompanyInfo(@PathVariable Long insuranceId, @RequestBody Insurance insurance ) {
         return ResponseEntity.ok().body(insuranceWriteServicePrinciple.updateInsuranceCompanyInformation(insuranceId, insurance));
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','DELETE_INSURANCE_COMPANY')")
     @ApiOperation(value = "DELETE insurance company", notes = "DELETE insurance company info")
-    @RequestMapping(value = "/{insuranceId}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> getListOfInsuranceCompanies(@PathVariable Long insuranceId ) {
+    @RequestMapping(value = "/{insuranceId}", method = RequestMethod.DELETE)
+    ResponseEntity<?> deleteInsuranceCompany(@PathVariable Long insuranceId ) {
         return ResponseEntity.ok().body(insuranceWriteServicePrinciple.deleteInsuranceCompany(insuranceId));
     }
 

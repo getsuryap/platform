@@ -1,6 +1,7 @@
 package org.ospic.platform.organization.insurances.service;
 
 import org.ospic.platform.organization.insurances.domain.Insurance;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,5 @@ import org.springframework.stereotype.Service;
 public interface InsuranceWriteServicePrinciple {
     Insurance createNewInsuranceCompany(Insurance insurance);
     Insurance updateInsuranceCompanyInformation(Long id,Insurance insurance);
-    Insurance deleteInsuranceCompany(Long id);
+    ResponseEntity<?> deleteInsuranceCompany(Long id);
 }
