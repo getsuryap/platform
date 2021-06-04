@@ -28,4 +28,5 @@ import java.util.Collection;
  */
 public interface InsuranceCardRepository extends JpaRepository<InsuranceCard, Long> {
     Collection<InsuranceCard> findByInsuranceId(Long insuranceId);
+    Collection<InsuranceCard> findByPatientId(Long patientId);
 }

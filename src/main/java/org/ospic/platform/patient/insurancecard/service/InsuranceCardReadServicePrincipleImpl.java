@@ -54,6 +54,11 @@ public class InsuranceCardReadServicePrincipleImpl implements InsuranceCardReadS
     }
 
     @Override
+    public Collection<InsuranceCard> getInsuranceCardsByPatientId(Long patientId) {
+        return this.cardRepository.findByPatientId(patientId);
+    }
+
+    @Override
     public ResponseEntity<?> getInsuranceCard(Long insuranceCardId) {
         Optional<InsuranceCard> optionalCard = this.cardRepository.findById(insuranceCardId);
         return ResponseEntity.ok().body(optionalCard.isPresent() ?  optionalCard.get() : "Insurance card not found") ;
