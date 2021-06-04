@@ -83,8 +83,8 @@ public class InsuranceCard extends AbstractPersistableCustom implements Serializ
     private Patient patient;
 
 
-    public InsuranceCard fromJson(InsurancePayload p){
-        return new InsuranceCard(p.getPatientName(), p.getMembershipNumber(),p.getSex(),p.getVoteNo(),p.getDateOfBirth(),p.getIssuedDate(),p.getExpireDate(),p.getCodeNo());
+    public InsuranceCard fromJson(InsurancePayload p, Patient patient){
+        return new InsuranceCard(patient.getName(), p.getMembershipNumber(),patient.getGender(),p.getVoteNo(),p.getDateOfBirth(),p.getIssuedDate(),p.getExpireDate(),p.getCodeNo());
     }
 
 
