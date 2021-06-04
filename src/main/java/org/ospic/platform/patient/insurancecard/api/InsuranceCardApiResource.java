@@ -84,6 +84,13 @@ public class InsuranceCardApiResource {
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_INSURANCE')")
+    @ApiOperation(value = "GET patient insurances ", notes = "GET patient insurances by  patient id")
+    @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> getInsuranceCardsByPatientId(@Valid @PathVariable("patientId") Long patientId) {
+        return ResponseEntity.ok().body(insuranceCardReadServicePrinciple.getInsuranceCardsByPatientId(patientId));
+    }
+
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_INSURANCE')")
     @ApiOperation(value = "GET patient insurance by id", notes = "GET patient insurances by id")
     @RequestMapping(value = "/{cardId}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> getInsuranceCardById(@PathVariable("cardId") Long cardId) {

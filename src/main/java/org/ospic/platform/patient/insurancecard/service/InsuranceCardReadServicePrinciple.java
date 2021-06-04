@@ -33,6 +33,7 @@ import java.util.Collection;
 public interface InsuranceCardReadServicePrinciple {
     Collection<InsuranceCard> getInsuranceCards();
     Collection<InsuranceCard> getInsuranceCardsByInsure(Long insureId);
+    Collection<InsuranceCard> getInsuranceCardsByPatientId(Long patientId);
     ResponseEntity<?> getInsuranceCard(Long insuranceCardId);
 
 }
