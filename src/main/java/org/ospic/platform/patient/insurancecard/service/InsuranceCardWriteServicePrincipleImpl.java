@@ -54,7 +54,7 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
     public InsuranceCard addInsuranceCard(InsurancePayload payload) {
         return this.insuranceRepository.findById(payload.getInsuranceId()).map(insurance -> {
             return this.patientRepository.findById(payload.getPatientId()).map(patient -> {
-                InsuranceCard card = new InsuranceCard().fromJson(payload);
+                InsuranceCard card = new InsuranceCard().fromJson(payload, patient);
                 card.setPatient(patient);
                 card.setInsurance(insurance);
                 return this.cardRepository.save(card);
