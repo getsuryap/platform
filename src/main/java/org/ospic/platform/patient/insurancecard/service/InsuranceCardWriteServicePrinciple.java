@@ -31,4 +31,6 @@ public interface InsuranceCardWriteServicePrinciple {
     InsuranceCard addInsuranceCard(InsurancePayload payload);
     InsuranceCard updateInsuranceCard(Long id,InsurancePayload payload);
     ResponseEntity<?> deleteInsuranceCard(Long cardId);
+    InsuranceCard activateInsuranceCard(Long insuranceCardId);
+    InsuranceCard deactivateInsuranceCard(Long insuranceCardId);
 }

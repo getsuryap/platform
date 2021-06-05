@@ -2,6 +2,7 @@ package org.ospic.platform.patient.insurancecard.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.patient.insurancecard.data.InsurancePayload;
 import org.ospic.platform.patient.insurancecard.service.InsuranceCardReadServicePrinciple;
 import org.ospic.platform.patient.insurancecard.service.InsuranceCardWriteServicePrinciple;
@@ -41,9 +42,10 @@ import javax.validation.Valid;
 public class InsuranceCardApiResource {
     private final InsuranceCardReadServicePrinciple insuranceCardReadServicePrinciple;
     private final InsuranceCardWriteServicePrinciple insuranceCardWriteServicePrinciple;
+
     @Autowired
     public InsuranceCardApiResource(final InsuranceCardReadServicePrinciple insuranceCardReadServicePrinciple,
-                                 final InsuranceCardWriteServicePrinciple insuranceCardWriteServicePrinciple){
+                                    final InsuranceCardWriteServicePrinciple insuranceCardWriteServicePrinciple) {
         this.insuranceCardReadServicePrinciple = insuranceCardReadServicePrinciple;
         this.insuranceCardWriteServicePrinciple = insuranceCardWriteServicePrinciple;
     }
@@ -67,6 +69,20 @@ public class InsuranceCardApiResource {
     @RequestMapping(value = "/{insuranceCardId}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> updateInsuranceCard(@Valid @PathVariable("insuranceCardId") Long insuranceCardId, @RequestBody InsurancePayload payload) {
         return ResponseEntity.ok().body(insuranceCardWriteServicePrinciple.updateInsuranceCard(insuranceCardId, payload));
+    }
+
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INSURANCE')")
+    @ApiOperation(value = "ACTIVATE patient insurance", notes = "ACTIVATE patient insurance ")
+    @RequestMapping(value = "/{insuranceCardId}/{action}", method = RequestMethod.PUT, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<?> updateInsuranceCardStatus(@Valid @PathVariable("insuranceCardId") Long insuranceCardId, @Valid @PathVariable("action") String action) {
+        if ("activate".equals(action)) {
+            return ResponseEntity.ok().body(this.insuranceCardWriteServicePrinciple.activateInsuranceCard(insuranceCardId));
+        } else if ("deactivate".equals(action)) {
+            return ResponseEntity.ok().body(this.insuranceCardWriteServicePrinciple.deactivateInsuranceCard(insuranceCardId));
+        } else {
+            return ResponseEntity.ok().body(new ResponseMessage(String.format("Action %s is not allowed",action)));
+        }
+
     }
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','DELETE_INSURANCE')")

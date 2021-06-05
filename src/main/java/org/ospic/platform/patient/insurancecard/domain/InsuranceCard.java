@@ -73,6 +73,9 @@ public class InsuranceCard extends AbstractPersistableCustom implements Serializ
     @Column(name = "code_no")
     private String codeNo;
 
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default false")
+    private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "insurance_id")
     private Insurance insurance;

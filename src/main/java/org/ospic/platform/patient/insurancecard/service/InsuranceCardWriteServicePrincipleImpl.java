@@ -88,4 +88,22 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
         ResponseMessage message = new ResponseMessage("");
         return ResponseEntity.ok().body(message) ;
     }
+
+    @Override
+    public InsuranceCard activateInsuranceCard(Long insuranceCardId) {
+        return this.cardRepository.findById(insuranceCardId).map(card -> {
+            card.setIsActive(true);
+            return this.cardRepository.save(card);
+        }).orElseThrow(()->new InsuranceCardNotFoundException(insuranceCardId));
+    }
+
+    @Override
+    public InsuranceCard deactivateInsuranceCard(Long insuranceCardId) {
+        return this.cardRepository.findById(insuranceCardId).map(card -> {
+            card.setIsActive(false);
+            return this.cardRepository.save(card);
+        }).orElseThrow(()->new InsuranceCardNotFoundException(insuranceCardId));
+    }
+
+
 }
