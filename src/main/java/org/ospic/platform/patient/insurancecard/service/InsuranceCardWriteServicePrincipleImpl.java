@@ -1,6 +1,5 @@
 package org.ospic.platform.patient.insurancecard.service;
 
-import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.organization.insurances.exceptions.InsuranceNotFoundException;
 import org.ospic.platform.organization.insurances.repository.InsuranceRepository;
 import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
@@ -10,7 +9,6 @@ import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
 import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardNotFoundException;
 import org.ospic.platform.patient.insurancecard.repository.InsuranceCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -81,13 +79,6 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
         }).orElseThrow(()->new InsuranceCardNotFoundException(id));
     }
 
-    @Override
-    public ResponseEntity<?> deleteInsuranceCard(Long cardId) {
-        this.cardRepository.findById(cardId).orElseThrow(()->new InsuranceCardNotFoundException(cardId));
-        this.cardRepository.deleteById(cardId);
-        ResponseMessage message = new ResponseMessage("");
-        return ResponseEntity.ok().body(message) ;
-    }
 
     @Override
     public InsuranceCard activateInsuranceCard(Long insuranceCardId) {
