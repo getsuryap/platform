@@ -2,6 +2,7 @@ package org.ospic.platform.patient.insurancecard.service;
 
 import org.ospic.platform.patient.insurancecard.data.InsurancePayload;
 import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,5 +30,5 @@ import org.springframework.stereotype.Repository;
 public interface InsuranceCardWriteServicePrinciple {
     InsuranceCard addInsuranceCard(InsurancePayload payload);
     InsuranceCard updateInsuranceCard(Long id,InsurancePayload payload);
-    InsuranceCard deleteInsuranceCard(Long cardId);
+    ResponseEntity<?> deleteInsuranceCard(Long cardId);
 }

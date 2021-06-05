@@ -1,9 +1,6 @@
 package org.ospic.platform.patient.insurancecard.data;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -31,10 +28,9 @@ import java.time.LocalDate;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
+@AllArgsConstructor
 public class InsurancePayload {
-    private String patientName;
     private String membershipNumber;
-    private String sex;
     private String voteNo;
     private LocalDate dateOfBirth;
     private LocalDate issuedDate;
