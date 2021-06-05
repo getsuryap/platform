@@ -85,12 +85,7 @@ public class InsuranceCardApiResource {
 
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','DELETE_INSURANCE')")
-    @ApiOperation(value = "DELETE patient insurance ", notes = "DELETE patient insurance")
-    @RequestMapping(value = "/{insuranceCardId}", method = RequestMethod.DELETE, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> deleteInsuranceCard(@Valid @PathVariable("insuranceCardId") Long insuranceCardId) {
-        return ResponseEntity.ok().body(insuranceCardWriteServicePrinciple.deleteInsuranceCard(insuranceCardId));
-    }
+
 
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_INSURANCE')")
     @ApiOperation(value = "GET issuer insurance ", notes = "GET patient insurances by issuer id")
