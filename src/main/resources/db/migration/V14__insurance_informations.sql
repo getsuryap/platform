@@ -27,6 +27,7 @@ create table `m_client_insurances`(
   `issued_date` timestamp not null comment 'insurance start date',
   `expire_date` timestamp not null comment 'insurance expire date ',
   `code_no` varchar (20),
+  is_active BOOLEAN NOT NULL DEFAULT true,
   `insurance_id` bigint references `m_insurances`(`id`) ON DELETE CASCADE ,
   `patient_id` bigint  references `m_patients`(`id`) ON DELETE NO ACTION,
   constraint  uc_membership_number unique(`insurance_id` ,`membership_no`),

@@ -1,7 +1,9 @@
 package org.ospic.platform.patient.consultation.data;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * This file was created by eli on 25/12/2020 for org.ospic.platform.patient.consultation.data
@@ -24,7 +26,8 @@ import lombok.NoArgsConstructor;
  * specific language governing permissions and limitations
  * under the License.
  */
-@Data
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class ConsultationPayload {
     private Long id;
