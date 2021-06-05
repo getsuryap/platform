@@ -1,13 +1,16 @@
 package org.ospic.platform.patient.insurancecard.service;
 
+import org.ospic.platform.fileuploads.message.ResponseMessage;
 import org.ospic.platform.organization.insurances.exceptions.InsuranceNotFoundException;
 import org.ospic.platform.organization.insurances.repository.InsuranceRepository;
 import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPlatform;
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.insurancecard.data.InsurancePayload;
 import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
+import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardNotFoundException;
 import org.ospic.platform.patient.insurancecard.repository.InsuranceCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -64,11 +67,25 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
 
     @Override
     public InsuranceCard updateInsuranceCard(Long id, InsurancePayload payload) {
-        return null;
+        return this.cardRepository.findById(id).map(card -> {
+            return this.patientRepository.findById(payload.getPatientId()).map(patient -> {
+                card.setCodeNo(payload.getCodeNo());
+                card.setExpireDate(payload.getExpireDate());
+                card.setIssuedDate(payload.getIssuedDate());
+                card.setMembershipNumber(payload.getMembershipNumber());
+                card.setVoteNo(payload.getVoteNo());
+                card.setPatientName(patient.getName());
+                card.setSex(patient.getGender());
+                return this.cardRepository.save(card);
+            }).orElseThrow(()->new PatientNotFoundExceptionPlatform(payload.getPatientId()));
+        }).orElseThrow(()->new InsuranceCardNotFoundException(id));
     }
 
     @Override
-    public InsuranceCard deleteInsuranceCard(Long cardId) {
-        return null;
+    public ResponseEntity<?> deleteInsuranceCard(Long cardId) {
+        this.cardRepository.findById(cardId).orElseThrow(()->new InsuranceCardNotFoundException(cardId));
+        this.cardRepository.deleteById(cardId);
+        ResponseMessage message = new ResponseMessage("");
+        return ResponseEntity.ok().body(message) ;
     }
 }
