@@ -6,6 +6,7 @@ import org.ospic.platform.patient.details.exceptions.PatientNotFoundExceptionPla
 import org.ospic.platform.patient.details.repository.PatientRepository;
 import org.ospic.platform.patient.insurancecard.data.InsurancePayload;
 import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
+import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardDateException;
 import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardNotFoundException;
 import org.ospic.platform.patient.insurancecard.repository.InsuranceCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
     public InsuranceCard addInsuranceCard(InsurancePayload payload) {
         return this.insuranceRepository.findById(payload.getInsuranceId()).map(insurance -> {
             return this.patientRepository.findById(payload.getPatientId()).map(patient -> {
+                if (payload.getExpireDate().isBefore(payload.getIssuedDate())){
+                    throw new InsuranceCardDateException();
+                };
                 InsuranceCard card = new InsuranceCard().fromJson(payload, patient);
                 card.setPatient(patient);
                 card.setInsurance(insurance);
