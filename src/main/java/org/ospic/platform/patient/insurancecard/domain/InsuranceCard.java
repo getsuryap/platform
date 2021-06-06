@@ -87,11 +87,11 @@ public class InsuranceCard extends AbstractPersistableCustom implements Serializ
 
 
     public InsuranceCard fromJson(InsurancePayload p, Patient patient){
-        return new InsuranceCard(patient.getName(), p.getMembershipNumber(),patient.getGender(),p.getVoteNo(),p.getDateOfBirth(),p.getIssuedDate(),p.getExpireDate(),p.getCodeNo());
+        return new InsuranceCard(patient.getName(), p.getMembershipNumber(),patient.getGender(),p.getVoteNo(),p.getDateOfBirth(),p.getIssuedDate(),p.getExpireDate(),p.getCodeNo(), true);
     }
 
 
-    private InsuranceCard(String patientName, String membershipNumber, String sex, String voteNo, LocalDate dateOfBirth, LocalDate issuedDate, LocalDate expireDate, String codeNo) {
+    private InsuranceCard(String patientName, String membershipNumber, String sex, String voteNo, LocalDate dateOfBirth, LocalDate issuedDate, LocalDate expireDate, String codeNo, Boolean isActive) {
         this.patientName = patientName;
         this.membershipNumber = membershipNumber;
         this.sex = sex;
@@ -100,5 +100,6 @@ public class InsuranceCard extends AbstractPersistableCustom implements Serializ
         this.issuedDate = issuedDate;
         this.expireDate = expireDate;
         this.codeNo = codeNo;
+        this.isActive = isActive;
     }
 }
