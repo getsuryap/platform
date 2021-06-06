@@ -9,9 +9,15 @@ import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
 import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardDateException;
 import org.ospic.platform.patient.insurancecard.exceptions.InsuranceCardNotFoundException;
 import org.ospic.platform.patient.insurancecard.repository.InsuranceCardRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Collection;
 
 /**
  * This file was created by eli on 03/06/2021 for org.ospic.platform.patient.insurancecard.service
@@ -37,7 +43,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Component
 public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWriteServicePrinciple {
-
+    private static final Logger log = LoggerFactory.getLogger(InsuranceCardWriteServicePrincipleImpl.class);
     private final InsuranceRepository insuranceRepository;
     private final InsuranceCardRepository cardRepository;
     private final PatientRepository patientRepository;
@@ -98,6 +104,18 @@ public class InsuranceCardWriteServicePrincipleImpl implements InsuranceCardWrit
             card.setIsActive(false);
             return this.cardRepository.save(card);
         }).orElseThrow(()->new InsuranceCardNotFoundException(insuranceCardId));
+    }
+
+    @Scheduled(cron = "0 59 23 * * ?")
+    public void checkCards(){
+        Collection<InsuranceCard> insuranceCards = this.cardRepository.findAll();
+        insuranceCards.forEach(card->{
+            if (card.getExpireDate().isBefore(LocalDate.now())){
+                card.setIsActive(false);
+            }
+            this.cardRepository.save(card);
+        });
+
     }
 
 
