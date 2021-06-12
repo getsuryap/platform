@@ -6,6 +6,7 @@ import org.ospic.platform.domain.CustomReponseMessage;
 import org.ospic.platform.inventory.admission.data.AdmissionRequest;
 import org.ospic.platform.inventory.admission.data.AdmissionResponseData;
 import org.ospic.platform.inventory.admission.data.EndAdmissionRequest;
+import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.inventory.admission.repository.AdmissionRepository;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.inventory.admission.service.AdmissionsWriteService;
@@ -86,7 +87,7 @@ public class AdmissionsApiResources {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = AdmissionResponseData.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
+    public ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
         if (null != command){
             if (command.equals("bed")){
                 return admissionsReadService.retrieveListOfAdmissionInBedId(id);
@@ -126,7 +127,7 @@ public class AdmissionsApiResources {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
     @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits",response = AdmissionVisit.class, responseContainer = "List")
     @RequestMapping(value = "/{admissionId}/visits", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
+    public ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
         return visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
     }
 
@@ -137,5 +138,10 @@ public class AdmissionsApiResources {
     ResponseEntity<?> visitAdmission(@Valid @RequestBody VisitPayload visitPayload){
         return visitsWritePrincipleService.createVisits(visitPayload);
     }
-
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/consultations/{consultationId}/admissions")
+    @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
+    public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        return this.admissionsReadService.retrieveListOfServiceAdmission(consultationId);
+    }
 }
