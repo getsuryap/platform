@@ -106,7 +106,7 @@ public class PatientApiResources {
 
     @ApiOperation(value = "GET specific Patient information by patient ID", notes = "GET specific Patient information by patient ID", response = Patient.class)
     @RequestMapping(value = "/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, AbstractPlatformInactiveResourceException.ResourceNotFoundException {
+    public ResponseEntity<?> findById(@ApiParam(name = "patientId", required = true) @PathVariable Long patientId) throws NotFoundException, AbstractPlatformInactiveResourceException.ResourceNotFoundException {
         return patientInformationReadServices.retrievePatientById(patientId);
     }
 

@@ -21,11 +21,11 @@ import org.ospic.platform.organization.authentication.users.exceptions.UserNotFo
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
+import org.ospic.platform.patient.consultation.api.ConsultationApiResources;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
+import org.ospic.platform.patient.details.api.PatientApiResources;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.ospic.platform.patient.details.service.PatientInformationReadServices;
 import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +63,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/self")
 @Api(value = "/api/self", tags = "SelfService", description = "Self service user data's")
 public class SelfServiceApiResources {
-
-    @Autowired
-    PatientInformationReadServices patientInformationReadServices;
     @Autowired
     UserJpaRepository userJpaRepository;
-    @Autowired
-    ConsultationReadPrinciplesService consultationReadService;
     @Autowired
     DiagnosisService diagnosisService;
     @Autowired
@@ -88,6 +83,10 @@ public class SelfServiceApiResources {
     AuthenticationApiResource authenticationApiResource;
     @Autowired
     BillsApiResources billsApiResources;
+    @Autowired
+    PatientApiResources patientApiResources;
+    @Autowired
+    ConsultationApiResources consultationApiResources;
 
 
     @PostMapping("/login")
@@ -123,14 +122,14 @@ public class SelfServiceApiResources {
     @GetMapping("/patients")
     @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account", response = Patient.class)
     public ResponseEntity<?> getPatient() throws Exception {
-        return this.patientInformationReadServices.retrievePatientById(this.validateForUserIsSelfServiceReturnUserId());
+        return this.patientApiResources.findById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations")
     @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultations() throws Exception {
-        return ResponseEntity.ok().body(this.consultationReadService.retrieveConsultationsByPatientId(this.validateForUserIsSelfServiceReturnUserId()));
+        return this.consultationApiResources.retrieveConsultationByPatientId(this.validateForUserIsSelfServiceReturnUserId(), "");
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -138,7 +137,7 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET self-service consultations by ID ", notes = "GET self-service consultations by ID", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.consultationReadService.retrieveAConsultationById(consultationId);
+        return this.consultationApiResources.retrieveConsultationById(consultationId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
