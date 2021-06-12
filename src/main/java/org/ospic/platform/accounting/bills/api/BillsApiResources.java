@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Collection;
+
 /**
  * This file was created by eli on 18/02/2021 for org.ospic.platform.accounting.bills.api
  * --
@@ -36,13 +39,13 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/bills")
-@Api(value = "/api/bills", tags="Bills", description = "Medical consultation bills")
+@Api(value = "/api/bills", tags = "Bills", description = "Medical consultation bills")
 public class BillsApiResources {
     private final BillReadPrincipleService readService;
     private final BillWritePrincipleService writeService;
 
     @Autowired
-    BillsApiResources(BillReadPrincipleService readService,BillWritePrincipleService writeService){
+    public BillsApiResources(final BillReadPrincipleService readService, final BillWritePrincipleService writeService) {
         this.readService = readService;
         this.writeService = writeService;
     }
@@ -55,17 +58,17 @@ public class BillsApiResources {
             if ("all".equals(command)) {
                 readService.readAllBills();
             }
-            if ("unpaid".equals(command)){
+            if ("unpaid".equals(command)) {
                 return ResponseEntity.ok().body(readService.readUnpaidBillsBills());
             }
         }
-        return  ResponseEntity.ok().body(readService.readAllBills());
+        return ResponseEntity.ok().body(readService.readAllBills());
     }
 
     @ApiOperation(value = "GET bill by ID", notes = "GET bill by ID", response = BillPayload.class)
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
     @RequestMapping(value = "/{billId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
+    public ResponseEntity<?> getBillsById(@PathVariable(name = "billId") Long billId) {
         return readService.readBillById(billId);
     }
 
@@ -75,6 +78,14 @@ public class BillsApiResources {
     @RequestMapping(value = "/", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> payBill(@RequestBody PaymentPayload payload) {
         return writeService.payBill(payload);
+    }
+
+    @ApiOperation(value = "GET patient bill", notes = "GET patient bill's history", response = BillPayload.class, responseContainer = "List")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_BILL')")
+    @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getBillByPatientId(@Valid @PathVariable("patientId") Long patientId) {
+        Collection<BillPayload> billPayloadCollection = this.readService.readBillsByPatientId(patientId);
+        return ResponseEntity.ok().body(billPayloadCollection);
     }
 
 
