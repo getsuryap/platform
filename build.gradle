@@ -30,7 +30,7 @@ repositories {
     jcenter()
     google()
     maven{url "http://jasperreports.sourceforge.net/maven2/"}
-    maven{url "https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/"}
+    maven{url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"}
 }
 
 dependencies {
@@ -58,7 +58,7 @@ dependencies {
             ['org.projectreactor:reactor-spring:1.0.1.RELEASE'],
 
     )
-    implementation ('net.sf.jasperreports:jasperreports:6.1.0') {
+    implementation ('net.sf.jasperreports:jasperreports:6.16.0') {
         exclude group: 'com.itextpdf'
     }
     runtime 'com.itextpdf:itextpdf:5.5.0'
