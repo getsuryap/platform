@@ -14,13 +14,13 @@ import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
 import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
+import org.ospic.platform.organization.authentication.users.api.AuthenticationApiResource;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
-import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
@@ -63,7 +63,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/self")
 @Api(value = "/api/self", tags = "SelfService", description = "Self service user data's")
 public class SelfServiceApiResources {
-    @Autowired UsersReadPrincipleService usersReadPrincipleService;
+
     @Autowired PatientInformationReadServices patientInformationReadServices;
     @Autowired UserJpaRepository userJpaRepository;
     @Autowired
@@ -83,6 +83,8 @@ public class SelfServiceApiResources {
     ConsultationResourceJpaRepository consultationResourceJpaRepository;
     @Autowired
     TransactionJpaRepository transactionJpaRepository;
+    @Autowired
+    AuthenticationApiResource authenticationApiResource;
 
 
 
@@ -90,7 +92,7 @@ public class SelfServiceApiResources {
     @PostMapping("/login")
     @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user", response = JwtResponse.class)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
-        return this.usersReadPrincipleService.authenticateUser(loginRequest);
+        return this.authenticationApiResource.authenticateUser(loginRequest);
     }
 
 
@@ -99,7 +101,7 @@ public class SelfServiceApiResources {
     @GetMapping("/users")
     @ApiOperation(value = "GET self service user ", notes = "GET self service user", response = User.class)
     public ResponseEntity<?> getUser() throws Exception {
-        return this.usersReadPrincipleService.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
+        return this.authenticationApiResource.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
