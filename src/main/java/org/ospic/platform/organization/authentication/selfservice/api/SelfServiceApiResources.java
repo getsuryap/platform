@@ -4,9 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.ospic.platform.accounting.bills.api.BillsApiResources;
 import org.ospic.platform.accounting.bills.data.BillPayload;
+import org.ospic.platform.accounting.transactions.api.TransactionApiResource;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
-import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
 import org.ospic.platform.inventory.admission.domains.Admission;
 import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
@@ -26,7 +26,7 @@ import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
 import org.ospic.platform.patient.details.api.PatientApiResources;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
+import org.ospic.platform.patient.diagnosis.api.DiagnosisApiResources;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -66,10 +66,6 @@ public class SelfServiceApiResources {
     @Autowired
     UserJpaRepository userJpaRepository;
     @Autowired
-    DiagnosisService diagnosisService;
-    @Autowired
-    TransactionReadPrincipleService transactionReadPrincipleService;
-    @Autowired
     FileInformationRepository fileInformationRepository;
     @Autowired
     AdmissionsReadService admissionsReadService;
@@ -87,6 +83,10 @@ public class SelfServiceApiResources {
     PatientApiResources patientApiResources;
     @Autowired
     ConsultationApiResources consultationApiResources;
+    @Autowired
+    DiagnosisApiResources diagnosisApiResources;
+    @Autowired
+    TransactionApiResource transactionApiResource;
 
 
     @PostMapping("/login")
@@ -161,7 +161,7 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET self-service consultation diagnoses ", notes = "GET self-service consultations diagnoses", response = ConsultationResource.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.diagnosisService.retrieveAllDiagnosisReportsByServiceId(consultationId);
+        return this.diagnosisApiResources.retrieveAllDiagnosisReportsByServiceId(consultationId);
     }
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
@@ -172,11 +172,11 @@ public class SelfServiceApiResources {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
             case 0:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
             default:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
         }
     }
 
@@ -185,7 +185,7 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET consultation transaction by transaction ID ", notes = "GET consultation transaction by transaction ID", response = TransactionRowMap.class)
     public ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(consultationId, transactionId);
-        return this.transactionReadPrincipleService.readTransactionById(transactionId);
+        return this.transactionApiResource.getMedicalTransactionById(transactionId);
     }
 
 

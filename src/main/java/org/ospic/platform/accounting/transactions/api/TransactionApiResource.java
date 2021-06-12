@@ -86,14 +86,14 @@ public class TransactionApiResource {
 
     @ApiOperation(value = "GET transaction by ID", notes = "GET transaction by ID", response = TransactionRowMap.class)
     @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> getMedicalTransactionById( @PathVariable("transactionId") Long transactionId) {
+    public ResponseEntity<?> getMedicalTransactionById( @PathVariable("transactionId") Long transactionId) {
         return readService.readTransactionById(transactionId);
     }
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
     @RequestMapping(value = "/{trxId}/consultation", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId, @RequestParam(value = "reversed", required = false) boolean reversed) {
+    public ResponseEntity<?> listConsultationTransactions(@PathVariable(name = "trxId") Long trxId, @RequestParam(value = "reversed", required = false) boolean reversed) {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
