@@ -8,10 +8,9 @@ import org.ospic.platform.accounting.transactions.api.TransactionApiResource;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.inventory.admission.api.AdmissionsApiResources;
 import org.ospic.platform.inventory.admission.domains.Admission;
-import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
-import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
 import org.ospic.platform.organization.authentication.users.api.AuthenticationApiResource;
@@ -67,10 +66,7 @@ public class SelfServiceApiResources {
     UserJpaRepository userJpaRepository;
     @Autowired
     FileInformationRepository fileInformationRepository;
-    @Autowired
-    AdmissionsReadService admissionsReadService;
-    @Autowired
-    VisitsReadPrincipleService visitsReadPrincipleService;
+
     @Autowired
     ConsultationResourceJpaRepository consultationResourceJpaRepository;
     @Autowired
@@ -87,6 +83,8 @@ public class SelfServiceApiResources {
     DiagnosisApiResources diagnosisApiResources;
     @Autowired
     TransactionApiResource transactionApiResource;
+    @Autowired
+    AdmissionsApiResources admissionsApiResources;
 
 
     @PostMapping("/login")
@@ -194,7 +192,7 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.admissionsReadService.retrieveListOfServiceAdmission(consultationId);
+        return this.admissionsApiResources.readConsultationsAdmissionByConsultationId(consultationId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -202,8 +200,7 @@ public class SelfServiceApiResources {
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
     public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         validateForUserIsSelfService();
-
-        return ResponseEntity.ok().body(this.admissionsReadService.retrieveAdmissionById(admissionId));
+        return this.admissionsApiResources.retrieveAdmissionByID(admissionId, null);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
@@ -212,7 +209,7 @@ public class SelfServiceApiResources {
     public ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         this.validateForUserIsSelfService();
 
-        return this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
+        return this.admissionsApiResources.retrieveAdmissionVisits(admissionId);
     }
 
     private void validateForUserIsSelfService() {
