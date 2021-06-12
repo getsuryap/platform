@@ -89,7 +89,7 @@ public class SelfServiceApiResources {
 
     @PostMapping("/login")
     @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user", response = JwtResponse.class)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+    ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
         return this.authenticationApiResource.authenticateUser(loginRequest);
     }
 
@@ -97,21 +97,21 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/users")
     @ApiOperation(value = "GET self service user ", notes = "GET self service user", response = User.class)
-    public ResponseEntity<?> getUser() throws Exception {
+    ResponseEntity<?> getUser() throws Exception {
         return this.authenticationApiResource.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/bills")
     @ApiOperation(value = "GET list of bills", notes = "GET list of bills", response = BillPayload.class, responseContainer = "List")
-    public ResponseEntity<?> getUserBills() throws Exception {
+    ResponseEntity<?> getUserBills() throws Exception {
         return this.billsApiResources.getBillByPatientId(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/bills/{billId}")
     @ApiOperation(value = "GET bill by Id", notes = "GET bill by Id", response = BillPayload.class)
-    public ResponseEntity<?> getUserBillsByBillId(@PathVariable("billId") Long billId) throws Exception {
+    ResponseEntity<?> getUserBillsByBillId(@PathVariable("billId") Long billId) throws Exception {
         this.validateForUserIsSelfService();
         return this.billsApiResources.getBillsById(billId);
     }
@@ -119,21 +119,21 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/patients")
     @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account", response = Patient.class)
-    public ResponseEntity<?> getPatient() throws Exception {
+    ResponseEntity<?> getPatient() throws Exception {
         return this.patientApiResources.findById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations")
     @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultations() throws Exception {
+    ResponseEntity<?> readConsultations() throws Exception {
         return this.consultationApiResources.retrieveConsultationByPatientId(this.validateForUserIsSelfServiceReturnUserId(), "");
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}")
     @ApiOperation(value = "GET self-service consultations by ID ", notes = "GET self-service consultations by ID", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+    ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
         return this.consultationApiResources.retrieveConsultationById(consultationId);
     }
@@ -141,7 +141,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/reports")
     @ApiOperation(value = "GET consultation report by consultation ID ", notes = "GET consultation report by consultation ID", response = Reports.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+    ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
         return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
     }
@@ -149,7 +149,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/reports/{reportId}")
     @ApiOperation(value = "GET report by  ID ", notes = "GET report by ID", response = Reports.class)
-    public ResponseEntity<?> readConsultationsReportsById(@PathVariable(name = "reportId") Long reportId) throws Exception {
+    ResponseEntity<?> readConsultationsReportsById(@PathVariable(name = "reportId") Long reportId) throws Exception {
         return ResponseEntity.ok().body(this.fileInformationRepository.findById(reportId));
     }
 
@@ -157,7 +157,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/diagnoses/{consultationId}")
     @ApiOperation(value = "GET self-service consultation diagnoses ", notes = "GET self-service consultations diagnoses", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+    ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
         return this.diagnosisApiResources.retrieveAllDiagnosisReportsByServiceId(consultationId);
     }
@@ -181,7 +181,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/transactions/{transactionId}")
     @ApiOperation(value = "GET consultation transaction by transaction ID ", notes = "GET consultation transaction by transaction ID", response = TransactionRowMap.class)
-    public ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
+    ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(consultationId, transactionId);
         return this.transactionApiResource.getMedicalTransactionById(transactionId);
     }
@@ -190,7 +190,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/admissions")
     @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+    ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
         return this.admissionsApiResources.readConsultationsAdmissionByConsultationId(consultationId);
     }
@@ -198,7 +198,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/admissions/{admissionId}")
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
-    public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+    ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         validateForUserIsSelfService();
         return this.admissionsApiResources.retrieveAdmissionByID(admissionId, null);
     }
@@ -206,7 +206,7 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/admissions/{admissionId}/visits")
     @ApiOperation(value = "GET consultation admission visits by ID ", notes = "GET consultation admission visits by  ID", response = AdmissionVisit.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+    ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         this.validateForUserIsSelfService();
 
         return this.admissionsApiResources.retrieveAdmissionVisits(admissionId);
