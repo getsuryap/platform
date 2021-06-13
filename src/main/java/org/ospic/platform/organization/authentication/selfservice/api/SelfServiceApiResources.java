@@ -2,31 +2,30 @@ package org.ospic.platform.organization.authentication.selfservice.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.ospic.platform.accounting.bills.api.BillsApiResources;
 import org.ospic.platform.accounting.bills.data.BillPayload;
-import org.ospic.platform.accounting.bills.service.BillReadPrincipleService;
+import org.ospic.platform.accounting.transactions.api.TransactionApiResource;
 import org.ospic.platform.accounting.transactions.data.TransactionRowMap;
 import org.ospic.platform.accounting.transactions.repository.TransactionJpaRepository;
-import org.ospic.platform.accounting.transactions.service.TransactionReadPrincipleService;
 import org.ospic.platform.infrastructure.reports.domain.Reports;
+import org.ospic.platform.inventory.admission.api.AdmissionsApiResources;
 import org.ospic.platform.inventory.admission.domains.Admission;
-import org.ospic.platform.inventory.admission.service.AdmissionsReadService;
 import org.ospic.platform.inventory.admission.visits.domain.AdmissionVisit;
-import org.ospic.platform.inventory.admission.visits.service.VisitsReadPrincipleService;
 import org.ospic.platform.laboratory.reports.repository.FileInformationRepository;
 import org.ospic.platform.organization.authentication.selfservice.exceptions.NotSelfServiceUserException;
+import org.ospic.platform.organization.authentication.users.api.AuthenticationApiResource;
 import org.ospic.platform.organization.authentication.users.domain.User;
 import org.ospic.platform.organization.authentication.users.exceptions.InsufficientRoleException;
 import org.ospic.platform.organization.authentication.users.exceptions.UserNotFoundPlatformException;
 import org.ospic.platform.organization.authentication.users.payload.request.LoginRequest;
 import org.ospic.platform.organization.authentication.users.payload.response.JwtResponse;
 import org.ospic.platform.organization.authentication.users.repository.UserJpaRepository;
-import org.ospic.platform.organization.authentication.users.services.UsersReadPrincipleService;
+import org.ospic.platform.patient.consultation.api.ConsultationApiResources;
 import org.ospic.platform.patient.consultation.domain.ConsultationResource;
 import org.ospic.platform.patient.consultation.repository.ConsultationResourceJpaRepository;
-import org.ospic.platform.patient.consultation.service.ConsultationReadPrinciplesService;
+import org.ospic.platform.patient.details.api.PatientApiResources;
 import org.ospic.platform.patient.details.domain.Patient;
-import org.ospic.platform.patient.details.service.PatientInformationReadServices;
-import org.ospic.platform.patient.diagnosis.service.DiagnosisService;
+import org.ospic.platform.patient.diagnosis.api.DiagnosisApiResources;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -63,86 +62,86 @@ import javax.validation.Valid;
 @RequestMapping("/api/self")
 @Api(value = "/api/self", tags = "SelfService", description = "Self service user data's")
 public class SelfServiceApiResources {
-    @Autowired UsersReadPrincipleService usersReadPrincipleService;
-    @Autowired PatientInformationReadServices patientInformationReadServices;
-    @Autowired UserJpaRepository userJpaRepository;
     @Autowired
-    ConsultationReadPrinciplesService consultationReadService;
-    @Autowired
-    BillReadPrincipleService billReadPrincipleService;
-    @Autowired
-    DiagnosisService diagnosisService;
-    @Autowired TransactionReadPrincipleService transactionReadPrincipleService;
+    UserJpaRepository userJpaRepository;
     @Autowired
     FileInformationRepository fileInformationRepository;
-    @Autowired
-    AdmissionsReadService admissionsReadService;
-    @Autowired
-    VisitsReadPrincipleService visitsReadPrincipleService;
+
     @Autowired
     ConsultationResourceJpaRepository consultationResourceJpaRepository;
     @Autowired
     TransactionJpaRepository transactionJpaRepository;
-
-
+    @Autowired
+    AuthenticationApiResource authenticationApiResource;
+    @Autowired
+    BillsApiResources billsApiResources;
+    @Autowired
+    PatientApiResources patientApiResources;
+    @Autowired
+    ConsultationApiResources consultationApiResources;
+    @Autowired
+    DiagnosisApiResources diagnosisApiResources;
+    @Autowired
+    TransactionApiResource transactionApiResource;
+    @Autowired
+    AdmissionsApiResources admissionsApiResources;
 
 
     @PostMapping("/login")
     @ApiOperation(value = "AUTHENTICATE self service user ", notes = "AUTHENTICATE self service user", response = JwtResponse.class)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
-        return this.usersReadPrincipleService.authenticateUser(loginRequest);
+    ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        return this.authenticationApiResource.authenticateUser(loginRequest);
     }
-
 
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/users")
     @ApiOperation(value = "GET self service user ", notes = "GET self service user", response = User.class)
-    public ResponseEntity<?> getUser() throws Exception {
-        return this.usersReadPrincipleService.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
+    ResponseEntity<?> getUser() throws Exception {
+        return this.authenticationApiResource.retrieveUserById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/bills")
     @ApiOperation(value = "GET list of bills", notes = "GET list of bills", response = BillPayload.class, responseContainer = "List")
-    public ResponseEntity<?> getUserBills() throws Exception {
-        return ResponseEntity.ok().body(this.billReadPrincipleService.readBillsByPatientId(this.validateForUserIsSelfServiceReturnUserId()));
+    ResponseEntity<?> getUserBills() throws Exception {
+        return this.billsApiResources.getBillByPatientId(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/bills/{billId}")
     @ApiOperation(value = "GET bill by Id", notes = "GET bill by Id", response = BillPayload.class)
-    public ResponseEntity<?> getUserBillsByBillId(@PathVariable("billId") Long billId) throws Exception {
+    ResponseEntity<?> getUserBillsByBillId(@PathVariable("billId") Long billId) throws Exception {
         this.validateForUserIsSelfService();
-        return this.billReadPrincipleService.readBillById(billId);
+        return this.billsApiResources.getBillsById(billId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/patients")
     @ApiOperation(value = "GET self service user patient linked account ", notes = "GET self service user patient linked account", response = Patient.class)
-    public ResponseEntity<?> getPatient() throws Exception {
-        return this.patientInformationReadServices.retrievePatientById(this.validateForUserIsSelfServiceReturnUserId());
+    ResponseEntity<?> getPatient() throws Exception {
+        return this.patientApiResources.findById(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations")
     @ApiOperation(value = "GET self-service consultations ", notes = "GET self-service consultations", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultations() throws Exception {
-        return ResponseEntity.ok().body(this.consultationReadService.retrieveConsultationsByPatientId(this.validateForUserIsSelfServiceReturnUserId()));
+    ResponseEntity<?> readConsultations() throws Exception {
+        return this.consultationApiResources.retrieveConsultationByPatientId(this.validateForUserIsSelfServiceReturnUserId(), "");
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}")
     @ApiOperation(value = "GET self-service consultations by ID ", notes = "GET self-service consultations by ID", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-       this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.consultationReadService.retrieveAConsultationById(consultationId);
+    ResponseEntity<?> readConsultationsById(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
+        return this.consultationApiResources.retrieveConsultationById(consultationId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/reports")
     @ApiOperation(value = "GET consultation report by consultation ID ", notes = "GET consultation report by consultation ID", response = Reports.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+    ResponseEntity<?> readConsultationsReportsByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
         return ResponseEntity.ok().body(this.fileInformationRepository.findByConsultationId(consultationId));
     }
@@ -150,18 +149,17 @@ public class SelfServiceApiResources {
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/reports/{reportId}")
     @ApiOperation(value = "GET report by  ID ", notes = "GET report by ID", response = Reports.class)
-    public ResponseEntity<?> readConsultationsReportsById(@PathVariable(name = "reportId") Long reportId) throws Exception {
+    ResponseEntity<?> readConsultationsReportsById(@PathVariable(name = "reportId") Long reportId) throws Exception {
         return ResponseEntity.ok().body(this.fileInformationRepository.findById(reportId));
     }
-
 
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/diagnoses/{consultationId}")
     @ApiOperation(value = "GET self-service consultation diagnoses ", notes = "GET self-service consultations diagnoses", response = ConsultationResource.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-       validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.diagnosisService.retrieveAllDiagnosisReportsByServiceId(consultationId);
+    ResponseEntity<?> readConsultationDiagnoses(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
+        return this.diagnosisApiResources.retrieveAllDiagnosisReportsByServiceId(consultationId);
     }
 
     @ApiOperation(value = "LIST consultation transactions", notes = "LIST consultation transactions", response = TransactionRowMap.class, responseContainer = "List")
@@ -172,92 +170,90 @@ public class SelfServiceApiResources {
         int isReversed = reversed ? 1 : 0;
         switch (isReversed) {
             case 1:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
             case 0:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
             default:
-                return this.transactionReadPrincipleService.readTransactionsByConsultationId(consultationId);
+                return this.transactionApiResource.listConsultationTransactions(consultationId, false);
         }
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/transactions/{transactionId}")
     @ApiOperation(value = "GET consultation transaction by transaction ID ", notes = "GET consultation transaction by transaction ID", response = TransactionRowMap.class)
-    public ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
+    ResponseEntity<?> readConsultationsTransactionByTransactionId(@PathVariable(name = "consultationId") Long consultationId, @PathVariable(name = "transactionId") Long transactionId) throws Exception {
         this.validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(consultationId, transactionId);
-        return this.transactionReadPrincipleService.readTransactionById(transactionId);
+        return this.transactionApiResource.getMedicalTransactionById(transactionId);
     }
-
 
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/admissions")
     @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
-       this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
-        return this.admissionsReadService.retrieveListOfServiceAdmission(consultationId);
+    ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
+        this.validateForUserIsSelfServiceAndConsultationBelongsToHim(consultationId);
+        return this.admissionsApiResources.readConsultationsAdmissionByConsultationId(consultationId);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/admissions/{admissionId}")
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
-    public ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+    ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         validateForUserIsSelfService();
-
-        return ResponseEntity.ok().body(this.admissionsReadService.retrieveAdmissionById(admissionId));
+        return this.admissionsApiResources.retrieveAdmissionByID(admissionId, null);
     }
 
     @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/admissions/{admissionId}/visits")
     @ApiOperation(value = "GET consultation admission visits by ID ", notes = "GET consultation admission visits by  ID", response = AdmissionVisit.class, responseContainer = "List")
-    public ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
+    ResponseEntity<?> readConsultationsAdmissionVisitsAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
         this.validateForUserIsSelfService();
 
-        return this.visitsReadPrincipleService.retrieveAdmissionVisits(admissionId);
+        return this.admissionsApiResources.retrieveAdmissionVisits(admissionId);
     }
 
-    private void validateForUserIsSelfService(){
+    private void validateForUserIsSelfService() {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()) {
             throw new NotSelfServiceUserException(u.getUsername());
         }
     }
 
-    private void validateForUserIsSelfServiceAndConsultationBelongsToHim(Long consultantId){
+    private void validateForUserIsSelfServiceAndConsultationBelongsToHim(Long consultantId) {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()) {
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        this.consultationResourceJpaRepository.findById(consultantId).map(consultation->{
-            if (consultation.getPatient().getId() != u.getPatient().getId()){
-                throw new InsufficientRoleException(2L,"Insufficient role to access this resource");
+        this.consultationResourceJpaRepository.findById(consultantId).map(consultation -> {
+            if (consultation.getPatient().getId() != u.getPatient().getId()) {
+                throw new InsufficientRoleException(2L, "Insufficient role to access this resource");
             }
             return null;
         });
     }
 
-    private void validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(Long consultantId, Long transactionId){
+    private void validateForUserIsSelfServiceAndConsultationBelongsToHimAndTransactionBelongToConsultation(Long consultantId, Long transactionId) {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()) {
             throw new NotSelfServiceUserException(u.getUsername());
         }
-        this.consultationResourceJpaRepository.findById(consultantId).map(consultation->{
-            return this.transactionJpaRepository.findById(transactionId).map(transaction ->{
-                if ((consultation.getPatient().getId() != u.getPatient().getId())||(transaction.getBill().getConsultation().getId() != consultation.getId())){
-                    throw new InsufficientRoleException(2L,"Insufficient role to access this resource");
+        this.consultationResourceJpaRepository.findById(consultantId).map(consultation -> {
+            return this.transactionJpaRepository.findById(transactionId).map(transaction -> {
+                if ((consultation.getPatient().getId() != u.getPatient().getId()) || (transaction.getBill().getConsultation().getId() != consultation.getId())) {
+                    throw new InsufficientRoleException(2L, "Insufficient role to access this resource");
                 }
                 return null;
             });
         });
     }
 
-    private Long validateForUserIsSelfServiceReturnUserId(){
+    private Long validateForUserIsSelfServiceReturnUserId() {
         UserDetailsImpl ud = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(()-> new UserNotFoundPlatformException(ud.getId()));
-        if (!u.getIsSelfService()){
+        User u = this.userJpaRepository.findById(ud.getId()).orElseThrow(() -> new UserNotFoundPlatformException(ud.getId()));
+        if (!u.getIsSelfService()) {
             throw new NotSelfServiceUserException(u.getUsername());
         }
         return u.getPatient().getId();

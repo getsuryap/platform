@@ -108,7 +108,7 @@ public class AuthenticationApiResource {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS', 'READ_USER')")
     @ApiOperation(value = "RETRIEVE User by ID", notes = "RETRIEVE User by ID")
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> retrieveUserById(@PathVariable("userId") Long userId) {
        return this.usersReadPrincipleService.retrieveUserById(userId);
     }
 

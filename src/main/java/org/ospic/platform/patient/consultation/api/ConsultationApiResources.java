@@ -93,7 +93,7 @@ public class ConsultationApiResources {
     @ApiOperation(value = "RETRIEVE patient consultation by patient ID", notes = "RETRIEVE  patient consultation by patient ID", response = ConsultationResource.class, responseContainer = "List")
     @RequestMapping(value = "/patient/{patientId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
-    ResponseEntity<?> retrieveConsultationByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
+    public ResponseEntity<?> retrieveConsultationByPatientId(@PathVariable Long patientId,@RequestParam(value = "active", required = false) String command) {
         if (!(command == null || command.isEmpty())) {
             if (command.equals("true")) {
                 return ResponseEntity.ok().body(consultationRead.retrieveConsultationByPatientIdAndIsActiveTrue(patientId));
@@ -130,7 +130,7 @@ public class ConsultationApiResources {
     @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE patient consultation by ID", notes = "RETRIEVE  patient consultation by ID", response = ConsultationResource.class)
     @RequestMapping(value = "/{consultationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> retrieveConsultationById(@PathVariable Long consultationId) {
+    public ResponseEntity<?> retrieveConsultationById(@PathVariable Long consultationId) {
         return consultationRead.retrieveAConsultationById(consultationId);
     }
 
