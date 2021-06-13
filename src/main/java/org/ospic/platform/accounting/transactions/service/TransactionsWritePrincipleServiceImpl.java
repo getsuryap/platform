@@ -28,6 +28,7 @@ import org.ospic.platform.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,7 +62,10 @@ import java.util.Date;
  */
 @Repository
 public class TransactionsWritePrincipleServiceImpl implements TransactionsWritePrincipleService {
-    private static final Logger logger = LoggerFactory.getLogger(TransactionsWritePrincipleServiceImpl.class);
+	@Value("${application.default.currency}")
+	private String applicationDefaultCurrency;
+	
+	private static final Logger logger = LoggerFactory.getLogger(TransactionsWritePrincipleServiceImpl.class);
     private final TransactionJpaRepository repository;
     private final MedicalServiceJpaRepository medicalServiceRepository;
     private final ConsultationResourceJpaRepository consultationResourceRepository;
@@ -134,7 +138,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setTransactionDate(transactionDate);
                     trx.setIsReversed(false);
                     trx.setAmount(service.getPrice());
-                    trx.setCurrencyCode("USD");
+                    trx.setCurrencyCode(applicationDefaultCurrency);
                     trx.setMedicine(null);
                     trx.setMedicalService(service);
                     trx.setBill(b);
@@ -172,7 +176,7 @@ public class TransactionsWritePrincipleServiceImpl implements TransactionsWriteP
                     trx.setIsReversed(false);
                     final BigDecimal amount = medicine.getSellingPrice().multiply(BigDecimal.valueOf(payload.getQuantity()));
                     trx.setAmount(amount);
-                    trx.setCurrencyCode("USD");
+                    trx.setCurrencyCode(applicationDefaultCurrency);
                     trx.setMedicalService(null);
                     trx.setMedicine(medicine);
                     trx.setBill(bill);
