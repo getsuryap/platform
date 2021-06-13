@@ -81,8 +81,6 @@ public class PatientInformationWriteServiceImpl implements PatientInformationWri
     public Patient createNewPatient(Patient patient) {
         patient.setIsActive(false);
         patient.setHasSelfServiceUserAccount(false);
-        String gender = patient.getGender().toLowerCase();
-        patient.setGender(gender);
         logger.info(patient.toString());
         return patientRepository.save(patient);
     }
