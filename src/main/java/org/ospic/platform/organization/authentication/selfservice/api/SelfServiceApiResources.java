@@ -26,6 +26,8 @@ import org.ospic.platform.patient.consultation.repository.ConsultationResourceJp
 import org.ospic.platform.patient.details.api.PatientApiResources;
 import org.ospic.platform.patient.details.domain.Patient;
 import org.ospic.platform.patient.diagnosis.api.DiagnosisApiResources;
+import org.ospic.platform.patient.insurancecard.api.InsuranceCardApiResource;
+import org.ospic.platform.patient.insurancecard.domain.InsuranceCard;
 import org.ospic.platform.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -85,6 +87,8 @@ public class SelfServiceApiResources {
     TransactionApiResource transactionApiResource;
     @Autowired
     AdmissionsApiResources admissionsApiResources;
+    @Autowired
+    InsuranceCardApiResource insuranceCardApiResource;
 
 
     @PostMapping("/login")
@@ -210,6 +214,14 @@ public class SelfServiceApiResources {
         this.validateForUserIsSelfService();
 
         return this.admissionsApiResources.retrieveAdmissionVisits(admissionId);
+    }
+
+    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @GetMapping("/insurances")
+    @ApiOperation(value = "GET patient insurance cards by patient ID ", notes = "GET patient insurance cards by patient ID", response = InsuranceCard.class, responseContainer = "List")
+    ResponseEntity<?> readPatientInsuranceCardsByPatientId()  {
+        this.validateForUserIsSelfService();
+        return this.insuranceCardApiResource.getInsuranceCardsByPatientId(this.validateForUserIsSelfServiceReturnUserId());
     }
 
     private void validateForUserIsSelfService() {
