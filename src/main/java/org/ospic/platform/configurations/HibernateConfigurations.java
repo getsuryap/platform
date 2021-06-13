@@ -1,6 +1,7 @@
 package org.ospic.platform.configurations;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -35,7 +36,19 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfigurations {
+	
+	@Value("${spring.datasource.driver}")
+	private String springDataSourceDriverClassName;
+	
+	@Value("${spring.datasource.url}")
+	private String springDataSourceUrl;
 
+	@Value("${spring.datasource.username}")
+	private String springDataSourceUsername;
+
+	@Value("${spring.datasource.password}")
+	private String springDataSourcePassword;
+	
     @Bean(name = "entityManagerFactory")
     public LocalSessionFactoryBean sessionFactoryBean() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
@@ -58,14 +71,14 @@ public class HibernateConfigurations {
     };
      **/
 
-      @Bean public DataSource dataSource() {
+    @Bean public DataSource dataSource() {
       BasicDataSource basicDataSource = new BasicDataSource();
-      basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-      basicDataSource.setUrl("jdbc:mysql://remotemysql.com:3306/1GT19qmaZr?useSSL=true");
-      basicDataSource.setUsername("1GT19qmaZr");
-      basicDataSource.setPassword("OOTnKY9r3I");
+      basicDataSource.setDriverClassName(springDataSourceDriverClassName);
+      basicDataSource.setUrl(springDataSourceUrl);
+      basicDataSource.setUsername(springDataSourceUsername);
+      basicDataSource.setPassword(springDataSourcePassword);
       return basicDataSource;
-      }
+    }
 
 
     @Bean(name = "transactionManager")

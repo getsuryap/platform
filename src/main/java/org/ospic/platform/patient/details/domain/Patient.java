@@ -66,7 +66,7 @@ public class Patient extends Auditable implements Serializable {
     @Column(name = "address", length = 200)
     private String address;
 
-    @Column(name = "email_address", length = 20)
+    @Column(name = "email_address", length = 254)
     private String emailAddress;
 
     @NotBlank
