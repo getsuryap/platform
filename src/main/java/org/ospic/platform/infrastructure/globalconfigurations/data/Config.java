@@ -1,9 +1,11 @@
-package org.ospic.platform.infrastructure.globalconfigurations.exceptions;
+package org.ospic.platform.infrastructure.globalconfigurations.data;
 
-import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * This file was created by eli on 18/06/2021 for org.ospic.platform.infrastructure.globalconfigurations.exceptions
+ * This file was created by eli on 18/06/2021 for org.ospic.platform.infrastructure.globalconfigurations.data
  * --
  * --
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,11 +25,9 @@ import org.ospic.platform.infrastructure.app.exception.AbstractPlatformException
  * specific language governing permissions and limitations
  * under the License.
  */
-public class GlobalConfigurationNotFoundException extends AbstractPlatformException {
-    protected GlobalConfigurationNotFoundException(String globalisationMessageCode, String defaultUserMessage) {
-        super(globalisationMessageCode, defaultUserMessage);
-    }
-    public GlobalConfigurationNotFoundException(){
-        super("error.msg.global.configuration.not.found","Global configuration not found");
-    }
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+public class Config {
+    Long configurationId;
+    Long configurationValue;
 }
