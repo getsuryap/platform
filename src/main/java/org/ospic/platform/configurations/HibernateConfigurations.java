@@ -40,7 +40,7 @@ public class HibernateConfigurations {
 	@Value("${spring.datasource.driver}")
 	private String springDataSourceDriverClassName;
 	
-	@Value("${spring.datasource.localurl}")
+	@Value("${spring.datasource.url}")
 	private String springDataSourceUrl;
 
 	@Value("${spring.datasource.username}")
