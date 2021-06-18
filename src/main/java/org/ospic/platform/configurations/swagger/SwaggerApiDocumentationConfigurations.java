@@ -1,5 +1,6 @@
 package org.ospic.platform.configurations.swagger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,9 +14,11 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -47,11 +50,18 @@ import java.util.List;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerApiDocumentationConfigurations {
 
+    private final ServletContext servletContext;
+
+    @Autowired
+    public SwaggerApiDocumentationConfigurations(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
     public static ApiInfo metadata() {
         return new ApiInfoBuilder()
                 .title("(Ospic) Hospital Management System")
                 .description("Ospic Spring platform is a spring boot API based for hospital management system")
-                .license("Apache License 2.0").licenseUrl("https://github.com/ospic/spring_platform/blob/master/LICENSE")
+                .license("Apache License 2.0").licenseUrl("https://github.com/ospic/platform/blob/master/LICENSE")
                 .contact(new Contact("Elirehema Paul", "https://app.ospicx.com/", "elirehemapaulo@gmail.com"))
                 .version("1.0")
                 .build();
@@ -89,6 +99,13 @@ public class SwaggerApiDocumentationConfigurations {
                         .message("UnAuthorized")
                         .build());
         return new Docket(DocumentationType.SWAGGER_2)
+                .host("ospicapi.herokuapp.com")
+                .pathProvider(new RelativePathProvider(servletContext){
+                    @Override
+                    protected String getDocumentationPath() {
+                        return "/api";
+                    }
+                })
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, globalResponses)
                 .globalResponseMessage(RequestMethod.POST, globalResponses)
