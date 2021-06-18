@@ -12,3 +12,5 @@ create table `m_configurations`(
 ) COLLATE='utf8_unicode_ci' ENGINE=InnoDB;
 
 insert into `m_configurations`(`name`,`code`,`value`,`active`) values ("Timely based consultation","code.value.timely.based.consultation",0,false);
+replace into `m_privilege` (`name`) VALUES ("UPDATE_CONFIGURATION"),("READ_CONFIGURATION");
+

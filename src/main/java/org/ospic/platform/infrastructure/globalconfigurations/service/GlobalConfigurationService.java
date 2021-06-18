@@ -1,5 +1,12 @@
 package org.ospic.platform.infrastructure.globalconfigurations.service;
 
+import org.ospic.platform.infrastructure.globalconfigurations.data.Config;
+import org.ospic.platform.infrastructure.globalconfigurations.domain.GlobalConfigurations;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+
 /**
  * This file was created by eli on 18/06/2021 for org.ospic.platform.infrastructure.globalconfigurations.service
  * --
@@ -21,5 +28,12 @@ package org.ospic.platform.infrastructure.globalconfigurations.service;
  * specific language governing permissions and limitations
  * under the License.
  */
+@Component
+@Service
 public interface GlobalConfigurationService {
+    GlobalConfigurations updateConfigurationStatus(Long configurationId, Boolean status);
+    GlobalConfigurations updateConfigurationValue(Config config);
+    GlobalConfigurations getConfigurationById(Long configurationId);
+    Collection<GlobalConfigurations> getConfigurations();
+
 }
