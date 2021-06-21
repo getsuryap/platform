@@ -164,7 +164,7 @@ public class ConsultationApiResources {
        return this.consultationWrite.uploadConsultationLaboratoryReport(consultationId,fileLocation, file);
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION',)")
     @ApiOperation(value = "GET consultation report files", notes = "GET consultation report files", response = FileInformation.class, responseContainer = "List")
     @RequestMapping(value = "/{consultationId}/files", method = RequestMethod.GET)
     public ResponseEntity<?> getConsultationLaboratoryReportFiles( @PathVariable(name = "consultationId") Long consultationId) {

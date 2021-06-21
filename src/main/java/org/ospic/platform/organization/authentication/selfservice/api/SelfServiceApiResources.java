@@ -199,7 +199,7 @@ public class SelfServiceApiResources {
         return this.admissionsApiResources.readConsultationsAdmissionByConsultationId(consultationId);
     }
 
-    @PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    //@PreAuthorize("hasAnyAuthority('READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/admissions/{admissionId}")
     @ApiOperation(value = "GET consultation admission by ID ", notes = "GET consultation admission by  ID", response = Admission.class)
     ResponseEntity<?> readConsultationsAdmissionByAdmissionsId(@PathVariable(name = "admissionId") Long admissionId) throws Exception {
@@ -239,7 +239,7 @@ public class SelfServiceApiResources {
             throw new NotSelfServiceUserException(u.getUsername());
         }
         this.consultationResourceJpaRepository.findById(consultantId).map(consultation -> {
-            if (consultation.getPatient().getId() != u.getPatient().getId()) {
+            if (!consultation.getPatient().getId().equals(u.getPatient().getId())) {
                 throw new InsufficientRoleException(2L, "Insufficient role to access this resource");
             }
             return null;
