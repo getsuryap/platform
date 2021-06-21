@@ -76,7 +76,7 @@ public class AdmissionsApiResources {
         this.visitsWritePrincipleService = visitsWritePrincipleService;
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE Admissions", notes = "RETRIEVE Admissions", response = AdmissionResponseData.class, responseContainer = "List")
     @RequestMapping(value = "/", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveAllAdmissions() {
@@ -84,7 +84,7 @@ public class AdmissionsApiResources {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE Admission by ID", notes = "RETRIEVE Admission by ID", response = AdmissionResponseData.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> retrieveAdmissionByID(@NotNull @PathVariable("id") Long id, @RequestParam(value = "command", required = false) String command) {
@@ -103,28 +103,28 @@ public class AdmissionsApiResources {
 
 
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','CREATE_CONSULTATION','UPDATE_CONSULTATION')")
     @ApiOperation(value = "CREATE new  admission", notes = "CREATE new admission", response = Long.class)
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> requestPatientAdmission(@Valid @RequestBody AdmissionRequest admissionRequest) {
         return admissionsWriteService.admitPatient(admissionRequest);
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','CREATE_CONSULTATION','UPDATE_CONSULTATION')")
     @ApiOperation(value = "End patient admission", notes = "End patient admission admission", response = String.class)
     @RequestMapping(value = "/end", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> requestPatientUnAdmission( @Valid @RequestBody EndAdmissionRequest r) {
         return admissionsWriteService.endPatientAdmission(r);
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE Active admission in this bed", notes = "RETRIEVE active admission in this bed", response = AdmissionResponseData.class)
     @RequestMapping(value = "/inbed/{bedId}",method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> retrieveAdmissionInThisBed(@NotNull @PathVariable("bedId") Long bedId){
         return admissionsReadService.retrieveAdmissionInThisBed(bedId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION')")
     @ApiOperation(value = "RETRIEVE Admission visits", notes = "RETRIEVE Admission visits",response = AdmissionVisit.class, responseContainer = "List")
     @RequestMapping(value = "/{admissionId}/visits", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> retrieveAdmissionVisits( @PathVariable("admissionId") Long admissionId){
@@ -132,13 +132,13 @@ public class AdmissionsApiResources {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','UPDATE_INVENTORY')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','CREATE_CONSULTATION','UPDATE_CONSULTATION')")
     @ApiOperation(value = "CREATE Admission visits", notes = "CREATE Admission visits", response = CustomReponseMessage.class)
     @RequestMapping(value = "/visits", method = RequestMethod.POST, consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> visitAdmission(@Valid @RequestBody VisitPayload visitPayload){
         return visitsWritePrincipleService.createVisits(visitPayload);
     }
-    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
+    @PreAuthorize("hasAnyAuthority('ALL_FUNCTIONS','READ_CONSULTATION','READ_SELF_SERVICE', 'UPDATE_SELF_SERVICE')")
     @GetMapping("/consultations/{consultationId}/admissions")
     @ApiOperation(value = "GET consultation admissions by consultation ID ", notes = "GET consultation admissions by consultation ID", response = Admission.class, responseContainer = "List")
     public ResponseEntity<?> readConsultationsAdmissionByConsultationId(@PathVariable(name = "consultationId") Long consultationId) throws Exception {
